@@ -1,0 +1,45 @@
+{
+  "name": "subway-configurator",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "prebuild": "npm run lint",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "type-check": "tsc --noEmit",
+    "lint:css": "stylelint **/*.css"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.3",
+    "konva": "^10.3.0",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-konva": "^19.2.5",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.66.0",
+    "@typescript-eslint/parser": "^8.66.0",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "prettier": "^3.9.6",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "stylelint": "^17.14.1",
+    "stylelint-config-clean-order": "^10.0.0",
+    "stylelint-config-standard": "^40.0.0",
+    "typescript": "^5"
+  }
+}

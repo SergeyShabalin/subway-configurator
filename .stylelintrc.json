@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "stylelint-config-standard"
+  ],
+  "rules": {
+    "color-hex-length": "long",
+    "selector-class-pattern": null
+  }
+}
