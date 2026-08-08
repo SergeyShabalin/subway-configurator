@@ -1,0 +1,290 @@
+.loaderWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.loader {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.loaderContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.map {
+    position: relative;
+    width: 300px;
+    height: 120px;
+    overflow: visible;
+}
+
+.route {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.routeBackground,
+.routeProgress {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.routeBackground {
+    stroke: rgba(255, 255, 255, 0.08);
+}
+
+.routeProgress {
+    stroke: #3b82f6;
+    stroke-dasharray: 420;
+    stroke-dashoffset: 420;
+    animation: buildRoute 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+}
+
+.station {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    box-sizing: border-box;
+    animation: stationAppear 3s ease-out infinite;
+}
+
+.station span {
+    position: absolute;
+    inset: 1px;
+    border-radius: 50%;
+    background: #3b82f6;
+    opacity: 0;
+    animation: stationPulse 1.5s ease-in-out infinite;
+}
+
+.dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #3b82f6;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5),
+    0 0 60px rgba(59, 130, 246, 0.2);
+    animation: dotMove 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+}
+
+.text {
+    display: flex;
+    align-items: center;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dots {
+    width: 18px;
+    overflow: hidden;
+    animation: dots 1.2s steps(4) infinite;
+    display: inline-block;
+}
+
+@keyframes buildRoute {
+    0% {
+        stroke-dashoffset: 420;
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    55%, 75% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    100% {
+        stroke-dashoffset: -420;
+        opacity: 0;
+    }
+}
+
+@keyframes stationAppear {
+    0%, 15% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    25%, 80% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes stationPulse {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+}
+
+@keyframes dotMove {
+    0% {
+        left: 8%;
+        top: 58%;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    5% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    10% {
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    15% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    25% {
+        left: 28%;
+        top: 30%;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    30% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    35% {
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    40% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    50% {
+        left: 50%;
+        top: 55%;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    55% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    65% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    75% {
+        left: 72%;
+        top: 25%;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    80% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    85% {
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    90% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        left: 92%;
+        top: 48%;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes dots {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 18px;
+    }
+}
+
+@media (max-width: 400px) {
+    .loader {
+        width: 260px;
+    }
+
+    .map {
+        width: 240px;
+        height: 100px;
+    }
+
+    .station {
+        width: 5px;
+        height: 5px;
+        border-width: 1.5px;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    @keyframes dotMove {
+        0% {
+            left: 8%;
+            top: 58%;
+        }
+        25% {
+            left: 28%;
+            top: 30%;
+        }
+        50% {
+            left: 50%;
+            top: 55%;
+        }
+        75% {
+            left: 72%;
+            top: 25%;
+        }
+        100% {
+            left: 92%;
+            top: 48%;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .routeProgress,
+    .station,
+    .dot,
+    .dots {
+        animation: none;
+    }
+
+    .station span {
+        animation: none;
+        opacity: 0.6;
+    }
+
+    .dot {
+        left: 50%;
+        top: 50%;
+        animation: none;
+    }
+}

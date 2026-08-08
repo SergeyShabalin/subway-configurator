@@ -1,11 +1,9 @@
-import { Field } from '@/components/field'
-import styles from './page.module.css'
+import { MetroCanvas } from '@/components/canvas/MetroCanvas'
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <p>The subway configurator</p>
-      <Field />
+    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
+      <MetroCanvas />
     </div>
   )
 }
