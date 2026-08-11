@@ -67,6 +67,19 @@ const eslintConfig = defineConfig([
       '@typescript-eslint/no-unsafe-call': 'error',
       '@typescript-eslint/no-unsafe-member-access': 'error',
       '@typescript-eslint/no-unsafe-return': 'error',
+
+      '@typescript-eslint/array-type': [
+        'error',
+        {
+          default: 'generic',
+          readonly: 'generic',
+        },
+      ],
+
+      // Дополнительно: требуем явные типы для массивов
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-inferrable-types': 'off',
+
       'no-var': 'error',
       'no-empty': 'error',
       'no-duplicate-case': 'error',
@@ -88,6 +101,7 @@ const eslintConfig = defineConfig([
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
       'import/no-default-export': 'off',
+      '@typescript-eslint/array-type': 'off',
     },
   },
 ])

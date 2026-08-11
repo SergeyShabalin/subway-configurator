@@ -10,9 +10,14 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "type-check": "tsc --noEmit",
-    "lint:css": "stylelint **/*.css"
+    "lint:css": "stylelint **/*.css",
+    "migrate": "tsx scripts/migrate.ts",
+    "db:init": "tsx scripts/init-db.ts",
+    "db:reset": "npx rimraf metro.db && tsx scripts/init-db.ts",
+    "db:seed": "tsx migrate.ts"
   },
   "dependencies": {
+    "axios": "^1.19.0",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^13.0.3",
     "konva": "^10.3.0",
@@ -40,6 +45,7 @@
     "stylelint": "^17.14.1",
     "stylelint-config-clean-order": "^10.0.0",
     "stylelint-config-standard": "^40.0.0",
+    "tsx": "^4.23.11",
     "typescript": "^5"
   }
 }
