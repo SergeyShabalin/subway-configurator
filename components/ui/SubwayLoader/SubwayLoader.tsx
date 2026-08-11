@@ -1,6 +1,6 @@
 'use client'
 
-import styles from './MetroLoader.module.css'
+import styles from './SubwayLoader.module.css'
 
 const stations = [
   { left: '8%', top: '58%' },
@@ -14,7 +14,7 @@ interface MetroLoaderProps {
   text?: string
 }
 
-function MetroLoader({ text = 'Building metro' }: MetroLoaderProps) {
+function SubwayLoader({ text = 'Building metro' }: MetroLoaderProps) {
   return (
     <div className={styles.loaderWrapper}>
       <div className={styles.loader}>
@@ -50,4 +50,4 @@ function MetroLoader({ text = 'Building metro' }: MetroLoaderProps) {
   )
 }
 
-export { MetroLoader }
+export { SubwayLoader }

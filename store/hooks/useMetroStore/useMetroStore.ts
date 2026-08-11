@@ -1,5 +1,25 @@
-import { ApiResponse, MetroState } from '@/store/hooks/useMetroStore/types'
+// store/hooks/useMetroStore/useMetroStore.tsx
+import { graphService, stationsService } from '@/lib/services'
+import type { Line, Segment, Station } from '@/store/types'
 import { create } from 'zustand'
+
+interface MetroState {
+  stations: Array<Station>
+  segments: Array<Segment>
+  lines: Array<Line>
+  visualToStations: Record<string, Array<string>>
+  selectedStationId: string | null
+  isDragging: boolean
+  mode: 'view' | 'edit' | 'route'
+  isLoading: boolean
+  error: string | null
+
+  setSelectedStation: (id: string | null) => void
+  setMode: (mode: 'view' | 'edit' | 'route') => void
+  setDragging: (isDragging: boolean) => void
+  loadData: () => Promise<void>
+  saveVisualPosition: (visualId: string, x: number, y: number) => Promise<void>
+}
 
 export const useMetroStore = create<MetroState>((set, _get) => ({
   stations: [],
@@ -20,13 +40,7 @@ export const useMetroStore = create<MetroState>((set, _get) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const response = await fetch('/api/graph')
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = (await response.json()) as ApiResponse
+      const data = await graphService.getGraph()
 
       set({
         stations: data.stations,
@@ -46,15 +60,7 @@ export const useMetroStore = create<MetroState>((set, _get) => ({
 
   saveVisualPosition: async (visualId, x, y) => {
     try {
-      const response = await fetch(`/api/visuals/${visualId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ x, y }),
-      })
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
+      await stationsService.updateVisualPosition(visualId, x, y)
     } catch (error) {
       console.error('Failed to save visual position:', error)
     }

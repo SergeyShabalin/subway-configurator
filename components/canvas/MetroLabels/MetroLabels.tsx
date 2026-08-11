@@ -27,12 +27,15 @@ export const MetroLabels = ({ visuals, stationNames, textRef }: MetroLabelsProps
             x={visual.x + visual.labelOffset.x}
             y={visual.y + visual.labelOffset.y}
             text={name}
-            fontSize={12}
+            fontSize={16}
             fontFamily="Arial"
-            fill="#b1aaaa"
+            fill="#e2e8f0"
             align="center"
             verticalAlign="middle"
             listening={false}
+            letterSpacing={2}
+            stroke="#020913"
+            strokeWidth={0.3}
           />
         )
       })}

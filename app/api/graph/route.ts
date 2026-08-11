@@ -9,7 +9,7 @@ import {
   Visual,
   VisualStationLink,
 } from '@/app/api/graph/types'
-import db from '@/lib/db'
+import { db } from '@/lib/db'
 import { NextResponse } from 'next/server'
 
 export async function GET() {

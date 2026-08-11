@@ -1,3 +1,5 @@
+'use client'
+
 import { MetroCanvas } from '@/components/canvas/MetroCanvas'
 
 export default function Home() {

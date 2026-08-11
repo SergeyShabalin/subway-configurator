@@ -1,3 +1,4 @@
+// components/canvas/MetroStations/MetroStations.tsx
 'use client'
 
 import { useVisualsRef } from '@/components/canvas/hooks/useVisualsRef'
@@ -56,7 +57,6 @@ export const MetroStations = ({
         }
       }
 
-      // Перебираем все линии из store
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i]
         const lineNode = lineRef.current[line.id]

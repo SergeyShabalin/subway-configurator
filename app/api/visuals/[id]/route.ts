@@ -1,6 +1,6 @@
 import { Visual } from '@/app/api/graph/types'
 import { UpdateVisualRequest } from '@/app/api/visuals/[id]/types'
-import db from '@/lib/db'
+import { db } from '@/lib/db'
 import { NextResponse } from 'next/server'
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {

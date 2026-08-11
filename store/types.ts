@@ -1,32 +1,5 @@
-export interface VisualStation {
-  id: string
-  x: number
-  y: number
-  labelOffset: {
-    x: number
-    y: number
-  }
-  isTransfer: boolean
-}
+import type { Line, Segment, Station, Visual } from '@/lib/api'
 
-export interface Station {
-  id: string
-  name: string
-  lineId: number
-}
+export type { Line, Segment, Station, Visual }
 
-export interface Segment {
-  id: string
-  fromStationId: string
-  toStationId: string
-  timeMinutes: number
-}
-
-export interface Line {
-  id: string
-  name: string
-  color: string
-  isCircular: boolean
-  visualStationIds: Array<string>
-  logicalStationIds: Array<string>
-}
+export type VisualStation = Visual

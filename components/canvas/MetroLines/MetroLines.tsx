@@ -1,12 +1,12 @@
+// components/canvas/MetroLines/MetroLines.tsx
 'use client'
 
 import { useMetroStore } from '@/store'
-
 import { Line } from 'react-konva'
 import type { MetroLinesProps } from './types'
 
 export const MetroLines = ({ visuals, lineRef }: MetroLinesProps) => {
-  const lines = useMetroStore((state) => state.lines)
+  const lines = useMetroStore((state) => state.lines) // ← берет из стора
 
   return (
     <>
