@@ -1,93 +1,44 @@
 'use client'
 
-import { MetroLabels } from '@/components/canvas/MetroLabels/MetroLabels'
-import { MetroLines } from '@/components/canvas/MetroLines/MetroLines'
-import { MetroStations } from '@/components/canvas/MetroStations/MetroStations'
 import { AddElement } from '@/components/canvas/addStationModal/AddElement'
-import { useStageResize } from '@/components/canvas/hooks/useStageResize'
-import { useStageZoom } from '@/components/canvas/hooks/useStageZoom'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
-import type { GraphData } from '@/lib/api'
-import { graphService } from '@/lib/services'
-import type { VisualStation } from '@/store'
-import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Layer, Stage } from 'react-konva'
+import { useMetroCanvas } from './hooks'
+import { useMetroModal } from './hooks/useMetroModal'
+import { MetroLabels } from './MetroLabels/MetroLabels'
+import { MetroLines } from './MetroLines/MetroLines'
+import { MetroStations } from './MetroStations/MetroStations'
+import { useStageResize } from './shared/useStageResize'
+import { useStageZoom } from './shared/useStageZoom'
 
 export interface MetroCanvasRef {
   openAddStationModal: () => void
   getClickPosition: () => { x: number; y: number }
 }
 
-const transformApiData = (data: GraphData) => {
-  const visualsMap: Record<string, VisualStation> = {}
-  for (const v of data.visuals) {
-    visualsMap[v.id] = {
-      id: v.id,
-      x: v.x,
-      y: v.y,
-      labelOffset: v.labelOffset,
-      isTransfer: v.isTransfer,
-    }
-  }
-
-  const namesMap: Record<string, string> = {}
-  for (const station of data.stations) {
-    namesMap[station.id] = station.name
-  }
-
-  return { visualsMap, namesMap }
-}
-
 export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
-  const { loadData } = useMetroStore()
-  const [visuals, setVisuals] = useState<Record<string, VisualStation>>({})
-  const [stationNames, setStationNames] = useState<Record<string, string>>({})
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 })
   const [isMounted, setIsMounted] = useState(false)
-
   const hasCenteredRef = useRef(false)
 
+  const { visuals, stationNames, isLoaded, isInitializing, reloadData, setVisuals } =
+    useMetroCanvas()
+
+  const { isModalOpen, clickPosition, openModal, closeModal } = useMetroModal()
   const { width, height } = useStageResize()
   const { stageRef, stageScale, stagePosition, handleWheel, handleStageDragEnd, centerStage } =
-    useStageZoom({
-      minScale: 0.1,
-      maxScale: 5,
-      scaleStep: 1.1,
-    })
+    useStageZoom(0.1, 5, 1.1)
 
   const lineRef = useRef<Record<string, Konva.Line>>({})
   const circleRef = useRef<Record<string, Konva.Circle>>({})
   const textRef = useRef<Record<string, Konva.Text>>({})
 
-  const loadAndUpdateData = async (): Promise<void> => {
-    const data = await graphService.getGraph()
-    const { visualsMap, namesMap } = transformApiData(data)
-    setVisuals(visualsMap)
-    setStationNames(namesMap)
-  }
-
   useEffect(() => {
     setIsMounted(true)
     return () => setIsMounted(false)
   }, [])
-
-  useEffect(() => {
-    const init = async (): Promise<void> => {
-      await loadData()
-      await loadAndUpdateData()
-
-      setTimeout(() => {
-        setIsLoaded(true)
-      }, 2600)
-    }
-
-    init()
-  }, [loadData])
 
   useLayoutEffect(() => {
     if (!isLoaded || hasCenteredRef.current) return
@@ -99,7 +50,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     hasCenteredRef.current = true
   }, [isLoaded, visuals, centerStage, width, height])
 
-  const handleDblClick = (_event: Konva.KonvaEventObject<MouseEvent>) => {
+  const handleDblClick = () => {
     const stage = stageRef.current
     if (!stage) return
 
@@ -111,15 +62,14 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
       y: (pointer.y - stagePosition.y) / stageScale,
     }
 
-    setClickPosition(worldPos)
-    setIsModalOpen(true)
+    openModal(worldPos.x, worldPos.y)
   }
 
-  const handleStationAdded = async (): Promise<void> => {
-    await loadAndUpdateData()
+  const handleStationAdded = async () => {
+    await reloadData()
   }
 
-  if (!isLoaded) {
+  if (!isLoaded || isInitializing) {
     return <SubwayLoader />
   }
 
@@ -157,7 +107,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
         createPortal(
           <AddElement
             isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+            onClose={closeModal}
             position={clickPosition}
             onStationAdded={handleStationAdded}
           />,

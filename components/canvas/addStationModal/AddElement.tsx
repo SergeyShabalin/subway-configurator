@@ -1,7 +1,7 @@
-// components/canvas/addStationModal/AddElement.tsx
 'use client'
 
 import { Modal } from '@/components/ui/Modal/Modal'
+import { linesService, stationsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useEffect, useRef, useState } from 'react'
 import styles from './AddElement.module.css'
@@ -38,7 +38,6 @@ export const AddElement = ({
   const [lineColor, setLineColor] = useState('#3b82f6')
   const [isLineLoading, setIsLineLoading] = useState(false)
 
-  // Закрываем дропдаун при клике вне
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -49,7 +48,6 @@ export const AddElement = ({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Блокируем скролл модалки при открытом дропдауне
   useEffect(() => {
     const modalContent = modalContentRef.current
 
@@ -66,10 +64,8 @@ export const AddElement = ({
     }
   }, [isDropdownOpen])
 
-  // Сбрасываем дропдаун при закрытии модалки через useEffect без setState
   useEffect(() => {
     if (!isOpen) {
-      // Просто сбрасываем через setTimeout или используем ref
       const timeoutId = setTimeout(() => {
         setIsDropdownOpen(false)
       }, 0)
@@ -77,27 +73,20 @@ export const AddElement = ({
     }
   }, [isOpen])
 
+  // AddElement.tsx
   const handleAddStation = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!stationName.trim() || !selectedLineId) return
 
     setIsStationLoading(true)
     try {
-      const response = await fetch('/api/stations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: stationName,
-          lineId: selectedLineId,
-          x: position.x,
-          y: position.y,
-          timeMinutes,
-        }),
+      await stationsService.createWithSegment({
+        name: stationName,
+        lineId: selectedLineId,
+        x: position.x,
+        y: position.y,
+        timeMinutes: timeMinutes,
       })
-
-      if (!response.ok) {
-        throw new Error('Failed to create station')
-      }
 
       await loadData()
       onStationAdded?.()
@@ -119,18 +108,10 @@ export const AddElement = ({
 
     setIsLineLoading(true)
     try {
-      const response = await fetch('/api/lines', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: lineName,
-          color: lineColor,
-        }),
+      await linesService.create({
+        name: lineName,
+        color: lineColor,
       })
-
-      if (!response.ok) {
-        throw new Error('Failed to create line')
-      }
 
       await loadData()
       onLineAdded?.()
