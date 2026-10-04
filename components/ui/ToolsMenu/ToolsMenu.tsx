@@ -2,67 +2,42 @@
 
 import { DownloadJson } from '@/components/db/DownloadJson/DownloadJson'
 import { UploadJson } from '@/components/db/UploadJson/UploadJson'
+import { CloseIcon, SettingsIcon } from '@/components/ui/Icons'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
+import styles from './ToolsMenu.module.css'
 
 export const ToolsMenu = () => {
+  const t = useTranslations('ToolsMenu')
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        bottom: 20,
-        right: 20,
-        zIndex: 9999,
-      }}
-    >
-      {/* Кнопка меню */}
+    <div className={styles.wrapper}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        style={{
-          width: 48,
-          height: 48,
-          borderRadius: '50%',
-          background: isOpen ? '#ef4444' : '#3b82f6',
-          color: 'white',
-          border: 'none',
-          fontSize: 24,
-          cursor: 'pointer',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-          transition: 'all 0.2s',
-        }}
+        type="button"
+        onClick={() => setIsOpen((open) => !open)}
+        className={`${styles.trigger} ${isOpen ? styles.triggerOpen : ''}`}
+        aria-label={isOpen ? t('close') : t('open')}
+        aria-expanded={isOpen}
       >
-        {isOpen ? '✕' : '⚙️'}
+        {isOpen ? (
+          <CloseIcon className={styles.triggerIcon} />
+        ) : (
+          <SettingsIcon className={styles.triggerIcon} />
+        )}
       </button>
 
-      {/* Меню */}
       {isOpen && (
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 60,
-            right: 0,
-            background: 'white',
-            borderRadius: 8,
-            padding: 12,
-            boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-            minWidth: 220,
-            border: '1px solid #e5e7eb',
-          }}
-        >
-          <div style={{ marginBottom: 8 }}>
-            <div style={{ fontSize: 12, fontWeight: 'bold', color: '#6b7280', marginBottom: 4 }}>
-              📤 Загрузка
-            </div>
+        <div className={styles.menu} role="menu">
+          <div className={styles.section}>
+            <div className={styles.sectionTitle}>{t('uploadSection')}</div>
             <UploadJson />
           </div>
 
-          <div style={{ borderTop: '1px solid #e5e7eb', margin: '8px 0' }} />
+          <div className={styles.divider} />
 
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 'bold', color: '#6b7280', marginBottom: 4 }}>
-              📥 Выгрузка
-            </div>
+          <div className={styles.section}>
+            <div className={styles.sectionTitle}>{t('downloadSection')}</div>
             <DownloadJson />
           </div>
         </div>

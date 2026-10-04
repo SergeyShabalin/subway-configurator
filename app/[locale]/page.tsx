@@ -1,5 +1,3 @@
-'use client'
-
 import { MetroCanvas } from '@/components/canvas/MetroCanvas'
 import { ToolsMenu } from '@/components/ui/ToolsMenu/ToolsMenu'
 

@@ -20,7 +20,7 @@ export const MetroLines = ({ visuals, lineRef }: MetroLinesProps) => {
         }
 
         if (points.length < 4) {
-          console.log(`⚠️ [MetroLines] Line ${line.id} has only ${points.length} points, skipping`)
+          console.log(`[MetroLines] Line ${line.id} has only ${points.length} points, skipping`)
           return null
         }
 

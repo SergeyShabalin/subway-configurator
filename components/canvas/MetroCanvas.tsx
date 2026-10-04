@@ -1,14 +1,18 @@
 'use client'
 
-import { AddElement } from '@/components/canvas/addStationModal/AddElement'
+import { AddElementModal } from '@/components/canvas/features'
+import { MouseRightClickIcon } from '@/components/ui/Icons/MouseRightClickIcon/MouseRightClickIcon'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import type Konva from 'konva'
-import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Layer, Stage } from 'react-konva'
 import { useMetroCanvas } from './hooks'
 import { useMetroModal } from './hooks/useMetroModal'
+import styles from './MetroCanvas.module.css'
 import { MetroLabels } from './MetroLabels/MetroLabels'
+import { useMetroLines } from './MetroLines/hooks/useMetroLines'
 import { MetroLines } from './MetroLines/MetroLines'
 import { MetroStations } from './MetroStations/MetroStations'
 import { useStageResize } from './shared/useStageResize'
@@ -20,11 +24,18 @@ export interface MetroCanvasRef {
 }
 
 export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
+  const t = useTranslations('MetroCanvas')
+
   const [isMounted, setIsMounted] = useState(false)
   const hasCenteredRef = useRef(false)
 
   const { visuals, stationNames, isLoaded, isInitializing, reloadData, setVisuals } =
     useMetroCanvas()
+
+  const { lineData } = useMetroLines()
+  const hasLines = lineData.length > 0
+  const hasStations = Object.keys(visuals).length > 0
+  const showHint = !hasStations
 
   const { isModalOpen, clickPosition, openModal, closeModal } = useMetroModal()
   const { width, height } = useStageResize()
@@ -50,7 +61,9 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     hasCenteredRef.current = true
   }, [isLoaded, visuals, centerStage, width, height])
 
-  const handleDblClick = () => {
+  const handleContextMenu = (e: Konva.KonvaEventObject<PointerEvent>) => {
+    e.evt.preventDefault()
+
     const stage = stageRef.current
     if (!stage) return
 
@@ -65,16 +78,32 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     openModal(worldPos.x, worldPos.y)
   }
 
-  const handleStationAdded = async () => {
+  const handleDataReload = async () => {
     await reloadData()
   }
+
+  const initialTab = hasLines ? 'station' : 'line'
+
+  const modal = useMemo(
+    () => (
+      <AddElementModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        position={clickPosition}
+        initialTab={initialTab}
+        onStationAdded={handleDataReload}
+        onLineAdded={handleDataReload}
+      />
+    ),
+    [isModalOpen, closeModal, clickPosition, initialTab, handleDataReload]
+  )
 
   if (!isLoaded || isInitializing) {
     return <SubwayLoader />
   }
 
   return (
-    <>
+    <div className={styles.container} style={{ width, height }}>
       <Stage
         ref={stageRef}
         width={width}
@@ -84,7 +113,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
         x={stagePosition.x}
         y={stagePosition.y}
         onWheel={handleWheel}
-        onDblClick={handleDblClick}
+        onContextMenu={handleContextMenu}
         draggable
         onDragEnd={handleStageDragEnd}
       >
@@ -103,18 +132,25 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
         </Layer>
       </Stage>
 
-      {isMounted &&
-        createPortal(
-          <AddElement
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            position={clickPosition}
-            onStationAdded={handleStationAdded}
-          />,
-          document.body
-        )}
-    </>
+      {showHint && (
+        <div className={styles.hint}>
+          <MouseRightClickIcon className={styles.icon} />
+
+          {hasLines ? (
+            <>
+              <div className={styles.title}>{t('hintNoStationsTitle')}</div>
+              <div className={styles.text}>{t('hintNoStationsText')}</div>
+            </>
+          ) : (
+            <>
+              <div className={styles.title}>{t('hintNoLinesTitle')}</div>
+              <div className={styles.text}>{t('hintNoLinesText')}</div>
+            </>
+          )}
+        </div>
+      )}
+
+      {isMounted && createPortal(modal, document.body)}
+    </div>
   )
 })
-
-MetroCanvas.displayName = 'MetroCanvas'

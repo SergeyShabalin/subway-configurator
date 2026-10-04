@@ -1,0 +1,64 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.button {
+    width: 100%;
+    padding: 10px 16px;
+    background: #8b5cf6;
+    color: #f1f5f9;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease,
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.button:hover:not(:disabled) {
+    background: #7c3aed;
+    transform: translateY(-1px);
+}
+
+.button:focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 2px;
+}
+
+.button:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.spinner {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.status {
+    padding: 4px 8px;
+    font-size: 11px;
+    text-align: center;
+    border-radius: 4px;
+    word-break: break-word;
+}
+
+.statusSuccess {
+    color: #4ade80;
+    background: rgb(16 185 129 / 12%);
+}
+
+.statusError {
+    color: #f87171;
+    background: rgb(239 68 68 / 12%);
+}

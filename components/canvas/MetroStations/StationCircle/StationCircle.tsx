@@ -17,7 +17,7 @@ const StationCircle = memo(
     if (!visual) return null
 
     const isMultiTransfer = isTransfer && colors && colors.length >= 2
-    const radius = isMultiTransfer ? 16 : 10
+    const radius = isMultiTransfer ? 9 : 7
     const strokeWidth = 2.5
 
     return (
@@ -65,7 +65,5 @@ const StationCircle = memo(
     )
   }
 )
-
-StationCircle.displayName = 'StationCircle'
 
 export { StationCircle }
