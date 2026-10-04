@@ -1,12 +1,12 @@
-// store/hooks/useMetroStore/useMetroStore.tsx
-import { graphService, stationsService } from '@/lib/services'
-import type { Line, Segment, Station } from '@/store/types'
+import { graphService, stationsService } from '@/src/lib/services'
+import { Line, Segment, Station, Visual } from '@/types/metro'
 import { create } from 'zustand'
 
 interface MetroState {
   stations: Array<Station>
   segments: Array<Segment>
   lines: Array<Line>
+  visuals: Array<Visual>
   visualToStations: Record<string, Array<string>>
   selectedStationId: string | null
   isDragging: boolean
@@ -21,10 +21,11 @@ interface MetroState {
   saveVisualPosition: (visualId: string, x: number, y: number) => Promise<void>
 }
 
-export const useMetroStore = create<MetroState>((set, _get) => ({
+export const useMetroStore = create<MetroState>((set, get) => ({
   stations: [],
   segments: [],
   lines: [],
+  visuals: [],
   visualToStations: {},
   selectedStationId: null,
   isDragging: false,
@@ -46,6 +47,7 @@ export const useMetroStore = create<MetroState>((set, _get) => ({
         stations: data.stations,
         segments: data.segments,
         lines: data.lines,
+        visuals: data.visuals,
         visualToStations: data.visualToStations,
         isLoading: false,
         error: null,
@@ -61,6 +63,10 @@ export const useMetroStore = create<MetroState>((set, _get) => ({
   saveVisualPosition: async (visualId, x, y) => {
     try {
       await stationsService.updateVisualPosition(visualId, x, y)
+
+      set((state) => ({
+        visuals: state.visuals.map((v) => (v.id === visualId ? { ...v, x, y } : v)),
+      }))
     } catch (error) {
       console.error('Failed to save visual position:', error)
     }

@@ -1,24 +1,27 @@
-// components/canvas/MetroLines/MetroLines.tsx
 'use client'
 
-import { useMetroStore } from '@/store'
 import { Line } from 'react-konva'
+import { useMetroLines } from './hooks/useMetroLines'
 import type { MetroLinesProps } from './types'
 
 export const MetroLines = ({ visuals, lineRef }: MetroLinesProps) => {
-  const lines = useMetroStore((state) => state.lines) // ← берет из стора
+  const { lineData } = useMetroLines()
 
   return (
     <>
-      {lines.map((line) => {
+      {lineData.map((line) => {
         const points: Array<number> = []
-        if (line.visualStationIds) {
-          for (const visualId of line.visualStationIds) {
-            const visual = visuals[visualId]
-            if (visual) {
-              points.push(visual.x, visual.y)
-            }
+
+        for (const visualId of line.visualStationIds) {
+          const visual = visuals[visualId]
+          if (visual) {
+            points.push(visual.x, visual.y)
           }
+        }
+
+        if (points.length < 4) {
+          console.log(`[MetroLines] Line ${line.id} has only ${points.length} points, skipping`)
+          return null
         }
 
         return (

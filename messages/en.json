@@ -1,0 +1,88 @@
+{
+  "Metadata": {
+    "title": "Subway configurator",
+    "description": "Build your own subway map"
+  },
+  "MetroCanvas": {
+    "hintNoLinesTitle": "Start with a new line",
+    "hintNoLinesText": "Right-click anywhere to add a new line and its stations",
+    "hintNoStationsTitle": "Add stations to the line",
+    "hintNoStationsText": "Right-click anywhere to place a station on the line"
+  },
+  "AddElementModal": {
+    "title": "Add element",
+    "tabStation": "Station",
+    "tabLine": "Line"
+  },
+  "AddStationForm": {
+    "nameLabel": "Station name",
+    "namePlaceholder": "Enter name...",
+    "lineLabel": "Line",
+    "linePlaceholder": "Select a line",
+    "noLines": "No lines yet. Create a line in the adjacent tab.",
+    "coordinates": "Coordinates: X={x}, Y={y}",
+    "cancel": "Cancel",
+    "submit": "Add station",
+    "submitting": "Adding...",
+    "errorCreate": "Failed to create station"
+  },
+  "AddLineForm": {
+    "nameLabel": "Line name",
+    "namePlaceholder": "Enter line name...",
+    "colorLabel": "Line color",
+    "cancel": "Cancel",
+    "submit": "Add line",
+    "submitting": "Adding...",
+    "errorCreate": "Failed to create line"
+  },
+  "ToolsMenu": {
+    "open": "Open menu",
+    "close": "Close menu",
+    "uploadSection": "Upload",
+    "downloadSection": "Download"
+  },
+  "UploadJson": {
+    "button": {
+      "idle": "Upload JSON",
+      "loading": "Uploading...",
+      "dragging": "Drop file"
+    },
+    "dragOverlay": "Drop file to upload",
+    "status": {
+      "reading": "Reading file...",
+      "importing": "Importing data...",
+      "success": "Loaded: {lines} lines, {stations} stations, {visuals} visuals",
+      "error": "Error: {message}"
+    },
+    "errors": {
+      "missingField": "Missing field \"{field}\" in JSON",
+      "linesNotObject": "Field \"lines\" must be an object",
+      "logicStationsMissing": "Missing \"logic.stations\" or it is not an object",
+      "logicSegmentsMissing": "Missing \"logic.segments\" or it is not an object",
+      "visualsStationsMissing": "Missing \"visuals.stations\" or it is not an object",
+      "noLines": "JSON contains no lines",
+      "lineMissingId": "Line \"{id}\" is missing field \"id\"",
+      "lineMissingName": "Line \"{id}\" is missing field \"name\"",
+      "lineMissingColor": "Line \"{id}\" is missing field \"color\"",
+      "lineMissingVisualStationIds": "Line \"{id}\" is missing \"visualStationIds\" or it is not an array",
+      "lineMissingLogicalStationIds": "Line \"{id}\" is missing \"logicalStationIds\" or it is not an array",
+      "notJson": "Please select a JSON file",
+      "unknown": "Unknown error"
+    }
+  },
+  "DownloadJson": {
+    "button": {
+      "idle": "Download JSON",
+      "loading": "Preparing..."
+    },
+    "status": {
+      "building": "Building data...",
+      "creatingFile": "Creating file...",
+      "success": "JSON downloaded! ({size} KB)",
+      "error": "Error: {message}"
+    },
+    "errors": {
+      "unknown": "Unknown error"
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "Metadata": {
+    "title": "Конфигуратор метро",
+    "description": "Соберите свою схему метро"
+  },
+  "MetroCanvas": {
+    "hintNoLinesTitle": "Начните с новой ветки",
+    "hintNoLinesText": "Нажмите правую кнопку мыши в любом месте, чтобы добавить ветку и станции для неё",
+    "hintNoStationsTitle": "Добавьте станции на ветке",
+    "hintNoStationsText": "Нажмите правую кнопку мыши в любом месте, чтобы поставить станцию на ветке"
+  },
+  "AddElementModal": {
+    "title": "Добавить элемент",
+    "tabStation": "Станция",
+    "tabLine": "Ветка"
+  },
+  "AddStationForm": {
+    "nameLabel": "Название станции",
+    "namePlaceholder": "Введите название...",
+    "lineLabel": "Ветка",
+    "linePlaceholder": "Выберите ветку",
+    "noLines": "Нет веток. Создайте ветку в соседней вкладке.",
+    "coordinates": "Координаты: X={x}, Y={y}",
+    "cancel": "Отмена",
+    "submit": "Добавить станцию",
+    "submitting": "Добавление...",
+    "errorCreate": "Ошибка при создании станции"
+  },
+  "AddLineForm": {
+    "nameLabel": "Название ветки",
+    "namePlaceholder": "Введите название ветки...",
+    "colorLabel": "Цвет ветки",
+    "cancel": "Отмена",
+    "submit": "Добавить ветку",
+    "submitting": "Добавление...",
+    "errorCreate": "Ошибка при создании ветки"
+  },
+  "ToolsMenu": {
+    "open": "Открыть меню",
+    "close": "Закрыть меню",
+    "uploadSection": "Загрузка",
+    "downloadSection": "Выгрузка"
+  },
+  "UploadJson": {
+    "button": {
+      "idle": "Загрузить JSON",
+      "loading": "Загрузка...",
+      "dragging": "Отпустите файл"
+    },
+    "dragOverlay": "Отпустите файл для загрузки",
+    "status": {
+      "reading": "Чтение файла...",
+      "importing": "Импорт данных...",
+      "success": "Загружено: {lines} линий, {stations} станций, {visuals} визуалов",
+      "error": "Ошибка: {message}"
+    },
+    "errors": {
+      "missingField": "Отсутствует поле \"{field}\" в JSON",
+      "linesNotObject": "Поле \"lines\" должно быть объектом",
+      "logicStationsMissing": "Отсутствуют \"logic.stations\" или это не объект",
+      "logicSegmentsMissing": "Отсутствуют \"logic.segments\" или это не объект",
+      "visualsStationsMissing": "Отсутствуют \"visuals.stations\" или это не объект",
+      "noLines": "В JSON нет ни одной линии",
+      "lineMissingId": "У линии \"{id}\" отсутствует поле \"id\"",
+      "lineMissingName": "У линии \"{id}\" отсутствует поле \"name\"",
+      "lineMissingColor": "У линии \"{id}\" отсутствует поле \"color\"",
+      "lineMissingVisualStationIds": "У линии \"{id}\" отсутствует \"visualStationIds\" или это не массив",
+      "lineMissingLogicalStationIds": "У линии \"{id}\" отсутствует \"logicalStationIds\" или это не массив",
+      "notJson": "Пожалуйста, выберите JSON файл",
+      "unknown": "Неизвестная ошибка"
+    }
+  },
+  "DownloadJson": {
+    "button": {
+      "idle": "Скачать JSON",
+      "loading": "Подготовка..."
+    },
+    "status": {
+      "building": "Формирование данных...",
+      "creatingFile": "Создание файла...",
+      "success": "JSON скачан! ({size} KB)",
+      "error": "Ошибка: {message}"
+    },
+    "errors": {
+      "unknown": "Неизвестная ошибка"
+    }
+  }
+}
