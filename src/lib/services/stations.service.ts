@@ -99,8 +99,11 @@ export class StationsService extends BaseService {
       const line = await linesRepo.getById(data.lineId)
       if (line) {
         const visualStationIds = line.visualStationIds ?? []
+        const logicalStationIds = line.logicalStationIds ?? []
+
         await linesRepo.update(data.lineId, {
           visualStationIds: [...visualStationIds, visualId],
+          logicalStationIds: [...logicalStationIds, stationId],
         })
       }
 

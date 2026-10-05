@@ -53,7 +53,7 @@ interface VisualRecord {
 const buildLines = (lines: Array<LineRecord>) =>
   lines.reduce<Record<string, unknown>>((acc, line) => {
     acc[line.id] = {
-      id: Number(line.id),
+      id: line.id,
       name: line.name,
       color: line.color,
       isCircular: Boolean(line.is_circular),
