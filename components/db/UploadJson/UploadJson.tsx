@@ -6,6 +6,7 @@ import { stationsRepo } from '@/src/lib/indexeddb/repositories/stations.reposito
 import { visualStationLinksRepo } from '@/src/lib/indexeddb/repositories/visual-station-links.repository'
 import { visualsRepo } from '@/src/lib/indexeddb/repositories/visuals.repository'
 import { useMetroStore } from '@/store'
+import type { VisualStationLink } from '@/types/metro'
 import { useTranslations } from 'next-intl'
 import { ChangeEvent, DragEvent, useRef, useState } from 'react'
 import styles from './UploadJson.module.css'
@@ -85,11 +86,6 @@ interface VisualRecord {
   label_x: number
   label_y: number
   is_transfer: number
-}
-
-interface LinkRecord {
-  visual_id: string
-  station_id: string
 }
 
 interface SegmentRecord {
@@ -246,12 +242,15 @@ const buildVisualRecords = (visuals: Record<string, VisualStationInput>): Array<
     is_transfer: v.connections.length > 1 ? 1 : 0,
   }))
 
-const buildLinkRecords = (visuals: Record<string, VisualStationInput>): Array<LinkRecord> => {
-  const links: Array<LinkRecord> = []
+const buildLinkRecords = (
+  visuals: Record<string, VisualStationInput>
+): Array<VisualStationLink> => {
+  const links: Array<VisualStationLink> = []
 
   for (const [visualId, visual] of Object.entries(visuals)) {
     for (const stationId of visual.connections) {
       links.push({
+        id: `${visualId}:${stationId}`,
         visual_id: String(visualId),
         station_id: String(stationId),
       })

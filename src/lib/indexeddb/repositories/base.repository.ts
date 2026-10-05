@@ -26,7 +26,7 @@ export abstract class BaseRepository<T extends { id: string }> implements IRepos
     return db.put<T>(this.storeName, entity)
   }
 
-  async saveMany(entities: T[]): Promise<void> {
+  async saveMany(entities: Array<T>): Promise<void> {
     return db.bulkPut<T>(this.storeName, entities)
   }
 

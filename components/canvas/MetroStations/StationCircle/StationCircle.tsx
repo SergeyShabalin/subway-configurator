@@ -66,4 +66,6 @@ const StationCircle = memo(
   }
 )
 
+StationCircle.displayName = 'StationCircle'
+
 export { StationCircle }

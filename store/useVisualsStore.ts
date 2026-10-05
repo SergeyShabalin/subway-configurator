@@ -1,5 +1,5 @@
+import type { VisualStation } from '@/types/metro'
 import { create } from 'zustand'
-import type { VisualStation } from './types'
 
 interface VisualsState {
   visuals: Record<string, VisualStation>
@@ -19,10 +19,15 @@ export const useVisualsStore = create<VisualsState>((set) => ({
   },
 
   updateVisualPosition: (id, x, y) =>
-    set((state) => ({
-      visuals: {
-        ...state.visuals,
-        [id]: { ...state.visuals[id], x, y },
-      },
-    })),
+    set((state) => {
+      const existing = state.visuals[id]
+      if (!existing) return state
+
+      return {
+        visuals: {
+          ...state.visuals,
+          [id]: { ...existing, x, y },
+        },
+      }
+    }),
 }))

@@ -1,5 +1,5 @@
 import { graphService, stationsService } from '@/src/lib/services'
-import { Line, Segment, Station, Visual } from '@/types/metro'
+import type { Line, Segment, Station, Visual } from '@/types/metro'
 import { create } from 'zustand'
 
 interface MetroState {
@@ -21,7 +21,7 @@ interface MetroState {
   saveVisualPosition: (visualId: string, x: number, y: number) => Promise<void>
 }
 
-export const useMetroStore = create<MetroState>((set, get) => ({
+export const useMetroStore = create<MetroState>((set) => ({
   stations: [],
   segments: [],
   lines: [],
@@ -43,11 +43,42 @@ export const useMetroStore = create<MetroState>((set, get) => ({
     try {
       const data = await graphService.getGraph()
 
+      const stations: Array<Station> = data.stations.map((s) => ({
+        id: s.id,
+        name: s.name,
+        line_id: s.lineId,
+      }))
+
+      const segments: Array<Segment> = data.segments.map((s) => ({
+        id: s.id,
+        from_station_id: s.fromStationId,
+        to_station_id: s.toStationId,
+        time_minutes: s.timeMinutes,
+      }))
+
+      const lines: Array<Line> = data.lines.map((l) => ({
+        id: l.id,
+        name: l.name,
+        color: l.color,
+        is_circular: l.isCircular ? 1 : 0,
+        visualStationIds: l.visualStationIds,
+        logicalStationIds: l.logicalStationIds,
+      }))
+
+      const visuals: Array<Visual> = data.visuals.map((v) => ({
+        id: v.id,
+        x: v.x,
+        y: v.y,
+        label_x: v.labelOffset.x,
+        label_y: v.labelOffset.y,
+        is_transfer: v.isTransfer ? 1 : 0,
+      }))
+
       set({
-        stations: data.stations,
-        segments: data.segments,
-        lines: data.lines,
-        visuals: data.visuals,
+        stations,
+        segments,
+        lines,
+        visuals,
         visualToStations: data.visualToStations,
         isLoading: false,
         error: null,

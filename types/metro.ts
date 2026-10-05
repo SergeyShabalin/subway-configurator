@@ -3,14 +3,15 @@ export interface Line {
   name: string
   color: string
   is_circular: number
-  visualStationIds?: string[]
-  logicalStationIds?: string[]
+  visualStationIds?: Array<string>
+  logicalStationIds?: Array<string>
 }
 
 export interface Station {
   id: string
   name: string
   line_id: string
+  createdAt?: number
 }
 
 export interface Visual {
@@ -23,6 +24,7 @@ export interface Visual {
 }
 
 export interface VisualStationLink {
+  id: string
   visual_id: string
   station_id: string
 }
@@ -31,18 +33,18 @@ export interface Segment {
   id: string
   from_station_id: string
   to_station_id: string
+  line_id?: string
   time_minutes: number
 }
 
-// 👇 GraphData для работы с graphService (camelCase)
 export interface GraphData {
   lines: Array<{
     id: string
     name: string
     color: string
     isCircular: boolean
-    visualStationIds: string[]
-    logicalStationIds: string[]
+    visualStationIds: Array<string>
+    logicalStationIds: Array<string>
   }>
   stations: Array<{
     id: string
@@ -65,10 +67,9 @@ export interface GraphData {
     toStationId: string
     timeMinutes: number
   }>
-  visualToStations: Record<string, string[]>
+  visualToStations: Record<string, Array<string>>
 }
 
-// 👇 Тип для VisualStation из store
 export interface VisualStation {
   id: string
   x: number
