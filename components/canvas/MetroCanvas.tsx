@@ -5,7 +5,15 @@ import { MouseRightClickIcon } from '@/components/ui/Icons/MouseRightClickIcon/M
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import type Konva from 'konva'
 import { useTranslations } from 'next-intl'
-import { forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { createPortal } from 'react-dom'
 import { Layer, Stage } from 'react-konva'
 import { useMetroCanvas } from './hooks'
@@ -78,15 +86,16 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     openModal(worldPos.x, worldPos.y)
   }
 
-  const handleDataReload = async () => {
+  const handleDataReload = useCallback(async () => {
     await reloadData()
-  }
+  }, [reloadData])
 
   const initialTab = hasLines ? 'station' : 'line'
 
   const modal = useMemo(
     () => (
       <AddElementModal
+        key={isModalOpen ? 'open' : 'closed'}
         isOpen={isModalOpen}
         onClose={closeModal}
         position={clickPosition}
@@ -154,3 +163,5 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     </div>
   )
 })
+
+MetroCanvas.displayName = 'MetroCanvas'

@@ -66,7 +66,7 @@ export class IndexedDB {
   }
 
   // Получить все записи
-  async getAll<T>(storeName: string): Promise<T[]> {
+  async getAll<T>(storeName: string): Promise<Array<T>> {
     const db = await this.open()
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(storeName, 'readonly')
@@ -105,7 +105,7 @@ export class IndexedDB {
   }
 
   // Массовое добавление
-  async bulkPut<T>(storeName: string, items: T[]): Promise<void> {
+  async bulkPut<T>(storeName: string, items: Array<T>): Promise<void> {
     if (items.length === 0) return
 
     const db = await this.open()
@@ -135,7 +135,7 @@ export class IndexedDB {
   }
 
   // Обновить конкретное поле
-  async update<T extends Record<string, any>>(
+  async update<T extends Record<string, unknown>>(
     storeName: string,
     id: string,
     data: Partial<T>

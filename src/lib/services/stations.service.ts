@@ -35,20 +35,21 @@ export class StationsService extends BaseService {
       const allStations = await stationsRepo.getAll()
       const lineStations = allStations
         .filter((s) => s.line_id === data.lineId)
-        .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))
+        .sort((a, b) => (a.createdAt ?? 0) - (b.createdAt ?? 0))
 
       let segment: Segment | undefined
       if (lineStations.length > 1 && data.timeMinutes > 0) {
         const previousStation = lineStations[lineStations.length - 2]
 
         if (previousStation) {
-          segment = await segmentsRepo.save({
+          segment = {
             id: this.generateId(),
             from_station_id: previousStation.id,
             to_station_id: result.station.id,
             line_id: data.lineId,
             time_minutes: data.timeMinutes,
-          })
+          }
+          await segmentsRepo.save(segment)
         }
       }
 
@@ -90,14 +91,14 @@ export class StationsService extends BaseService {
       })
 
       await visualStationLinksRepo.save({
+        id: `${visualId}:${stationId}`,
         visual_id: visualId,
         station_id: stationId,
       })
 
-      // 🔥 Добавляем визуал в линию
       const line = await linesRepo.getById(data.lineId)
       if (line) {
-        const visualStationIds = line.visualStationIds || []
+        const visualStationIds = line.visualStationIds ?? []
         await linesRepo.update(data.lineId, {
           visualStationIds: [...visualStationIds, visualId],
         })

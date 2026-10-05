@@ -3,7 +3,7 @@
 import { AddStationForm } from '@/components/canvas/features'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AddLineForm } from '../AddLineForm/AddLineForm'
 import styles from './AddElementModal.module.css'
 
@@ -28,12 +28,6 @@ export const AddElementModal = ({
 }: AddElementModalProps) => {
   const t = useTranslations('AddElementModal')
   const [activeTab, setActiveTab] = useState<TabType>(initialTab)
-
-  useEffect(() => {
-    if (isOpen) {
-      setActiveTab(initialTab)
-    }
-  }, [isOpen, initialTab])
 
   if (!isOpen) return null
 
