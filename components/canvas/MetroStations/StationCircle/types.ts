@@ -19,4 +19,5 @@ export interface StationCircleProps {
   onDragStart: () => void
   onDragMove: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
   onDragEnd: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
+  onDoubleClick?: () => void
 }
