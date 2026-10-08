@@ -33,11 +33,13 @@ export class StationsService extends BaseService {
       })
 
       const allStations = await stationsRepo.getAll()
+
       const lineStations = allStations
         .filter((s) => s.line_id === data.lineId)
         .sort((a, b) => (a.createdAt ?? 0) - (b.createdAt ?? 0))
 
       let segment: Segment | undefined
+
       if (lineStations.length > 1 && data.timeMinutes > 0) {
         const previousStation = lineStations[lineStations.length - 2]
 
@@ -49,6 +51,7 @@ export class StationsService extends BaseService {
             line_id: data.lineId,
             time_minutes: data.timeMinutes,
           }
+
           await segmentsRepo.save(segment)
         }
       }
@@ -79,6 +82,7 @@ export class StationsService extends BaseService {
         line_id: data.lineId,
         createdAt: Date.now(),
       }
+
       await stationsRepo.save(newStation)
 
       await visualsRepo.save({
@@ -86,7 +90,7 @@ export class StationsService extends BaseService {
         x: data.x,
         y: data.y,
         label_x: 0,
-        label_y: -40,
+        label_y: -30,
         is_transfer: 0,
       })
 
@@ -97,6 +101,7 @@ export class StationsService extends BaseService {
       })
 
       const line = await linesRepo.getById(data.lineId)
+
       if (line) {
         const visualStationIds = line.visualStationIds ?? []
         const logicalStationIds = line.logicalStationIds ?? []
@@ -107,9 +112,62 @@ export class StationsService extends BaseService {
         })
       }
 
-      return { station: newStation, visualId }
+      return {
+        station: newStation,
+        visualId,
+      }
     } catch (error) {
       return this.handleError(error, 'StationsService.create')
+    }
+  }
+
+  async delete(stationId: string): Promise<void> {
+    try {
+      const station = await stationsRepo.getById(stationId)
+
+      if (!station) {
+        throw new Error(`Station ${stationId} not found`)
+      }
+
+      const [links, segments, line] = await Promise.all([
+        visualStationLinksRepo.getByStationId(stationId),
+        segmentsRepo.getByStationId(stationId),
+        linesRepo.getById(station.line_id),
+      ])
+
+      const visualIds = [...new Set(links.map((link) => link.visual_id))]
+
+      const visualLinks = await Promise.all(
+        visualIds.map(async (visualId) => ({
+          visualId,
+          links: await visualStationLinksRepo.getByVisualId(visualId),
+        }))
+      )
+
+      const visualIdsToDelete = visualLinks
+        .filter(({ links: linksForVisual }) =>
+          linksForVisual.every((link) => link.station_id === stationId)
+        )
+        .map(({ visualId }) => visualId)
+
+      await Promise.all([
+        ...segments.map((segment) => segmentsRepo.delete(segment.id)),
+        ...links.map((link) => visualStationLinksRepo.delete(link.id)),
+        ...visualIdsToDelete.map((visualId) => visualsRepo.delete(visualId)),
+      ])
+
+      if (line) {
+        await linesRepo.update(station.line_id, {
+          logicalStationIds: (line.logicalStationIds ?? []).filter((id) => id !== stationId),
+          visualStationIds: (line.visualStationIds ?? []).filter(
+            (id) => !visualIdsToDelete.includes(id)
+          ),
+        })
+      }
+
+      await stationsRepo.delete(stationId)
+    } catch (error) {
+      return this.handleError(error, 'StationsService.delete')
     }
   }
 

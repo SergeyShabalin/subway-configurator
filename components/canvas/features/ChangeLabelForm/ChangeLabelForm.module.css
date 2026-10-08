@@ -1,0 +1,64 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.label {
+    flex: 0 0 70px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.value {
+    min-width: 0;
+    color: var(--text-primary);
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+}
+
+.deleteButton {
+    padding: 8px 16px;
+    border: 1px solid var(--error);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--error);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.deleteButton:hover {
+    background: var(--error);
+    color: var(--white);
+}
+
+.deleteButton:active {
+    transform: translateY(1px);
+}
+
+.deleteButton:focus-visible {
+    outline: 2px solid var(--error);
+    outline-offset: 2px;
+}

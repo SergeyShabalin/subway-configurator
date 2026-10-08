@@ -13,6 +13,7 @@ const StationCircle = memo(
     onDragStart,
     onDragMove,
     onDragEnd,
+    onDoubleClick,
   }: StationCircleProps) => {
     if (!visual) return null
 
@@ -33,11 +34,15 @@ const StationCircle = memo(
           onDragStart={onDragStart}
           onDragMove={(e) => onDragMove(e, visual.id)}
           onDragEnd={(e) => onDragEnd(e, visual.id)}
+          onDblClick={onDoubleClick}
         />
+
         {isMultiTransfer &&
           colors.slice(1).map((c: string, index: number) => {
             const innerRadius = 16 - (index + 1) * 2.5
+
             if (innerRadius < 4) return null
+
             return (
               <Circle
                 key={`${visual.id}-inner-${index}`}
@@ -56,12 +61,14 @@ const StationCircle = memo(
   },
   (prev: StationCircleProps, next: StationCircleProps) => {
     if (!prev.visual || !next.visual) return true
+
     return (
       prev.visual.x === next.visual.x &&
       prev.visual.y === next.visual.y &&
       prev.color === next.color &&
       prev.isTransfer === next.isTransfer &&
-      prev.colors?.join(',') === next.colors?.join(',')
+      prev.colors?.join(',') === next.colors?.join(',') &&
+      prev.onDoubleClick === next.onDoubleClick
     )
   }
 )

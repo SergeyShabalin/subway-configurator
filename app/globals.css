@@ -1,12 +1,26 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
+
+    --text-primary: #171717;
+    --text-secondary: #6b7280;
+    --border: #e5e7eb;
+
+    --error: #dc2626;
+    --white: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #0a0a0a;
         --foreground: #ededed;
+
+        --text-primary: #ededed;
+        --text-secondary: #a1a1aa;
+        --border: #27272a;
+
+        --error: #ef4444;
+        --white: #ffffff;
     }
 }
 

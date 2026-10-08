@@ -38,4 +38,5 @@ export interface MetroStationsProps {
       | Record<string, VisualData>
       | ((prev: Record<string, VisualData>) => Record<string, VisualData>)
   ) => void
+  onStationDoubleClick: (stationId: string) => void
 }

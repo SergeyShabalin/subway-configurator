@@ -1,6 +1,7 @@
 'use client'
 
 import { AddElementModal } from '@/components/canvas/features'
+import { ChangeElementModal } from '@/components/canvas/features/ChangeElementModal/ChangeElementModal'
 import { MouseRightClickIcon } from '@/components/ui/Icons/MouseRightClickIcon/MouseRightClickIcon'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import type Konva from 'konva'
@@ -35,18 +36,23 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
   const t = useTranslations('MetroCanvas')
 
   const [isMounted, setIsMounted] = useState(false)
+  const [selectedStationId, setSelectedStationId] = useState<string | null>(null)
+
   const hasCenteredRef = useRef(false)
 
   const { visuals, stationNames, isLoaded, isInitializing, reloadData, setVisuals } =
     useMetroCanvas()
 
   const { lineData } = useMetroLines()
+
   const hasLines = lineData.length > 0
   const hasStations = Object.keys(visuals).length > 0
   const showHint = !hasStations
 
   const { isModalOpen, clickPosition, openModal, closeModal } = useMetroModal()
+
   const { width, height } = useStageResize()
+
   const { stageRef, stageScale, stagePosition, handleWheel, handleStageDragEnd, centerStage } =
     useStageZoom(0.1, 5, 1.1)
 
@@ -56,6 +62,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
 
   useEffect(() => {
     setIsMounted(true)
+
     return () => setIsMounted(false)
   }, [])
 
@@ -63,6 +70,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     if (!isLoaded || hasCenteredRef.current) return
 
     const values = Object.values(visuals)
+
     if (values.length === 0) return
 
     centerStage(values, width, height)
@@ -73,9 +81,11 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     e.evt.preventDefault()
 
     const stage = stageRef.current
+
     if (!stage) return
 
     const pointer = stage.getPointerPosition()
+
     if (!pointer) return
 
     const worldPos = {
@@ -90,9 +100,17 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     await reloadData()
   }, [reloadData])
 
+  const handleStationDoubleClick = useCallback((stationId: string) => {
+    setSelectedStationId(stationId)
+  }, [])
+
+  const handleChangeModalClose = useCallback(() => {
+    setSelectedStationId(null)
+  }, [])
+
   const initialTab = hasLines ? 'station' : 'line'
 
-  const modal = useMemo(
+  const addElementModal = useMemo(
     () => (
       <AddElementModal
         key={isModalOpen ? 'open' : 'closed'}
@@ -105,6 +123,18 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
       />
     ),
     [isModalOpen, closeModal, clickPosition, initialTab, handleDataReload]
+  )
+
+  const changeElementModal = useMemo(
+    () => (
+      <ChangeElementModal
+        isOpen={selectedStationId !== null}
+        onClose={handleChangeModalClose}
+        stationId={selectedStationId}
+        onSuccess={handleDataReload}
+      />
+    ),
+    [selectedStationId, handleChangeModalClose, handleDataReload]
   )
 
   if (!isLoaded || isInitializing) {
@@ -135,6 +165,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
             lineRef={lineRef}
             textRef={textRef}
             setVisuals={setVisuals}
+            onStationDoubleClick={handleStationDoubleClick}
           />
 
           <MetroLabels visuals={visuals} stationNames={stationNames} textRef={textRef} />
@@ -148,18 +179,27 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
           {hasLines ? (
             <>
               <div className={styles.title}>{t('hintNoStationsTitle')}</div>
+
               <div className={styles.text}>{t('hintNoStationsText')}</div>
             </>
           ) : (
             <>
               <div className={styles.title}>{t('hintNoLinesTitle')}</div>
+
               <div className={styles.text}>{t('hintNoLinesText')}</div>
             </>
           )}
         </div>
       )}
 
-      {isMounted && createPortal(modal, document.body)}
+      {isMounted &&
+        createPortal(
+          <>
+            {addElementModal}
+            {changeElementModal}
+          </>,
+          document.body
+        )}
     </div>
   )
 })
