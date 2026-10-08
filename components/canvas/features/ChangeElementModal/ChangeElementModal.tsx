@@ -2,6 +2,7 @@
 
 import { ChangeLabelForm } from '@/components/canvas/features/ChangeLabelForm/ChangeLabelForm'
 import { Modal } from '@/components/ui/Modal/Modal'
+import { useTranslations } from 'next-intl'
 
 interface ChangeElementModalProps {
   isOpen: boolean
@@ -16,6 +17,8 @@ export const ChangeElementModal = ({
   stationId,
   onSuccess,
 }: ChangeElementModalProps) => {
+  const t = useTranslations('ChangeElementModal')
+
   if (!isOpen || !stationId) {
     return null
   }
@@ -26,7 +29,7 @@ export const ChangeElementModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Change station" size="medium">
+    <Modal isOpen={isOpen} onClose={onClose} title={t('title')} size="medium">
       <div>
         <ChangeLabelForm stationId={stationId} onSuccess={handleSuccess} />
       </div>
