@@ -84,5 +84,16 @@
     "errors": {
       "unknown": "Unknown error"
     }
+  },
+  "ChangeLabelForm": {
+    "id": "ID",
+    "name": "Name",
+    "lineId": "Line ID",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete station \"{name}\"?",
+    "errorDelete": "Failed to delete station"
+  },
+  "ChangeElementModal": {
+    "title": "Change station"
   }
 }

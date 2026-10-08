@@ -84,5 +84,16 @@
     "errors": {
       "unknown": "Неизвестная ошибка"
     }
+  },
+  "ChangeLabelForm": {
+    "id": "ID",
+    "name": "Название",
+    "lineId": "ID ветки",
+    "delete": "Удалить",
+    "confirmDelete": "Вы действительно хотите удалить станцию \"{name}\"?",
+    "errorDelete": "Не удалось удалить станцию"
+  },
+  "ChangeElementModal": {
+    "title": "Изменить станцию"
   }
 }
