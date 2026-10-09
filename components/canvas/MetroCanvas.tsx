@@ -179,13 +179,11 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
           {hasLines ? (
             <>
               <div className={styles.title}>{t('hintNoStationsTitle')}</div>
-
               <div className={styles.text}>{t('hintNoStationsText')}</div>
             </>
           ) : (
             <>
               <div className={styles.title}>{t('hintNoLinesTitle')}</div>
-
               <div className={styles.text}>{t('hintNoLinesText')}</div>
             </>
           )}

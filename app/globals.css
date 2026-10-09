@@ -1,26 +1,45 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
-
     --text-primary: #171717;
     --text-secondary: #6b7280;
     --border: #e5e7eb;
-
     --error: #dc2626;
+    --success: #16a34a;
     --white: #ffffff;
+    --button-primary-bg: #1078cd;
+    --button-primary-hover: #0866b2;
+    --button-primary-text: #ffffff;
+    --button-outline-bg: transparent;
+    --button-outline-hover: #f3f4f6;
+    --button-outline-text: var(--text-primary);
+    --button-border: var(--border);
+    --button-ghost-hover: #f3f4f6;
+    --button-ghost-text: var(--text-primary);
+    --button-disabled-opacity: 0.5;
+    --button-focus: #38bdf8;
+    --radius-sm: 6px;
+    --radius-md: 8px;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #0a0a0a;
         --foreground: #ededed;
-
         --text-primary: #ededed;
         --text-secondary: #a1a1aa;
         --border: #27272a;
-
         --error: #ef4444;
         --white: #ffffff;
+        --button-primary-bg: #1078cd;
+        --button-primary-hover: #1689e5;
+        --button-primary-text: #ffffff;
+        --button-outline-bg: transparent;
+        --button-outline-hover: #1e293b;
+        --button-outline-text: var(--text-primary);
+        --button-border: var(--border);
+        --button-ghost-hover: #1e293b;
+        --button-ghost-text: var(--text-primary);
     }
 }
 

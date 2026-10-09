@@ -4,36 +4,6 @@
     gap: 6px;
 }
 
-.button {
-    width: 100%;
-    padding: 10px 16px;
-    background: #8b5cf6;
-    color: #f1f5f9;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s ease,
-    opacity 0.15s ease,
-    transform 0.15s ease;
-}
-
-.button:hover:not(:disabled) {
-    background: #7c3aed;
-    transform: translateY(-1px);
-}
-
-.button:focus-visible {
-    outline: 2px solid #38bdf8;
-    outline-offset: 2px;
-}
-
-.button:disabled {
-    cursor: wait;
-    opacity: 0.6;
-}
-
 .spinner {
     display: inline-block;
     animation: spin 1s linear infinite;

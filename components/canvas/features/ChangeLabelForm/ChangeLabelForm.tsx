@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/Button'
 import { stationsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
@@ -52,9 +53,9 @@ const ChangeLabelForm = ({ stationId, onSuccess }: ChangeLabelFormProps) => {
       </div>
 
       <div className={styles.actions}>
-        <button type="button" className={styles.deleteButton} onClick={handleDelete}>
+        <Button variant="danger" size="medium" onClick={handleDelete}>
           {t('delete')}
-        </button>
+        </Button>
       </div>
     </div>
   )
