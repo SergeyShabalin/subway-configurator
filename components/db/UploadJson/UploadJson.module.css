@@ -11,8 +11,8 @@
     min-height: 36px;
     padding: 8px 16px;
     background: transparent;
-    color: var(--button-primary-bg);
-    border: 1px solid var(--button-primary-bg);
+    color: var(--blue);
+    border: 1px solid var(--blue);
     border-radius: var(--radius-sm);
     font-family: inherit;
     font-size: 14px;
@@ -30,9 +30,9 @@
 }
 
 .dropzone:hover {
-    background: var(--button-primary-bg);
+    background: var(--blue);
     color: var(--button-primary-text);
-    border-color: var(--button-primary-bg);
+    border-color: var(--blue);
 }
 
 .dropzone:active {
@@ -45,7 +45,7 @@
 }
 
 .dropzoneDragging {
-    background: var(--button-primary-bg);
+    background: var(--blue);
     color: var(--button-primary-text);
     border: 2px dashed var(--button-primary-text);
 }
@@ -119,7 +119,7 @@
     align-items: center;
     justify-content: center;
     background: rgb(59 130 246 / 12%);
-    border: 4px dashed var(--button-primary-bg);
+    border: 4px dashed var(--blue);
     color: #60a5fa;
     font-size: 22px;
     font-weight: 700;

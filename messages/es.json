@@ -1,0 +1,99 @@
+{
+  "Metadata": {
+    "title": "Configurador de metro",
+    "description": "Crea tu propio mapa de metro"
+  },
+  "MetroCanvas": {
+    "hintNoLinesTitle": "Empieza con una nueva línea",
+    "hintNoLinesText": "Haz clic derecho en cualquier lugar para añadir una nueva línea y sus estaciones",
+    "hintNoStationsTitle": "Añade estaciones a la línea",
+    "hintNoStationsText": "Haz clic derecho en cualquier lugar para colocar una estación en la línea"
+  },
+  "AddElementModal": {
+    "title": "Añadir elemento",
+    "tabStation": "Estación",
+    "tabLine": "Línea"
+  },
+  "AddStationForm": {
+    "nameLabel": "Nombre de la estación",
+    "namePlaceholder": "Introduce el nombre...",
+    "lineLabel": "Línea",
+    "linePlaceholder": "Selecciona una línea",
+    "noLines": "Aún no hay líneas. Crea una línea en la pestaña contigua.",
+    "coordinates": "Coordenadas: X={x}, Y={y}",
+    "cancel": "Cancelar",
+    "submit": "Añadir estación",
+    "submitting": "Añadiendo...",
+    "errorCreate": "No se pudo crear la estación"
+  },
+  "AddLineForm": {
+    "nameLabel": "Nombre de la línea",
+    "namePlaceholder": "Introduce el nombre de la línea...",
+    "colorLabel": "Color de la línea",
+    "cancel": "Cancelar",
+    "submit": "Añadir línea",
+    "submitting": "Añadiendo...",
+    "errorCreate": "No se pudo crear la línea"
+  },
+  "ToolsMenu": {
+    "open": "Abrir menú",
+    "close": "Cerrar menú",
+    "uploadSection": "Cargar",
+    "downloadSection": "Descargar"
+  },
+  "UploadJson": {
+    "button": {
+      "idle": "Cargar JSON",
+      "loading": "Cargando...",
+      "dragging": "Suelta el archivo"
+    },
+    "dragOverlay": "Suelta el archivo para cargar",
+    "status": {
+      "reading": "Leyendo archivo...",
+      "importing": "Importando datos...",
+      "success": "Cargado: {lines} líneas, {stations} estaciones, {visuals} visuales",
+      "error": "Error: {message}"
+    },
+    "errors": {
+      "missingField": "Falta el campo \"{field}\" en el JSON",
+      "linesNotObject": "El campo \"lines\" debe ser un objeto",
+      "logicStationsMissing": "Falta \"logic.stations\" o no es un objeto",
+      "logicSegmentsMissing": "Falta \"logic.segments\" o no es un objeto",
+      "visualsStationsMissing": "Falta \"visuals.stations\" o no es un objeto",
+      "noLines": "El JSON no contiene líneas",
+      "lineMissingId": "A la línea \"{id}\" le falta el campo \"id\"",
+      "lineMissingName": "A la línea \"{id}\" le falta el campo \"name\"",
+      "lineMissingColor": "A la línea \"{id}\" le falta el campo \"color\"",
+      "lineMissingVisualStationIds": "A la línea \"{id}\" le falta \"visualStationIds\" o no es un array",
+      "lineMissingLogicalStationIds": "A la línea \"{id}\" le falta \"logicalStationIds\" o no es un array",
+      "notJson": "Por favor, selecciona un archivo JSON",
+      "unknown": "Error desconocido"
+    }
+  },
+  "DownloadJson": {
+    "button": {
+      "idle": "Descargar JSON",
+      "loading": "Preparando..."
+    },
+    "status": {
+      "building": "Construyendo datos...",
+      "creatingFile": "Creando archivo...",
+      "success": "¡JSON descargado! ({size} KB)",
+      "error": "Error: {message}"
+    },
+    "errors": {
+      "unknown": "Error desconocido"
+    }
+  },
+  "ChangeLabelForm": {
+    "id": "ID",
+    "name": "Nombre",
+    "lineId": "ID de línea",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Seguro que quieres eliminar la estación \"{name}\"?",
+    "errorDelete": "No se pudo eliminar la estación"
+  },
+  "ChangeElementModal": {
+    "title": "Cambiar estación"
+  }
+}

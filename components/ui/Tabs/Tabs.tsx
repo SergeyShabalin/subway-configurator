@@ -1,5 +1,7 @@
 'use client'
 
+import { Button } from '@/components/ui/Button'
+import { useMemo } from 'react'
 import styles from './Tabs.module.css'
 
 export interface Tab<T extends string> {
@@ -17,22 +19,32 @@ interface TabsProps<T extends string> {
 export const Tabs = <T extends string>({ value, onChange, tabs, className }: TabsProps<T>) => {
   const classNames = [styles.tabs, className].filter(Boolean).join(' ')
 
+  const handlers = useMemo(() => {
+    const map = {} as Record<T, () => void>
+
+    for (const tab of tabs) {
+      map[tab.value] = () => onChange(tab.value)
+    }
+
+    return map
+  }, [tabs, onChange])
+
   return (
     <div className={classNames} role="tablist">
       {tabs.map((tab) => {
         const isActive = tab.value === value
 
         return (
-          <button
+          <Button
+            title={tab.label}
             key={tab.value}
-            type="button"
             role="tab"
+            color="primary"
+            variant={isActive ? 'outline' : 'ghost'}
+            className={styles.tab}
             aria-selected={isActive}
-            className={`${styles.tab} ${isActive ? styles.active : ''}`}
-            onClick={() => onChange(tab.value)}
-          >
-            {tab.label}
-          </button>
+            onClick={handlers[tab.value]}
+          />
         )
       })}
     </div>

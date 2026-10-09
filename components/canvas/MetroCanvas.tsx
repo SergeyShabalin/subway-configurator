@@ -27,6 +27,8 @@ import { MetroStations } from './MetroStations/MetroStations'
 import { useStageResize } from './shared/useStageResize'
 import { useStageZoom } from './shared/useStageZoom'
 
+const LOADER_DELAY_MS = 700
+
 export interface MetroCanvasRef {
   openAddStationModal: () => void
   getClickPosition: () => { x: number; y: number }
@@ -37,11 +39,27 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
 
   const [isMounted, setIsMounted] = useState(false)
   const [selectedStationId, setSelectedStationId] = useState<string | null>(null)
+  const [showLoader, setShowLoader] = useState(false)
 
   const hasCenteredRef = useRef(false)
 
   const { visuals, stationNames, isLoaded, isInitializing, reloadData, setVisuals } =
     useMetroCanvas()
+
+  const isBusy = !isLoaded || isInitializing
+
+  useEffect(() => {
+    if (!isBusy) {
+      setShowLoader(false)
+      return
+    }
+
+    const timer = setTimeout(() => {
+      setShowLoader(true)
+    }, LOADER_DELAY_MS)
+
+    return () => clearTimeout(timer)
+  }, [isBusy])
 
   const { lineData } = useMetroLines()
 
@@ -62,7 +80,6 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
 
   useEffect(() => {
     setIsMounted(true)
-
     return () => setIsMounted(false)
   }, [])
 
@@ -118,8 +135,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
         onClose={closeModal}
         position={clickPosition}
         initialTab={initialTab}
-        onStationAdded={handleDataReload}
-        onLineAdded={handleDataReload}
+        onAdded={handleDataReload}
       />
     ),
     [isModalOpen, closeModal, clickPosition, initialTab, handleDataReload]
@@ -137,8 +153,12 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     [selectedStationId, handleChangeModalClose, handleDataReload]
   )
 
-  if (!isLoaded || isInitializing) {
+  if (isBusy && showLoader) {
     return <SubwayLoader />
+  }
+
+  if (isBusy) {
+    return null
   }
 
   return (

@@ -7,7 +7,8 @@
     --error: #dc2626;
     --success: #16a34a;
     --white: #ffffff;
-    --button-primary-bg: #1078cd;
+    --blue: #1078cd;
+    --black: #000000;
     --button-primary-hover: #0866b2;
     --button-primary-text: #ffffff;
     --button-outline-bg: transparent;
@@ -31,7 +32,7 @@
         --border: #27272a;
         --error: #ef4444;
         --white: #ffffff;
-        --button-primary-bg: #1078cd;
+        --blue: #1078cd;
         --button-primary-hover: #1689e5;
         --button-primary-text: #ffffff;
         --button-outline-bg: transparent;

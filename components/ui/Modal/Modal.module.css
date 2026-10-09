@@ -1,7 +1,7 @@
 .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgb(0 0 0 / 60%);
     backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
@@ -13,15 +13,28 @@
 .modal {
     background: #1a1a2e;
     border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 20px 60px rgb(0 0 0 / 50%);
+    border: 1px solid rgb(255 255 255 / 6%);
     animation: slideUp 0.3s ease-out;
-    width: 480px;
-    height: 420px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     flex-shrink: 0;
+}
+
+.small {
+    width: 360px;
+    height: 320px;
+}
+
+.medium {
+    width: 480px;
+    height: 420px;
+}
+
+.large {
+    width: 720px;
+    height: 600px;
 }
 
 .header {
@@ -29,7 +42,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgb(255 255 255 / 6%);
     flex-shrink: 0;
 }
 
@@ -53,8 +66,18 @@
 }
 
 .closeButton:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgb(255 255 255 / 5%);
     color: #e2e8f0;
+}
+
+.closeButton:focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 2px;
+}
+
+.closeButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .content {
@@ -65,28 +88,39 @@
     flex-direction: column;
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
 }
 
-@keyframes slideUp {
+@keyframes slide-up {
     from {
         transform: translateY(20px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
     }
 }
 
-@media (max-width: 520px) {
-    .modal {
+@media (width <= 520px) {
+    .small,
+    .medium {
+        width: 92vw;
+        height: 80vh;
+        min-height: 360px;
+    }
+}
+
+@media (width <= 820px) {
+    .large {
         width: 92vw;
         height: 80vh;
         min-height: 360px;
