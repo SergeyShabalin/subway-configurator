@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/Button'
 import { stationsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
@@ -11,9 +12,15 @@ interface AddStationFormProps {
   position: { x: number; y: number }
   onSuccess?: () => void
   onCancel?: () => void
+  onLoadingChange?: (isLoading: boolean) => void
 }
 
-export const AddStationForm = ({ position, onSuccess, onCancel }: AddStationFormProps) => {
+export const AddStationForm = ({
+  position,
+  onSuccess,
+  onCancel,
+  onLoadingChange,
+}: AddStationFormProps) => {
   const t = useTranslations('AddStationForm')
   const { lines, loadData } = useMetroStore()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -24,6 +31,10 @@ export const AddStationForm = ({ position, onSuccess, onCancel }: AddStationForm
   const [stationName, setStationName] = useState('')
   const [selectedLineId, setSelectedLineId] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    onLoadingChange?.(isLoading)
+  }, [isLoading, onLoadingChange])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -57,6 +68,7 @@ export const AddStationForm = ({ position, onSuccess, onCancel }: AddStationForm
     if (!stationName.trim() || !selectedLineId) return
 
     setIsLoading(true)
+
     try {
       await stationsService.create({
         name: stationName,
@@ -66,13 +78,14 @@ export const AddStationForm = ({ position, onSuccess, onCancel }: AddStationForm
       })
 
       await loadData()
-      onSuccess?.()
+
       setStationName('')
       setSelectedLineId('')
+      setIsLoading(false)
+      onSuccess?.()
     } catch (error) {
       console.error('Error creating station:', error)
       alert(t('errorCreate'))
-    } finally {
       setIsLoading(false)
     }
   }
@@ -157,16 +170,24 @@ export const AddStationForm = ({ position, onSuccess, onCancel }: AddStationForm
       <div className={styles.spacer} />
 
       <div className={styles.actions}>
-        <button type="button" onClick={onCancel} className={styles.cancelButton}>
-          {t('cancel')}
-        </button>
-        <button
-          type="submit"
-          disabled={!stationName.trim() || !selectedLineId || isLoading}
-          className={styles.submitButton}
+        <Button
+          type="button"
+          variant="outline"
+          size="medium"
+          onClick={onCancel}
+          disabled={isLoading}
         >
-          {isLoading ? t('submitting') : t('submit')}
-        </button>
+          {t('cancel')}
+        </Button>
+        <Button
+          type="submit"
+          variant="primary"
+          size="medium"
+          loading={isLoading}
+          disabled={!stationName.trim() || !selectedLineId}
+        >
+          {t('submit')}
+        </Button>
       </div>
     </form>
   )

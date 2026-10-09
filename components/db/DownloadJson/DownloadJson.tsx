@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/Button'
 import { linesRepo } from '@/src/lib/indexeddb/repositories/lines.repository'
 import { segmentsRepo } from '@/src/lib/indexeddb/repositories/segments.repository'
 import { stationsRepo } from '@/src/lib/indexeddb/repositories/stations.repository'
@@ -200,7 +201,7 @@ export const DownloadJson = () => {
 
   return (
     <div className={styles.wrapper}>
-      <button type="button" onClick={handleDownload} disabled={loading} className={styles.button}>
+      <Button variant="success" onClick={handleDownload} disabled={loading}>
         {loading ? (
           <>
             <span className={styles.spinner} /> {t('button.loading')}
@@ -208,7 +209,7 @@ export const DownloadJson = () => {
         ) : (
           <>{t('button.idle')}</>
         )}
-      </button>
+      </Button>
 
       {status && <div className={`${styles.status} ${statusClass}`}>{status.message}</div>}
     </div>

@@ -2,8 +2,9 @@
 
 import { AddStationForm } from '@/components/canvas/features'
 import { Modal } from '@/components/ui/Modal/Modal'
+import { Tabs } from '@/components/ui/Tabs'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { AddLineForm } from '../AddLineForm/AddLineForm'
 import styles from './AddElementModal.module.css'
 
@@ -28,48 +29,62 @@ export const AddElementModal = ({
 }: AddElementModalProps) => {
   const t = useTranslations('AddElementModal')
   const [activeTab, setActiveTab] = useState<TabType>(initialTab)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [pendingClose, setPendingClose] = useState(false)
+
+  useEffect(() => {
+    if (!pendingClose) return
+    if (isSubmitting) return
+
+    const timer = setTimeout(() => {
+      setPendingClose(false)
+      onClose()
+    }, 200)
+
+    return () => clearTimeout(timer)
+  }, [pendingClose, isSubmitting, onClose])
+
+  const handleSuccess = useCallback((cb?: () => void) => {
+    cb?.()
+    setPendingClose(true)
+  }, [])
 
   if (!isOpen) return null
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t('title')} size="medium">
+    <Modal
+      key={isOpen ? 'open' : 'closed'}
+      isOpen={isOpen}
+      onClose={onClose}
+      title={t('title')}
+      size="medium"
+      disableClose={isSubmitting || pendingClose}
+    >
       <div className={styles.modalContent}>
-        <div className={styles.tabs}>
-          <button
-            type="button"
-            className={`${styles.tab} ${activeTab === 'line' ? styles.active : ''}`}
-            onClick={() => setActiveTab('line')}
-          >
-            {t('tabLine')}
-          </button>
-          <button
-            type="button"
-            className={`${styles.tab} ${activeTab === 'station' ? styles.active : ''}`}
-            onClick={() => setActiveTab('station')}
-          >
-            {t('tabStation')}
-          </button>
-        </div>
+        <Tabs<TabType>
+          value={activeTab}
+          onChange={setActiveTab}
+          tabs={[
+            { value: 'line', label: t('tabLine') },
+            { value: 'station', label: t('tabStation') },
+          ]}
+        />
 
         <div className={styles.formWrapper}>
           {activeTab === 'line' && (
             <AddLineForm
-              onSuccess={() => {
-                onLineAdded?.()
-                onClose()
-              }}
+              onSuccess={() => handleSuccess(onLineAdded)}
               onCancel={onClose}
+              onLoadingChange={setIsSubmitting}
             />
           )}
 
           {activeTab === 'station' && (
             <AddStationForm
               position={position}
-              onSuccess={() => {
-                onStationAdded?.()
-                onClose()
-              }}
+              onSuccess={() => handleSuccess(onStationAdded)}
               onCancel={onClose}
+              onLoadingChange={setIsSubmitting}
             />
           )}
         </div>
