@@ -77,18 +77,8 @@ export const AddLineForm = ({ onSuccess, onCancel, onLoadingChange }: AddLineFor
       </div>
 
       <div className={styles.actions}>
-        <Button type="button" variant="ghost" size="medium" onClick={onCancel} disabled={isLoading}>
-          {t('cancel')}
-        </Button>
-        <Button
-          type="submit"
-          variant="primary"
-          size="medium"
-          loading={isLoading}
-          disabled={!lineName.trim()}
-        >
-          {t('submit')}
-        </Button>
+        <Button title={t('cancel')} variant="outline" onClick={onCancel} disabled={isLoading} />
+        <Button title={t('submit')} type="submit" loading={isLoading} disabled={!lineName.trim()} />
       </div>
     </form>
   )

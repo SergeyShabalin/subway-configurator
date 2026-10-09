@@ -201,7 +201,7 @@ export const DownloadJson = () => {
 
   return (
     <div className={styles.wrapper}>
-      <Button variant="success" onClick={handleDownload} disabled={loading}>
+      <Button variant="outlineColored" color="success" onClick={handleDownload} disabled={loading}>
         {loading ? (
           <>
             <span className={styles.spinner} /> {t('button.loading')}

@@ -53,9 +53,12 @@ const ChangeLabelForm = ({ stationId, onSuccess }: ChangeLabelFormProps) => {
       </div>
 
       <div className={styles.actions}>
-        <Button variant="danger" size="medium" onClick={handleDelete}>
-          {t('delete')}
-        </Button>
+        <Button
+          variant="outlineColored"
+          color="danger"
+          title={t('delete')}
+          onClick={handleDelete}
+        />
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/Button'
 import { ReactNode, useEffect, useRef } from 'react'
 import styles from './Modal.module.css'
 
@@ -59,14 +60,13 @@ export const Modal = ({
       >
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
-          <button
+          <Button
+            title="✕"
+            variant="ghost"
             className={styles.closeButton}
             onClick={handleCloseClick}
             disabled={disableClose}
-            type="button"
-          >
-            ✕
-          </button>
+          />
         </div>
         <div className={styles.content}>{children}</div>
       </div>

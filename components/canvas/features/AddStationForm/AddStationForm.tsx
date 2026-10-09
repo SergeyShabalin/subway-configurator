@@ -171,23 +171,18 @@ export const AddStationForm = ({
 
       <div className={styles.actions}>
         <Button
-          type="button"
+          title={t('cancel')}
           variant="outline"
           size="medium"
           onClick={onCancel}
           disabled={isLoading}
-        >
-          {t('cancel')}
-        </Button>
+        />
         <Button
-          type="submit"
-          variant="primary"
+          title={t('submit')}
           size="medium"
           loading={isLoading}
           disabled={!stationName.trim() || !selectedLineId}
-        >
-          {t('submit')}
-        </Button>
+        />
       </div>
     </form>
   )
