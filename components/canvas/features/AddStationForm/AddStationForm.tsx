@@ -1,11 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
+import { Dropdown } from '@/components/ui/Dropdown'
+import type { DropdownOption } from '@/components/ui/Dropdown/Dropdown'
+import { Input } from '@/components/ui/Input/Input'
 import { stationsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
-import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useEffect, useState } from 'react'
 import styles from './AddStationForm.module.css'
 
 interface AddStationFormProps {
@@ -23,10 +25,6 @@ export const AddStationForm = ({
 }: AddStationFormProps) => {
   const t = useTranslations('AddStationForm')
   const { lines, loadData } = useMetroStore()
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<HTMLDivElement>(null)
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 })
 
   const [stationName, setStationName] = useState('')
   const [selectedLineId, setSelectedLineId] = useState<string>('')
@@ -36,32 +34,11 @@ export const AddStationForm = ({
     onLoadingChange?.(isLoading)
   }, [isLoading, onLoadingChange])
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(e.target as Node)
-      ) {
-        setIsDropdownOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
-
-  const toggleDropdown = () => {
-    if (!isDropdownOpen && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect()
-      setDropdownPosition({
-        top: rect.bottom + 4,
-        left: rect.left,
-        width: rect.width,
-      })
-    }
-    setIsDropdownOpen(!isDropdownOpen)
-  }
+  const lineOptions: Array<DropdownOption<string>> = lines.map((line) => ({
+    value: line.id,
+    label: line.name,
+    color: line.color,
+  }))
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -90,77 +67,28 @@ export const AddStationForm = ({
     }
   }
 
-  const selectedLine = lines.find((l) => l.id === selectedLineId)
-
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.field}>
-        <label className={styles.label}>{t('nameLabel')}</label>
-        <input
+        <Input
           type="text"
+          label={t('nameLabel')}
           value={stationName}
           onChange={(e) => setStationName(e.target.value)}
           placeholder={t('namePlaceholder')}
-          className={styles.input}
           autoFocus
         />
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label}>{t('lineLabel')}</label>
-        <div className={styles.dropdownWrapper}>
-          <div
-            ref={triggerRef}
-            className={`${styles.dropdownTrigger} ${isDropdownOpen ? styles.open : ''}`}
-            onClick={toggleDropdown}
-          >
-            {selectedLineId && selectedLine ? (
-              <span className={styles.optionLine}>
-                <span className={styles.colorDot} style={{ backgroundColor: selectedLine.color }} />
-                {selectedLine.name}
-              </span>
-            ) : (
-              <span className={styles.placeholder}>{t('linePlaceholder')}</span>
-            )}
-            <span className={styles.arrow}>▼</span>
-          </div>
-
-          {isDropdownOpen &&
-            createPortal(
-              <div
-                ref={dropdownRef}
-                className={styles.dropdownMenu}
-                style={{
-                  top: dropdownPosition.top,
-                  left: dropdownPosition.left,
-                  width: dropdownPosition.width,
-                }}
-              >
-                {lines.length === 0 ? (
-                  <div className={styles.dropdownEmpty}>{t('noLines')}</div>
-                ) : (
-                  lines.map((line) => (
-                    <div
-                      key={line.id}
-                      className={`${styles.dropdownItem} ${
-                        line.id === selectedLineId ? styles.dropdownItemActive : ''
-                      }`}
-                      onClick={() => {
-                        setSelectedLineId(line.id)
-                        setIsDropdownOpen(false)
-                      }}
-                    >
-                      <span className={styles.optionLine}>
-                        <span className={styles.colorDot} style={{ backgroundColor: line.color }} />
-                        {line.name}
-                      </span>
-                    </div>
-                  ))
-                )}
-              </div>,
-              document.body
-            )}
-        </div>
+        <Dropdown
+          value={selectedLineId}
+          options={lineOptions}
+          onChange={setSelectedLineId}
+          label={t('lineLabel')}
+          placeholder={t('linePlaceholder')}
+          emptyMessage={t('noLines')}
+        />
       </div>
 
       <div className={styles.coordinates}>
@@ -180,6 +108,7 @@ export const AddStationForm = ({
         <Button
           title={t('submit')}
           size="medium"
+          type="submit"
           loading={isLoading}
           disabled={!stationName.trim() || !selectedLineId}
         />

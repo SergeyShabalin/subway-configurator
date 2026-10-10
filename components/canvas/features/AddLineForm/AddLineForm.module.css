@@ -19,47 +19,6 @@
     color: #e2e8f0;
 }
 
-.input {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #334155;
-    background: #1e293b;
-    color: #e2e8f0;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-.input:focus {
-    border-color: #3b82f6;
-}
-
-.input::placeholder {
-    color: #64748b;
-}
-
-.colorPicker {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.colorInput {
-    width: 40px;
-    height: 40px;
-    padding: 2px;
-    border-radius: 6px;
-    border: 1px solid #334155;
-    background: #1e293b;
-    cursor: pointer;
-}
-
-.colorValue {
-    font-size: 14px;
-    color: #e2e8f0;
-    font-family: monospace;
-}
-
 .actions {
     display: flex;
     justify-content: flex-end;

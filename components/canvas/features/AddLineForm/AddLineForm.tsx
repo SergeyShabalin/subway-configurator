@@ -1,9 +1,11 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input/Input'
 import { linesService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
+import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 import styles from './AddLineForm.module.css'
 
@@ -24,7 +26,7 @@ export const AddLineForm = ({ onSuccess, onCancel, onLoadingChange }: AddLineFor
     onLoadingChange?.(isLoading)
   }, [isLoading, onLoadingChange])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!lineName.trim()) return
 
@@ -52,28 +54,22 @@ export const AddLineForm = ({ onSuccess, onCancel, onLoadingChange }: AddLineFor
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.field}>
-        <label className={styles.label}>{t('nameLabel')}</label>
-        <input
-          type="text"
+        <Input
           value={lineName}
+          label={t('nameLabel')}
           onChange={(e) => setLineName(e.target.value)}
           placeholder={t('namePlaceholder')}
-          className={styles.input}
           autoFocus
         />
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label}>{t('colorLabel')}</label>
-        <div className={styles.colorPicker}>
-          <input
-            type="color"
-            value={lineColor}
-            onChange={(e) => setLineColor(e.target.value)}
-            className={styles.colorInput}
-          />
-          <span className={styles.colorValue}>{lineColor}</span>
-        </div>
+        <Input
+          type="color"
+          label={t('colorLabel')}
+          value={lineColor}
+          onChange={(e) => setLineColor(e.target.value)}
+        />
       </div>
 
       <div className={styles.actions}>
