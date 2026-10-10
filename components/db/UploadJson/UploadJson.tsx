@@ -1,5 +1,6 @@
 'use client'
 
+import { Input } from '@/components/ui/Input/Input'
 import { linesRepo } from '@/src/lib/indexeddb/repositories/lines.repository'
 import { segmentsRepo } from '@/src/lib/indexeddb/repositories/segments.repository'
 import { stationsRepo } from '@/src/lib/indexeddb/repositories/stations.repository'
@@ -419,14 +420,13 @@ export const UploadJson = ({ onSuccess, onError }: UploadJsonProps) => {
         ) : (
           <>{t('button.idle')}</>
         )}
-        <input
+        <Input
           ref={fileInputRef}
           id="upload-json"
           type="file"
           accept=".json,application/json"
           onChange={handleFileChange}
           disabled={loading}
-          className={styles.fileInput}
         />
       </label>
 
