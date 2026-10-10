@@ -90,6 +90,7 @@
     "name": "Nombre",
     "lineId": "ID de línea",
     "delete": "Eliminar",
+    "save": "Ahorrar",
     "confirmDelete": "¿Seguro que quieres eliminar la estación \"{name}\"?",
     "errorDelete": "No se pudo eliminar la estación"
   },

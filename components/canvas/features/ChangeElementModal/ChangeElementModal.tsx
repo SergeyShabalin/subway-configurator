@@ -30,9 +30,7 @@ export const ChangeElementModal = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('title')}>
-      <div>
-        <ChangeLabelForm stationId={stationId} onSuccess={handleSuccess} />
-      </div>
+      <ChangeLabelForm key={stationId} stationId={stationId} onSuccess={handleSuccess} />
     </Modal>
   )
 }

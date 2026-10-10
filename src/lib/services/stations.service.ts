@@ -121,6 +121,20 @@ export class StationsService extends BaseService {
     }
   }
 
+  async updateName(stationId: string, name: string): Promise<void> {
+    try {
+      const station = await stationsRepo.getById(stationId)
+
+      if (!station) {
+        throw new Error(`Station ${stationId} not found`)
+      }
+
+      await stationsRepo.update(stationId, { name })
+    } catch (error) {
+      return this.handleError(error, 'StationsService.updateName')
+    }
+  }
+
   async delete(stationId: string): Promise<void> {
     try {
       const station = await stationsRepo.getById(stationId)

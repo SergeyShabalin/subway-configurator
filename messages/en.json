@@ -90,6 +90,7 @@
     "name": "Name",
     "lineId": "Line ID",
     "delete": "Delete",
+    "save": "Save",
     "confirmDelete": "Are you sure you want to delete station \"{name}\"?",
     "errorDelete": "Failed to delete station"
   },
