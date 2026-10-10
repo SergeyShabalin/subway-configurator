@@ -389,6 +389,12 @@ export const UploadJson = ({ onSuccess, onError }: UploadJsonProps) => {
     setIsDragging(false)
   }
 
+  const buttonTitle = loading
+    ? t('button.loading')
+    : isDragging
+      ? t('button.dragging')
+      : t('button.idle')
+
   const statusClass = status
     ? status.type === 'success'
       ? styles.statusSuccess
@@ -404,31 +410,19 @@ export const UploadJson = ({ onSuccess, onError }: UploadJsonProps) => {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <label
-        htmlFor="upload-json"
+      <Input
+        ref={fileInputRef}
+        type="file"
+        accept=".json,application/json"
+        onChange={handleFileChange}
+        disabled={loading}
         className={`${styles.dropzone} ${
           isDragging ? styles.dropzoneDragging : ''
         } ${loading ? styles.dropzoneLoading : ''}`}
       >
-        {loading ? (
-          <>
-            <span className={styles.spinner} />
-            {t('button.loading')}
-          </>
-        ) : isDragging ? (
-          t('button.dragging')
-        ) : (
-          <>{t('button.idle')}</>
-        )}
-        <Input
-          ref={fileInputRef}
-          id="upload-json"
-          type="file"
-          accept=".json,application/json"
-          onChange={handleFileChange}
-          disabled={loading}
-        />
-      </label>
+        {loading && <span className={styles.spinner} />}
+        {buttonTitle}
+      </Input>
 
       {status && <div className={`${styles.status} ${statusClass}`}>{status.message}</div>}
 
