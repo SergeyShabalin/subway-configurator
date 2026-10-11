@@ -97,9 +97,24 @@
     "save": "Ahorrar",
     "confirmDelete": "¿Seguro que quieres eliminar la estación \"{name}\"?",
     "confirmDeleteTransfer": "La estación \"{name}\" es de transbordo (vinculada a {count} líneas). ¿Eliminarla de todas las líneas?",
-    "errorDelete": "No se pudo eliminar la estación"
+    "errorDelete": "No se pudo eliminar la estación",
+    "transfers": "Transbordos",
+    "createTransfer": "Crear transbordo",
+    "noTransfers": "Sin transbordos"
   },
   "ChangeElementModal": {
     "title": "Cambiar estación"
+  },
+  "CreateTransferModal": {
+    "title": "Crear transbordo",
+    "targetLabel": "Estación destino",
+    "targetPlaceholder": "Selecciona una estación",
+    "noTargets": "No hay estaciones disponibles",
+    "timeLabel": "Tiempo de transbordo (min)",
+    "cancel": "Cancelar",
+    "submit": "Crear",
+    "errorCreate": "No se pudo crear el transbordo",
+    "errorAlreadyExists": "Este transbordo ya existe",
+    "errorSameVisual": "No se puede crear un transbordo a la misma estación"
   }
 }

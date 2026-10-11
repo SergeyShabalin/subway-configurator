@@ -1,0 +1,44 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0 0 0 / 60%);
+    backdrop-filter: blur(4px);
+    z-index: 1100;
+}
+
+.modal {
+    width: 420px;
+    max-width: 92vw;
+    padding: 20px;
+    background: #1a1a2e;
+    border: 1px solid rgb(255 255 255 / 6%);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgb(0 0 0 / 50%);
+}
+
+.header {
+    margin-bottom: 16px;
+}
+
+.title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 8px;
+}

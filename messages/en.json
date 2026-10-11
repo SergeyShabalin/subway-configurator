@@ -97,9 +97,24 @@
     "save": "Save",
     "confirmDelete": "Are you sure you want to delete station \"{name}\"?",
     "errorDelete": "Failed to delete station",
-    "confirmDeleteTransfer": "Station \"{name}\" is a transfer station (linked to {count} lines). Delete it from all lines?"
+    "confirmDeleteTransfer": "Station \"{name}\" is a transfer station (linked to {count} lines). Delete it from all lines?",
+    "transfers": "Transfers",
+    "createTransfer": "Create transfer",
+    "noTransfers": "No transfers"
   },
   "ChangeElementModal": {
     "title": "Change station"
+  },
+  "CreateTransferModal": {
+    "title": "Create transfer",
+    "targetLabel": "Target station",
+    "targetPlaceholder": "Select a station",
+    "noTargets": "No available stations",
+    "timeLabel": "Transfer time (min)",
+    "cancel": "Cancel",
+    "submit": "Create",
+    "errorCreate": "Failed to create transfer",
+    "errorAlreadyExists": "This transfer already exists",
+    "errorSameVisual": "Cannot create a transfer to the same station"
   }
 }

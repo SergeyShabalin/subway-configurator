@@ -1,7 +1,7 @@
 export class IndexedDB {
   private db: IDBDatabase | null = null
   private readonly DB_NAME = 'MetroDB'
-  private readonly VERSION = 1
+  private readonly VERSION = 3
   private isInitialized = false
 
   async open(): Promise<IDBDatabase> {
@@ -62,6 +62,13 @@ export class IndexedDB {
       const store = db.createObjectStore('segments', { keyPath: 'id' })
       store.createIndex('from_station_id', 'from_station_id', { unique: false })
       store.createIndex('to_station_id', 'to_station_id', { unique: false })
+    }
+
+    // Visual Transfers
+    if (!db.objectStoreNames.contains('visual_transfers')) {
+      const store = db.createObjectStore('visual_transfers', { keyPath: 'id' })
+      store.createIndex('from_visual_id', 'from_visual_id', { unique: false })
+      store.createIndex('to_visual_id', 'to_visual_id', { unique: false })
     }
   }
 

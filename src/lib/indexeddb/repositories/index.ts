@@ -5,4 +5,5 @@ export {
   VisualStationLinksRepository,
   visualStationLinksRepo,
 } from './visual-station-links.repository'
+export { visualTransfersRepo } from './visual-transfers.repository'
 export { VisualsRepository, visualsRepo } from './visuals.repository'

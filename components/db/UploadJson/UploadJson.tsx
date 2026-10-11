@@ -5,9 +5,10 @@ import { linesRepo } from '@/src/lib/indexeddb/repositories/lines.repository'
 import { segmentsRepo } from '@/src/lib/indexeddb/repositories/segments.repository'
 import { stationsRepo } from '@/src/lib/indexeddb/repositories/stations.repository'
 import { visualStationLinksRepo } from '@/src/lib/indexeddb/repositories/visual-station-links.repository'
+import { visualTransfersRepo } from '@/src/lib/indexeddb/repositories/visual-transfers.repository'
 import { visualsRepo } from '@/src/lib/indexeddb/repositories/visuals.repository'
 import { useMetroStore } from '@/store'
-import type { VisualStationLink } from '@/types/metro'
+import type { VisualStationLink, VisualTransfer } from '@/types/metro'
 import { useTranslations } from 'next-intl'
 import { ChangeEvent, DragEvent, useRef, useState } from 'react'
 import styles from './UploadJson.module.css'
@@ -54,6 +55,14 @@ interface SegmentInput {
   timeMinutes: number
 }
 
+interface TransferInput {
+  id: string
+  fromVisualId: string
+  toVisualId: string
+  timeMinutes: number
+  style?: string
+}
+
 interface MetroDataInput {
   lines: Record<string, LineInput>
   logic: {
@@ -62,6 +71,10 @@ interface MetroDataInput {
   }
   visuals: {
     stations: Record<string, VisualStationInput>
+  }
+  connections?: {
+    visualToLogical?: Record<string, Array<string>>
+    visualTransfers?: Record<string, TransferInput>
   }
 }
 
@@ -269,6 +282,15 @@ const buildSegmentRecords = (segments: Record<string, SegmentInput>): Array<Segm
     time_minutes: s.timeMinutes,
   }))
 
+const buildTransferRecords = (transfers: Record<string, TransferInput>): Array<VisualTransfer> =>
+  Object.values(transfers).map((tr) => ({
+    id: String(tr.id),
+    from_visual_id: String(tr.fromVisualId),
+    to_visual_id: String(tr.toVisualId),
+    time_minutes: Number(tr.timeMinutes) || 3,
+    style: (tr.style as VisualTransfer['style']) ?? 'dashed',
+  }))
+
 export const UploadJson = ({ onSuccess, onError }: UploadJsonProps) => {
   const t = useTranslations('UploadJson')
   const [loading, setLoading] = useState(false)
@@ -320,6 +342,10 @@ export const UploadJson = ({ onSuccess, onError }: UploadJsonProps) => {
     const segments = buildSegmentRecords(metroData.logic.segments)
     await segmentsRepo.clear()
     await segmentsRepo.saveMany(segments)
+
+    const transfers = buildTransferRecords(metroData.connections?.visualTransfers ?? {})
+    await visualTransfersRepo.clear()
+    await visualTransfersRepo.saveMany(transfers)
 
     await loadData()
 

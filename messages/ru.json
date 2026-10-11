@@ -97,9 +97,24 @@
     "save": "Сохранить",
     "confirmDelete": "Вы действительно хотите удалить станцию \"{name}\"?",
     "errorDelete": "Не удалось удалить станцию",
-    "confirmDeleteTransfer": "Станция \"{name}\" — пересадочная (привязана к {count} линиям). Удалить её со всех линий?"
+    "confirmDeleteTransfer": "Станция \"{name}\" — пересадочная (привязана к {count} линиям). Удалить её со всех линий?",
+    "transfers": "Переходы",
+    "createTransfer": "Создать переход",
+    "noTransfers": "Переходов нет"
   },
   "ChangeElementModal": {
     "title": "Изменить станцию"
+  },
+  "CreateTransferModal": {
+    "title": "Создать переход",
+    "targetLabel": "Целевая станция",
+    "targetPlaceholder": "Выберите станцию",
+    "noTargets": "Нет доступных станций",
+    "timeLabel": "Время перехода (мин)",
+    "cancel": "Отмена",
+    "submit": "Создать",
+    "errorCreate": "Не удалось создать переход",
+    "errorAlreadyExists": "Такой переход уже существует",
+    "errorSameVisual": "Нельзя создать переход на ту же станцию"
   }
 }

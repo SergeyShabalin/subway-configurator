@@ -55,10 +55,7 @@ export interface GraphData {
     id: string
     x: number
     y: number
-    labelOffset: {
-      x: number
-      y: number
-    }
+    labelOffset: { x: number; y: number }
     isTransfer: boolean
   }>
   segments: Array<{
@@ -68,6 +65,13 @@ export interface GraphData {
     timeMinutes: number
   }>
   visualToStations: Record<string, Array<string>>
+  visualTransfers: Array<{
+    id: string
+    fromVisualId: string
+    toVisualId: string
+    timeMinutes: number
+    style?: 'dashed' | 'dotted' | 'solid'
+  }>
 }
 
 export interface VisualStation {
@@ -79,4 +83,12 @@ export interface VisualStation {
     y: number
   }
   isTransfer: boolean
+}
+
+export interface VisualTransfer {
+  id: string
+  from_visual_id: string
+  to_visual_id: string
+  time_minutes: number
+  style?: 'dashed' | 'dotted' | 'solid'
 }

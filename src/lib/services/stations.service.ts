@@ -4,6 +4,7 @@ import {
   stationsRepo,
   visualsRepo,
   visualStationLinksRepo,
+  visualTransfersRepo,
 } from '@/src/lib/indexeddb/repositories'
 import type { Line, Segment, Station, VisualStationLink } from '@/types/metro'
 import { BaseService } from './base.service'
@@ -226,6 +227,17 @@ export class StationsService extends BaseService {
         }
       }
 
+      const transfersArrays = await Promise.all(
+        visualIds.map((visualId) => visualTransfersRepo.getByVisualId(visualId))
+      )
+
+      const transfersToDelete = new Map<string, { id: string }>()
+      for (const list of transfersArrays) {
+        for (const tr of list) {
+          transfersToDelete.set(tr.id, tr)
+        }
+      }
+
       const lineIds = [
         ...new Set(
           stationsToDelete.filter((s): s is Station => s !== undefined).map((s) => s.line_id)
@@ -247,6 +259,7 @@ export class StationsService extends BaseService {
         ...allLinksToDelete.map((link) => visualStationLinksRepo.delete(link.id)),
         ...visualIds.map((visualId) => visualsRepo.delete(visualId)),
         ...[...stationIdsToDelete].map((id) => stationsRepo.delete(id)),
+        ...[...transfersToDelete.values()].map((tr) => visualTransfersRepo.delete(tr.id)),
       ])
 
       await Promise.all(

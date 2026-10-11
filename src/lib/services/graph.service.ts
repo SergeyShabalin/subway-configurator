@@ -4,17 +4,19 @@ import {
   stationsRepo,
   visualsRepo,
   visualStationLinksRepo,
+  visualTransfersRepo,
 } from '@/src/lib/indexeddb/repositories'
 import type { GraphData } from '@/types/metro'
 
 export const graphService = {
   async getGraph(): Promise<GraphData> {
-    const [lines, stations, visuals, links, segments] = await Promise.all([
+    const [lines, stations, visuals, links, segments, transfers] = await Promise.all([
       linesRepo.getAll(),
       stationsRepo.getAll(),
       visualsRepo.getAll(),
       visualStationLinksRepo.getAll(),
       segmentsRepo.getAll(),
+      visualTransfersRepo.getAll(),
     ])
 
     const visualToStations: Record<string, Array<string>> = {}
@@ -56,6 +58,13 @@ export const graphService = {
         timeMinutes: s.time_minutes,
       })),
       visualToStations,
+      visualTransfers: transfers.map((t) => ({
+        id: t.id,
+        fromVisualId: t.from_visual_id,
+        toVisualId: t.to_visual_id,
+        timeMinutes: t.time_minutes,
+        style: t.style,
+      })),
     }
   },
 }
