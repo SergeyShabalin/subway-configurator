@@ -24,7 +24,11 @@
     "cancel": "Cancel",
     "submit": "Add station",
     "submitting": "Adding...",
-    "errorCreate": "Failed to create station"
+    "errorCreate": "Failed to create station",
+    "transferLabel": "Create same-name station",
+    "transferPlaceholder": "Select a same-name station",
+    "noTransferOptions": "No stations on other lines",
+    "errorAlreadyOnLine": "This station is already on the selected line"
   },
   "AddLineForm": {
     "nameLabel": "Line name",
@@ -92,7 +96,8 @@
     "delete": "Delete",
     "save": "Save",
     "confirmDelete": "Are you sure you want to delete station \"{name}\"?",
-    "errorDelete": "Failed to delete station"
+    "errorDelete": "Failed to delete station",
+    "confirmDeleteTransfer": "Station \"{name}\" is a transfer station (linked to {count} lines). Delete it from all lines?"
   },
   "ChangeElementModal": {
     "title": "Change station"

@@ -4,6 +4,12 @@ import { memo } from 'react'
 import { Circle } from 'react-konva'
 import type { StationCircleProps } from './types'
 
+const BASE_RADIUS = 7
+const TRANSFER_BASE_RADIUS = 12
+const RING_STEP = 2.5
+const RING_WIDTH = 2.5
+const MIN_RING_RADIUS = 3
+
 const StationCircle = memo(
   ({
     visual,
@@ -18,18 +24,35 @@ const StationCircle = memo(
     if (!visual) return null
 
     const isMultiTransfer = isTransfer && colors && colors.length >= 2
-    const radius = isMultiTransfer ? 9 : 7
-    const strokeWidth = 2.5
+    const baseRadius = isMultiTransfer ? TRANSFER_BASE_RADIUS : BASE_RADIUS
+
+    if (!isMultiTransfer) {
+      return (
+        <Circle
+          x={visual.x ?? 0}
+          y={visual.y ?? 0}
+          radius={baseRadius}
+          fill="#020913"
+          stroke={color || '#888888'}
+          strokeWidth={RING_WIDTH}
+          draggable
+          onDragStart={onDragStart}
+          onDragMove={(e) => onDragMove(e, visual.id)}
+          onDragEnd={(e) => onDragEnd(e, visual.id)}
+          onDblClick={onDoubleClick}
+        />
+      )
+    }
 
     return (
       <>
         <Circle
           x={visual.x ?? 0}
           y={visual.y ?? 0}
-          radius={radius}
+          radius={baseRadius}
           fill="#020913"
-          stroke={isMultiTransfer ? colors[0] : color || '#888888'}
-          strokeWidth={strokeWidth}
+          stroke={colors[0]}
+          strokeWidth={RING_WIDTH}
           draggable
           onDragStart={onDragStart}
           onDragMove={(e) => onDragMove(e, visual.id)}
@@ -37,25 +60,24 @@ const StationCircle = memo(
           onDblClick={onDoubleClick}
         />
 
-        {isMultiTransfer &&
-          colors.slice(1).map((c: string, index: number) => {
-            const innerRadius = 16 - (index + 1) * 2.5
+        {colors.slice(1).map((c: string, index: number) => {
+          const innerRadius = baseRadius - (index + 1) * RING_STEP
 
-            if (innerRadius < 4) return null
+          if (innerRadius < MIN_RING_RADIUS) return null
 
-            return (
-              <Circle
-                key={`${visual.id}-inner-${index}`}
-                x={visual.x ?? 0}
-                y={visual.y ?? 0}
-                radius={innerRadius}
-                fill="#020913"
-                stroke={c}
-                strokeWidth={strokeWidth}
-                listening={false}
-              />
-            )
-          })}
+          return (
+            <Circle
+              key={`${visual.id}-inner-${index}`}
+              x={visual.x ?? 0}
+              y={visual.y ?? 0}
+              radius={innerRadius}
+              fill="transparent"
+              stroke={c}
+              strokeWidth={RING_WIDTH}
+              listening={false}
+            />
+          )
+        })}
       </>
     )
   },

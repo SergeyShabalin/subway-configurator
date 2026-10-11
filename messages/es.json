@@ -24,7 +24,11 @@
     "cancel": "Cancelar",
     "submit": "Añadir estación",
     "submitting": "Añadiendo...",
-    "errorCreate": "No se pudo crear la estación"
+    "errorCreate": "No se pudo crear la estación",
+    "transferLabel": "Crear estación con el mismo nombre",
+    "transferPlaceholder": "Selecciona una estación con el mismo nombre",
+    "noTransferOptions": "No hay estaciones en otras líneas",
+    "errorAlreadyOnLine": "Esta estación ya existe en la línea seleccionada"
   },
   "AddLineForm": {
     "nameLabel": "Nombre de la línea",
@@ -92,6 +96,7 @@
     "delete": "Eliminar",
     "save": "Ahorrar",
     "confirmDelete": "¿Seguro que quieres eliminar la estación \"{name}\"?",
+    "confirmDeleteTransfer": "La estación \"{name}\" es de transbordo (vinculada a {count} líneas). ¿Eliminarla de todas las líneas?",
     "errorDelete": "No se pudo eliminar la estación"
   },
   "ChangeElementModal": {

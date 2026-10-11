@@ -6,7 +6,7 @@ import { stationsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
 import type { ChangeEvent } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './ChangeLabelForm.module.css'
 
 interface ChangeLabelFormProps {
@@ -21,6 +21,21 @@ const ChangeLabelForm = ({ stationId, onSuccess }: ChangeLabelFormProps) => {
 
   const [stationName, setStationName] = useState(station?.name ?? '')
   const [isLoading, setIsLoading] = useState(false)
+  const [transferCount, setTransferCount] = useState(1)
+
+  useEffect(() => {
+    let cancelled = false
+
+    stationsService.countTransferStations(stationId).then((count) => {
+      if (!cancelled) {
+        setTransferCount(count)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [stationId])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setStationName(e.target.value)
@@ -47,7 +62,9 @@ const ChangeLabelForm = ({ stationId, onSuccess }: ChangeLabelFormProps) => {
   const handleDelete = async () => {
     if (!station) return
 
-    const confirmed = window.confirm(t('confirmDelete', { name: station.name }))
+    const confirmKey = transferCount > 1 ? 'confirmDeleteTransfer' : 'confirmDelete'
+    const confirmed = window.confirm(t(confirmKey, { name: station.name, count: transferCount }))
+
     if (!confirmed) return
 
     await stationsService.delete(stationId)
