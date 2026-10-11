@@ -1,5 +1,5 @@
 import { graphService, stationsService } from '@/src/lib/services'
-import type { Line, Segment, Station, Visual } from '@/types/metro'
+import type { Line, Segment, Station, Visual, VisualTransfer } from '@/types/metro'
 import { create } from 'zustand'
 
 interface MetroState {
@@ -8,6 +8,7 @@ interface MetroState {
   lines: Array<Line>
   visuals: Array<Visual>
   visualToStations: Record<string, Array<string>>
+  visualTransfers: Array<VisualTransfer>
   selectedStationId: string | null
   isDragging: boolean
   mode: 'view' | 'edit' | 'route'
@@ -27,6 +28,7 @@ export const useMetroStore = create<MetroState>((set) => ({
   lines: [],
   visuals: [],
   visualToStations: {},
+  visualTransfers: [],
   selectedStationId: null,
   isDragging: false,
   mode: 'view',
@@ -74,12 +76,21 @@ export const useMetroStore = create<MetroState>((set) => ({
         is_transfer: v.isTransfer ? 1 : 0,
       }))
 
+      const visualTransfers: Array<VisualTransfer> = data.visualTransfers.map((t) => ({
+        id: t.id,
+        from_visual_id: t.fromVisualId,
+        to_visual_id: t.toVisualId,
+        time_minutes: t.timeMinutes,
+        style: t.style ?? 'dashed',
+      }))
+
       set({
         stations,
         segments,
         lines,
         visuals,
         visualToStations: data.visualToStations,
+        visualTransfers,
         isLoading: false,
         error: null,
       })

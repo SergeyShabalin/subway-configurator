@@ -5,6 +5,7 @@ import { linesRepo } from '@/src/lib/indexeddb/repositories/lines.repository'
 import { segmentsRepo } from '@/src/lib/indexeddb/repositories/segments.repository'
 import { stationsRepo } from '@/src/lib/indexeddb/repositories/stations.repository'
 import { visualStationLinksRepo } from '@/src/lib/indexeddb/repositories/visual-station-links.repository'
+import { visualTransfersRepo } from '@/src/lib/indexeddb/repositories/visual-transfers.repository'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
@@ -42,6 +43,14 @@ interface SegmentRecord {
   from_station_id: string
   to_station_id: string
   time_minutes: number
+}
+
+interface TransferRecord {
+  id: string
+  from_visual_id: string
+  to_visual_id: string
+  time_minutes: number
+  style?: string
 }
 
 interface VisualRecord {
@@ -110,11 +119,24 @@ const buildVisualToLogical = (visuals: Array<VisualRecord>, links: Array<LinkRec
     return acc
   }, {})
 
+const buildVisualTransfers = (transfers: Array<TransferRecord>) =>
+  transfers.reduce<Record<string, unknown>>((acc, transfer) => {
+    acc[transfer.id] = {
+      id: transfer.id,
+      fromVisualId: transfer.from_visual_id,
+      toVisualId: transfer.to_visual_id,
+      timeMinutes: transfer.time_minutes,
+      style: transfer.style ?? 'dashed',
+    }
+    return acc
+  }, {})
+
 const buildMetroData = (
   lines: Array<LineRecord>,
   stations: Array<StationRecord>,
   links: Array<LinkRecord>,
   segments: Array<SegmentRecord>,
+  transfers: Array<TransferRecord>,
   visuals: Array<VisualRecord>
 ) => ({
   lines: buildLines(lines),
@@ -127,6 +149,7 @@ const buildMetroData = (
   },
   connections: {
     visualToLogical: buildVisualToLogical(visuals, links),
+    visualTransfers: buildVisualTransfers(transfers),
   },
 })
 
@@ -158,11 +181,12 @@ export const DownloadJson = () => {
     setStatus({ type: 'success', message: t('status.building') })
 
     try {
-      const [lines, stations, links, segments] = await Promise.all([
+      const [lines, stations, links, segments, transfers] = await Promise.all([
         linesRepo.getAll(),
         stationsRepo.getAll(),
         visualStationLinksRepo.getAll(),
         segmentsRepo.getAll(),
+        visualTransfersRepo.getAll(),
       ])
 
       setStatus({ type: 'success', message: t('status.creatingFile') })
@@ -172,6 +196,7 @@ export const DownloadJson = () => {
         stations as Array<StationRecord>,
         links as Array<LinkRecord>,
         segments as Array<SegmentRecord>,
+        transfers as Array<TransferRecord>,
         visuals as Array<VisualRecord>
       )
       const size = triggerDownload(metroData)

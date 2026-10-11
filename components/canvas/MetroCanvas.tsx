@@ -2,6 +2,7 @@
 
 import { AddElementModal } from '@/components/canvas/features'
 import { ChangeElementModal } from '@/components/canvas/features/ChangeElementModal/ChangeElementModal'
+import { MetroTransfers } from '@/components/canvas/MetroTransfers/MetroTransfers'
 import { MouseRightClickIcon } from '@/components/ui/Icons/MouseRightClickIcon/MouseRightClickIcon'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import type Konva from 'konva'
@@ -189,6 +190,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
           />
 
           <MetroLabels visuals={visuals} stationNames={stationNames} textRef={textRef} />
+          <MetroTransfers visuals={visuals} />
         </Layer>
       </Stage>
 
