@@ -24,7 +24,11 @@
     "cancel": "Отмена",
     "submit": "Добавить станцию",
     "submitting": "Добавление...",
-    "errorCreate": "Ошибка при создании станции"
+    "errorCreate": "Ошибка при создании станции",
+    "transferLabel": "Создать одноимённую станцию",
+    "transferPlaceholder": "Выберите одноимённую станцию",
+    "noTransferOptions": "Нет станций на других линиях",
+    "errorAlreadyOnLine": "Эта станция уже есть на выбранной линии"
   },
   "AddLineForm": {
     "nameLabel": "Название ветки",
@@ -92,7 +96,8 @@
     "delete": "Удалить",
     "save": "Сохранить",
     "confirmDelete": "Вы действительно хотите удалить станцию \"{name}\"?",
-    "errorDelete": "Не удалось удалить станцию"
+    "errorDelete": "Не удалось удалить станцию",
+    "confirmDeleteTransfer": "Станция \"{name}\" — пересадочная (привязана к {count} линиям). Удалить её со всех линий?"
   },
   "ChangeElementModal": {
     "title": "Изменить станцию"
