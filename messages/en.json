@@ -89,7 +89,7 @@
       "unknown": "Unknown error"
     }
   },
-  "ChangeLabelForm": {
+  "EditStation": {
     "id": "ID",
     "name": "Name",
     "lineId": "Line ID",
@@ -100,10 +100,12 @@
     "confirmDeleteTransfer": "Station \"{name}\" is a transfer station (linked to {count} lines). Delete it from all lines?",
     "transfers": "Transfers",
     "createTransfer": "Create transfer",
-    "noTransfers": "No transfers"
+    "noTransfers": "No transfers",
+    "currentLine": "Current line"
   },
   "ChangeElementModal": {
-    "title": "Change station"
+    "title": "Change station",
+    "transferTitle": "Create transfer"
   },
   "CreateTransferModal": {
     "title": "Create transfer",

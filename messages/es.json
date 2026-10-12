@@ -89,7 +89,7 @@
       "unknown": "Error desconocido"
     }
   },
-  "ChangeLabelForm": {
+  "EditStation": {
     "id": "ID",
     "name": "Nombre",
     "lineId": "ID de línea",
@@ -100,10 +100,12 @@
     "errorDelete": "No se pudo eliminar la estación",
     "transfers": "Transbordos",
     "createTransfer": "Crear transbordo",
-    "noTransfers": "Sin transbordos"
+    "noTransfers": "Sin transbordos",
+    "currentLine": "Línea actual"
   },
   "ChangeElementModal": {
-    "title": "Cambiar estación"
+    "title": "Cambiar estación",
+    "transferTitle": "Crear transbordo"
   },
   "CreateTransferModal": {
     "title": "Crear transbordo",
