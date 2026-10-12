@@ -24,17 +24,17 @@
 
 .small {
     width: 360px;
-    height: 320px;
+    min-height: 320px;
 }
 
 .medium {
     width: 480px;
-    height: 500px;
+    min-height: 200px;
 }
 
 .large {
     width: 720px;
-    height: 600px;
+    min-height: 600px;
 }
 
 .header {

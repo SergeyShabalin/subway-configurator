@@ -1,24 +1,27 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
+import { InfoRow } from '@/components/ui/InfoRow/InfoRow'
 import { Input } from '@/components/ui/Input/Input'
 import { stationsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
 import type { ChangeEvent } from 'react'
 import { useEffect, useState } from 'react'
-import styles from './ChangeLabelForm.module.css'
+import styles from './EditStation.module.css'
 
-interface ChangeLabelFormProps {
+interface EditStationProps {
   stationId: string
   onSuccess?: () => Promise<void>
   onCreateTransfer?: () => void
 }
 
-const ChangeLabelForm = ({ stationId, onSuccess, onCreateTransfer }: ChangeLabelFormProps) => {
-  const t = useTranslations('ChangeLabelForm')
+const EditStation = ({ stationId, onSuccess, onCreateTransfer }: EditStationProps) => {
+  const t = useTranslations('EditStation')
 
   const station = useMetroStore((state) => state.stations.find((s) => s.id === stationId))
+  const stations = useMetroStore((state) => state.stations)
+  const lines = useMetroStore((state) => state.lines)
   const visualTransfers = useMetroStore((state) => state.visualTransfers)
   const visualToStations = useMetroStore((state) => state.visualToStations)
 
@@ -46,17 +49,21 @@ const ChangeLabelForm = ({ stationId, onSuccess, onCreateTransfer }: ChangeLabel
 
   const stationTransfers = stationVisualId
     ? visualTransfers.filter(
-        (tr) => tr.from_visual_id === stationVisualId || tr.to_visual_id === stationVisualId
+        (transfer) =>
+          transfer.from_visual_id === stationVisualId || transfer.to_visual_id === stationVisualId
       )
     : []
+
+  const currentLine = station
+    ? lines.find((line) => String(line.id) === String(station.line_id))
+    : null
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setStationName(e.target.value)
   }
 
   const handleSave = async () => {
-    if (!station) return
-    if (!stationName.trim()) return
+    if (!station || !stationName.trim()) return
     if (stationName === station.name) return
 
     setIsLoading(true)
@@ -76,6 +83,7 @@ const ChangeLabelForm = ({ stationId, onSuccess, onCreateTransfer }: ChangeLabel
     if (!station) return
 
     const confirmKey = transferCount > 1 ? 'confirmDeleteTransfer' : 'confirmDelete'
+
     const confirmed = window.confirm(t(confirmKey, { name: station.name, count: transferCount }))
 
     if (!confirmed) return
@@ -84,37 +92,32 @@ const ChangeLabelForm = ({ stationId, onSuccess, onCreateTransfer }: ChangeLabel
     await onSuccess?.()
   }
 
-  if (!station) {
-    return null
-  }
+  if (!station) return null
 
   const isSaveDisabled = isLoading || !stationName.trim() || stationName === station.name
 
   return (
     <div className={styles.container}>
       <div className={styles.info}>
-        <div className={styles.row}>
-          <Input
-            label={t('name')}
-            type="text"
-            value={stationName}
-            onChange={handleChange}
-            disabled={isLoading}
-          />
-        </div>
-        <div className={styles.row}>
-          <span className={styles.label}>{t('id')}</span>
-          <span className={styles.value}>{station.id}</span>
-        </div>
-        <div className={styles.row}>
-          <span className={styles.label}>{t('lineId')}</span>
-          <span className={styles.value}>{station.line_id}</span>
-        </div>
+        <Input
+          label={t('name')}
+          type="text"
+          value={stationName}
+          onChange={handleChange}
+          disabled={isLoading}
+        />
+        <InfoRow
+          label={t('currentLine')}
+          value={currentLine?.name}
+          color={currentLine?.color}
+          indicatorType="dot"
+        />
       </div>
 
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
           <span className={styles.sectionTitle}>{t('transfers')}</span>
+
           <Button
             title={t('createTransfer')}
             variant="outlineColored"
@@ -136,15 +139,23 @@ const ChangeLabelForm = ({ stationId, onSuccess, onCreateTransfer }: ChangeLabel
                   : transfer.from_visual_id
 
               const otherStationIds = visualToStations[otherVisualId] ?? []
+
               const otherStationId = otherStationIds[0]
-              const otherStation = useMetroStore
-                .getState()
-                .stations.find((s) => s.id === otherStationId)
+
+              const otherStation = stations.find((s) => s.id === otherStationId)
+
+              const otherLine = otherStation
+                ? lines.find((line) => String(line.id) === String(otherStation.line_id))
+                : undefined
 
               return (
                 <li key={transfer.id} className={styles.transferItem}>
-                  <span>{otherStation?.name ?? otherVisualId}</span>
-                  <span className={styles.transferTime}>{transfer.time_minutes} min</span>
+                  <InfoRow
+                    value={otherStation?.name ?? otherVisualId}
+                    description={`${transfer.time_minutes} мин`}
+                    color={otherLine?.color}
+                    indicatorType="bar"
+                  />
                 </li>
               )
             })}
@@ -161,6 +172,7 @@ const ChangeLabelForm = ({ stationId, onSuccess, onCreateTransfer }: ChangeLabel
           loading={isLoading}
           disabled={isSaveDisabled}
         />
+
         <Button
           title={t('delete')}
           variant="outlineColored"
@@ -173,4 +185,4 @@ const ChangeLabelForm = ({ stationId, onSuccess, onCreateTransfer }: ChangeLabel
   )
 }
 
-export { ChangeLabelForm }
+export { EditStation }

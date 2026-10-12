@@ -11,18 +11,16 @@ import { useMemo, useState } from 'react'
 import styles from './CreateTransferModal.module.css'
 
 interface CreateTransferModalProps {
-  isOpen: boolean
-  onClose: () => void
   fromVisualId: string
   existingTransferIds: Array<string>
+  onCancel: () => void
   onSuccess?: () => Promise<void>
 }
 
 export const CreateTransferModal = ({
-  isOpen,
-  onClose,
   fromVisualId,
   existingTransferIds,
+  onCancel,
   onSuccess,
 }: CreateTransferModalProps) => {
   const t = useTranslations('CreateTransferModal')
@@ -40,7 +38,9 @@ export const CreateTransferModal = ({
         const stationIds = visualToStations[v.id] ?? []
         const stationId = stationIds[0]
         const station = stations.find((s) => s.id === stationId)
-        const line = station ? lines.find((l) => l.id === station.line_id) : undefined
+        const line = station
+          ? lines.find((l) => String(l.id) === String(station.line_id))
+          : undefined
 
         return {
           value: v.id,
@@ -83,50 +83,40 @@ export const CreateTransferModal = ({
     }
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>{t('title')}</h2>
-        </div>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <Dropdown
+        value={selectedVisualId}
+        options={options}
+        onChange={setSelectedVisualId}
+        label={t('targetLabel')}
+        placeholder={t('targetPlaceholder')}
+        emptyMessage={t('noTargets')}
+      />
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <Dropdown
-            value={selectedVisualId}
-            options={options}
-            onChange={setSelectedVisualId}
-            label={t('targetLabel')}
-            placeholder={t('targetPlaceholder')}
-            emptyMessage={t('noTargets')}
-          />
+      <Input
+        type="text"
+        label={t('timeLabel')}
+        value={String(timeMinutes)}
+        onChange={(e) => setTimeMinutes(Number(e.target.value) || 0)}
+      />
 
-          <Input
-            type="text"
-            label={t('timeLabel')}
-            value={String(timeMinutes)}
-            onChange={(e) => setTimeMinutes(Number(e.target.value) || 0)}
-          />
-
-          <div className={styles.actions}>
-            <Button
-              title={t('cancel')}
-              variant="outline"
-              size="medium"
-              onClick={onClose}
-              disabled={isLoading}
-            />
-            <Button
-              title={t('submit')}
-              size="medium"
-              type="submit"
-              loading={isLoading}
-              disabled={!selectedVisualId}
-            />
-          </div>
-        </form>
+      <div className={styles.actions}>
+        <Button
+          title={t('cancel')}
+          variant="outline"
+          size="medium"
+          onClick={onCancel}
+          disabled={isLoading}
+        />
+        <Button
+          title={t('submit')}
+          size="medium"
+          type="submit"
+          loading={isLoading}
+          disabled={!selectedVisualId}
+        />
       </div>
-    </div>
+    </form>
   )
 }

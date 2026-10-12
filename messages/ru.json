@@ -89,7 +89,7 @@
       "unknown": "Неизвестная ошибка"
     }
   },
-  "ChangeLabelForm": {
+  "EditStation": {
     "id": "ID",
     "name": "Название",
     "lineId": "ID ветки",
@@ -100,10 +100,12 @@
     "confirmDeleteTransfer": "Станция \"{name}\" — пересадочная (привязана к {count} линиям). Удалить её со всех линий?",
     "transfers": "Переходы",
     "createTransfer": "Создать переход",
-    "noTransfers": "Переходов нет"
+    "noTransfers": "Переходов нет",
+    "currentLine": "Текущая ветка"
   },
   "ChangeElementModal": {
-    "title": "Изменить станцию"
+    "title": "Изменить станцию",
+    "transferTitle": "Создать пересадку"
   },
   "CreateTransferModal": {
     "title": "Создать переход",

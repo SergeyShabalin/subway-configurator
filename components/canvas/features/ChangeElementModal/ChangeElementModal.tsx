@@ -1,11 +1,14 @@
 'use client'
 
-import { ChangeLabelForm } from '@/components/canvas/features/ChangeLabelForm/ChangeLabelForm'
 import { CreateTransferModal } from '@/components/canvas/features/CreateTransferModal/CreateTransferModal'
+import { EditStation } from '@/components/canvas/features/EditStation/EditStation'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import styles from './ChangeElementModal.module.css'
+
+type View = 'edit' | 'transfer'
 
 interface ChangeElementModalProps {
   isOpen: boolean
@@ -21,53 +24,63 @@ export const ChangeElementModal = ({
   onSuccess,
 }: ChangeElementModalProps) => {
   const t = useTranslations('ChangeElementModal')
-  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false)
+  const [view, setView] = useState<View>('edit')
 
   const visualToStations = useMetroStore((state) => state.visualToStations)
   const visualTransfers = useMetroStore((state) => state.visualTransfers)
 
-  if (!isOpen || !stationId) {
-    return null
-  }
+  const stationVisualId = useMemo(() => {
+    if (!stationId) return undefined
+    return Object.entries(visualToStations).find(([, stationIds]) =>
+      stationIds.includes(stationId)
+    )?.[0]
+  }, [visualToStations, stationId])
+
+  const existingTransferIds = useMemo(() => {
+    if (!stationVisualId) return []
+    return visualTransfers
+      .filter((tr) => tr.from_visual_id === stationVisualId || tr.to_visual_id === stationVisualId)
+      .map((tr) => (tr.from_visual_id === stationVisualId ? tr.to_visual_id : tr.from_visual_id))
+  }, [visualTransfers, stationVisualId])
+
+  if (!isOpen || !stationId) return null
 
   const handleSuccess = async () => {
     await onSuccess?.()
     onClose()
   }
 
-  const stationVisualId = Object.entries(visualToStations).find(([, stationIds]) =>
-    stationIds.includes(stationId)
-  )?.[0]
+  const handleClose = () => {
+    setView('edit')
+    onClose()
+  }
+
+  const title = view === 'edit' ? t('title') : t('transferTitle')
 
   return (
-    <>
-      <Modal isOpen={isOpen} onClose={onClose} title={t('title')}>
-        <ChangeLabelForm
-          key={stationId}
-          stationId={stationId}
-          onSuccess={handleSuccess}
-          onCreateTransfer={() => setIsTransferModalOpen(true)}
-        />
-      </Modal>
+    <Modal isOpen={isOpen} onClose={handleClose} title={title}>
+      <div className={styles.modalContent}>
+        {view === 'edit' && (
+          <EditStation
+            key={stationId}
+            stationId={stationId}
+            onSuccess={handleSuccess}
+            onCreateTransfer={() => setView('transfer')}
+          />
+        )}
 
-      {stationVisualId && (
-        <CreateTransferModal
-          isOpen={isTransferModalOpen}
-          onClose={() => setIsTransferModalOpen(false)}
-          fromVisualId={stationVisualId}
-          existingTransferIds={visualTransfers
-            .filter(
-              (tr) => tr.from_visual_id === stationVisualId || tr.to_visual_id === stationVisualId
-            )
-            .map((tr) =>
-              tr.from_visual_id === stationVisualId ? tr.to_visual_id : tr.from_visual_id
-            )}
-          onSuccess={async () => {
-            setIsTransferModalOpen(false)
-            await onSuccess?.()
-          }}
-        />
-      )}
-    </>
+        {view === 'transfer' && stationVisualId && (
+          <CreateTransferModal
+            fromVisualId={stationVisualId}
+            existingTransferIds={existingTransferIds}
+            onCancel={() => setView('edit')}
+            onSuccess={async () => {
+              setView('edit')
+              await onSuccess?.()
+            }}
+          />
+        )}
+      </div>
+    </Modal>
   )
 }
