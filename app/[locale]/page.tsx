@@ -1,4 +1,4 @@
-import { MetroCanvas } from '@/components/canvas/MetroCanvas'
+import { MetroCanvas } from '@/components/canvas/MetroCanvas/MetroCanvas'
 import { ToolsMenu } from '@/components/ui/ToolsMenu/ToolsMenu'
 
 export default function Home() {

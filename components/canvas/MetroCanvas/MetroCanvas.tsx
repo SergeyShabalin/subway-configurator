@@ -2,33 +2,25 @@
 
 import { AddElementModal } from '@/components/canvas/features'
 import { ChangeElementModal } from '@/components/canvas/features/ChangeElementModal/ChangeElementModal'
+import { useMetroLoader } from '@/components/canvas/MetroCanvas/hooks/useMetroLoader'
+import { useStationSelection } from '@/components/canvas/MetroCanvas/hooks/useStationSelection'
 import { MetroTransfers } from '@/components/canvas/MetroTransfers/MetroTransfers'
 import { MouseRightClickIcon } from '@/components/ui/Icons/MouseRightClickIcon/MouseRightClickIcon'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import type Konva from 'konva'
 import { useTranslations } from 'next-intl'
-import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { forwardRef, useCallback, useLayoutEffect, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Layer, Stage } from 'react-konva'
-import { useMetroCanvas } from './hooks'
-import { useMetroModal } from './hooks/useMetroModal'
+import { useMetroCanvas } from '../hooks'
+import { useMetroModal } from '../hooks/useMetroModal'
+import { MetroLabels } from '../MetroLabels/MetroLabels'
+import { useMetroLines } from '../MetroLines/hooks/useMetroLines'
+import { MetroLines } from '../MetroLines/MetroLines'
+import { MetroStations } from '../MetroStations/MetroStations'
+import { useStageResize } from '../shared/useStageResize'
+import { useStageZoom } from '../shared/useStageZoom'
 import styles from './MetroCanvas.module.css'
-import { MetroLabels } from './MetroLabels/MetroLabels'
-import { useMetroLines } from './MetroLines/hooks/useMetroLines'
-import { MetroLines } from './MetroLines/MetroLines'
-import { MetroStations } from './MetroStations/MetroStations'
-import { useStageResize } from './shared/useStageResize'
-import { useStageZoom } from './shared/useStageZoom'
-
-const LOADER_DELAY_MS = 700
 
 export interface MetroCanvasRef {
   openAddStationModal: () => void
@@ -38,29 +30,19 @@ export interface MetroCanvasRef {
 export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
   const t = useTranslations('MetroCanvas')
 
-  const [isMounted, setIsMounted] = useState(false)
-  const [selectedStationId, setSelectedStationId] = useState<string | null>(null)
-  const [showLoader, setShowLoader] = useState(false)
+  const lineRef = useRef<Record<string, Konva.Line>>({})
+  const circleRef = useRef<Record<string, Konva.Circle>>({})
+  const textRef = useRef<Record<string, Konva.Text>>({})
 
   const hasCenteredRef = useRef(false)
 
   const { visuals, stationNames, isLoaded, isInitializing, reloadData, setVisuals } =
     useMetroCanvas()
 
+  const { selectedStationId, selectStation, clearSelection } = useStationSelection()
+
   const isBusy = !isLoaded || isInitializing
-
-  useEffect(() => {
-    if (!isBusy) {
-      setShowLoader(false)
-      return
-    }
-
-    const timer = setTimeout(() => {
-      setShowLoader(true)
-    }, LOADER_DELAY_MS)
-
-    return () => clearTimeout(timer)
-  }, [isBusy])
+  const { isMounted, showLoader } = useMetroLoader(isBusy)
 
   const { lineData } = useMetroLines()
 
@@ -74,15 +56,6 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
 
   const { stageRef, stageScale, stagePosition, handleWheel, handleStageDragEnd, centerStage } =
     useStageZoom(0.1, 5, 1.1)
-
-  const lineRef = useRef<Record<string, Konva.Line>>({})
-  const circleRef = useRef<Record<string, Konva.Circle>>({})
-  const textRef = useRef<Record<string, Konva.Text>>({})
-
-  useEffect(() => {
-    setIsMounted(true)
-    return () => setIsMounted(false)
-  }, [])
 
   useLayoutEffect(() => {
     if (!isLoaded || hasCenteredRef.current) return
@@ -99,32 +72,21 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     e.evt.preventDefault()
 
     const stage = stageRef.current
-
     if (!stage) return
 
     const pointer = stage.getPointerPosition()
-
     if (!pointer) return
 
     const worldPos = {
       x: (pointer.x - stagePosition.x) / stageScale,
       y: (pointer.y - stagePosition.y) / stageScale,
     }
-
     openModal(worldPos.x, worldPos.y)
   }
 
   const handleDataReload = useCallback(async () => {
     await reloadData()
   }, [reloadData])
-
-  const handleStationDoubleClick = useCallback((stationId: string) => {
-    setSelectedStationId(stationId)
-  }, [])
-
-  const handleChangeModalClose = useCallback(() => {
-    setSelectedStationId(null)
-  }, [])
 
   const initialTab = hasLines ? 'station' : 'line'
 
@@ -146,12 +108,12 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     () => (
       <ChangeElementModal
         isOpen={selectedStationId !== null}
-        onClose={handleChangeModalClose}
+        onClose={clearSelection}
         stationId={selectedStationId}
         onSuccess={handleDataReload}
       />
     ),
-    [selectedStationId, handleChangeModalClose, handleDataReload]
+    [selectedStationId, clearSelection, handleDataReload]
   )
 
   if (isBusy && showLoader) {
@@ -186,7 +148,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
             lineRef={lineRef}
             textRef={textRef}
             setVisuals={setVisuals}
-            onStationDoubleClick={handleStationDoubleClick}
+            onStationDoubleClick={selectStation}
           />
 
           <MetroLabels visuals={visuals} stationNames={stationNames} textRef={textRef} />
