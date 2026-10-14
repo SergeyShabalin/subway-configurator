@@ -13,8 +13,13 @@ export const MouseRightClickIcon = ({ className, size }: MouseRightClickIconProp
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
   >
-    <rect x="7" y="2" width="10" height="20" rx="5" stroke="currentColor" strokeWidth="1.5" />
-    <line x1="12" y1="2" x2="12" y2="10" stroke="currentColor" strokeWidth="1.5" />
-    <circle cx="14.5" cy="6" r="1.6" fill="#38bdf8" />
+    <path
+      d="M12 2C7.86 2 5 4.86 5 9V15C5 19.14 7.86 22 12 22C16.14 22 19 19.14 19 15V9C19 4.86 16.14 2 12 2Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
+    />
+    <path d="M14 3.8V10.8H17.2V9C17.2 6.5 16 4.5 14 3.8Z" fill="#38BDF8" />
+    <path d="M12 2.5V11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 )

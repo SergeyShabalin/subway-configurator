@@ -1,7 +1,7 @@
 import {
   UseMetroStationsParams,
   UseMetroStationsReturn,
-} from '@/components/canvas/MetroStations/hooks/types'
+} from '@/components/canvas/MetroCanvas/MetroStations/hooks/types'
 import { useMetroStore } from '@/store'
 import { useEffect, useMemo } from 'react'
 import type { StationData } from '../types'
