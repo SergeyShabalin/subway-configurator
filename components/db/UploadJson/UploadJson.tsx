@@ -52,6 +52,7 @@ interface SegmentInput {
   id: string | number
   fromStationId: string
   toStationId: string
+  lineId?: string
   timeMinutes: number
 }
 
@@ -97,8 +98,7 @@ interface VisualRecord {
   id: string
   x: number
   y: number
-  label_x: number
-  label_y: number
+  labelOffset: { x: number; y: number }
   is_transfer: number
 }
 
@@ -106,6 +106,7 @@ interface SegmentRecord {
   id: string
   from_station_id: string
   to_station_id: string
+  line_id: string
   time_minutes: number
 }
 
@@ -251,8 +252,10 @@ const buildVisualRecords = (visuals: Record<string, VisualStationInput>): Array<
     id: String(v.id),
     x: v.x,
     y: v.y,
-    label_x: v.labelOffset?.x ?? 0,
-    label_y: v.labelOffset?.y ?? -60,
+    labelOffset: {
+      x: v.labelOffset?.x ?? 0,
+      y: v.labelOffset?.y ?? -60,
+    },
     is_transfer: v.connections.length > 1 ? 1 : 0,
   }))
 
@@ -279,6 +282,7 @@ const buildSegmentRecords = (segments: Record<string, SegmentInput>): Array<Segm
     id: String(s.id),
     from_station_id: String(s.fromStationId),
     to_station_id: String(s.toStationId),
+    line_id: s.lineId ?? '',
     time_minutes: s.timeMinutes,
   }))
 

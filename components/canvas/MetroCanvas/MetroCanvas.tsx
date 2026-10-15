@@ -8,6 +8,8 @@ import { useMetroLoader } from '@/components/canvas/MetroCanvas/hooks/useMetroLo
 import { useStationSelection } from '@/components/canvas/MetroCanvas/hooks/useStationSelection'
 import { MetroTransfers } from '@/components/canvas/MetroCanvas/MetroTransfers/MetroTransfers'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
+import { stationsService } from '@/src/lib/services'
+import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { forwardRef, useCallback, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
@@ -32,8 +34,11 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
   const circleRef = useRef<Record<string, Konva.Circle>>({})
   const textRef = useRef<Record<string, Konva.Text>>({})
 
-  const { visuals, stationNames, isLoaded, isInitializing, reloadData, setVisuals } =
-    useMetroCanvas()
+  const visuals = useMetroStore((state) => state.visuals)
+  const stations = useMetroStore((state) => state.stations)
+  const updateVisualLabelOffset = useMetroStore((state) => state.updateVisualLabelOffset)
+
+  const { isLoaded, isInitializing, reloadData } = useMetroCanvas()
 
   const { selectedStationId, selectStation, clearSelection } = useStationSelection()
 
@@ -48,6 +53,14 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     useStageZoom(0.1, 5, 1.1)
 
   useInitialCenterCanvas({ isLoaded, visuals, width, height, centerStage })
+
+  const stationNames = useMemo(() => {
+    const map: Record<string, string> = {}
+    for (const station of stations) {
+      map[station.id] = station.name
+    }
+    return map
+  }, [stations])
 
   const { lineData } = useMetroLines()
 
@@ -74,6 +87,22 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
   const handleDataReload = useCallback(async () => {
     await reloadData()
   }, [reloadData])
+
+  const handleLabelMove = useCallback(
+    async (visualId: string, x: number, y: number) => {
+      const visual = visuals[visualId]
+      if (!visual) return
+
+      const labelX = x - visual.x
+      const labelY = y - visual.y
+
+      console.log('[handleLabelMove]', { visualId, x, y, labelX, labelY })
+
+      updateVisualLabelOffset(visualId, labelX, labelY)
+      await stationsService.updateLabelPosition(visualId, labelX, labelY)
+    },
+    [visuals, updateVisualLabelOffset]
+  )
 
   const initialTab = hasLines ? 'station' : 'line'
 
@@ -131,15 +160,17 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
           <MetroTransfers visuals={visuals} />
 
           <MetroStations
-            visuals={visuals}
             circleRef={circleRef}
             lineRef={lineRef}
             textRef={textRef}
-            setVisuals={setVisuals}
             onStationDoubleClick={selectStation}
           />
 
-          <MetroLabels visuals={visuals} stationNames={stationNames} textRef={textRef} />
+          <MetroLabels
+            stationNames={stationNames}
+            textRef={textRef}
+            onLabelMove={handleLabelMove}
+          />
         </Layer>
       </Stage>
 

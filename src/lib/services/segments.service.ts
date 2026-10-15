@@ -14,6 +14,7 @@ export class SegmentsService extends BaseService {
   async create(data: {
     fromStationId: string
     toStationId: string
+    lineId: string
     timeMinutes: number
   }): Promise<Segment> {
     try {
@@ -22,6 +23,7 @@ export class SegmentsService extends BaseService {
         id,
         from_station_id: data.fromStationId,
         to_station_id: data.toStationId,
+        line_id: data.lineId,
         time_minutes: data.timeMinutes,
       }
       await segmentsRepo.save(newSegment)

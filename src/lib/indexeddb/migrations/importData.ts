@@ -34,6 +34,7 @@ interface MetroJsonSegment {
   id: string | number
   fromStationId: string
   toStationId: string
+  lineId?: string
   timeMinutes: number
 }
 
@@ -115,8 +116,10 @@ export async function importMetroData() {
       id: String(v.id),
       x: v.x,
       y: v.y,
-      label_x: v.labelOffset?.x ?? 0,
-      label_y: v.labelOffset?.y ?? -60,
+      labelOffset: {
+        x: v.labelOffset?.x ?? 0,
+        y: v.labelOffset?.y ?? -60,
+      },
       is_transfer: v.connections.length > 1 ? 1 : 0,
     }))
 
@@ -144,6 +147,7 @@ export async function importMetroData() {
       id: String(s.id),
       from_station_id: String(s.fromStationId),
       to_station_id: String(s.toStationId),
+      line_id: s.lineId ?? '',
       time_minutes: s.timeMinutes,
     }))
 

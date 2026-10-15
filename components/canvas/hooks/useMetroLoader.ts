@@ -1,18 +1,20 @@
 import { graphService } from '@/src/lib/services'
-import type { VisualStation } from '@/store'
-import type { GraphData } from '@/types/metro'
+import type { GraphData, VisualStation } from '@/types/metro'
 import { useCallback } from 'react'
 
 export const useMetroLoader = () => {
   const transformApiData = useCallback((data: GraphData) => {
     const visualsMap: Record<string, VisualStation> = {}
+
     for (const v of data.visuals) {
       visualsMap[v.id] = {
         id: v.id,
         x: v.x,
         y: v.y,
         labelOffset: v.labelOffset,
-        isTransfer: v.isTransfer,
+        connections: v.connections,
+        displayMode: v.displayMode,
+        is_transfer: v.isTransfer ? 1 : 0,
       }
     }
 

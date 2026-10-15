@@ -1,2 +1,2 @@
 export { StationCircle } from './StationCircle'
-export type { StationCircleProps, VisualData } from './types'
+export type { StationCircleProps } from './types'

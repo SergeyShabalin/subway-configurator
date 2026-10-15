@@ -1,45 +1,20 @@
-import {
-  UseMetroStationsParams,
-  UseMetroStationsReturn,
-} from '@/components/canvas/MetroCanvas/MetroStations/hooks/types'
 import { useMetroStore } from '@/store'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { StationData } from '../types'
 
-/**
- * Builds color data for each visual station.
- *
- * For each visual, determines:
- * - Single station: color from its line
- * - Transfer station (multiple station IDs): collects all line colors
- *
- * Performance: O(n * m) where n = visuals count, m = lines count.
- * For typical metro maps (100-200 stations, 10-20 lines) this is fine.
- *
- * @param params - Object containing visuals and visualsRef
- * @returns Object containing visualData map with color information for each visual
- *
- * @example
- * const visualsRef = useRef(visuals)
- * const { visualData } = useMetroStations({ visuals, visualsRef })
- * // visualData: { "station_1": { color: "#FF0000", isTransfer: false }, ... }
- */
-export const useMetroStations = ({
-  visuals,
-  visualsRef,
-}: UseMetroStationsParams): UseMetroStationsReturn => {
-  const { lines, visualToStations } = useMetroStore()
+interface UseMetroStationsReturn {
+  visualData: Record<string, StationData>
+}
 
-  useEffect(() => {
-    visualsRef.current = visuals
-  }, [visuals, visualsRef])
+export const useMetroStations = (): UseMetroStationsReturn => {
+  const visuals = useMetroStore((state) => state.visuals)
+  const lines = useMetroStore((state) => state.lines)
+  const visualToStations = useMetroStore((state) => state.visualToStations)
 
   const visualData = useMemo((): Record<string, StationData> => {
     const result: Record<string, StationData> = {}
 
-    if (!visuals) {
-      return result
-    }
+    if (!visuals) return result
 
     for (const visual of Object.values(visuals)) {
       if (!visual?.id) continue
@@ -60,28 +35,30 @@ export const useMetroStations = ({
           }
         }
 
-        if (colors.length > 0) {
-          result[visual.id] = {
-            color: colors[0] || '#ffffff',
-            colors,
-            isTransfer: true,
-          }
-        } else {
-          result[visual.id] = { color: '#ffffff', isTransfer: true }
+        result[visual.id] = {
+          color: colors[0] || '#ffffff',
+          colors,
+          isTransfer: true,
         }
       } else {
         const stationId = stationIds[0]
+
         if (!stationId) {
           result[visual.id] = { color: '#888888', isTransfer: false }
-        } else {
-          let foundColor = '#888888'
-          for (const line of lines) {
-            if (line.visualStationIds?.includes(visual.id)) {
-              foundColor = line.color
-              break
-            }
+          continue
+        }
+
+        let foundColor = '#888888'
+        for (const line of lines) {
+          if (line.visualStationIds?.includes(visual.id)) {
+            foundColor = line.color
+            break
           }
-          result[visual.id] = { color: foundColor, isTransfer: false }
+        }
+
+        result[visual.id] = {
+          color: foundColor,
+          isTransfer: visual.is_transfer === 1,
         }
       }
     }

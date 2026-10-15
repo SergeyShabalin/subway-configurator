@@ -197,7 +197,7 @@ export const DownloadJson = () => {
         links as Array<LinkRecord>,
         segments as Array<SegmentRecord>,
         transfers as Array<TransferRecord>,
-        visuals as Array<VisualRecord>
+        Object.values(visuals) as Array<VisualRecord>
       )
       const size = triggerDownload(metroData)
 
