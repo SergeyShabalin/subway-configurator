@@ -114,8 +114,7 @@ export class StationsService extends BaseService {
           id: visualId,
           x: data.x,
           y: data.y,
-          label_x: 0,
-          label_y: -30,
+          labelOffset: { x: 0, y: -30 },
           is_transfer: 0,
         })
       }
@@ -312,6 +311,16 @@ export class StationsService extends BaseService {
       await visualsRepo.updatePosition(visualId, x, y)
     } catch (error) {
       return this.handleError(error, 'StationsService.updateVisualPosition')
+    }
+  }
+
+  async updateLabelPosition(visualId: string, labelX: number, labelY: number): Promise<void> {
+    try {
+      await visualsRepo.update(visualId, {
+        labelOffset: { x: labelX, y: labelY },
+      })
+    } catch (error) {
+      return this.handleError(error, 'StationsService.updateLabelPosition')
     }
   }
 }

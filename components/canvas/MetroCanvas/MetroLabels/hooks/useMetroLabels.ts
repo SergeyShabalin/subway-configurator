@@ -1,15 +1,6 @@
 import { useMetroStore } from '@/store'
+import type { VisualStation } from '@/types/metro'
 import { useMemo } from 'react'
-
-export interface Visual {
-  id: string
-  x: number
-  y: number
-  labelOffset?: {
-    x: number
-    y: number
-  }
-}
 
 export interface LabelData {
   id: string
@@ -23,7 +14,7 @@ interface UseMetroLabelsReturn {
 }
 
 export const useMetroLabels = (
-  visuals: Record<string, Visual>,
+  visuals: Record<string, VisualStation>,
   stationNames: Record<string, string>
 ): UseMetroLabelsReturn => {
   const visualToStations = useMetroStore((state) => state.visualToStations)
@@ -41,13 +32,11 @@ export const useMetroLabels = (
       if (!name) continue
 
       const labelOffset = visual.labelOffset ?? { x: 0, y: -60 }
-      const labelX = labelOffset.x ?? 0
-      const labelY = labelOffset.y ?? -60
 
       result.push({
         id: visual.id,
-        x: visual.x + labelX,
-        y: visual.y + labelY,
+        x: visual.x + (labelOffset.x ?? 0),
+        y: visual.y + (labelOffset.y ?? -60),
         text: name,
       })
     }

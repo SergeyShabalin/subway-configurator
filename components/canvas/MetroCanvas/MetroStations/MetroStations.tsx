@@ -2,25 +2,17 @@
 
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
-import { useRef } from 'react'
 import { StationCircle } from './StationCircle'
 import { useMetroDrag, useMetroPosition, useMetroStations } from './hooks'
-import type { MetroStationsProps, StationData, VisualData } from './types'
+import type { MetroStationsProps, StationData } from './types'
 
-export const MetroStations = ({
-  visuals,
-  lineRef,
-  textRef,
-  setVisuals,
-  onStationDoubleClick,
-}: MetroStationsProps) => {
-  const visualsRef = useRef<Record<string, VisualData>>({})
-
+export const MetroStations = ({ lineRef, textRef, onStationDoubleClick }: MetroStationsProps) => {
+  const visuals = useMetroStore((state) => state.visuals)
   const visualToStations = useMetroStore((state) => state.visualToStations)
 
-  const { visualData } = useMetroStations({ visuals, visualsRef })
+  const { visualData } = useMetroStations()
   const { savePosition } = useMetroPosition()
-  const { handleDragStart, handleDragMove, handleDragEnd } = useMetroDrag(visuals, setVisuals)
+  const { handleDragStart, handleDragMove, handleDragEnd } = useMetroDrag()
 
   const onDragMove = (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => {
     handleDragMove(e, visualId, lineRef, textRef)

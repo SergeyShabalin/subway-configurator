@@ -1,18 +1,10 @@
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
-import { useCallback, useRef } from 'react'
-import type { VisualData } from '../types'
+import { useCallback } from 'react'
 
-export const useMetroDrag = (
-  visuals: Record<string, VisualData>,
-  setVisuals: (
-    value:
-      | Record<string, VisualData>
-      | ((prev: Record<string, VisualData>) => Record<string, VisualData>)
-  ) => void
-) => {
-  const { lines, setDragging } = useMetroStore()
-  const visualsRef = useRef(visuals)
+export const useMetroDrag = () => {
+  const setDragging = useMetroStore((state) => state.setDragging)
+  const updateVisualPosition = useMetroStore((state) => state.updateVisualPosition)
 
   const handleDragStart = useCallback(() => {
     setDragging(true)
@@ -28,21 +20,21 @@ export const useMetroDrag = (
       const newX = e.target.x()
       const newY = e.target.y()
 
-      const currentVisual = visualsRef.current[visualId]
-      if (currentVisual) {
-        visualsRef.current[visualId] = {
-          ...currentVisual,
-          x: newX,
-          y: newY,
-        }
-      }
+      const state = useMetroStore.getState()
+      const currentVisual = state.visuals[visualId]
+      if (!currentVisual) return
 
-      const affectedLines = lines.filter((line) => line.visualStationIds?.includes(visualId))
+      const labelOffset = currentVisual.labelOffset ?? { x: 0, y: -60 }
+
+      const affectedLines = state.lines.filter((line) => line.visualStationIds?.includes(visualId))
+
       for (const line of affectedLines) {
         const lineNode = lineRef.current[line.id]
         if (!lineNode) continue
+
         const points = lineNode.points() as Array<number>
         const visualIndex = line.visualStationIds?.findIndex((id) => id === visualId) ?? -1
+
         if (visualIndex !== -1) {
           points[visualIndex * 2] = newX
           points[visualIndex * 2 + 1] = newY
@@ -51,24 +43,14 @@ export const useMetroDrag = (
       }
 
       const textNode = textRef.current[visualId]
-      const visual = visualsRef.current[visualId]
-      if (textNode && visual) {
-        const labelOffset = visual.labelOffset || { x: 0, y: -60 }
+      if (textNode) {
         textNode.x(newX + (labelOffset.x ?? 0))
         textNode.y(newY + (labelOffset.y ?? -60))
       }
 
-      setVisuals((prev) => ({
-        ...prev,
-        [visualId]: {
-          ...prev[visualId],
-          x: newX,
-          y: newY,
-          labelOffset: prev[visualId]?.labelOffset || { x: 0, y: -60 },
-        },
-      }))
+      updateVisualPosition(visualId, newX, newY)
     },
-    [lines, setVisuals]
+    [updateVisualPosition]
   )
 
   const handleDragEnd = useCallback(
@@ -85,5 +67,5 @@ export const useMetroDrag = (
     [setDragging]
   )
 
-  return { handleDragStart, handleDragMove, handleDragEnd, visualsRef }
+  return { handleDragStart, handleDragMove, handleDragEnd }
 }

@@ -12,6 +12,17 @@ interface MetroTransfersProps {
 const FALLBACK_COLOR = '#94a3b8'
 const OUTLINE_COLOR = '#0f172a'
 
+const buildGradientStops = (fromColor: string, toColor: string) => [
+  0,
+  fromColor,
+  0.35,
+  fromColor,
+  0.65,
+  toColor,
+  1,
+  toColor,
+]
+
 export const MetroTransfers = ({ visuals }: MetroTransfersProps) => {
   const visualTransfers = useMetroStore((state) => state.visualTransfers)
   const visualToStations = useMetroStore((state) => state.visualToStations)
@@ -44,6 +55,7 @@ export const MetroTransfers = ({ visuals }: MetroTransfersProps) => {
         const toColor = visualColors[transfer.to_visual_id] ?? FALLBACK_COLOR
 
         const points = [from.x, from.y, to.x, to.y]
+        const gradientStops = buildGradientStops(fromColor, toColor)
 
         return (
           <Fragment key={transfer.id}>
@@ -66,7 +78,7 @@ export const MetroTransfers = ({ visuals }: MetroTransfersProps) => {
               listening={false}
               strokeLinearGradientStartPoint={{ x: from.x, y: from.y }}
               strokeLinearGradientEndPoint={{ x: to.x, y: to.y }}
-              strokeLinearGradientColorStops={[0, fromColor, 0.5, toColor]}
+              strokeLinearGradientColorStops={gradientStops}
             />
           </Fragment>
         )

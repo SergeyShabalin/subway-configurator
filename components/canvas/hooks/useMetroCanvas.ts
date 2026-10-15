@@ -1,15 +1,18 @@
 import { useMetroStore } from '@/store'
-import { useEffect } from 'react'
-import { useMetroData } from './useMetroData'
+import { useCallback, useEffect, useState } from 'react'
 import { useMetroInit } from './useMetroInit'
-import { useMetroLoader } from './useMetroLoader'
 
-export const useMetroCanvas = () => {
+interface UseMetroCanvasResult {
+  isLoaded: boolean
+  isInitializing: boolean
+  reloadData: () => Promise<void>
+}
+
+export const useMetroCanvas = (): UseMetroCanvasResult => {
   const { isInitializing, initialize } = useMetroInit()
-  const { visuals, stationNames, isLoaded, setVisuals, setStationNames, setIsLoaded } =
-    useMetroData()
-  const { loadData } = useMetroLoader()
-  const { loadData: loadStoreData } = useMetroStore()
+  const loadData = useMetroStore((state) => state.loadData)
+
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     initialize()
@@ -19,35 +22,20 @@ export const useMetroCanvas = () => {
     const fetchData = async () => {
       if (isInitializing) return
 
-      await loadStoreData()
-      const result = await loadData()
-
-      if (result.visualsMap && result.namesMap) {
-        setVisuals(result.visualsMap)
-        setStationNames(result.namesMap)
-        setIsLoaded(true)
-      }
+      await loadData()
+      setIsLoaded(true)
     }
 
     fetchData()
-  }, [isInitializing, loadData, loadStoreData, setVisuals, setStationNames, setIsLoaded])
+  }, [isInitializing, loadData])
 
-  const reloadData = async () => {
-    await loadStoreData()
-    const result = await loadData()
-    if (result.visualsMap && result.namesMap) {
-      setVisuals(result.visualsMap)
-      setStationNames(result.namesMap)
-    }
-  }
+  const reloadData = useCallback(async () => {
+    await loadData()
+  }, [loadData])
 
   return {
-    visuals,
-    stationNames,
     isLoaded: isLoaded && !isInitializing,
     isInitializing,
     reloadData,
-    setVisuals,
-    setStationNames,
   }
 }

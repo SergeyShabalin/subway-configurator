@@ -1,5 +1,6 @@
 'use client'
 
+import { Fragment } from 'react'
 import { Line } from 'react-konva'
 import { useMetroLines } from './hooks/useMetroLines'
 import type { MetroLinesProps } from './types'
@@ -24,21 +25,34 @@ export const MetroLines = ({ visuals, lineRef }: MetroLinesProps) => {
         }
 
         return (
-          <Line
-            key={line.id}
-            ref={(node) => {
-              if (node) {
-                lineRef.current[line.id] = node
-              }
-            }}
-            points={points}
-            stroke={line.color}
-            strokeWidth={6}
-            tension={0.3}
-            lineCap="round"
-            lineJoin="round"
-            listening={false}
-          />
+          <Fragment key={line.id}>
+            <Line
+              points={points}
+              stroke="#0f172a"
+              strokeWidth={7}
+              tension={0.3}
+              lineCap="round"
+              lineJoin="round"
+              listening={false}
+            />
+
+            <Line
+              ref={(node) => {
+                if (node) {
+                  lineRef.current[line.id] = node
+                }
+              }}
+              perfectDrawEnabled={false}
+
+              points={points}
+              stroke={line.color}
+              strokeWidth={6}
+              tension={0.3}
+              lineCap="round"
+              lineJoin="round"
+              listening={false}
+            />
+          </Fragment>
         )
       })}
     </>

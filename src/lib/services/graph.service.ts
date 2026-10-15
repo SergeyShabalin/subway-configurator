@@ -41,20 +41,27 @@ export const graphService = {
         name: s.name,
         lineId: s.line_id,
       })),
-      visuals: visuals.map((v) => ({
-        id: v.id,
-        x: v.x,
-        y: v.y,
-        labelOffset: {
-          x: v.label_x || 0,
-          y: v.label_y || -60,
-        },
-        isTransfer: Boolean(v.is_transfer),
-      })),
+      visuals: visuals.map((v) => {
+        const connections = links.filter((l) => l.visual_id === v.id).map((l) => l.station_id)
+
+        return {
+          id: v.id,
+          x: v.x,
+          y: v.y,
+          labelOffset: {
+            x: v.labelOffset?.x ?? 0,
+            y: v.labelOffset?.y ?? -60,
+          },
+          connections,
+          displayMode: connections.length > 1 ? 'multiple' : 'single',
+          isTransfer: Boolean(v.is_transfer),
+        }
+      }),
       segments: segments.map((s) => ({
         id: s.id,
         fromStationId: s.from_station_id,
         toStationId: s.to_station_id,
+        lineId: s.line_id,
         timeMinutes: s.time_minutes,
       })),
       visualToStations,
