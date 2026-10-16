@@ -5,7 +5,7 @@ import { EditStation } from '@/components/canvas/features/EditStation/EditStatio
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styles from './ChangeElementModal.module.css'
 
 type View = 'edit' | 'transfer'
@@ -43,17 +43,30 @@ export const ChangeElementModal = ({
       .map((tr) => (tr.from_visual_id === stationVisualId ? tr.to_visual_id : tr.from_visual_id))
   }, [visualTransfers, stationVisualId])
 
-  if (!isOpen || !stationId) return null
-
-  const handleSuccess = async () => {
+  const handleSuccess = useCallback(async () => {
     await onSuccess?.()
     onClose()
-  }
+  }, [onSuccess, onClose])
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setView('edit')
     onClose()
-  }
+  }, [onClose])
+
+  const handleOpenTransfer = useCallback(() => {
+    setView('transfer')
+  }, [])
+
+  const handleCancelTransfer = useCallback(() => {
+    setView('edit')
+  }, [])
+
+  const handleTransferSuccess = useCallback(async () => {
+    setView('edit')
+    await onSuccess?.()
+  }, [onSuccess])
+
+  if (!isOpen || !stationId) return null
 
   const title = view === 'edit' ? t('title') : t('transferTitle')
 
@@ -65,7 +78,7 @@ export const ChangeElementModal = ({
             key={stationId}
             stationId={stationId}
             onSuccess={handleSuccess}
-            onCreateTransfer={() => setView('transfer')}
+            onCreateTransfer={handleOpenTransfer}
           />
         )}
 
@@ -73,11 +86,8 @@ export const ChangeElementModal = ({
           <CreateTransferModal
             fromVisualId={stationVisualId}
             existingTransferIds={existingTransferIds}
-            onCancel={() => setView('edit')}
-            onSuccess={async () => {
-              setView('edit')
-              await onSuccess?.()
-            }}
+            onCancel={handleCancelTransfer}
+            onSuccess={handleTransferSuccess}
           />
         )}
       </div>

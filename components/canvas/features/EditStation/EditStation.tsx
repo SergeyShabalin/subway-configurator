@@ -7,7 +7,7 @@ import { stationsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
 import type { ChangeEvent } from 'react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styles from './EditStation.module.css'
 
 interface EditStationProps {
@@ -43,26 +43,54 @@ const EditStation = ({ stationId, onSuccess, onCreateTransfer }: EditStationProp
     }
   }, [stationId])
 
-  const stationVisualId = Object.entries(visualToStations).find(([, stationIds]) =>
-    stationIds.includes(stationId)
-  )?.[0]
+  const stationVisualId = useMemo(() => {
+    return Object.entries(visualToStations).find(([, stationIds]) =>
+      stationIds.includes(stationId)
+    )?.[0]
+  }, [visualToStations, stationId])
 
-  const stationTransfers = stationVisualId
-    ? visualTransfers.filter(
-        (transfer) =>
-          transfer.from_visual_id === stationVisualId || transfer.to_visual_id === stationVisualId
-      )
-    : []
+  const stationTransfers = useMemo(() => {
+    if (!stationVisualId) return []
+    return visualTransfers.filter(
+      (transfer) =>
+        transfer.from_visual_id === stationVisualId || transfer.to_visual_id === stationVisualId
+    )
+  }, [visualTransfers, stationVisualId])
 
-  const currentLine = station
-    ? lines.find((line) => String(line.id) === String(station.line_id))
-    : null
+  const currentLine = useMemo(() => {
+    if (!station) return null
+    return lines.find((line) => String(line.id) === String(station.line_id)) ?? null
+  }, [lines, station])
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const transfersWithDetails = useMemo(() => {
+    return stationTransfers.map((transfer) => {
+      const otherVisualId =
+        transfer.from_visual_id === stationVisualId
+          ? transfer.to_visual_id
+          : transfer.from_visual_id
+
+      const otherStationIds = visualToStations[otherVisualId] ?? []
+      const otherStationId = otherStationIds[0]
+      const otherStation = stations.find((s) => s.id === otherStationId)
+      const otherLine = otherStation
+        ? lines.find((line) => String(line.id) === String(otherStation.line_id))
+        : undefined
+
+      return {
+        id: transfer.id,
+        otherVisualId,
+        otherStationName: otherStation?.name ?? otherVisualId,
+        timeMinutes: transfer.time_minutes,
+        color: otherLine?.color,
+      }
+    })
+  }, [stationTransfers, stationVisualId, visualToStations, stations, lines])
+
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setStationName(e.target.value)
-  }
+  }, [])
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!station || !stationName.trim()) return
     if (stationName === station.name) return
 
@@ -77,9 +105,9 @@ const EditStation = ({ stationId, onSuccess, onCreateTransfer }: EditStationProp
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [station, stationName, stationId, onSuccess, t])
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     if (!station) return
 
     const confirmKey = transferCount > 1 ? 'confirmDeleteTransfer' : 'confirmDelete'
@@ -90,7 +118,7 @@ const EditStation = ({ stationId, onSuccess, onCreateTransfer }: EditStationProp
 
     await stationsService.delete(stationId)
     await onSuccess?.()
-  }
+  }, [station, transferCount, stationId, onSuccess, t])
 
   if (!station) return null
 
@@ -128,37 +156,20 @@ const EditStation = ({ stationId, onSuccess, onCreateTransfer }: EditStationProp
           />
         </div>
 
-        {stationTransfers.length === 0 ? (
+        {transfersWithDetails.length === 0 ? (
           <div className={styles.emptyTransfers}>{t('noTransfers')}</div>
         ) : (
           <ul className={styles.transferList}>
-            {stationTransfers.map((transfer) => {
-              const otherVisualId =
-                transfer.from_visual_id === stationVisualId
-                  ? transfer.to_visual_id
-                  : transfer.from_visual_id
-
-              const otherStationIds = visualToStations[otherVisualId] ?? []
-
-              const otherStationId = otherStationIds[0]
-
-              const otherStation = stations.find((s) => s.id === otherStationId)
-
-              const otherLine = otherStation
-                ? lines.find((line) => String(line.id) === String(otherStation.line_id))
-                : undefined
-
-              return (
-                <li key={transfer.id} className={styles.transferItem}>
-                  <InfoRow
-                    value={otherStation?.name ?? otherVisualId}
-                    description={`${transfer.time_minutes} мин`}
-                    color={otherLine?.color}
-                    indicatorType="bar"
-                  />
-                </li>
-              )
-            })}
+            {transfersWithDetails.map((transfer) => (
+              <li key={transfer.id} className={styles.transferItem}>
+                <InfoRow
+                  value={transfer.otherStationName}
+                  description={`${transfer.timeMinutes} мин`}
+                  color={transfer.color}
+                  indicatorType="bar"
+                />
+              </li>
+            ))}
           </ul>
         )}
       </div>

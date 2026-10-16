@@ -14,13 +14,13 @@ export function useStageZoom(minScale = 0.1, maxScale = 5, scaleStep = 1.1): Use
       const stage = stageRef.current
       if (!stage) return
 
-      const oldScale = stageScale
+      const oldScale = stage.scaleX()
       const pointer = stage.getPointerPosition()
       if (!pointer) return
 
       const mousePointTo = {
-        x: (pointer.x - stagePosition.x) / oldScale,
-        y: (pointer.y - stagePosition.y) / oldScale,
+        x: (pointer.x - stage.x()) / oldScale,
+        y: (pointer.y - stage.y()) / oldScale,
       }
 
       const direction = e.evt.deltaY > 0 ? -1 : 1
@@ -29,13 +29,19 @@ export function useStageZoom(minScale = 0.1, maxScale = 5, scaleStep = 1.1): Use
         maxScale
       )
 
-      setStageScale(newScale)
-      setStagePosition({
+      const newPos = {
         x: pointer.x - mousePointTo.x * newScale,
         y: pointer.y - mousePointTo.y * newScale,
-      })
+      }
+
+      stage.scale({ x: newScale, y: newScale })
+      stage.position(newPos)
+      stage.batchDraw()
+
+      setStageScale(newScale)
+      setStagePosition(newPos)
     },
-    [stageScale, stagePosition, minScale, maxScale, scaleStep]
+    [minScale, maxScale, scaleStep]
   )
 
   const handleStageDragEnd = useCallback((e: Konva.KonvaEventObject<DragEvent>) => {
@@ -77,12 +83,19 @@ export function useStageZoom(minScale = 0.1, maxScale = 5, scaleStep = 1.1): Use
       const scaleX = (stageWidth - padding * 2) / mapWidth
       const scaleY = (stageHeight - padding * 2) / mapHeight
       const newScale = Math.min(scaleX, scaleY, 1.5, maxScale)
+      const finalScale = Math.max(newScale, minScale)
 
-      setStageScale(Math.max(newScale, minScale))
-      setStagePosition({
-        x: stageWidth / 2 - centerX * newScale,
-        y: stageHeight / 2 - centerY * newScale,
-      })
+      const newPos = {
+        x: stageWidth / 2 - centerX * finalScale,
+        y: stageHeight / 2 - centerY * finalScale,
+      }
+
+      stage.scale({ x: finalScale, y: finalScale })
+      stage.position(newPos)
+      stage.batchDraw()
+
+      setStageScale(finalScale)
+      setStagePosition(newPos)
     },
     [maxScale, minScale]
   )

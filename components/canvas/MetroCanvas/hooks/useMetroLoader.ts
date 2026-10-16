@@ -1,18 +1,12 @@
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useEffect, useState } from 'react'
 
 const LOADER_DELAY_MS = 700
 
-const emptySubscribe = () => () => {}
-const getSnapshot = () => true
-const getServerSnapshot = () => false
-
 interface UseMetroLoaderResult {
-  isMounted: boolean
   showLoader: boolean
 }
 
 export const useMetroLoader = (isBusy: boolean): UseMetroLoaderResult => {
-  const isMounted = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot)
   const [showLoader, setShowLoader] = useState(false)
 
   useEffect(() => {
@@ -32,5 +26,5 @@ export const useMetroLoader = (isBusy: boolean): UseMetroLoaderResult => {
     }
   }, [isBusy, showLoader])
 
-  return { isMounted, showLoader }
+  return { showLoader }
 }
