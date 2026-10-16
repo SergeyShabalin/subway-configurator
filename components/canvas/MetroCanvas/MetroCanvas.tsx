@@ -12,7 +12,6 @@ import { stationsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { forwardRef, useCallback, useMemo, useRef } from 'react'
-import { createPortal } from 'react-dom'
 import { Layer, Stage } from 'react-konva'
 import { useMetroCanvas } from '../hooks'
 import { useMetroModal } from '../hooks/useMetroModal'
@@ -43,7 +42,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
   const { selectedStationId, selectStation, clearSelection } = useStationSelection()
 
   const isBusy = !isLoaded || isInitializing
-  const { isMounted, showLoader } = useMetroLoader(isBusy)
+  const { showLoader } = useMetroLoader(isBusy)
 
   const { isModalOpen, clickPosition, openModal, closeModal } = useMetroModal()
 
@@ -96,8 +95,6 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
       const labelX = x - visual.x
       const labelY = y - visual.y
 
-      console.log('[handleLabelMove]', { visualId, x, y, labelX, labelY })
-
       updateVisualLabelOffset(visualId, labelX, labelY)
       await stationsService.updateLabelPosition(visualId, labelX, labelY)
     },
@@ -105,32 +102,6 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
   )
 
   const initialTab = hasLines ? 'station' : 'line'
-
-  const addElementModal = useMemo(
-    () => (
-      <AddElementModal
-        key={isModalOpen ? 'open' : 'closed'}
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        position={clickPosition}
-        initialTab={initialTab}
-        onAdded={handleDataReload}
-      />
-    ),
-    [isModalOpen, closeModal, clickPosition, initialTab, handleDataReload]
-  )
-
-  const changeElementModal = useMemo(
-    () => (
-      <ChangeElementModal
-        isOpen={selectedStationId !== null}
-        onClose={clearSelection}
-        stationId={selectedStationId}
-        onSuccess={handleDataReload}
-      />
-    ),
-    [selectedStationId, clearSelection, handleDataReload]
-  )
 
   if (isBusy && showLoader) {
     return <SubwayLoader />
@@ -176,14 +147,21 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
 
       {showHint && <HintLetsStarted hasLines={hasLines} />}
 
-      {isMounted &&
-        createPortal(
-          <>
-            {addElementModal}
-            {changeElementModal}
-          </>,
-          document.body
-        )}
+      <AddElementModal
+        key={isModalOpen ? 'open' : 'closed'}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        position={clickPosition}
+        initialTab={initialTab}
+        onAdded={handleDataReload}
+      />
+
+      <ChangeElementModal
+        isOpen={selectedStationId !== null}
+        onClose={clearSelection}
+        stationId={selectedStationId}
+        onSuccess={handleDataReload}
+      />
     </div>
   )
 })

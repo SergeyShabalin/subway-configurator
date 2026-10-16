@@ -1,7 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { ReactNode, useEffect, useRef } from 'react'
+import { ReactNode, useEffect, useRef, useSyncExternalStore } from 'react'
+import { createPortal } from 'react-dom'
 import styles from './Modal.module.css'
 
 interface ModalProps {
@@ -13,6 +14,10 @@ interface ModalProps {
   disableClose?: boolean
 }
 
+const emptySubscribe = () => () => {}
+const getSnapshot = () => true
+const getServerSnapshot = () => false
+
 export const Modal = ({
   isOpen,
   onClose,
@@ -22,6 +27,7 @@ export const Modal = ({
   disableClose = false,
 }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null)
+  const isMounted = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot)
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -51,7 +57,7 @@ export const Modal = ({
     onClose()
   }
 
-  return (
+  const content = (
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div
         ref={modalRef}
@@ -72,4 +78,8 @@ export const Modal = ({
       </div>
     </div>
   )
+
+  if (!isMounted) return null
+
+  return createPortal(content, document.body)
 }
