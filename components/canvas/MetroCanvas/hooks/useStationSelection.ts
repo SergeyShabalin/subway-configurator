@@ -1,19 +1,16 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
-export const useStationSelection = () => {
+export interface UseStationSelectionResult {
+  selectedStationId: string | null
+  selectStation: (id: string) => void
+  clearSelection: () => void
+}
+
+export const useStationSelection = (): UseStationSelectionResult => {
   const [selectedStationId, setSelectedStationId] = useState<string | null>(null)
 
-  const selectStation = useCallback((stationId: string) => {
-    setSelectedStationId(stationId)
-  }, [])
+  const selectStation = (id: string) => setSelectedStationId(id)
+  const clearSelection = () => setSelectedStationId(null)
 
-  const clearSelection = useCallback(() => {
-    setSelectedStationId(null)
-  }, [])
-
-  return {
-    selectedStationId,
-    selectStation,
-    clearSelection,
-  }
+  return { selectedStationId, selectStation, clearSelection }
 }

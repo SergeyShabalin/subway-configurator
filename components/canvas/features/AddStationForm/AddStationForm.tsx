@@ -27,6 +27,7 @@ export const AddStationForm = ({
   const { lines, stations, visualToStations, loadData } = useMetroStore()
 
   const [stationName, setStationName] = useState('')
+  const [timeMinutes, setTimeMinutes] = useState(2)
   const [selectedLineId, setSelectedLineId] = useState('')
   const [transferStationId, setTransferStationId] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -95,6 +96,7 @@ export const AddStationForm = ({
         x: position.x,
         y: position.y,
         transferToVisualId,
+        timeMinutes,
       })
 
       await loadData()
@@ -153,7 +155,14 @@ export const AddStationForm = ({
           disabled={!selectedLineId}
         />
       </div>
-
+      <div className={styles.field}>
+        <Input
+          type="text"
+          label={t('timeLabel')}
+          value={String(timeMinutes)}
+          onChange={(e) => setTimeMinutes(Number(e.target.value) || 0)}
+        />
+      </div>
       <div className={styles.coordinates}>
         <span>{t('coordinates', { x: Math.round(position.x), y: Math.round(position.y) })}</span>
       </div>

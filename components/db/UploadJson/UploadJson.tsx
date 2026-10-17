@@ -277,14 +277,31 @@ const buildLinkRecords = (
   return links
 }
 
-const buildSegmentRecords = (segments: Record<string, SegmentInput>): Array<SegmentRecord> =>
-  Object.values(segments).map((s) => ({
-    id: String(s.id),
-    from_station_id: String(s.fromStationId),
-    to_station_id: String(s.toStationId),
-    line_id: s.lineId ?? '',
-    time_minutes: s.timeMinutes,
-  }))
+const buildSegmentRecords = (
+  segments: Record<string, SegmentInput>,
+  lines: Record<string, LineInput>
+): Array<SegmentRecord> =>
+  Object.values(segments).map((s) => {
+    const fromId = String(s.fromStationId)
+    const toId = String(s.toStationId)
+
+    let lineId = s.lineId ? String(s.lineId) : ''
+
+    if (!lineId) {
+      const line = Object.values(lines).find(
+        (l) => l.logicalStationIds?.includes(fromId) && l.logicalStationIds?.includes(toId)
+      )
+      lineId = line ? String(line.id) : ''
+    }
+
+    return {
+      id: String(s.id),
+      from_station_id: fromId,
+      to_station_id: toId,
+      line_id: lineId,
+      time_minutes: s.timeMinutes,
+    }
+  })
 
 const buildTransferRecords = (transfers: Record<string, TransferInput>): Array<VisualTransfer> =>
   Object.values(transfers).map((tr) => ({
@@ -343,7 +360,7 @@ export const UploadJson = ({ onSuccess, onError }: UploadJsonProps) => {
     await visualStationLinksRepo.clear()
     await visualStationLinksRepo.saveMany(links)
 
-    const segments = buildSegmentRecords(metroData.logic.segments)
+    const segments = buildSegmentRecords(metroData.logic.segments, metroData.lines)
     await segmentsRepo.clear()
     await segmentsRepo.saveMany(segments)
 

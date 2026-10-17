@@ -1,11 +1,12 @@
 import { VisualStation } from '@/types/metro'
 import type Konva from 'konva'
+import { MutableRefObject } from 'react'
 
 export interface MetroStationsProps {
-  circleRef?: React.MutableRefObject<Record<string, Konva.Circle>>
-  lineRef: React.MutableRefObject<Record<string, Konva.Line>>
-  textRef: React.MutableRefObject<Record<string, Konva.Text>>
-  onStationDoubleClick: (stationId: string) => void
+  circleRef?: MutableRefObject<Record<string, Konva.Circle>>
+  lineRef: MutableRefObject<Record<string, Konva.Line>>
+  textRef: MutableRefObject<Record<string, Konva.Text>>
+  onStationClick: (stationId: string) => void
 }
 
 export interface StationData {

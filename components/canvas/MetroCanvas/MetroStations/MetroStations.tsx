@@ -2,11 +2,12 @@
 
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
+import { useCallback } from 'react'
 import { StationCircle } from './StationCircle'
 import { useMetroDrag, useMetroPosition, useMetroStations } from './hooks'
 import type { MetroStationsProps, StationData } from './types'
 
-export const MetroStations = ({ lineRef, textRef, onStationDoubleClick }: MetroStationsProps) => {
+export const MetroStations = ({ lineRef, textRef, onStationClick }: MetroStationsProps) => {
   const visuals = useMetroStore((state) => state.visuals)
   const visualToStations = useMetroStore((state) => state.visualToStations)
 
@@ -14,13 +15,19 @@ export const MetroStations = ({ lineRef, textRef, onStationDoubleClick }: MetroS
   const { savePosition } = useMetroPosition()
   const { handleDragStart, handleDragMove, handleDragEnd } = useMetroDrag()
 
-  const onDragMove = (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => {
-    handleDragMove(e, visualId, lineRef, textRef)
-  }
+  const onDragMove = useCallback(
+    (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => {
+      handleDragMove(e, visualId, lineRef, textRef)
+    },
+    [handleDragMove, lineRef, textRef]
+  )
 
-  const onDragEnd = (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => {
-    handleDragEnd(e, visualId, (id, x, y) => savePosition(id, x, y))
-  }
+  const onDragEnd = useCallback(
+    (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => {
+      handleDragEnd(e, visualId, (id, x, y) => savePosition(id, x, y))
+    },
+    [handleDragEnd, savePosition]
+  )
 
   const visualValues = Object.values(visuals).filter((v) => v && v.id)
 
@@ -43,10 +50,11 @@ export const MetroStations = ({ lineRef, textRef, onStationDoubleClick }: MetroS
             isTransfer={data.isTransfer}
             color={data.color}
             colors={data.colors}
+            stationId={stationId}
             onDragStart={handleDragStart}
             onDragMove={onDragMove}
             onDragEnd={onDragEnd}
-            onDoubleClick={() => onStationDoubleClick(stationId)}
+            onStationClick={onStationClick}
           />
         )
       })}

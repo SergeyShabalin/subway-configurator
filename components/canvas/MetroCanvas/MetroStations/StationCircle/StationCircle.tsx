@@ -1,6 +1,7 @@
 'use client'
 
-import { memo } from 'react'
+import type Konva from 'konva'
+import { memo, useRef, useState } from 'react'
 import { Circle } from 'react-konva'
 import type { StationCircleProps } from './types'
 
@@ -9,6 +10,8 @@ const TRANSFER_BASE_RADIUS = 12
 const RING_STEP = 2.5
 const RING_WIDTH = 2.5
 const MIN_RING_RADIUS = 3
+const HOVER_STROKE_WIDTH = 4
+const DRAG_THRESHOLD = 2
 
 const StationCircle = memo(
   ({
@@ -16,30 +19,86 @@ const StationCircle = memo(
     isTransfer,
     color,
     colors,
+    stationId,
     onDragStart,
     onDragMove,
     onDragEnd,
-    onDoubleClick,
+    onStationClick,
   }: StationCircleProps) => {
+    const [isHovered, setIsHovered] = useState(false)
+    const dragStartPosRef = useRef<{ x: number; y: number } | null>(null)
+
     if (!visual) return null
 
-    const isMultiTransfer = isTransfer && colors && colors.length >= 2
-    const baseRadius = isMultiTransfer ? TRANSFER_BASE_RADIUS : BASE_RADIUS
+    const multiColors = isTransfer && colors && colors.length >= 2 ? colors : null
+    const baseRadius = multiColors ? TRANSFER_BASE_RADIUS : BASE_RADIUS
+    const strokeColor = isHovered ? '#ffffff' : color || '#888888'
+    const strokeWidth = isHovered ? HOVER_STROKE_WIDTH : RING_WIDTH
 
-    if (!isMultiTransfer) {
+    const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>) => {
+      const stage = e.target.getStage()
+      if (stage) stage.container().style.cursor = 'pointer'
+      setIsHovered(true)
+    }
+
+    const handleMouseLeave = (e: Konva.KonvaEventObject<MouseEvent>) => {
+      const stage = e.target.getStage()
+      if (stage) stage.container().style.cursor = 'default'
+      setIsHovered(false)
+    }
+
+    const handleMouseDown = () => {
+      dragStartPosRef.current = null
+    }
+
+    const handleStationDragStart = (e: Konva.KonvaEventObject<DragEvent>) => {
+      const node: Konva.Node = e.target
+      dragStartPosRef.current = { x: node.x(), y: node.y() }
+      onDragStart()
+    }
+
+    const handleStationMouseUp = (e: Konva.KonvaEventObject<MouseEvent>) => {
+      const node: Konva.Node = e.target
+      const start = dragStartPosRef.current
+
+      if (!start) {
+        onStationClick?.(stationId)
+        return
+      }
+
+      const dx = node.x() - start.x
+      const dy = node.y() - start.y
+      const moved = Math.sqrt(dx * dx + dy * dy)
+
+      if (moved < DRAG_THRESHOLD) {
+        onStationClick?.(stationId)
+      }
+
+      dragStartPosRef.current = null
+    }
+
+    const handleStationTap = () => {
+      onStationClick?.(stationId)
+    }
+
+    if (!multiColors) {
       return (
         <Circle
           x={visual.x ?? 0}
           y={visual.y ?? 0}
           radius={baseRadius}
           fill="#020913"
-          stroke={color || '#888888'}
-          strokeWidth={RING_WIDTH}
+          stroke={strokeColor}
+          strokeWidth={strokeWidth}
           draggable
-          onDragStart={onDragStart}
+          onMouseDown={handleMouseDown}
+          onDragStart={handleStationDragStart}
           onDragMove={(e) => onDragMove(e, visual.id)}
           onDragEnd={(e) => onDragEnd(e, visual.id)}
-          onDblClick={onDoubleClick}
+          onMouseUp={handleStationMouseUp}
+          onTap={handleStationTap}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         />
       )
     }
@@ -51,16 +110,20 @@ const StationCircle = memo(
           y={visual.y ?? 0}
           radius={baseRadius}
           fill="#020913"
-          stroke={colors[0]}
-          strokeWidth={RING_WIDTH}
+          stroke={isHovered ? '#ffffff' : (multiColors[0] ?? color)}
+          strokeWidth={strokeWidth}
           draggable
-          onDragStart={onDragStart}
+          onMouseDown={handleMouseDown}
+          onDragStart={handleStationDragStart}
           onDragMove={(e) => onDragMove(e, visual.id)}
           onDragEnd={(e) => onDragEnd(e, visual.id)}
-          onDblClick={onDoubleClick}
+          onMouseUp={handleStationMouseUp}
+          onTap={handleStationTap}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         />
 
-        {colors.slice(1).map((c: string, index: number) => {
+        {multiColors.slice(1).map((c: string, index: number) => {
           const innerRadius = baseRadius - (index + 1) * RING_STEP
 
           if (innerRadius < MIN_RING_RADIUS) return null
@@ -72,25 +135,13 @@ const StationCircle = memo(
               y={visual.y ?? 0}
               radius={innerRadius}
               fill="transparent"
-              stroke={c}
+              stroke={isHovered ? '#ffffff' : c}
               strokeWidth={RING_WIDTH}
               listening={false}
             />
           )
         })}
       </>
-    )
-  },
-  (prev: StationCircleProps, next: StationCircleProps) => {
-    if (!prev.visual || !next.visual) return true
-
-    return (
-      prev.visual.x === next.visual.x &&
-      prev.visual.y === next.visual.y &&
-      prev.color === next.color &&
-      prev.isTransfer === next.isTransfer &&
-      prev.colors?.join(',') === next.colors?.join(',') &&
-      prev.onDoubleClick === next.onDoubleClick
     )
   }
 )

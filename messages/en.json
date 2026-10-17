@@ -28,7 +28,8 @@
     "transferLabel": "Create same-name station",
     "transferPlaceholder": "Select a same-name station",
     "noTransferOptions": "No stations on other lines",
-    "errorAlreadyOnLine": "This station is already on the selected line"
+    "errorAlreadyOnLine": "This station is already on the selected line",
+    "timeLabel": "Time to previous station (min)"
   },
   "AddLineForm": {
     "nameLabel": "Line name",
@@ -118,5 +119,13 @@
     "errorCreate": "Failed to create transfer",
     "errorAlreadyExists": "This transfer already exists",
     "errorSameVisual": "Cannot create a transfer to the same station"
+  },
+  "ChangeSegmentInfoModal": {
+    "title": "Segment info",
+    "from": "from station",
+    "to": "to station",
+    "line": "line",
+    "minutes": "minutes",
+    "save": "Save"
   }
 }

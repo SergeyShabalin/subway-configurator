@@ -28,7 +28,8 @@
     "transferLabel": "Crear estación con el mismo nombre",
     "transferPlaceholder": "Selecciona una estación con el mismo nombre",
     "noTransferOptions": "No hay estaciones en otras líneas",
-    "errorAlreadyOnLine": "Esta estación ya existe en la línea seleccionada"
+    "errorAlreadyOnLine": "Esta estación ya existe en la línea seleccionada",
+    "timeLabel": "Tiempo hasta la estación anterior (min)"
   },
   "AddLineForm": {
     "nameLabel": "Nombre de la línea",
@@ -118,5 +119,13 @@
     "errorCreate": "No se pudo crear el transbordo",
     "errorAlreadyExists": "Este transbordo ya existe",
     "errorSameVisual": "No se puede crear un transbordo a la misma estación"
+  },
+  "ChangeSegmentInfoModal": {
+    "title": "Información del segmento",
+    "from": "desde la estación",
+    "to": "hasta la estación",
+    "line": "línea",
+    "minutes": "minutos",
+    "save": "Guardar"
   }
 }
