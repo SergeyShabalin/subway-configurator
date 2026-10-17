@@ -31,6 +31,7 @@ export class StationsService extends BaseService {
         lineId: data.lineId,
         x: data.x,
         y: data.y,
+        timeMinutes: 0,
       })
 
       const allStations = await stationsRepo.getAll()
@@ -73,20 +74,21 @@ export class StationsService extends BaseService {
     x: number
     y: number
     transferToVisualId?: string
+    timeMinutes: number
   }): Promise<{ station: Station; visualId: string }> {
     try {
       const stationId = this.generateId()
+      const isTransfer = Boolean(data.transferToVisualId)
+
+      const line = await linesRepo.getById(data.lineId)
+      if (!line) {
+        throw new Error(`Line ${data.lineId} not found`)
+      }
 
       let visualId: string
       let resolvedName = data.name
 
       if (data.transferToVisualId) {
-        const existingVisual = await visualsRepo.getById(data.transferToVisualId)
-
-        if (!existingVisual) {
-          throw new Error(`Visual ${data.transferToVisualId} not found`)
-        }
-
         const existingLinks = await visualStationLinksRepo.getByVisualId(data.transferToVisualId)
 
         if (existingLinks.length === 0) {
@@ -94,19 +96,16 @@ export class StationsService extends BaseService {
         }
 
         const primaryStation = await stationsRepo.getById(existingLinks[0].station_id)
-
         if (!primaryStation) {
           throw new Error('TRANSFER_STATION_NOT_FOUND')
         }
 
-        resolvedName = primaryStation.name
-        visualId = data.transferToVisualId
-
-        const line = await linesRepo.getById(data.lineId)
-
-        if (line?.visualStationIds?.includes(visualId)) {
+        if (line.visualStationIds?.includes(data.transferToVisualId)) {
           throw new Error('ALREADY_ON_LINE')
         }
+
+        resolvedName = primaryStation.name
+        visualId = data.transferToVisualId
       } else {
         visualId = this.generateId()
 
@@ -134,30 +133,34 @@ export class StationsService extends BaseService {
         station_id: stationId,
       })
 
-      const line = await linesRepo.getById(data.lineId)
+      const updatedLogicalIds = [...(line.logicalStationIds ?? []), stationId]
 
-      if (line) {
-        const visualStationIds = line.visualStationIds ?? []
-        const logicalStationIds = line.logicalStationIds ?? []
+      await linesRepo.update(data.lineId, {
+        visualStationIds: line.visualStationIds?.includes(visualId)
+          ? line.visualStationIds
+          : [...(line.visualStationIds ?? []), visualId],
+        logicalStationIds: updatedLogicalIds,
+      })
 
-        await linesRepo.update(data.lineId, {
-          visualStationIds: visualStationIds.includes(visualId)
-            ? visualStationIds
-            : [...visualStationIds, visualId],
-          logicalStationIds: [...logicalStationIds, stationId],
-        })
-      }
-
-      const allLinks = await visualStationLinksRepo.getByVisualId(visualId)
-
-      if (allLinks.length > 1) {
+      if (isTransfer) {
         await visualsRepo.update(visualId, { is_transfer: 1 })
       }
 
-      return {
-        station: newStation,
-        visualId,
+      if (updatedLogicalIds.length > 1) {
+        const previousStationId = updatedLogicalIds[updatedLogicalIds.length - 2]
+
+        if (previousStationId) {
+          await segmentsRepo.save({
+            id: this.generateId(),
+            from_station_id: previousStationId,
+            to_station_id: stationId,
+            line_id: data.lineId,
+            time_minutes: data.timeMinutes,
+          })
+        }
       }
+
+      return { station: newStation, visualId }
     } catch (error) {
       return this.handleError(error, 'StationsService.create')
     }
@@ -311,6 +314,14 @@ export class StationsService extends BaseService {
       await visualsRepo.updatePosition(visualId, x, y)
     } catch (error) {
       return this.handleError(error, 'StationsService.updateVisualPosition')
+    }
+  }
+
+  async updateSegmentTime(segmentId: string, timeMinutes: number): Promise<void> {
+    try {
+      await segmentsRepo.update(segmentId, { time_minutes: timeMinutes })
+    } catch (error) {
+      return this.handleError(error, 'StationsService.updateSegmentTime')
     }
   }
 

@@ -5,9 +5,10 @@ export interface StationCircleProps {
   visual: VisualStation
   isTransfer: boolean
   color: string
+  stationId: string
   colors?: Array<string>
   onDragStart: () => void
   onDragMove: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
   onDragEnd: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
-  onDoubleClick?: () => void
+  onStationClick?: (stationId: string) => void
 }

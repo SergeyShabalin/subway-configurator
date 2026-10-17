@@ -42,6 +42,7 @@ interface SegmentRecord {
   id: string
   from_station_id: string
   to_station_id: string
+  line_id: string
   time_minutes: number
 }
 
@@ -90,6 +91,7 @@ const buildLogicSegments = (segments: Array<SegmentRecord>) =>
       id: segment.id,
       fromStationId: segment.from_station_id,
       toStationId: segment.to_station_id,
+      lineId: segment.line_id,
       timeMinutes: segment.time_minutes,
     }
     return acc

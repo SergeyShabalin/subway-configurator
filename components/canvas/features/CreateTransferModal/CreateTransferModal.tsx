@@ -31,9 +31,20 @@ export const CreateTransferModal = ({
   const [isLoading, setIsLoading] = useState(false)
 
   const options: Array<DropdownOption<string>> = useMemo(() => {
+    const fromStationIds = visualToStations[fromVisualId] ?? []
+    const fromStationId = fromStationIds[0]
+    const fromStation = fromStationId ? stations.find((s) => s.id === fromStationId) : undefined
+    const fromLineId = fromStation?.line_id
+
     return Object.values(visuals)
       .filter((v) => v.id !== fromVisualId)
       .filter((v) => !existingTransferIds.includes(v.id))
+      .filter((v) => {
+        const stationIds = visualToStations[v.id] ?? []
+        const stationId = stationIds[0]
+        const station = stationId ? stations.find((s) => s.id === stationId) : undefined
+        return station?.line_id !== fromLineId
+      })
       .map((v) => {
         const stationIds = visualToStations[v.id] ?? []
         const stationId = stationIds[0]

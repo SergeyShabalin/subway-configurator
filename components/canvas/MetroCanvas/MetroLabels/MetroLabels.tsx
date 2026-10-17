@@ -16,11 +16,15 @@ export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsP
 
   const [hoveredLabelId, setHoveredLabelId] = useState<string | null>(null)
 
-  const handleMouseEnter = useCallback((id: string) => {
+  const handleMouseEnter = useCallback((e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
+    const stage = e.target.getStage()
+    if (stage) stage.container().style.cursor = 'pointer'
     setHoveredLabelId(id)
   }, [])
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
+    const stage = e.target.getStage()
+    if (stage) stage.container().style.cursor = 'default'
     setHoveredLabelId(null)
   }, [])
 
@@ -46,7 +50,6 @@ export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsP
             }}
             x={label.x}
             y={label.y}
-
             offsetX={LABEL_WIDTH / 2}
             text={label.text}
             fontSize={12}
@@ -54,13 +57,12 @@ export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsP
             fill={isHovered ? '#fbc901' : '#e2e8f0'}
             align="center"
             verticalAlign="middle"
-
             listening
             draggable
             letterSpacing={2}
             stroke="#020913"
             strokeWidth={0.3}
-            onMouseEnter={() => handleMouseEnter(label.id)}
+            onMouseEnter={(e) => handleMouseEnter(e, label.id)}
             onMouseLeave={handleMouseLeave}
             onDragEnd={(e) => handleDragEnd(e, label.id)}
             onMouseDown={(e) => {

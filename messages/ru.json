@@ -28,7 +28,8 @@
     "transferLabel": "Создать одноимённую станцию",
     "transferPlaceholder": "Выберите одноимённую станцию",
     "noTransferOptions": "Нет станций на других линиях",
-    "errorAlreadyOnLine": "Эта станция уже есть на выбранной линии"
+    "errorAlreadyOnLine": "Эта станция уже есть на выбранной линии",
+    "timeLabel": "Время до предыдущей станции (мин)"
   },
   "AddLineForm": {
     "nameLabel": "Название ветки",
@@ -118,5 +119,13 @@
     "errorCreate": "Не удалось создать переход",
     "errorAlreadyExists": "Такой переход уже существует",
     "errorSameVisual": "Нельзя создать переход на ту же станцию"
+  },
+  "ChangeSegmentInfoModal": {
+    "title": "Информация о сегменте",
+    "from": "от станции",
+    "to": "до станции",
+    "line": "ветка",
+    "minutes": "минут",
+    "save": "Сохранить"
   }
 }
