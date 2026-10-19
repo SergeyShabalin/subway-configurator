@@ -1,14 +1,15 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
+import { ArrowIcon } from '@/components/ui/Icons'
 import { InfoRow } from '@/components/ui/InfoRow/InfoRow'
 import { Input } from '@/components/ui/Input/Input'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useTranslations } from 'next-intl'
 import { type ChangeEvent, useState } from 'react'
-import styles from './ChangeSegmentInfoModal.module.css'
+import styles from './EditSegmentModal.module.css'
 
-interface ChangeSegmentInfoModalProps {
+interface EditSegmentModalProps {
   isOpen: boolean
   onClose: () => void
   fromStationName: string
@@ -16,10 +17,10 @@ interface ChangeSegmentInfoModalProps {
   timeMinutes: number
   lineName?: string
   lineColor?: string
-  onSave?: (timeMinutes: number) => Promise<void>
+  onSave: (timeMinutes: number) => Promise<void>
 }
 
-export const ChangeSegmentInfoModal = ({
+export const EditSegmentModal = ({
   isOpen,
   onClose,
   fromStationName,
@@ -28,7 +29,7 @@ export const ChangeSegmentInfoModal = ({
   lineName,
   lineColor,
   onSave,
-}: ChangeSegmentInfoModalProps) => {
+}: EditSegmentModalProps) => {
   const t = useTranslations('ChangeSegmentInfoModal')
   const [time, setTime] = useState(timeMinutes)
   const [isSaving, setIsSaving] = useState(false)
@@ -38,8 +39,6 @@ export const ChangeSegmentInfoModal = ({
   }
 
   const handleSave = async () => {
-    if (!onSave) return
-
     setIsSaving(true)
 
     try {
@@ -67,20 +66,7 @@ export const ChangeSegmentInfoModal = ({
         </div>
 
         <div className={styles.arrowRow}>
-          <svg
-            className={styles.arrowIcon}
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 5V19M12 19L6 13M12 19L18 13"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowIcon />
 
           <div className={styles.timeInput}>
             <Input
