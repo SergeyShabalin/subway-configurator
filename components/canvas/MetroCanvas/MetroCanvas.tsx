@@ -2,7 +2,7 @@
 
 import { AddElementModal } from '@/components/canvas/features'
 import { ChangeElementModal } from '@/components/canvas/features/ChangeElementModal/ChangeElementModal'
-import { ChangeSegmentInfoModal } from '@/components/canvas/features/ChangeSegmentInfoModal/ChangeSegmentInfoModal'
+import { EditSegment } from '@/components/canvas/features/EditSegment/EditSegment'
 import { HintLetsStarted } from '@/components/canvas/MetroCanvas/HintLetsStarted/HintLetsStarted'
 import { useInitialCenterCanvas } from '@/components/canvas/MetroCanvas/hooks/useInitialCenterCanvas'
 import { useMetroLoader } from '@/components/canvas/MetroCanvas/hooks/useMetroLoader'
@@ -19,7 +19,6 @@ import { useMetroCanvas } from '../hooks'
 import { useMetroModal } from '../hooks/useMetroModal'
 import { useStageResize } from '../shared/useStageResize'
 import { useStageZoom } from '../shared/useStageZoom'
-import { useSelectedSegmentData } from './hooks/useSelectedSegmentData'
 import styles from './MetroCanvas.module.css'
 import { MetroLabels } from './MetroLabels/MetroLabels'
 import { useMetroLines } from './MetroLines/hooks/useMetroLines'
@@ -43,6 +42,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
   const { isLoaded, isInitializing, reloadData } = useMetroCanvas()
 
   const { selectedStationId, selectStation, clearSelection } = useStationSelection()
+
   const {
     selectedSegment,
     selectSegment,
@@ -63,9 +63,11 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
 
   const stationNames = useMemo(() => {
     const map: Record<string, string> = {}
+
     for (const station of stations) {
       map[station.id] = station.name
     }
+
     return map
   }, [stations])
 
@@ -74,8 +76,6 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
   const hasLines = lineData.length > 0
   const hasStations = Object.keys(visuals).length > 0
   const showHint = !hasStations
-
-  const segmentModalData = useSelectedSegmentData(selectedSegment)
 
   const handleContextMenu = (e: Konva.KonvaEventObject<PointerEvent>) => {
     e.evt.preventDefault()
@@ -90,6 +90,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
       x: (pointer.x - stagePosition.x) / stageScale,
       y: (pointer.y - stagePosition.y) / stageScale,
     }
+
     openModal(worldPos.x, worldPos.y)
   }
 
@@ -109,16 +110,6 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
       await stationsService.updateLabelPosition(visualId, labelX, labelY)
     },
     [visuals, updateVisualLabelOffset]
-  )
-
-  const handleSegmentTimeSave = useCallback(
-    async (timeMinutes: number) => {
-      if (!segmentModalData?.segmentId) return
-
-      await stationsService.updateSegmentTime(segmentModalData.segmentId, timeMinutes)
-      await reloadData()
-    },
-    [segmentModalData, reloadData]
   )
 
   const initialTab = hasLines ? 'station' : 'line'
@@ -149,14 +140,12 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
         <Layer>
           <MetroLines visuals={visuals} lineRef={lineRef} onSegmentClick={selectSegment} />
           <MetroTransfers visuals={visuals} />
-
           <MetroStations
             circleRef={circleRef}
             lineRef={lineRef}
             textRef={textRef}
             onStationClick={selectStation}
           />
-
           <MetroLabels
             stationNames={stationNames}
             textRef={textRef}
@@ -183,23 +172,12 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
         onSuccess={handleDataReload}
       />
 
-      {segmentModalData && (
-        <ChangeSegmentInfoModal
-          key={
-            selectedSegment
-              ? `${selectedSegment.lineId}-${selectedSegment.fromVisualId}-${selectedSegment.toVisualId}`
-              : 'empty'
-          }
-          isOpen={selectedSegment !== null}
-          onClose={clearSegmentSelection}
-          fromStationName={segmentModalData.fromStationName}
-          toStationName={segmentModalData.toStationName}
-          timeMinutes={segmentModalData.timeMinutes}
-          lineName={segmentModalData.lineName}
-          lineColor={segmentModalData.lineColor}
-          onSave={handleSegmentTimeSave}
-        />
-      )}
+      <EditSegment
+        isOpen={selectedSegment !== null}
+        selectedSegment={selectedSegment}
+        onClose={clearSegmentSelection}
+        reloadData={reloadData}
+      />
     </div>
   )
 })

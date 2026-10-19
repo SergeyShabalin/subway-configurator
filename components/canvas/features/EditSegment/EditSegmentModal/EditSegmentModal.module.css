@@ -17,13 +17,6 @@
     gap: 12px;
 }
 
-.arrowIcon {
-    width: 28px;
-    height: 28px;
-    color: var(--text-secondary);
-    flex-shrink: 0;
-}
-
 .timeInput {
     display: flex;
     align-items: center;
