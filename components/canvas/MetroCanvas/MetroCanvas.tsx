@@ -1,8 +1,8 @@
 'use client'
 
 import { AddElementModal } from '@/components/canvas/features'
-import { ChangeElementModal } from '@/components/canvas/features/ChangeElementModal/ChangeElementModal'
-import { EditSegment } from '@/components/canvas/features/EditSegment/EditSegment'
+import { EditLine } from '@/components/canvas/features/EditLine/EditLine'
+import { EditStation } from '@/components/canvas/features/EditStation/EditStation'
 import { HintLetsStarted } from '@/components/canvas/MetroCanvas/HintLetsStarted/HintLetsStarted'
 import { useInitialCenterCanvas } from '@/components/canvas/MetroCanvas/hooks/useInitialCenterCanvas'
 import { useMetroLoader } from '@/components/canvas/MetroCanvas/hooks/useMetroLoader'
@@ -165,14 +165,14 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
         onAdded={handleDataReload}
       />
 
-      <ChangeElementModal
+      <EditStation
         isOpen={selectedStationId !== null}
-        onClose={clearSelection}
         stationId={selectedStationId}
-        onSuccess={handleDataReload}
+        onClose={clearSelection}
+        reloadData={reloadData}
       />
 
-      <EditSegment
+      <EditLine
         isOpen={selectedSegment !== null}
         selectedSegment={selectedSegment}
         onClose={clearSegmentSelection}

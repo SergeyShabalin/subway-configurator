@@ -91,22 +91,20 @@
     }
   },
   "EditStation": {
+    "title": "Cambiar estación",
     "id": "ID",
     "name": "Nombre",
     "lineId": "ID de línea",
     "delete": "Eliminar",
-    "save": "Ahorrar",
+    "save": "Guardar",
     "confirmDelete": "¿Seguro que quieres eliminar la estación \"{name}\"?",
     "confirmDeleteTransfer": "La estación \"{name}\" es de transbordo (vinculada a {count} líneas). ¿Eliminarla de todas las líneas?",
     "errorDelete": "No se pudo eliminar la estación",
     "transfers": "Transbordos",
     "createTransfer": "Crear transbordo",
     "noTransfers": "Sin transbordos",
-    "currentLine": "Línea actual"
-  },
-  "ChangeElementModal": {
-    "title": "Cambiar estación",
-    "transferTitle": "Crear transbordo"
+    "currentLine": "Línea actual",
+    "errorSave": "No se pudo guardar el nombre de la estación"
   },
   "CreateTransferModal": {
     "title": "Crear transbordo",
@@ -120,12 +118,23 @@
     "errorAlreadyExists": "Este transbordo ya existe",
     "errorSameVisual": "No se puede crear un transbordo a la misma estación"
   },
-  "ChangeSegmentInfoModal": {
+  "EditSegmentModal": {
     "title": "Información del segmento",
     "from": "desde la estación",
     "to": "hasta la estación",
     "line": "línea",
     "minutes": "minutos",
     "save": "Guardar"
+  },
+  "EditLine": {
+    "title": "Editar línea",
+    "tabSegment": "Segmento",
+    "tabLine": "Línea"
+  },
+  "EditLineForm": {
+    "nameLabel": "Nombre de la línea",
+    "colorLabel": "Color de la línea",
+    "save": "Guardar",
+    "errorSave": "Error al guardar la línea"
   }
 }
