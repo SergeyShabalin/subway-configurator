@@ -164,14 +164,12 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
         initialTab={initialTab}
         onAdded={handleDataReload}
       />
-
       <EditStation
         isOpen={selectedStationId !== null}
         stationId={selectedStationId}
         onClose={clearSelection}
         reloadData={reloadData}
       />
-
       <EditLine
         isOpen={selectedSegment !== null}
         selectedSegment={selectedSegment}
