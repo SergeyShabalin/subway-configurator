@@ -28,6 +28,13 @@ export class LinesService extends BaseService {
       return this.handleError(error, 'LinesService.create')
     }
   }
+  async update(lineId: string, data: { name?: string; color?: string }): Promise<void> {
+    try {
+      await linesRepo.update(lineId, data)
+    } catch (error) {
+      return this.handleError(error, 'LinesService.update')
+    }
+  }
 }
 
 export const linesService = new LinesService()

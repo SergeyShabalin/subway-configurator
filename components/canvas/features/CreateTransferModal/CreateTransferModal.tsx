@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { Dropdown } from '@/components/ui/Dropdown'
 import type { DropdownOption } from '@/components/ui/Dropdown/Dropdown'
 import { Input } from '@/components/ui/Input/Input'
+import { Modal } from '@/components/ui/Modal/Modal'
 import { transfersService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
@@ -11,6 +12,7 @@ import { useMemo, useState } from 'react'
 import styles from './CreateTransferModal.module.css'
 
 interface CreateTransferModalProps {
+  isOpen: boolean
   fromVisualId: string
   existingTransferIds: Array<string>
   onCancel: () => void
@@ -18,6 +20,7 @@ interface CreateTransferModalProps {
 }
 
 export const CreateTransferModal = ({
+  isOpen,
   fromVisualId,
   existingTransferIds,
   onCancel,
@@ -95,39 +98,41 @@ export const CreateTransferModal = ({
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <Dropdown
-        value={selectedVisualId}
-        options={options}
-        onChange={setSelectedVisualId}
-        label={t('targetLabel')}
-        placeholder={t('targetPlaceholder')}
-        emptyMessage={t('noTargets')}
-      />
-
-      <Input
-        type="text"
-        label={t('timeLabel')}
-        value={String(timeMinutes)}
-        onChange={(e) => setTimeMinutes(Number(e.target.value) || 0)}
-      />
-
-      <div className={styles.actions}>
-        <Button
-          title={t('cancel')}
-          variant="outline"
-          size="medium"
-          onClick={onCancel}
-          disabled={isLoading}
+    <Modal isOpen={isOpen} onClose={onCancel} title={t('title')}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <Dropdown
+          value={selectedVisualId}
+          options={options}
+          onChange={setSelectedVisualId}
+          label={t('targetLabel')}
+          placeholder={t('targetPlaceholder')}
+          emptyMessage={t('noTargets')}
         />
-        <Button
-          title={t('submit')}
-          size="medium"
-          type="submit"
-          loading={isLoading}
-          disabled={!selectedVisualId}
+
+        <Input
+          type="text"
+          label={t('timeLabel')}
+          value={String(timeMinutes)}
+          onChange={(e) => setTimeMinutes(Number(e.target.value) || 0)}
         />
-      </div>
-    </form>
+
+        <div className={styles.actions}>
+          <Button
+            title={t('cancel')}
+            variant="outline"
+            size="medium"
+            onClick={onCancel}
+            disabled={isLoading}
+          />
+          <Button
+            title={t('submit')}
+            size="medium"
+            type="submit"
+            loading={isLoading}
+            disabled={!selectedVisualId}
+          />
+        </div>
+      </form>
+    </Modal>
   )
 }

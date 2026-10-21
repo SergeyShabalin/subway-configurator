@@ -91,6 +91,7 @@
     }
   },
   "EditStation": {
+    "title": "Изменить станцию",
     "id": "ID",
     "name": "Название",
     "lineId": "ID ветки",
@@ -102,11 +103,8 @@
     "transfers": "Переходы",
     "createTransfer": "Создать переход",
     "noTransfers": "Переходов нет",
-    "currentLine": "Текущая ветка"
-  },
-  "ChangeElementModal": {
-    "title": "Изменить станцию",
-    "transferTitle": "Создать пересадку"
+    "currentLine": "Текущая ветка",
+    "errorSave": "Не удалось сохранить название станции"
   },
   "CreateTransferModal": {
     "title": "Создать переход",
@@ -120,12 +118,23 @@
     "errorAlreadyExists": "Такой переход уже существует",
     "errorSameVisual": "Нельзя создать переход на ту же станцию"
   },
-  "ChangeSegmentInfoModal": {
+  "EditSegmentModal": {
     "title": "Информация о сегменте",
     "from": "от станции",
     "to": "до станции",
     "line": "ветка",
     "minutes": "минут",
     "save": "Сохранить"
+  },
+  "EditLine": {
+    "title": "Изменить линию",
+    "tabSegment": "Сегмент",
+    "tabLine": "Ветка"
+  },
+  "EditLineForm": {
+    "nameLabel": "Название ветки",
+    "colorLabel": "Цвет ветки",
+    "save": "Сохранить",
+    "errorSave": "Ошибка при сохранении ветки"
   }
 }

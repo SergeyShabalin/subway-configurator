@@ -91,6 +91,7 @@
     }
   },
   "EditStation": {
+    "title": "Change station",
     "id": "ID",
     "name": "Name",
     "lineId": "Line ID",
@@ -102,11 +103,8 @@
     "transfers": "Transfers",
     "createTransfer": "Create transfer",
     "noTransfers": "No transfers",
-    "currentLine": "Current line"
-  },
-  "ChangeElementModal": {
-    "title": "Change station",
-    "transferTitle": "Create transfer"
+    "currentLine": "Current line",
+    "errorSave": "Failed to save station name"
   },
   "CreateTransferModal": {
     "title": "Create transfer",
@@ -120,12 +118,23 @@
     "errorAlreadyExists": "This transfer already exists",
     "errorSameVisual": "Cannot create a transfer to the same station"
   },
-  "ChangeSegmentInfoModal": {
+  "EditSegmentModal": {
     "title": "Segment info",
     "from": "from station",
     "to": "to station",
     "line": "line",
     "minutes": "minutes",
     "save": "Save"
+  },
+  "EditLine": {
+    "title": "Edit line",
+    "tabSegment": "Segment",
+    "tabLine": "Line"
+  },
+  "EditLineForm": {
+    "nameLabel": "Line name",
+    "colorLabel": "Line color",
+    "save": "Save",
+    "errorSave": "Failed to save line"
   }
 }
