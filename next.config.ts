@@ -11,8 +11,14 @@ const nextConfig: NextConfig = {
   },
 
   webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = [...(config.externals || []), 'better-sqlite3']
+    if (isServer && process.env.VERCEL) {
+      config.plugins.push({
+        apply: (compiler) => {
+          compiler.hooks.done.tap('ForceExit', () => {
+            setTimeout(() => process.exit(0), 100)
+          })
+        },
+      })
     }
     return config
   },
