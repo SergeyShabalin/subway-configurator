@@ -29,6 +29,11 @@ export class SegmentsRepository extends BaseRepository<Segment> {
         (segment.from_station_id === toId && segment.to_station_id === fromId)
     )
   }
+
+  async getByLineId(lineId: string): Promise<Array<Segment>> {
+    const all = await this.getAll()
+    return all.filter((segment) => segment.line_id === lineId)
+  }
 }
 
 export const segmentsRepo = new SegmentsRepository()

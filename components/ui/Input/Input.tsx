@@ -2,7 +2,7 @@ import type { InputHTMLAttributes, ReactNode, RefObject } from 'react'
 import { useId } from 'react'
 import styles from './Input.module.css'
 
-type InputType = 'text' | 'color' | 'file'
+type InputType = 'text' | 'color' | 'file' | 'checkbox'
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   type?: InputType
@@ -15,14 +15,22 @@ const INPUT_CLASSES: Record<InputType, string> = {
   text: styles.input,
   color: styles.colorInput,
   file: styles.fileInput,
+  checkbox: styles.checkbox,
 }
 
 const Input = ({ type = 'text', label, children, className, ref, ...props }: InputProps) => {
   const inputId = useId()
   const isFile = type === 'file'
+  const isCheckbox = type === 'checkbox'
 
   const inputElement = (
-    <input id={inputId} type={type} className={INPUT_CLASSES[type]} ref={ref} {...props} />
+    <input
+      id={inputId}
+      type={isCheckbox ? 'checkbox' : type}
+      className={INPUT_CLASSES[type]}
+      ref={ref}
+      {...props}
+    />
   )
 
   if (isFile) {
@@ -39,6 +47,17 @@ const Input = ({ type = 'text', label, children, className, ref, ...props }: Inp
           {children}
         </label>
       </>
+    )
+  }
+
+  if (isCheckbox) {
+    const wrapperClassName = [styles.checkboxWrapper, className].filter(Boolean).join(' ')
+    return (
+      <label className={wrapperClassName} htmlFor={inputId}>
+        {inputElement}
+        {label && <span className={styles.checkboxLabel}>{label}</span>}
+        {children}
+      </label>
     )
   }
 

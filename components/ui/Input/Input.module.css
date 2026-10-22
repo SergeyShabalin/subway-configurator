@@ -53,3 +53,25 @@
     opacity: 0;
     cursor: pointer;
 }
+
+.checkboxWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--button-focus, #3b82f6);
+    flex-shrink: 0;
+}
+
+.checkboxLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
