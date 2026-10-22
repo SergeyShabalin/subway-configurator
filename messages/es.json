@@ -135,6 +135,7 @@
     "nameLabel": "Nombre de la línea",
     "colorLabel": "Color de la línea",
     "save": "Guardar",
-    "errorSave": "Error al guardar la línea"
+    "errorSave": "Error al guardar la línea",
+    "circularLabel": "Línea circular"
   }
 }

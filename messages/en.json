@@ -135,6 +135,7 @@
     "nameLabel": "Line name",
     "colorLabel": "Line color",
     "save": "Save",
-    "errorSave": "Failed to save line"
+    "errorSave": "Failed to save line",
+    "circularLabel": "Loop line"
   }
 }

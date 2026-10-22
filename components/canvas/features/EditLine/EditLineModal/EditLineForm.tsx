@@ -19,6 +19,7 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
 
   const [name, setName] = useState(line.name)
   const [color, setColor] = useState(line.color)
+  const [isCircular, setIsCircular] = useState(line.is_circular === 1)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -29,9 +30,14 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
     setColor(e.target.value)
   }, [])
 
+  const handleIsCircularChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setIsCircular(e.target.checked)
+  }, [])
+
   const handleSave = useCallback(async () => {
     if (!name.trim()) return
-    if (name === line.name && color === line.color) return
+    if (name === line.name && color === line.color && isCircular === (line.is_circular === 1))
+      return
 
     setIsLoading(true)
 
@@ -39,6 +45,7 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
       await linesService.update(line.id, {
         name: name.trim(),
         color,
+        is_circular: isCircular ? 1 : 0,
       })
       await reloadData()
       onClose()
@@ -48,9 +55,12 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
     } finally {
       setIsLoading(false)
     }
-  }, [name, color, line, reloadData, onClose, t])
+  }, [name, color, isCircular, line, reloadData, onClose, t])
 
-  const isDisabled = isLoading || !name.trim() || (name === line.name && color === line.color)
+  const isDisabled =
+    isLoading ||
+    !name.trim() ||
+    (name === line.name && color === line.color && isCircular === (line.is_circular === 1))
 
   return (
     <div className={styles.content}>
@@ -76,6 +86,16 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
           />
           <span className={styles.colorValue}>{color}</span>
         </div>
+      </div>
+
+      <div className={styles.field}>
+        <Input
+          type="checkbox"
+          label={t('circularLabel')}
+          checked={isCircular}
+          onChange={handleIsCircularChange}
+          disabled={isLoading}
+        />
       </div>
 
       <div className={styles.actions}>
