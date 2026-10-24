@@ -10,7 +10,7 @@ import { useSegmentSelection } from '@/components/canvas/MetroCanvas/hooks/useSe
 import { useStationSelection } from '@/components/canvas/MetroCanvas/hooks/useStationSelection'
 import { MetroTransfers } from '@/components/canvas/MetroCanvas/MetroTransfers/MetroTransfers'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
-import { stationsService } from '@/src/lib/services'
+import { visualsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { forwardRef, useCallback, useMemo, useRef } from 'react'
@@ -57,7 +57,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
   const { width, height } = useStageResize()
 
   const { stageRef, stageScale, stagePosition, handleWheel, handleStageDragEnd, centerStage } =
-    useStageZoom(0.1, 5, 1.1)
+    useStageZoom(0.05, 20, 1.1)
 
   useInitialCenterCanvas({ isLoaded, visuals, width, height, centerStage })
 
@@ -107,7 +107,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
       const labelY = y - visual.y
 
       updateVisualLabelOffset(visualId, labelX, labelY)
-      await stationsService.updateLabelPosition(visualId, labelX, labelY)
+      await visualsService.updateLabelPosition(visualId, labelX, labelY)
     },
     [visuals, updateVisualLabelOffset]
   )
