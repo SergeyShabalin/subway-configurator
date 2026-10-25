@@ -1,6 +1,7 @@
 import { stationsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useEffect, useMemo, useState } from 'react'
+import type { LineOption } from '../EditStationModal/DeleteFromLineModal/DeleteFromLineModal'
 
 interface TransferItem {
   id: string
@@ -15,6 +16,7 @@ interface StationData {
   currentLineColor?: string
   transfers: Array<TransferItem>
   transferCount: number
+  lineOptions: Array<LineOption>
   fromVisualId?: string
   existingTransferIds: Array<string>
 }
@@ -79,11 +81,30 @@ export const useSelectedStationData = (stationId: string | null): StationData | 
 
     const currentLine = lines.find((line) => String(line.id) === String(station.line_id))
 
-    const existingTransferIds = fromVisualId
-      ? visualTransfers
-          .filter((tr) => tr.from_visual_id === fromVisualId || tr.to_visual_id === fromVisualId)
-          .map((tr) => (tr.from_visual_id === fromVisualId ? tr.to_visual_id : tr.from_visual_id))
-      : []
+    const existingTransferIds = stationTransfers.map((tr) =>
+      tr.from_visual_id === fromVisualId ? tr.to_visual_id : tr.from_visual_id
+    )
+
+    // Станции узла (по одной на ветку) для выбора, откуда удалять
+    const nodeStationIds = fromVisualId ? (visualToStations[fromVisualId] ?? []) : []
+
+    const lineOptions = nodeStationIds.flatMap((id): Array<LineOption> => {
+      const nodeStation = stations.find((s) => s.id === id)
+      const line = nodeStation
+        ? lines.find((l) => String(l.id) === String(nodeStation.line_id))
+        : undefined
+
+      if (!nodeStation || !line) return []
+
+      return [
+        {
+          stationId: nodeStation.id,
+          lineId: line.id,
+          lineName: line.name,
+          lineColor: line.color,
+        },
+      ]
+    })
 
     return {
       stationName: station.name,
@@ -91,6 +112,7 @@ export const useSelectedStationData = (stationId: string | null): StationData | 
       currentLineColor: currentLine?.color,
       transfers,
       transferCount,
+      lineOptions,
       fromVisualId,
       existingTransferIds,
     }

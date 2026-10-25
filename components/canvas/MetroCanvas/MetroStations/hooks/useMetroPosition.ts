@@ -1,4 +1,4 @@
-import { visualsRepo } from '@/src/lib/indexeddb/repositories'
+import { visualsService } from '@/src/lib/services'
 import { useCallback } from 'react'
 
 interface SavePositionResult {
@@ -10,7 +10,7 @@ export const useMetroPosition = () => {
   const savePosition = useCallback(
     async (visualId: string, x: number, y: number): Promise<SavePositionResult> => {
       try {
-        await visualsRepo.update(visualId, { x, y })
+        await visualsService.updatePosition(visualId, x, y)
         return { success: true, error: null }
       } catch (error) {
         console.error('Failed to save position:', error)

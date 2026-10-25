@@ -1,4 +1,4 @@
-import { graphService, stationsService } from '@/src/lib/services'
+import { graphService } from '@/src/lib/services'
 import type { Line, Segment, Station, VisualStation, VisualTransfer } from '@/types/metro'
 import { create } from 'zustand'
 
@@ -23,7 +23,7 @@ interface MetroState {
   updateVisualLabelOffset: (visualId: string, labelX: number, labelY: number) => void
 
   loadData: () => Promise<void>
-  saveVisualPosition: (visualId: string, x: number, y: number) => Promise<void>
+  // saveVisualPosition: (visualId: string, x: number, y: number) => Promise<void>
 }
 
 export const useMetroStore = create<MetroState>((set) => ({
@@ -141,23 +141,23 @@ export const useMetroStore = create<MetroState>((set) => ({
     }
   },
 
-  saveVisualPosition: async (visualId, x, y) => {
-    try {
-      await stationsService.updateVisualPosition(visualId, x, y)
-
-      set((state) => {
-        const current = state.visuals[visualId]
-        if (!current) return state
-
-        return {
-          visuals: {
-            ...state.visuals,
-            [visualId]: { ...current, x, y },
-          },
-        }
-      })
-    } catch (error) {
-      console.error('Failed to save visual position:', error)
-    }
-  },
+  // saveVisualPosition: async (visualId, x, y) => {
+  //   try {
+  //     await stationsService.updateVisualPosition(visualId, x, y)
+  //
+  //     set((state) => {
+  //       const current = state.visuals[visualId]
+  //       if (!current) return state
+  //
+  //       return {
+  //         visuals: {
+  //           ...state.visuals,
+  //           [visualId]: { ...current, x, y },
+  //         },
+  //       }
+  //     })
+  //   } catch (error) {
+  //     console.error('Failed to save visual position:', error)
+  //   }
+  // },
 }))

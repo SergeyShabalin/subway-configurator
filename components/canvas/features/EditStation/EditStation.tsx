@@ -1,6 +1,7 @@
 'use client'
 
 import { stationsService } from '@/src/lib/services'
+import type { DeleteScope } from './EditStationModal/DeleteFromLineModal/DeleteFromLineModal'
 import { EditStationModal } from './EditStationModal/EditStationModal'
 import { useSelectedStationData } from './hooks/useSelectedStationData'
 
@@ -20,9 +21,15 @@ export const EditStation = ({ isOpen, stationId, onClose, reloadData }: EditStat
     await reloadData()
   }
 
-  const handleDelete = async () => {
+  const handleDelete = async (scope: DeleteScope) => {
     if (!stationId) return
-    await stationsService.delete(stationId)
+
+    if (scope.type === 'line') {
+      await stationsService.deleteFromLine(scope.stationId)
+    } else {
+      await stationsService.delete(stationId)
+    }
+
     await reloadData()
   }
 
@@ -33,11 +40,13 @@ export const EditStation = ({ isOpen, stationId, onClose, reloadData }: EditStat
       key={stationId ?? 'empty'}
       isOpen={isOpen}
       onClose={onClose}
+      stationId={stationId}
       stationName={stationData.stationName}
       currentLineName={stationData.currentLineName}
       currentLineColor={stationData.currentLineColor}
       transfers={stationData.transfers}
       transferCount={stationData.transferCount}
+      lineOptions={stationData.lineOptions}
       fromVisualId={stationData.fromVisualId}
       existingTransferIds={stationData.existingTransferIds}
       onSave={handleSave}
