@@ -123,12 +123,14 @@
     "errorSameVisual": "No se puede crear un transbordo a la misma estación"
   },
   "EditSegmentModal": {
-    "title": "Información del segmento",
-    "from": "desde la estación",
-    "to": "hasta la estación",
-    "line": "línea",
+    "title": "Información del tramo",
+    "from": "Desde la estación",
+    "to": "Hasta la estación",
+    "line": "Línea",
+    "timeLabel": "Tiempo de viaje",
     "minutes": "minutos",
-    "save": "Guardar"
+    "save": "Guardar",
+    "errorSave": "No se pudo guardar el tiempo de viaje"
   },
   "EditLine": {
     "title": "Editar línea",
@@ -141,5 +143,19 @@
     "save": "Guardar",
     "errorSave": "Error al guardar la línea",
     "circularLabel": "Línea circular"
+  },
+  "EditTransfer": {
+    "title": "Editar transbordo"
+  },
+  "EditTransferModal": {
+    "from": "Desde la estación",
+    "to": "Hasta la estación",
+    "timeLabel": "Tiempo de transbordo",
+    "minutes": "minutos",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Eliminar el transbordo entre \"{from}\" y \"{to}\"?",
+    "errorSave": "No se pudo guardar el tiempo de transbordo",
+    "errorDelete": "No se pudo eliminar el transbordo"
   }
 }

@@ -1,0 +1,80 @@
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+
+.walkRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 4px 0;
+}
+
+.walkIcon {
+    flex-shrink: 0;
+    color: var(--text-secondary);
+}
+
+.timeInput {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.timeLabel {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.timeControl {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.timeControl input {
+    width: 100px;
+    min-height: 44px;
+    padding: 8px 12px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.timeUnit {
+    color: var(--text-secondary);
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+}
+
+@media (max-width: 360px) {
+    .walkRow {
+        gap: 10px;
+    }
+
+    .actions {
+        flex-direction: column-reverse;
+    }
+
+    .actions > * {
+        width: 100%;
+    }
+}

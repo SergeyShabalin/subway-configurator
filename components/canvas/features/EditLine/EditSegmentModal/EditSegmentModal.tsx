@@ -5,7 +5,7 @@ import { ArrowIcon } from '@/components/ui/Icons'
 import { InfoRow } from '@/components/ui/InfoRow/InfoRow'
 import { Input } from '@/components/ui/Input/Input'
 import { useTranslations } from 'next-intl'
-import { type ChangeEvent, useState } from 'react'
+import { useTimeEditor } from '../../hooks/useTimeEditor'
 import styles from './EditSegmentModal.module.css'
 
 interface EditSegmentModalProps {
@@ -28,61 +28,34 @@ export const EditSegmentModal = ({
   onSave,
 }: EditSegmentModalProps) => {
   const t = useTranslations('EditSegmentModal')
-  const [time, setTime] = useState(timeMinutes)
-  const [isSaving, setIsSaving] = useState(false)
 
-  const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTime(Number(e.target.value) || 0)
-  }
-
-  const handleSave = async () => {
-    setIsSaving(true)
-
-    try {
-      await onSave(time)
-      onClose()
-    } catch (error) {
-      console.error('Failed to save segment time:', error)
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  const isDisabled = isSaving || time === timeMinutes
+  const { time, isLoading, isSaveDisabled, handleTimeChange, handleSave } = useTimeEditor({
+    initialMinutes: timeMinutes,
+    onSave,
+    onSuccess: onClose,
+    onSaveError: () => alert(t('errorSave')),
+  })
 
   return (
     <div className={styles.content}>
-      <div className={styles.fromStation}>
-        <InfoRow
-          value={fromStationName}
-          description={t('from')}
-          color={lineColor}
-          indicatorType="bar"
-        />
-      </div>
+      <InfoRow label={t('from')} value={fromStationName} color={lineColor} indicatorType="bar" />
 
       <div className={styles.arrowRow}>
         <ArrowIcon />
 
-        <div className={styles.timeInput}>
-          <Input type="text" value={String(time)} onChange={handleTimeChange} disabled={isSaving} />
+        <div className={styles.timeControl}>
+          <div className={styles.timeField}>
+            <Input type="text" value={time} onChange={handleTimeChange} disabled={isLoading} />
+          </div>
+
           <span className={styles.timeUnit}>{t('minutes')}</span>
         </div>
       </div>
 
-      <div className={styles.toStation}>
-        <InfoRow
-          value={toStationName}
-          description={t('to')}
-          color={lineColor}
-          indicatorType="bar"
-        />
-      </div>
+      <InfoRow label={t('to')} value={toStationName} color={lineColor} indicatorType="bar" />
 
       {lineName && (
-        <div className={styles.lineRow}>
-          <InfoRow value={lineName} description={t('line')} color={lineColor} indicatorType="dot" />
-        </div>
+        <InfoRow label={t('line')} value={lineName} color={lineColor} indicatorType="dot" />
       )}
 
       <div className={styles.actions}>
@@ -91,8 +64,8 @@ export const EditSegmentModal = ({
           variant="outlineColored"
           color="success"
           onClick={handleSave}
-          loading={isSaving}
-          disabled={isDisabled}
+          loading={isLoading}
+          disabled={isSaveDisabled}
         />
       </div>
     </div>

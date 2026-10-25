@@ -2,22 +2,35 @@ import { visualTransfersRepo } from '@/src/lib/indexeddb/repositories'
 import type { VisualTransfer } from '@/types/metro'
 import { BaseService } from './base.service'
 
+const CONTEXT = {
+  getAll: 'TransfersService.getAll',
+  create: 'TransfersService.create',
+  updateTime: 'TransfersService.updateTime',
+  delete: 'TransfersService.delete',
+} as const
+
+interface CreateTransferInput {
+  fromVisualId: string
+  toVisualId: string
+  timeMinutes: number
+  style?: 'dashed' | 'dotted' | 'solid'
+}
+
 export class TransfersService extends BaseService {
-  async getAll(): Promise<Array<VisualTransfer>> {
+  private async run<T>(context: string, fn: () => Promise<T>): Promise<T> {
     try {
-      return await visualTransfersRepo.getAll()
+      return await fn()
     } catch (error) {
-      return this.handleError(error, 'TransfersService.getAll')
+      return this.handleError(error, context)
     }
   }
 
-  async create(data: {
-    fromVisualId: string
-    toVisualId: string
-    timeMinutes: number
-    style?: 'dashed' | 'dotted' | 'solid'
-  }): Promise<VisualTransfer> {
-    try {
+  async getAll(): Promise<Array<VisualTransfer>> {
+    return this.run(CONTEXT.getAll, () => visualTransfersRepo.getAll())
+  }
+
+  async create(data: CreateTransferInput): Promise<VisualTransfer> {
+    return this.run(CONTEXT.create, async () => {
       if (data.fromVisualId === data.toVisualId) {
         throw new Error('SAME_VISUAL')
       }
@@ -41,26 +54,17 @@ export class TransfersService extends BaseService {
       await visualTransfersRepo.save(transfer)
 
       return transfer
-    } catch (error) {
-      return this.handleError(error, 'TransfersService.create')
-    }
+    })
+  }
+
+  async updateTime(transferId: string, timeMinutes: number): Promise<void> {
+    return this.run(CONTEXT.updateTime, () =>
+      visualTransfersRepo.update(transferId, { time_minutes: timeMinutes })
+    )
   }
 
   async delete(transferId: string): Promise<void> {
-    try {
-      await visualTransfersRepo.delete(transferId)
-    } catch (error) {
-      return this.handleError(error, 'TransfersService.delete')
-    }
-  }
-
-  async deleteByVisualId(visualId: string): Promise<void> {
-    try {
-      const transfers = await visualTransfersRepo.getByVisualId(visualId)
-      await Promise.all(transfers.map((t) => visualTransfersRepo.delete(t.id)))
-    } catch (error) {
-      return this.handleError(error, 'TransfersService.deleteByVisualId')
-    }
+    return this.run(CONTEXT.delete, () => visualTransfersRepo.delete(transferId))
   }
 }
 

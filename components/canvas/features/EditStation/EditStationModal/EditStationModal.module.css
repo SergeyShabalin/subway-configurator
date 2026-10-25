@@ -58,11 +58,3 @@
     padding: 0;
     margin: 0;
 }
-
-.transferItem {
-    min-width: 0;
-}
-
-.transferItem > div {
-    gap: 4px;
-}

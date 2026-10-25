@@ -123,12 +123,14 @@
     "errorSameVisual": "Cannot create a transfer to the same station"
   },
   "EditSegmentModal": {
-    "title": "Segment info",
-    "from": "from station",
-    "to": "to station",
-    "line": "line",
+    "title": "Segment information",
+    "from": "From station",
+    "to": "To station",
+    "line": "Line",
+    "timeLabel": "Travel time",
     "minutes": "minutes",
-    "save": "Save"
+    "save": "Save",
+    "errorSave": "Failed to save travel time"
   },
   "EditLine": {
     "title": "Edit line",
@@ -141,5 +143,19 @@
     "save": "Save",
     "errorSave": "Failed to save line",
     "circularLabel": "Loop line"
+  },
+  "EditTransfer": {
+    "title": "Edit transfer"
+  },
+  "EditTransferModal": {
+    "from": "From station",
+    "to": "To station",
+    "timeLabel": "Transfer time",
+    "minutes": "minutes",
+    "save": "Save",
+    "delete": "Delete",
+    "confirmDelete": "Delete the transfer between \"{from}\" and \"{to}\"?",
+    "errorSave": "Failed to save transfer time",
+    "errorDelete": "Failed to delete the transfer"
   }
 }

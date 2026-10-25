@@ -3,11 +3,13 @@
 import { AddElementModal } from '@/components/canvas/features'
 import { EditLine } from '@/components/canvas/features/EditLine/EditLine'
 import { EditStation } from '@/components/canvas/features/EditStation/EditStation'
+import { EditTransfer } from '@/components/canvas/features/EditTransfer/EditTransfer'
 import { HintLetsStarted } from '@/components/canvas/MetroCanvas/HintLetsStarted/HintLetsStarted'
 import { useInitialCenterCanvas } from '@/components/canvas/MetroCanvas/hooks/useInitialCenterCanvas'
 import { useMetroLoader } from '@/components/canvas/MetroCanvas/hooks/useMetroLoader'
 import { useSegmentSelection } from '@/components/canvas/MetroCanvas/hooks/useSegmentSelection'
 import { useStationSelection } from '@/components/canvas/MetroCanvas/hooks/useStationSelection'
+import { useTransferSelection } from '@/components/canvas/MetroCanvas/hooks/useTransferSelection'
 import { MetroTransfers } from '@/components/canvas/MetroCanvas/MetroTransfers/MetroTransfers'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import { visualsService } from '@/src/lib/services'
@@ -48,6 +50,12 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     selectSegment,
     clearSelection: clearSegmentSelection,
   } = useSegmentSelection()
+
+  const {
+    selectedTransferId,
+    selectTransfer,
+    clearSelection: clearTransferSelection,
+  } = useTransferSelection()
 
   const isBusy = !isLoaded || isInitializing
   const { showLoader } = useMetroLoader(isBusy)
@@ -139,7 +147,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
       >
         <Layer>
           <MetroLines visuals={visuals} lineRef={lineRef} onSegmentClick={selectSegment} />
-          <MetroTransfers visuals={visuals} />
+          <MetroTransfers visuals={visuals} onTransferClick={selectTransfer} />
           <MetroStations
             circleRef={circleRef}
             lineRef={lineRef}
@@ -174,6 +182,12 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
         isOpen={selectedSegment !== null}
         selectedSegment={selectedSegment}
         onClose={clearSegmentSelection}
+        reloadData={reloadData}
+      />
+      <EditTransfer
+        isOpen={selectedTransferId !== null}
+        transferId={selectedTransferId}
+        onClose={clearTransferSelection}
         reloadData={reloadData}
       />
     </div>

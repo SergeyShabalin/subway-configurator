@@ -2,15 +2,18 @@
 
 import { useMetroStore } from '@/store'
 import type { VisualStation } from '@/types/metro'
-import { Fragment, useMemo } from 'react'
+import type Konva from 'konva'
+import { Fragment, useMemo, useState } from 'react'
 import { Line } from 'react-konva'
 
 interface MetroTransfersProps {
   visuals: Record<string, VisualStation>
+  onTransferClick?: (transfer: string) => void
 }
 
 const FALLBACK_COLOR = '#94a3b8'
 const OUTLINE_COLOR = '#0f172a'
+const HOVER_COLOR = '#ffffff'
 
 const buildGradientStops = (fromColor: string, toColor: string) => [
   0,
@@ -23,11 +26,29 @@ const buildGradientStops = (fromColor: string, toColor: string) => [
   toColor,
 ]
 
-export const MetroTransfers = ({ visuals }: MetroTransfersProps) => {
+export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps) => {
   const visualTransfers = useMetroStore((state) => state.visualTransfers)
   const visualToStations = useMetroStore((state) => state.visualToStations)
   const stations = useMetroStore((state) => state.stations)
   const lines = useMetroStore((state) => state.lines)
+  const [hoveredTransfer, setHoveredTransfer] = useState<string | null>(null)
+
+  const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
+    const stage = e.target.getStage()
+    if (stage) stage.container().style.cursor = 'pointer'
+    setHoveredTransfer(id)
+  }
+
+  const handleMouseLeave = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    const stage = e.target.getStage()
+    if (stage) stage.container().style.cursor = 'default'
+    setHoveredTransfer(null)
+  }
+
+  const handleClick = (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>, transferId: string) => {
+    e.cancelBubble = true
+    onTransferClick?.(transferId)
+  }
 
   const visualColors = useMemo(() => {
     const map: Record<string, string> = {}
@@ -55,7 +76,15 @@ export const MetroTransfers = ({ visuals }: MetroTransfersProps) => {
         const toColor = visualColors[transfer.to_visual_id] ?? FALLBACK_COLOR
 
         const points = [from.x, from.y, to.x, to.y]
-        const gradientStops = buildGradientStops(fromColor, toColor)
+        const isHovered = hoveredTransfer === transfer.id
+
+        const gradientProps = isHovered
+          ? {}
+          : {
+              strokeLinearGradientStartPoint: { x: from.x, y: from.y },
+              strokeLinearGradientEndPoint: { x: to.x, y: to.y },
+              strokeLinearGradientColorStops: buildGradientStops(fromColor, toColor),
+            }
 
         return (
           <Fragment key={transfer.id}>
@@ -71,14 +100,17 @@ export const MetroTransfers = ({ visuals }: MetroTransfersProps) => {
 
             <Line
               points={points}
+              stroke={isHovered ? HOVER_COLOR : undefined}
               strokeWidth={3}
               dash={[6, 6]}
               opacity={0.95}
               lineCap="round"
-              listening={false}
-              strokeLinearGradientStartPoint={{ x: from.x, y: from.y }}
-              strokeLinearGradientEndPoint={{ x: to.x, y: to.y }}
-              strokeLinearGradientColorStops={gradientStops}
+              hitStrokeWidth={20}
+              {...gradientProps}
+              onMouseEnter={(e) => handleMouseEnter(e, transfer.id)}
+              onMouseLeave={handleMouseLeave}
+              onClick={(e) => handleClick(e, transfer.id)}
+              onTap={(e) => handleClick(e, transfer.id)}
             />
           </Fragment>
         )
