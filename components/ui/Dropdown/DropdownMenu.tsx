@@ -4,6 +4,7 @@ import type { CSSProperties, Ref } from 'react'
 import { createPortal } from 'react-dom'
 import type { DropdownOption } from './Dropdown'
 import styles from './DropdownMenu.module.css'
+import { OptionColors } from './OptionColors'
 
 export interface DropdownMenuProps<T extends string> {
   id: string
@@ -48,9 +49,7 @@ export const DropdownMenu = <T extends string>({
             aria-selected={option.value === value}
           >
             <span className={styles.optionLine}>
-              {option.color && (
-                <span className={styles.colorDot} style={{ backgroundColor: option.color }} />
-              )}
+              <OptionColors colors={option.colors} color={option.color} />
               {option.label}
             </span>
           </li>

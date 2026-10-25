@@ -108,7 +108,8 @@
     "createTransfer": "Создать переход",
     "noTransfers": "Переходов нет",
     "currentLine": "Текущая ветка",
-    "errorSave": "Не удалось сохранить название станции"
+    "errorSave": "Не удалось сохранить название станции",
+    "transferTimeLabel": "мин"
   },
   "CreateTransferModal": {
     "title": "Создать переход",

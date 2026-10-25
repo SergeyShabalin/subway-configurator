@@ -108,7 +108,8 @@
     "createTransfer": "Create transfer",
     "noTransfers": "No transfers",
     "currentLine": "Current line",
-    "errorSave": "Failed to save station name"
+    "errorSave": "Failed to save station name",
+    "transferTimeLabel": "min"
   },
   "CreateTransferModal": {
     "title": "Create transfer",

@@ -49,13 +49,6 @@
     min-width: 0;
 }
 
-.colorDot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
 .placeholder {
     color: #64748b;
 }
