@@ -96,7 +96,6 @@ export const EditStationModal = ({
   )
 
   const handleDelete = useCallback(async () => {
-    // На узле несколько веток: даём выбрать, откуда удалять
     if (lineOptions.length > 1) {
       setIsDeleteModalOpen(true)
       return
@@ -163,7 +162,7 @@ export const EditStationModal = ({
             ) : (
               <ul className={styles.transferList}>
                 {transfers.map((transfer) => (
-                  <li key={transfer.id} className={styles.transferItem}>
+                  <li key={transfer.id}>
                     <InfoRow
                       value={transfer.otherStationName}
                       description={`${transfer.timeMinutes} мин`}

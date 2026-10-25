@@ -17,22 +17,23 @@ export const InfoRow = ({
   indicatorType = 'dot',
 }: InfoRowProps) => {
   return (
-    <div className={styles.row}>
-      {label && <span className={styles.label}>{label}</span>}
+    <div className={`${styles.row} ${color ? styles.hasIndicator : ''}`}>
+      {color && (
+        <span
+          aria-hidden="true"
+          className={indicatorType === 'dot' ? styles.dot : styles.indicator}
+          style={{ '--accent-color': color } as CSSProperties}
+        />
+      )}
 
-      <div className={styles.content}>
-        <div className={styles.value}>
-          {color && (
-            <span
-              className={indicatorType === 'dot' ? styles.dot : styles.indicator}
-              style={{ '--accent-color': color } as CSSProperties}
-            />
-          )}
+      <div className={styles.body}>
+        {label && <span className={styles.label}>{label}</span>}
 
+        <div className={styles.content}>
           <span className={styles.valueText}>{value}</span>
-        </div>
 
-        {description && <span className={styles.description}>{description}</span>}
+          {description && <span className={styles.description}>{description}</span>}
+        </div>
       </div>
     </div>
   )
