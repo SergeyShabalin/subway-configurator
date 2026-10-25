@@ -1,18 +1,29 @@
-import { linesRepo, segmentsRepo } from '@/src/lib/indexeddb/repositories'
-import type { Line, Segment } from '@/types/metro'
+import { linesRepo } from '@/src/lib/indexeddb/repositories'
+import type { Line } from '@/types/metro'
 import { BaseService } from './base.service'
+import { segmentsService } from './segments.service'
+
+const CONTEXT = {
+  getAll: 'LinesService.getAll',
+  create: 'LinesService.create',
+  update: 'LinesService.update',
+} as const
 
 export class LinesService extends BaseService {
-  async getAll(): Promise<Array<Line>> {
+  private async run<T>(context: string, fn: () => Promise<T>): Promise<T> {
     try {
-      return await linesRepo.getAll()
+      return await fn()
     } catch (error) {
-      return this.handleError(error, 'LinesService.getAll')
+      return this.handleError(error, context)
     }
   }
 
+  async getAll(): Promise<Array<Line>> {
+    return this.run(CONTEXT.getAll, () => linesRepo.getAll())
+  }
+
   async create(data: { name: string; color: string; isCircular?: boolean }): Promise<Line> {
-    try {
+    return this.run(CONTEXT.create, async () => {
       const newLine: Line = {
         id: this.generateId(),
         name: data.name,
@@ -21,85 +32,34 @@ export class LinesService extends BaseService {
         visualStationIds: [],
         logicalStationIds: [],
       }
+
       await linesRepo.save(newLine)
       return newLine
-    } catch (error) {
-      return this.handleError(error, 'LinesService.create')
-    }
+    })
   }
 
   async update(
     lineId: string,
     data: { name?: string; color?: string; is_circular?: number }
   ): Promise<void> {
-    try {
+    return this.run(CONTEXT.update, async () => {
       const line = await linesRepo.getById(lineId)
       if (!line) {
         throw new Error(`Line ${lineId} not found`)
       }
 
       const wasCircular = line.is_circular === 1
-      const willBeCircular = data.is_circular === 1
+      // Если поле не передано - закольцованность не меняется
+      const willBeCircular = data.is_circular === undefined ? wasCircular : data.is_circular === 1
 
       await linesRepo.update(lineId, data)
 
       if (!wasCircular && willBeCircular) {
-        await this.createCircularSegment(line)
+        await segmentsService.createClosing(line)
       } else if (wasCircular && !willBeCircular) {
-        await this.deleteCircularSegment(lineId)
+        await segmentsService.deleteClosing(line)
       }
-    } catch (error) {
-      return this.handleError(error, 'LinesService.update')
-    }
-  }
-
-  private async createCircularSegment(line: Line): Promise<void> {
-    const stationIds = line.logicalStationIds ?? []
-    if (stationIds.length < 2) return
-
-    const firstStationId = stationIds[0]
-    const lastStationId = stationIds[stationIds.length - 1]
-
-    const lineSegments = await segmentsRepo.getByLineId(line.id)
-    const alreadyExists = lineSegments.some(
-      (s) =>
-        (s.from_station_id === lastStationId && s.to_station_id === firstStationId) ||
-        (s.from_station_id === firstStationId && s.to_station_id === lastStationId)
-    )
-
-    if (alreadyExists) return
-
-    const segment: Segment = {
-      id: this.generateId(),
-      from_station_id: lastStationId,
-      to_station_id: firstStationId,
-      line_id: line.id,
-      time_minutes: 2,
-    }
-
-    await segmentsRepo.save(segment)
-  }
-
-  private async deleteCircularSegment(lineId: string): Promise<void> {
-    const line = await linesRepo.getById(lineId)
-    if (!line) return
-
-    const stationIds = line.logicalStationIds ?? []
-    if (stationIds.length < 2) return
-
-    const firstStationId = stationIds[0]
-    const lastStationId = stationIds[stationIds.length - 1]
-
-    const lineSegments = await segmentsRepo.getByLineId(lineId)
-    const circularSegment = lineSegments.find(
-      (s) =>
-        (s.from_station_id === lastStationId && s.to_station_id === firstStationId) ||
-        (s.from_station_id === firstStationId && s.to_station_id === lastStationId)
-    )
-
-    if (circularSegment) {
-      await segmentsRepo.delete(circularSegment.id)
-    }
+    })
   }
 }
 

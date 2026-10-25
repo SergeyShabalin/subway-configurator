@@ -157,7 +157,7 @@ export class IndexedDB {
   }
 
   // Удалить запись
-  async delete(storeName: string, id: string): Promise<void> {
+  async delete(storeName: string, id: IDBValidKey): Promise<void> {
     const db = await this.open()
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(storeName, 'readwrite')

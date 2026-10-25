@@ -8,6 +8,16 @@ import {
 } from '@/src/lib/indexeddb/repositories'
 import type { Line, Segment, Station, VisualStationLink } from '@/types/metro'
 import { BaseService } from './base.service'
+import { segmentsService } from './segments.service'
+
+const CONTEXT = {
+  getAll: 'StationsService.getAll',
+  create: 'StationsService.create',
+  updateName: 'StationsService.updateName',
+  delete: 'StationsService.delete',
+  deleteFromLine: 'StationsService.deleteFromLine',
+  countTransferStations: 'StationsService.countTransferStations',
+} as const
 
 const DEFAULT_LABEL_OFFSET = { x: 0, y: -30 }
 
@@ -36,41 +46,82 @@ export class StationsService extends BaseService {
   }
 
   async getAll(): Promise<Array<Station>> {
-    return this.run('StationsService.getAll', () => stationsRepo.getAll())
+    return this.run(CONTEXT.getAll, () => stationsRepo.getAll())
   }
 
-  async createWithSegment(data: {
-    name: string
-    lineId: string
-    x: number
-    y: number
-    timeMinutes: number
-  }): Promise<{ station: Station; visualId: string; segment?: Segment }> {
-    return this.run('StationsService.createWithSegment', () =>
-      this.createInternal({
-        name: data.name,
-        lineId: data.lineId,
-        x: data.x,
-        y: data.y,
-        timeMinutes: data.timeMinutes,
+  async create(data: CreateStationInput): Promise<CreateStationResult> {
+    return this.run(CONTEXT.create, async () => {
+      const line = await linesRepo.getById(data.lineId)
+      if (!line) {
+        throw new Error(`Line ${data.lineId} not found`)
+      }
+
+      const { visualId, name, isNewVisual } = await this.resolveVisual(data, line)
+      const stationId = this.generateId()
+
+      if (isNewVisual) {
+        await visualsRepo.save({
+          id: visualId,
+          x: data.x,
+          y: data.y,
+          labelOffset: { ...DEFAULT_LABEL_OFFSET },
+          is_transfer: 0,
+        })
+      }
+
+      const newStation: Station = {
+        id: stationId,
+        name,
+        line_id: data.lineId,
+        createdAt: Date.now(),
+      }
+
+      await stationsRepo.save(newStation)
+
+      await visualStationLinksRepo.save({
+        id: `${visualId}:${stationId}`,
+        visual_id: visualId,
+        station_id: stationId,
       })
-    )
-  }
 
-  async create(data: CreateStationInput): Promise<{ station: Station; visualId: string }> {
-    return this.run('StationsService.create', async () => {
-      const { station, visualId } = await this.createInternal(data)
-      return { station, visualId }
+      const updatedLogicalIds = [...(line.logicalStationIds ?? []), stationId]
+      const updatedVisualIds = line.visualStationIds?.includes(visualId)
+        ? line.visualStationIds
+        : [...(line.visualStationIds ?? []), visualId]
+
+      await linesRepo.update(data.lineId, {
+        visualStationIds: updatedVisualIds,
+        logicalStationIds: updatedLogicalIds,
+      })
+
+      if (!isNewVisual) {
+        await visualsRepo.update(visualId, { is_transfer: 1 })
+      }
+
+      const previousStationId = updatedLogicalIds[updatedLogicalIds.length - 2]
+
+      const segment = previousStationId
+        ? await segmentsService.create({
+            fromStationId: previousStationId,
+            toStationId: stationId,
+            lineId: data.lineId,
+            timeMinutes: data.timeMinutes,
+          })
+        : undefined
+
+      return { station: newStation, visualId, segment }
     })
   }
 
   async updateName(stationId: string, name: string): Promise<void> {
-    return this.run('StationsService.updateName', async () => {
+    return this.run(CONTEXT.updateName, async () => {
       const station = await stationsRepo.getById(stationId)
 
       if (!station) {
         throw new Error(`Station ${stationId} not found`)
       }
+
+      // Все станции одного узла хранят одно имя, поэтому переименовываем весь узел
       const { stationIds } = await this.collectNode(stationId)
       const idsToRename = new Set<string>([stationId, ...stationIds])
 
@@ -79,7 +130,7 @@ export class StationsService extends BaseService {
   }
 
   async delete(stationId: string): Promise<void> {
-    return this.run('StationsService.delete', async () => {
+    return this.run(CONTEXT.delete, async () => {
       const station = await stationsRepo.getById(stationId)
 
       if (!station) {
@@ -123,9 +174,15 @@ export class StationsService extends BaseService {
       const lines = await Promise.all(lineIds.map((id) => linesRepo.getById(id)))
       const linesToUpdate = lines.filter((line): line is Line => line !== undefined)
 
+      // Мост создаётся до удаления: было a-b, b-c, удаляем b → остаётся a-c.
+      // Список uniqueSegments собран выше, поэтому новые сегменты под удаление не попадут.
+      await Promise.all(
+        linesToUpdate.map((line) => segmentsService.bridgeRemoved(line, stationIdsToDelete))
+      )
+
       await Promise.all([
         ...[...uniqueSegments.values()].map((segment) => segmentsRepo.delete(segment.id)),
-        ...linksToDelete.map((link) => visualStationLinksRepo.delete(link.id)),
+        ...linksToDelete.map((link) => visualStationLinksRepo.deleteLink(link)),
         ...visualIds.map((visualId) => visualsRepo.delete(visualId)),
         ...idsArray.map((id) => stationsRepo.delete(id)),
         ...[...transfersToDelete.values()].map((tr) => visualTransfersRepo.delete(tr.id)),
@@ -146,34 +203,70 @@ export class StationsService extends BaseService {
     })
   }
 
+  /**
+   * Удаляет одну логическую станцию (с одной ветки).
+   * Визуал и станции других веток остаются; если станций на визуале не осталось, удаляется и визуал.
+   */
+  async deleteFromLine(stationId: string): Promise<void> {
+    return this.run(CONTEXT.deleteFromLine, async () => {
+      const station = await stationsRepo.getById(stationId)
+
+      if (!station) {
+        throw new Error(`Station ${stationId} not found`)
+      }
+
+      const [line, links, segments] = await Promise.all([
+        linesRepo.getById(station.line_id),
+        visualStationLinksRepo.getByStationId(stationId),
+        segmentsRepo.getByStationId(stationId),
+      ])
+
+      const visualId = links[0]?.visual_id
+
+      // Мост строится до удаления, как и в delete
+      if (line) {
+        await segmentsService.bridgeRemoved(line, new Set([stationId]))
+      }
+
+      const visualLinks = visualId ? await visualStationLinksRepo.getByVisualId(visualId) : []
+      const remainingCount = visualLinks.filter((link) => link.station_id !== stationId).length
+
+      await Promise.all([
+        ...segments.map((segment) => segmentsRepo.delete(segment.id)),
+        ...links.map((link) => visualStationLinksRepo.deleteLink(link)),
+        stationsRepo.delete(stationId),
+      ])
+
+      if (line) {
+        await linesRepo.update(line.id, {
+          logicalStationIds: (line.logicalStationIds ?? []).filter((id) => id !== stationId),
+          visualStationIds: (line.visualStationIds ?? []).filter((id) => id !== visualId),
+        })
+      }
+
+      if (!visualId) return
+
+      if (remainingCount === 0) {
+        const transfers = await visualTransfersRepo.getByVisualId(visualId)
+
+        await Promise.all([
+          visualsRepo.delete(visualId),
+          ...transfers.map((tr) => visualTransfersRepo.delete(tr.id)),
+        ])
+      } else if (remainingCount === 1) {
+        await visualsRepo.update(visualId, { is_transfer: 0 })
+      }
+    })
+  }
+
   async countTransferStations(stationId: string): Promise<number> {
-    return this.run('StationsService.countTransferStations', async () => {
+    return this.run(CONTEXT.countTransferStations, async () => {
       const { stationIds } = await this.collectNode(stationId)
       return stationIds.size
     })
   }
 
-  // --- Методы ниже не про станции, но вызываются снаружи через stationsService,
-  // --- поэтому оставлены здесь. Позже их стоит перенести в VisualsService / SegmentsService.
-
-  async updateVisualPosition(visualId: string, x: number, y: number): Promise<void> {
-    return this.run('StationsService.updateVisualPosition', () =>
-      visualsRepo.updatePosition(visualId, x, y)
-    )
-  }
-
-  async updateSegmentTime(segmentId: string, timeMinutes: number): Promise<void> {
-    return this.run('StationsService.updateSegmentTime', () =>
-      segmentsRepo.update(segmentId, { time_minutes: timeMinutes })
-    )
-  }
-
-  // --- Приватные хелперы ---
-
-  /**
-   * Узел = все визуалы станции и все станции, привязанные к этим визуалам.
-   * Раньше эта логика была скопирована в delete и countTransferStations.
-   */
+  /** Узел = все визуалы станции и все станции, привязанные к этим визуалам. */
   private async collectNode(
     stationId: string
   ): Promise<{ visualIds: Array<string>; stationIds: Set<string> }> {
@@ -195,8 +288,7 @@ export class StationsService extends BaseService {
   }
 
   /**
-   * Определяет визуал, к которому привязывается новая станция:
-   * либо существующий узел (пересадка), либо новый визуал.
+   * Определяет визуал для новой станции: существующий узел (пересадка) или новый визуал.
    * Все валидации выполняются до первой записи в БД.
    */
   private async resolveVisual(
@@ -227,75 +319,6 @@ export class StationsService extends BaseService {
       name: primaryStation.name,
       isNewVisual: false,
     }
-  }
-
-  private async createInternal(data: CreateStationInput): Promise<CreateStationResult> {
-    const line = await linesRepo.getById(data.lineId)
-    if (!line) {
-      throw new Error(`Line ${data.lineId} not found`)
-    }
-
-    const { visualId, name, isNewVisual } = await this.resolveVisual(data, line)
-    const stationId = this.generateId()
-
-    if (isNewVisual) {
-      await visualsRepo.save({
-        id: visualId,
-        x: data.x,
-        y: data.y,
-        labelOffset: { ...DEFAULT_LABEL_OFFSET },
-        is_transfer: 0,
-      })
-    }
-
-    const newStation: Station = {
-      id: stationId,
-      name,
-      line_id: data.lineId,
-      createdAt: Date.now(),
-    }
-
-    await stationsRepo.save(newStation)
-
-    await visualStationLinksRepo.save({
-      id: `${visualId}:${stationId}`,
-      visual_id: visualId,
-      station_id: stationId,
-    })
-
-    const updatedLogicalIds = [...(line.logicalStationIds ?? []), stationId]
-    const updatedVisualIds = line.visualStationIds?.includes(visualId)
-      ? line.visualStationIds
-      : [...(line.visualStationIds ?? []), visualId]
-
-    await linesRepo.update(data.lineId, {
-      visualStationIds: updatedVisualIds,
-      logicalStationIds: updatedLogicalIds,
-    })
-
-    if (!isNewVisual) {
-      await visualsRepo.update(visualId, { is_transfer: 1 })
-    }
-
-    let segment: Segment | undefined
-
-    if (updatedLogicalIds.length > 1) {
-      const previousStationId = updatedLogicalIds[updatedLogicalIds.length - 2]
-
-      if (previousStationId) {
-        segment = {
-          id: this.generateId(),
-          from_station_id: previousStationId,
-          to_station_id: stationId,
-          line_id: data.lineId,
-          time_minutes: data.timeMinutes,
-        }
-
-        await segmentsRepo.save(segment)
-      }
-    }
-
-    return { station: newStation, visualId, segment }
   }
 }
 

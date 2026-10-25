@@ -14,7 +14,7 @@ export interface MetroState {
   setMode: (mode: 'view' | 'edit' | 'route') => void
   setDragging: (isDragging: boolean) => void
   loadData: () => Promise<void>
-  saveVisualPosition: (visualId: string, x: number, y: number) => Promise<void>
+  // saveVisualPosition: (visualId: string, x: number, y: number) => Promise<void>
 }
 
 export interface ApiResponse {

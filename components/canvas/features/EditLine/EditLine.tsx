@@ -3,7 +3,7 @@
 import type { SelectedSegment } from '@/components/canvas/MetroCanvas/MetroLines/types'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { Tabs } from '@/components/ui/Tabs'
-import { stationsService } from '@/src/lib/services'
+import { segmentsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
@@ -40,7 +40,7 @@ export const EditLine = ({ isOpen, selectedSegment, onClose, reloadData }: EditL
 
   const handleSegmentSave = async (timeMinutes: number) => {
     if (!segmentData?.segmentId) return
-    await stationsService.updateSegmentTime(segmentData.segmentId, timeMinutes)
+    await segmentsService.updateTime(segmentData.segmentId, timeMinutes)
     await reloadData()
   }
 
