@@ -29,7 +29,7 @@ export const AddStationForm = ({
   const [stationName, setStationName] = useState('')
   const [timeMinutes, setTimeMinutes] = useState(2)
   const [selectedLineId, setSelectedLineId] = useState('')
-  const [transferStationId, setTransferStationId] = useState('')
+  const [transferVisualId, setTransferVisualId] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -42,43 +42,48 @@ export const AddStationForm = ({
     color: line.color,
   }))
 
+  // Одна опция на узел: название станции и цвета всех веток, которые через него проходят
   const transferOptions: Array<DropdownOption<string>> = useMemo(() => {
     if (!selectedLineId) return []
 
-    return stations
-      .filter((s) => s.line_id !== selectedLineId)
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map((s) => {
-        const line = lines.find((l) => l.id === s.line_id)
+    const stationById = new Map(stations.map((s) => [s.id, s]))
+    const colorByLineId = new Map(lines.map((l) => [String(l.id), l.color]))
 
-        return {
-          value: s.id,
-          label: s.name,
-          color: line?.color,
-        }
-      })
-  }, [stations, lines, selectedLineId])
-
-  const stationToVisual = useMemo(() => {
-    const map: Record<string, string> = {}
+    const options: Array<DropdownOption<string>> = []
 
     for (const [visualId, stationIds] of Object.entries(visualToStations)) {
-      for (const stationId of stationIds) {
-        map[stationId] = visualId
-      }
+      const nodeStations = stationIds.flatMap((id) => {
+        const station = stationById.get(id)
+        return station ? [station] : []
+      })
+
+      if (nodeStations.length === 0) continue
+
+      // Станция уже есть на выбранной ветке, добавить её туда второй раз нельзя
+      if (nodeStations.some((s) => String(s.line_id) === String(selectedLineId))) continue
+
+      const colors = [
+        ...new Set(
+          nodeStations.flatMap((s) => {
+            const color = colorByLineId.get(String(s.line_id))
+            return color ? [color] : []
+          })
+        ),
+      ]
+
+      options.push({ value: visualId, label: nodeStations[0].name, colors })
     }
 
-    return map
-  }, [visualToStations])
+    return options.sort((a, b) => a.label.localeCompare(b.label))
+  }, [stations, lines, visualToStations, selectedLineId])
 
-  const transferStation = transferStationId
-    ? stations.find((s) => s.id === transferStationId)
-    : undefined
+  const selectedTransfer = transferOptions.find((o) => o.value === transferVisualId)
+  const resolvedName = selectedTransfer?.label ?? stationName
 
-  const resolvedName = transferStation?.name ?? stationName
-
-  const handleTransferChange = (value: string) => {
-    setTransferStationId(value)
+  const handleLineChange = (lineId: string) => {
+    setSelectedLineId(lineId)
+    // Список переходов зависит от ветки, прежний выбор мог стать недопустимым
+    setTransferVisualId('')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,14 +93,12 @@ export const AddStationForm = ({
     setIsLoading(true)
 
     try {
-      const transferToVisualId = transferStationId ? stationToVisual[transferStationId] : undefined
-
       await stationsService.create({
         name: resolvedName,
         lineId: selectedLineId,
         x: position.x,
         y: position.y,
-        transferToVisualId,
+        transferToVisualId: transferVisualId || undefined,
         timeMinutes,
       })
 
@@ -103,7 +106,7 @@ export const AddStationForm = ({
 
       setStationName('')
       setSelectedLineId('')
-      setTransferStationId('')
+      setTransferVisualId('')
       setIsLoading(false)
       onSuccess?.()
     } catch (error) {
@@ -125,7 +128,7 @@ export const AddStationForm = ({
         <Dropdown
           value={selectedLineId}
           options={lineOptions}
-          onChange={setSelectedLineId}
+          onChange={handleLineChange}
           label={t('lineLabel')}
           placeholder={t('linePlaceholder')}
           emptyMessage={t('noLines')}
@@ -139,17 +142,16 @@ export const AddStationForm = ({
           value={resolvedName}
           onChange={(e) => setStationName(e.target.value)}
           placeholder={t('namePlaceholder')}
-          disabled={!!transferStationId}
+          disabled={!!transferVisualId}
           autoFocus
         />
       </div>
 
       <div className={styles.field}>
-        ssss
         <Dropdown
-          value={transferStationId}
+          value={transferVisualId}
           options={transferOptions}
-          onChange={handleTransferChange}
+          onChange={setTransferVisualId}
           label={t('transferLabel')}
           placeholder={t('transferPlaceholder')}
           emptyMessage={t('noTransferOptions')}

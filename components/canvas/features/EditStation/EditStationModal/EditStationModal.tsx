@@ -165,7 +165,7 @@ export const EditStationModal = ({
                   <li key={transfer.id}>
                     <InfoRow
                       value={transfer.otherStationName}
-                      description={`${transfer.timeMinutes} мин`}
+                      description={`${transfer.timeMinutes} ${t('transferTimeLabel')}`}
                       color={transfer.color}
                       indicatorType="bar"
                     />

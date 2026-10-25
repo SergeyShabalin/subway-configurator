@@ -3,11 +3,13 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import styles from './Dropdown.module.css'
 import { DropdownMenu } from './DropdownMenu'
+import { OptionColors } from './OptionColors'
 
 export interface DropdownOption<T extends string> {
   value: T
   label: string
   color?: string
+  colors?: Array<string>
 }
 
 interface DropdownPosition {
@@ -115,12 +117,7 @@ export const Dropdown = <T extends string>({
         >
           {selectedOption ? (
             <span className={styles.optionLine}>
-              {selectedOption.color && (
-                <span
-                  className={styles.colorDot}
-                  style={{ backgroundColor: selectedOption.color }}
-                />
-              )}
+              <OptionColors colors={selectedOption.colors} color={selectedOption.color} />
               {selectedOption.label}
             </span>
           ) : (
