@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
+import type { DropdownOption } from '@/components/ui/Dropdown'
 import { Dropdown } from '@/components/ui/Dropdown'
-import type { DropdownOption } from 'components/ui/Dropdown'
 import { TransferIcon } from '@/components/ui/Icons/TransferIcon/TransferIcon'
 import { Input } from '@/components/ui/Input/Input'
 import { Modal } from '@/components/ui/Modal/Modal'

@@ -1,8 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Dropdown } from '@/components/ui/Dropdown'
-import type { DropdownOption } from 'components/ui/Dropdown'
+import { Dropdown, type DropdownOption } from '@/components/ui/Dropdown'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
