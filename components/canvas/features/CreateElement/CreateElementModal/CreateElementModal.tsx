@@ -84,7 +84,6 @@ export const CreateElementModal = ({
               onLoadingChange={setIsSubmitting}
             />
           )}
-
           {activeTab === 'station' && (
             <CreateStationForm
               position={position}
