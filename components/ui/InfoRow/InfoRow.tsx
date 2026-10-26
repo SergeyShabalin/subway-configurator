@@ -7,6 +7,7 @@ interface InfoRowProps {
   description?: ReactNode
   color?: string
   indicatorType?: 'dot' | 'bar'
+  descriptionIndicator?: string
 }
 
 export const InfoRow = ({
@@ -15,6 +16,7 @@ export const InfoRow = ({
   description,
   color,
   indicatorType = 'dot',
+  descriptionIndicator,
 }: InfoRowProps) => {
   return (
     <div className={`${styles.row} ${color ? styles.hasIndicator : ''}`}>
@@ -32,7 +34,18 @@ export const InfoRow = ({
         <div className={styles.content}>
           <span className={styles.valueText}>{value}</span>
 
-          {description && <span className={styles.description}>{description}</span>}
+          {description && (
+            <span className={styles.description}>
+              {descriptionIndicator && (
+                <span
+                  className={styles.descriptionDot}
+                  style={{ '--accent-color': descriptionIndicator } as CSSProperties}
+                  aria-hidden="true"
+                />
+              )}
+              {description}
+            </span>
+          )}
         </div>
       </div>
     </div>

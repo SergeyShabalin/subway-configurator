@@ -1,4 +1,4 @@
-import type { DropdownOption } from '@/components/ui/Dropdown/Dropdown'
+import type { DropdownOption } from '@/components/ui/Dropdown'
 import { useMetroStore } from '@/store'
 import { useMemo } from 'react'
 import type { TransferNode } from '../types'

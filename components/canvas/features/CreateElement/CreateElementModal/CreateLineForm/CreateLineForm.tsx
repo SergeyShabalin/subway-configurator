@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/Input/Input'
 import { useTranslations } from 'next-intl'
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
-import type { CreateLinePayload } from '../../../CreateElement/types'
+import type { CreateLinePayload } from "../../types"
 import styles from './CreateLineForm.module.css'
 
 const DEFAULT_COLOR = '#3b82f6'
