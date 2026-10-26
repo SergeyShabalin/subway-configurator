@@ -9,12 +9,12 @@
     "hintNoStationsTitle": "Añade estaciones a la línea",
     "hintNoStationsText": "Haz clic derecho en cualquier lugar para colocar una estación en la línea"
   },
-  "AddElementModal": {
+  "CreateElementModal": {
     "title": "Añadir elemento",
     "tabStation": "Estación",
     "tabLine": "Línea"
   },
-  "AddStationForm": {
+  "CreateStationForm": {
     "nameLabel": "Nombre de la estación",
     "namePlaceholder": "Introduce el nombre...",
     "lineLabel": "Línea",
@@ -31,7 +31,7 @@
     "errorAlreadyOnLine": "Esta estación ya existe en la línea seleccionada",
     "timeLabel": "Tiempo hasta la estación anterior (min)"
   },
-  "AddLineForm": {
+  "CreateLineForm": {
     "nameLabel": "Nombre de la línea",
     "namePlaceholder": "Introduce el nombre de la línea...",
     "colorLabel": "Color de la línea",

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { ReactNode, useEffect, useRef, useSyncExternalStore } from 'react'
+import { type ReactNode, useEffect, useRef, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import styles from './Modal.module.css'
 
@@ -12,6 +12,7 @@ interface ModalProps {
   children: ReactNode
   size?: 'small' | 'medium' | 'large'
   disableClose?: boolean
+  icon?: ReactNode
 }
 
 const emptySubscribe = () => () => {}
@@ -25,6 +26,7 @@ export const Modal = ({
   children,
   size = 'medium',
   disableClose = false,
+  icon,
 }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null)
   const isMounted = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot)
@@ -66,14 +68,20 @@ export const Modal = ({
       >
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
-          <Button
-            title="✕"
-            variant="ghost"
-            className={styles.closeButton}
-            onClick={handleCloseClick}
-            disabled={disableClose}
-          />
+
+          <div className={styles.headerActions}>
+            {icon && <div className={styles.headerIcon}>{icon}</div>}
+
+            <Button
+              title="✕"
+              variant="ghost"
+              className={styles.closeButton}
+              onClick={handleCloseClick}
+              disabled={disableClose}
+            />
+          </div>
         </div>
+
         <div className={styles.content}>{children}</div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { ArrowIcon } from '@/components/ui/Icons'
+import { SegmentIcon } from '@/components/ui/Icons/SegmentIcon/SegmentIcon'
 import { InfoRow } from '@/components/ui/InfoRow/InfoRow'
 import { Input } from '@/components/ui/Input/Input'
 import { useTranslations } from 'next-intl'
@@ -41,7 +41,7 @@ export const EditSegmentModal = ({
       <InfoRow label={t('from')} value={fromStationName} color={lineColor} indicatorType="bar" />
 
       <div className={styles.arrowRow}>
-        <ArrowIcon />
+        <SegmentIcon color={lineColor} />
 
         <div className={styles.timeControl}>
           <div className={styles.timeField}>

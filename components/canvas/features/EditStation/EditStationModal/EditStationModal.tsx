@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
+import { StationIcon } from '@/components/ui/Icons/StationIcon/StationIcon'
 import { InfoRow } from '@/components/ui/InfoRow/InfoRow'
 import { Input } from '@/components/ui/Input/Input'
 import { Modal } from '@/components/ui/Modal/Modal'
@@ -125,7 +126,7 @@ export const EditStationModal = ({
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} title={t('title')}>
+      <Modal isOpen={isOpen} onClose={onClose} title={t('title')} icon={<StationIcon />}>
         <div className={styles.container}>
           <div className={styles.info}>
             <Input

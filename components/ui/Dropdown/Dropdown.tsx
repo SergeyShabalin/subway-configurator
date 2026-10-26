@@ -2,8 +2,8 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import styles from './Dropdown.module.css'
-import { DropdownMenu } from './DropdownMenu'
-import { OptionColors } from './OptionColors'
+import { DropdownMenu } from './DropdownMenu/DropdownMenu'
+import { OptionColors } from './DropdownMenu/OptionColors/OptionColors'
 
 export interface DropdownOption<T extends string> {
   value: T

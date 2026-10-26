@@ -60,7 +60,6 @@ export const EditTransferModal = ({
 
       <div className={styles.walkRow}>
         <WalkIcon className={styles.walkIcon} fromColor={fromColor} toColor={toColor} size={28} />
-
         <div className={styles.timeControl}>
           <div className={styles.timeField}>
             <Input type="text" value={time} onChange={handleTimeChange} disabled={isLoading} />

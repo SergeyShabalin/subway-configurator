@@ -1,5 +1,6 @@
 'use client'
 
+import { TransferIcon } from '@/components/ui/Icons/TransferIcon/TransferIcon'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { transfersService } from '@/src/lib/services/'
 import { useTranslations } from 'next-intl'
@@ -32,7 +33,7 @@ export const EditTransfer = ({ isOpen, transferId, onClose, reloadData }: EditTr
   if (!isOpen || !transferData) return null
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t('title')}>
+    <Modal isOpen={isOpen} onClose={onClose} title={t('title')} icon={<TransferIcon />}>
       <EditTransferModal
         key={transferData.transferId}
         onClose={onClose}

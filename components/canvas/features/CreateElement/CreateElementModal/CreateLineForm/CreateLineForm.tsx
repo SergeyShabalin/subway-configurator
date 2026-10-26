@@ -2,24 +2,30 @@
 
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input/Input'
-import { linesService } from '@/src/lib/services'
-import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
-import styles from './AddLineForm.module.css'
+import type { CreateLinePayload } from '../../../CreateElement/types'
+import styles from './CreateLineForm.module.css'
+
+const DEFAULT_COLOR = '#3b82f6'
 
 interface AddLineFormProps {
+  onSubmit: (data: CreateLinePayload) => Promise<void>
   onSuccess?: () => void
   onCancel?: () => void
   onLoadingChange?: (isLoading: boolean) => void
 }
 
-export const AddLineForm = ({ onSuccess, onCancel, onLoadingChange }: AddLineFormProps) => {
-  const t = useTranslations('AddLineForm')
-  const { loadData } = useMetroStore()
+export const CreateLineForm = ({
+  onSubmit,
+  onSuccess,
+  onCancel,
+  onLoadingChange,
+}: AddLineFormProps) => {
+  const t = useTranslations('CreateLineForm')
   const [lineName, setLineName] = useState('')
-  const [lineColor, setLineColor] = useState('#3b82f6')
+  const [lineColor, setLineColor] = useState(DEFAULT_COLOR)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -33,20 +39,15 @@ export const AddLineForm = ({ onSuccess, onCancel, onLoadingChange }: AddLineFor
     setIsLoading(true)
 
     try {
-      await linesService.create({
-        name: lineName,
-        color: lineColor,
-      })
-
-      await loadData()
+      await onSubmit({ name: lineName.trim(), color: lineColor })
 
       setLineName('')
-      setLineColor('#3b82f6')
-      setIsLoading(false)
+      setLineColor(DEFAULT_COLOR)
       onSuccess?.()
     } catch (error) {
       console.error('Error creating line:', error)
       alert(t('errorCreate'))
+    } finally {
       setIsLoading(false)
     }
   }

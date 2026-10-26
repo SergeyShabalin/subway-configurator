@@ -1,6 +1,7 @@
 'use client'
 
 import type { SelectedSegment } from '@/components/canvas/MetroCanvas/MetroLines/types'
+import { LineIcon } from '@/components/ui/Icons/LineIcon/LineIcon'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { Tabs } from '@/components/ui/Tabs'
 import { segmentsService } from '@/src/lib/services'
@@ -53,7 +54,7 @@ export const EditLine = ({ isOpen, selectedSegment, onClose, reloadData }: EditL
   if (!segmentData) return null
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t('title')}>
+    <Modal isOpen={isOpen} onClose={onClose} title={t('title')} icon={<LineIcon />}>
       <div className={styles.modalContent}>
         <Tabs value={activeTab} onChange={setActiveTab} tabs={ArrayOfTabs} />
 

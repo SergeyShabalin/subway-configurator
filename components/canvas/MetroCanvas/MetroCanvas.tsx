@@ -1,6 +1,6 @@
 'use client'
 
-import { AddElementModal } from '@/components/canvas/features'
+import { CreateElement } from '@/components/canvas/features/CreateElement/CreateElement'
 import { EditLine } from '@/components/canvas/features/EditLine/EditLine'
 import { EditStation } from '@/components/canvas/features/EditStation/EditStation'
 import { EditTransfer } from '@/components/canvas/features/EditTransfer/EditTransfer'
@@ -163,14 +163,12 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
       </Stage>
 
       {showHint && <HintLetsStarted hasLines={hasLines} />}
-
-      <AddElementModal
+      <CreateElement
         key={isModalOpen ? 'open' : 'closed'}
         isOpen={isModalOpen}
         onClose={closeModal}
         position={clickPosition}
-        initialTab={initialTab}
-        onAdded={handleDataReload}
+        reloadData={reloadData}
       />
       <EditStation
         isOpen={selectedStationId !== null}
