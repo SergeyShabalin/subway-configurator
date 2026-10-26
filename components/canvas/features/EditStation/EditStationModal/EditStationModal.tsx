@@ -169,6 +169,7 @@ export const EditStationModal = ({
                       description={`${transfer.timeMinutes} ${t('transferTimeLabel')}`}
                       color={transfer.color}
                       indicatorType="bar"
+                      descriptionIndicator={transfer.color}
                     />
                   </li>
                 ))}

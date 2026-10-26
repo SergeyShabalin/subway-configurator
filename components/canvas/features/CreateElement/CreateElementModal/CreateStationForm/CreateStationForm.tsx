@@ -1,12 +1,12 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
+import type { DropdownOption } from '@/components/ui/Dropdown'
 import { Dropdown } from '@/components/ui/Dropdown'
-import type { DropdownOption } from '@/components/ui/Dropdown/Dropdown'
 import { Input } from '@/components/ui/Input/Input'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useState } from 'react'
-import type { CreateStationPayload, TransferNode } from '../../../CreateElement/types'
+import type { CreateStationPayload, TransferNode } from '../../types'
 import styles from './CreateStationForm.module.css'
 import { useTimeField } from './hooks/useTimeField'
 

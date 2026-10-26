@@ -1,9 +1,9 @@
 'use client'
 
 import { CreateElement } from '@/components/canvas/features/CreateElement/CreateElement'
-import { EditLine } from '@/components/canvas/features/EditLine/EditLine'
-import { EditStation } from '@/components/canvas/features/EditStation/EditStation'
-import { EditTransfer } from '@/components/canvas/features/EditTransfer/EditTransfer'
+import { EditLine } from '@/components/canvas/features/EditLine'
+import { EditStation } from '@/components/canvas/features/EditStation'
+import { EditTransfer } from '@/components/canvas/features/EditTransfer'
 import { HintLetsStarted } from '@/components/canvas/MetroCanvas/HintLetsStarted/HintLetsStarted'
 import { useInitialCenterCanvas } from '@/components/canvas/MetroCanvas/hooks/useInitialCenterCanvas'
 import { useMetroLoader } from '@/components/canvas/MetroCanvas/hooks/useMetroLoader'
@@ -32,7 +32,7 @@ export interface MetroCanvasRef {
   getClickPosition: () => { x: number; y: number }
 }
 
-export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
+export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
   const lineRef = useRef<Record<string, Konva.Line>>({})
   const circleRef = useRef<Record<string, Konva.Circle>>({})
   const textRef = useRef<Record<string, Konva.Text>>({})
@@ -102,10 +102,6 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     openModal(worldPos.x, worldPos.y)
   }
 
-  const handleDataReload = useCallback(async () => {
-    await reloadData()
-  }, [reloadData])
-
   const handleLabelMove = useCallback(
     async (visualId: string, x: number, y: number) => {
       const visual = visuals[visualId]
@@ -119,8 +115,6 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>((_ref, _) => {
     },
     [visuals, updateVisualLabelOffset]
   )
-
-  const initialTab = hasLines ? 'station' : 'line'
 
   if (isBusy && showLoader) {
     return <SubwayLoader />

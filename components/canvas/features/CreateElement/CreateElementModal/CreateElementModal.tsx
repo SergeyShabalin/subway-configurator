@@ -2,7 +2,7 @@
 
 import { CreateLineForm } from '@/components/canvas/features/CreateElement/CreateElementModal/CreateLineForm/CreateLineForm'
 import { CreateStationForm } from '@/components/canvas/features/CreateElement/CreateElementModal/CreateStationForm/CreateStationForm'
-import type { DropdownOption } from '@/components/ui/Dropdown/Dropdown'
+import type { DropdownOption } from 'components/ui/Dropdown'
 import { LineIcon } from '@/components/ui/Icons/LineIcon/LineIcon'
 import { StationIcon } from '@/components/ui/Icons/StationIcon/StationIcon'
 import { Modal } from '@/components/ui/Modal/Modal'

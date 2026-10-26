@@ -237,7 +237,6 @@ export const DownloadJson = () => {
           <>{t('button.idle')}</>
         )}
       </Button>
-
       {status && <div className={`${styles.status} ${statusClass}`}>{status.message}</div>}
     </div>
   )

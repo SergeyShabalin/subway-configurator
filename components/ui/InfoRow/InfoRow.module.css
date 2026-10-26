@@ -83,10 +83,22 @@
 }
 
 .description {
+    display: inline-flex;
+    align-items: center;
     flex-shrink: 0;
+    gap: 8px;
     margin-left: auto;
     color: #94a3b8;
     font-size: 12px;
     line-height: 1.4;
     white-space: nowrap;
+}
+
+.descriptionDot {
+    display: inline-block;
+    flex: 0 0 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-color);
 }

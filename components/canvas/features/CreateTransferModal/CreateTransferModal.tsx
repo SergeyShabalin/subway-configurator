@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/Button'
 import { Dropdown } from '@/components/ui/Dropdown'
-import type { DropdownOption } from '@/components/ui/Dropdown/Dropdown'
+import type { DropdownOption } from 'components/ui/Dropdown'
 import { TransferIcon } from '@/components/ui/Icons/TransferIcon/TransferIcon'
 import { Input } from '@/components/ui/Input/Input'
 import { Modal } from '@/components/ui/Modal/Modal'
