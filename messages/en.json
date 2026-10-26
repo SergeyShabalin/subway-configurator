@@ -9,12 +9,12 @@
     "hintNoStationsTitle": "Add stations to the line",
     "hintNoStationsText": "Right-click anywhere to place a station on the line"
   },
-  "AddElementModal": {
+  "CreateElementModal": {
     "title": "Add element",
     "tabStation": "Station",
     "tabLine": "Line"
   },
-  "AddStationForm": {
+  "CreateStationForm": {
     "nameLabel": "Station name",
     "namePlaceholder": "Enter name...",
     "lineLabel": "Line",
@@ -31,7 +31,7 @@
     "errorAlreadyOnLine": "This station is already on the selected line",
     "timeLabel": "Time to previous station (min)"
   },
-  "AddLineForm": {
+  "CreateLineForm": {
     "nameLabel": "Line name",
     "namePlaceholder": "Enter line name...",
     "colorLabel": "Line color",

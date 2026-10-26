@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/Button'
 import { Dropdown } from '@/components/ui/Dropdown'
 import type { DropdownOption } from '@/components/ui/Dropdown/Dropdown'
+import { TransferIcon } from '@/components/ui/Icons/TransferIcon/TransferIcon'
 import { Input } from '@/components/ui/Input/Input'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { transfersService } from '@/src/lib/services'
@@ -98,7 +99,7 @@ export const CreateTransferModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onCancel} title={t('title')}>
+    <Modal isOpen={isOpen} onClose={onCancel} title={t('title')} icon={<TransferIcon />}>
       <form onSubmit={handleSubmit} className={styles.form}>
         <Dropdown
           value={selectedVisualId}

@@ -7,6 +7,7 @@
 }
 
 .arrowRow {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,9 +16,10 @@
 }
 
 .arrowRow > svg {
+    position: absolute;
+    right: calc(50% + 120px);
     display: block;
     flex-shrink: 0;
-    color: var(--text-secondary);
 }
 
 .timeControl {

@@ -2,9 +2,9 @@
 
 import type { CSSProperties, Ref } from 'react'
 import { createPortal } from 'react-dom'
-import type { DropdownOption } from './Dropdown'
+import type { DropdownOption } from '../Dropdown'
 import styles from './DropdownMenu.module.css'
-import { OptionColors } from './OptionColors'
+import { OptionColors } from './OptionColors/OptionColors'
 
 export interface DropdownMenuProps<T extends string> {
   id: string

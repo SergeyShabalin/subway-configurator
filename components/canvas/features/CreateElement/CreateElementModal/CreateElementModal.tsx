@@ -1,32 +1,41 @@
 'use client'
 
-import { AddStationForm } from '@/components/canvas/features'
+import { CreateLineForm } from '@/components/canvas/features/CreateElement/CreateElementModal/CreateLineForm/CreateLineForm'
+import { CreateStationForm } from '@/components/canvas/features/CreateElement/CreateElementModal/CreateStationForm/CreateStationForm'
+import type { DropdownOption } from '@/components/ui/Dropdown/Dropdown'
+import { LineIcon } from '@/components/ui/Icons/LineIcon/LineIcon'
+import { StationIcon } from '@/components/ui/Icons/StationIcon/StationIcon'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { Tabs } from '@/components/ui/Tabs'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
-import { AddLineForm } from '../AddLineForm/AddLineForm'
-import styles from './AddElementModal.module.css'
+import type { CreateLinePayload, CreateStationPayload, TransferNode } from '../types'
+import styles from './CreateElementModal.module.css'
+
+type TabType = 'station' | 'line'
 
 interface AddElementModalProps {
   isOpen: boolean
   onClose: () => void
   position: { x: number; y: number }
   initialTab?: TabType
-  onStationAdded?: () => void
-  onAdded?: () => void
+  lineOptions: Array<DropdownOption<string>>
+  transferNodes: Array<TransferNode>
+  onCreateStation: (data: CreateStationPayload) => Promise<void>
+  onCreateLine: (data: CreateLinePayload) => Promise<void>
 }
 
-type TabType = 'station' | 'line'
-
-export const AddElementModal = ({
+export const CreateElementModal = ({
   isOpen,
   onClose,
   position,
   initialTab = 'station',
-  onAdded,
+  lineOptions,
+  transferNodes,
+  onCreateStation,
+  onCreateLine,
 }: AddElementModalProps) => {
-  const t = useTranslations('AddElementModal')
+  const t = useTranslations('CreateElementModal')
   const ArrayOfTabs = [
     { value: 'line' as const, label: t('tabLine') },
     { value: 'station' as const, label: t('tabStation') },
@@ -49,7 +58,6 @@ export const AddElementModal = ({
   }, [pendingClose, isSubmitting, onClose])
 
   const handleSuccess = () => {
-    onAdded?.()
     setPendingClose(true)
   }
 
@@ -62,13 +70,15 @@ export const AddElementModal = ({
       onClose={onClose}
       title={t('title')}
       disableClose={isSubmitting || pendingClose}
+      icon={activeTab === 'line' ? <LineIcon /> : <StationIcon />}
     >
       <div className={styles.modalContent}>
         <Tabs value={activeTab} onChange={setActiveTab} tabs={ArrayOfTabs} />
 
         <div className={styles.formWrapper}>
           {activeTab === 'line' && (
-            <AddLineForm
+            <CreateLineForm
+              onSubmit={onCreateLine}
               onSuccess={handleSuccess}
               onCancel={onClose}
               onLoadingChange={setIsSubmitting}
@@ -76,8 +86,11 @@ export const AddElementModal = ({
           )}
 
           {activeTab === 'station' && (
-            <AddStationForm
+            <CreateStationForm
               position={position}
+              lineOptions={lineOptions}
+              transferNodes={transferNodes}
+              onSubmit={onCreateStation}
               onSuccess={handleSuccess}
               onCancel={onClose}
               onLoadingChange={setIsSubmitting}

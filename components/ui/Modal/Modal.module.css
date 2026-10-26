@@ -88,6 +88,29 @@
     flex-direction: column;
 }
 
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.headerIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: #4d85d6;
+}
+
+.headerIcon svg {
+    display: block;
+    width: 21px;
+    height: 21px;
+    flex-shrink: 0;
+}
+
 @keyframes fade-in {
     from {
         opacity: 0;

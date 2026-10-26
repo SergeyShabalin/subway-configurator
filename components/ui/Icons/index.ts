@@ -1,4 +1,4 @@
-export { ArrowIcon } from './ArrowIcon/ArrowIcon'
+export { ArrowIcon } from '@/components/ui/Icons/SegmentIcon/SegmentIcon'
 export { CloseIcon } from './CloseIcon/CloseIcon'
 export { MouseRightClickIcon } from './MouseRightClickIcon/MouseRightClickIcon'
 export { SettingsIcon } from './SettingsIcon/SettingsIcon'

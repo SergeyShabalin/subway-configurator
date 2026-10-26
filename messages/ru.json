@@ -9,12 +9,12 @@
     "hintNoStationsTitle": "Добавьте станции на ветке",
     "hintNoStationsText": "Нажмите правую кнопку мыши в любом месте, чтобы поставить станцию на ветке"
   },
-  "AddElementModal": {
+  "CreateElementModal": {
     "title": "Добавить элемент",
     "tabStation": "Станция",
     "tabLine": "Ветка"
   },
-  "AddStationForm": {
+  "CreateStationForm": {
     "nameLabel": "Название станции",
     "namePlaceholder": "Введите название...",
     "lineLabel": "Ветка",
@@ -31,7 +31,7 @@
     "errorAlreadyOnLine": "Эта станция уже есть на выбранной линии",
     "timeLabel": "Время до предыдущей станции (мин)"
   },
-  "AddLineForm": {
+  "CreateLineForm": {
     "nameLabel": "Название ветки",
     "namePlaceholder": "Введите название ветки...",
     "colorLabel": "Цвет ветки",
