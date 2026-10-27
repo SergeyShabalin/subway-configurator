@@ -90,6 +90,23 @@
       "unknown": "Unknown error"
     }
   },
+  "DownloadPdf": {
+    "button": {
+      "idle": "Download PDF",
+      "loading": "Preparing..."
+    },
+    "status": {
+      "rendering": "Rendering the map...",
+      "creatingFile": "Creating file...",
+      "success": "PDF downloaded!",
+      "error": "Error: {message}"
+    },
+    "errors": {
+      "noStage": "The map hasn't loaded yet",
+      "emptyMap": "The map is empty, nothing to export",
+      "unknown": "Unknown error"
+    }
+  },
   "EditStation": {
     "title": "Change station",
     "id": "ID",

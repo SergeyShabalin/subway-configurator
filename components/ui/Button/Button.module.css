@@ -143,6 +143,10 @@
     --button-color: var(--black);
 }
 
+.colorWarning {
+    --button-color: var(--warning);
+}
+
 .spinner {
     width: 14px;
     height: 14px;

@@ -90,6 +90,23 @@
       "unknown": "Неизвестная ошибка"
     }
   },
+  "DownloadPdf": {
+    "button": {
+      "idle": "Скачать PDF",
+      "loading": "Подготовка..."
+    },
+    "status": {
+      "rendering": "Отрисовка схемы...",
+      "creatingFile": "Создание файла...",
+      "success": "PDF скачан!",
+      "error": "Ошибка: {message}"
+    },
+    "errors": {
+      "noStage": "Схема ещё не загружена",
+      "emptyMap": "Схема пуста, нечего экспортировать",
+      "unknown": "Неизвестная ошибка"
+    }
+  },
   "EditStation": {
     "title": "Изменить станцию",
     "id": "ID",

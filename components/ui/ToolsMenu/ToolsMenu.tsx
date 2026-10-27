@@ -1,6 +1,7 @@
 'use client'
 
 import { DownloadJson } from '@/components/db/DownloadJson/DownloadJson'
+import { DownloadPdf } from '@/components/db/DownloadPdf/DownloadPdf'
 import { UploadJson } from '@/components/db/UploadJson/UploadJson'
 import { CloseIcon, SettingsIcon } from '@/components/ui/Icons'
 import { useTranslations } from 'next-intl'
@@ -39,6 +40,7 @@ export const ToolsMenu = () => {
           <div className={styles.section}>
             <div className={styles.sectionTitle}>{t('downloadSection')}</div>
             <DownloadJson />
+            <DownloadPdf />
           </div>
         </div>
       )}
