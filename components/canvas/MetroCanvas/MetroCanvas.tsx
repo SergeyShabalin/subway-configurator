@@ -15,7 +15,7 @@ import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import { visualsService } from '@/src/lib/services'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
-import { forwardRef, useCallback, useMemo, useRef } from 'react'
+import { forwardRef, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Layer, Stage } from 'react-konva'
 import { useMetroCanvas } from '../hooks'
 import { useMetroModal } from '../hooks/useMetroModal'
@@ -26,6 +26,7 @@ import { MetroLabels } from './MetroLabels/MetroLabels'
 import { useMetroLines } from './MetroLines/hooks/useMetroLines'
 import { MetroLines } from './MetroLines/MetroLines'
 import { MetroStations } from './MetroStations/MetroStations'
+import { setStage } from '@/src/lib/stageRegistry/stageRegistry'
 
 export interface MetroCanvasRef {
   openAddStationModal: () => void
@@ -115,6 +116,11 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
     },
     [visuals, updateVisualLabelOffset]
   )
+
+  useEffect(() => {
+    setStage(stageRef.current)
+    return () => setStage(null)
+  }, [isBusy, stageRef])
 
   if (isBusy && showLoader) {
     return <SubwayLoader />

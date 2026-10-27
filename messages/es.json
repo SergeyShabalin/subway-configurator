@@ -90,6 +90,23 @@
       "unknown": "Error desconocido"
     }
   },
+  "DownloadPdf": {
+    "button": {
+      "idle": "Descargar PDF",
+      "loading": "Preparando..."
+    },
+    "status": {
+      "rendering": "Renderizando el esquema...",
+      "creatingFile": "Creando archivo...",
+      "success": "¡PDF descargado!",
+      "error": "Error: {message}"
+    },
+    "errors": {
+      "noStage": "El esquema aún no se ha cargado",
+      "emptyMap": "El esquema está vacío, no hay nada que exportar",
+      "unknown": "Error desconocido"
+    }
+  },
   "EditStation": {
     "title": "Cambiar estación",
     "id": "ID",

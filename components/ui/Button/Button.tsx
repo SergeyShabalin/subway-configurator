@@ -5,7 +5,8 @@ export type ButtonVariant = 'primary' | 'outline' | 'outlineColored' | 'ghost' |
 
 export type ButtonSize = 'small' | 'medium' | 'large'
 
-export type ButtonColor = 'primary' | 'success' | 'danger' | 'neutral' | 'white' | 'black'
+export type ButtonColor =
+  'primary' | 'success' | 'danger' | 'neutral' | 'white' | 'black' | 'warning'
 
 const COLOR_CLASS: Record<ButtonColor, string> = {
   primary: styles.colorPrimary,
@@ -14,6 +15,7 @@ const COLOR_CLASS: Record<ButtonColor, string> = {
   neutral: styles.colorNeutral,
   white: styles.colorWhite,
   black: styles.colorBlack,
+  warning: styles.colorWarning,
 }
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
