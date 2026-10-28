@@ -1,5 +1,7 @@
 'use client'
 
+import { CANVAS_HOVER_COLOR } from '@/components/canvas/shared/themeColors'
+import { useTheme } from '@/context/theme-context'
 import type Konva from 'konva'
 import { Fragment, useState } from 'react'
 import { Path } from 'react-konva'
@@ -81,8 +83,11 @@ const buildSegments = (
 }
 
 export const MetroLines = ({ visuals, lineRef, onSegmentClick }: MetroLinesProps) => {
+  const { theme } = useTheme()
   const { lineData } = useMetroLines()
   const [hoveredKey, setHoveredKey] = useState<string | null>(null)
+
+  const hoverColor = CANVAS_HOVER_COLOR[theme]
 
   const handleClick = (
     e: Konva.KonvaEventObject<MouseEvent | TouchEvent>,
@@ -131,7 +136,7 @@ export const MetroLines = ({ visuals, lineRef, onSegmentClick }: MetroLinesProps
                   }}
                   perfectDrawEnabled={false}
                   data={segment.path}
-                  stroke={isHovered ? 'white' : line.color}
+                  stroke={isHovered ? hoverColor : line.color}
                   strokeWidth={isHovered ? 8 : 6}
                   lineCap="round"
                   lineJoin="round"

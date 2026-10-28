@@ -17,7 +17,6 @@
     transition: background 0.2s ease,
     transform 0.15s ease,
     box-shadow 0.2s ease;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,12 +51,11 @@
     right: 0;
     min-width: 240px;
     padding: 12px;
-    background: rgb(2 9 19 / 92%);
     border: 1px solid rgb(226 232 240 / 15%);
     border-radius: 12px;
     box-shadow: 0 20px 60px rgb(0 0 0 / 60%),
     0 0 0 1px rgb(226 232 240 / 4%) inset;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(3px);
     animation: menu-fade-in 0.15s ease-out;
 }
 

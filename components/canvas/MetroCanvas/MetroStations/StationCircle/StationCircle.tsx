@@ -1,5 +1,7 @@
 'use client'
 
+import { CANVAS_HOVER_COLOR, CANVAS_STATION_FILL } from '@/components/canvas/shared/themeColors'
+import { useTheme } from '@/context/theme-context'
 import type Konva from 'konva'
 import { memo, useRef, useState } from 'react'
 import { Circle } from 'react-konva'
@@ -25,14 +27,18 @@ const StationCircle = memo(
     onDragEnd,
     onStationClick,
   }: StationCircleProps) => {
+    const { theme } = useTheme()
     const [isHovered, setIsHovered] = useState(false)
     const dragStartPosRef = useRef<{ x: number; y: number } | null>(null)
 
     if (!visual) return null
 
+    const fillColor = CANVAS_STATION_FILL[theme]
+    const hoverColor = CANVAS_HOVER_COLOR[theme]
+
     const multiColors = isTransfer && colors && colors.length >= 2 ? colors : null
     const baseRadius = multiColors ? TRANSFER_BASE_RADIUS : BASE_RADIUS
-    const strokeColor = isHovered ? '#ffffff' : color || '#888888'
+    const strokeColor = isHovered ? hoverColor : color || '#888888'
     const strokeWidth = isHovered ? HOVER_STROKE_WIDTH : RING_WIDTH
 
     const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -87,7 +93,7 @@ const StationCircle = memo(
           x={visual.x ?? 0}
           y={visual.y ?? 0}
           radius={baseRadius}
-          fill="#020913"
+          fill={fillColor}
           stroke={strokeColor}
           strokeWidth={strokeWidth}
           draggable
@@ -109,8 +115,8 @@ const StationCircle = memo(
           x={visual.x ?? 0}
           y={visual.y ?? 0}
           radius={baseRadius}
-          fill="#020913"
-          stroke={isHovered ? '#ffffff' : (multiColors[0] ?? color)}
+          fill={fillColor}
+          stroke={isHovered ? hoverColor : (multiColors[0] ?? color)}
           strokeWidth={strokeWidth}
           draggable
           onMouseDown={handleMouseDown}
@@ -135,7 +141,7 @@ const StationCircle = memo(
               y={visual.y ?? 0}
               radius={innerRadius}
               fill="transparent"
-              stroke={isHovered ? '#ffffff' : c}
+              stroke={isHovered ? hoverColor : c}
               strokeWidth={RING_WIDTH}
               listening={false}
             />

@@ -1,10 +1,12 @@
-
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
-    --text-primary: #171717;
-    --text-secondary: #6b7280;
-    --border: #e5e7eb;
+    --background: #e8ebf1;
+    --foreground: #1a1d26;
+    --text-primary: #1f2430;
+    --text-secondary: #5b6475;
+    --text-strong: #1a1d26;
+    --text-muted: #5b6475;
+    --text-placeholder: #8a93a3;
+    --border: #d0d5df;
     --border-color: var(--border);
     --error: #dc2626;
     --success: #16a34a;
@@ -12,46 +14,104 @@
     --blue: #1078cd;
     --black: #000000;
     --warning: #a1d110;
+    --accent-icon: #2563eb;
     --button-primary-hover: #0866b2;
     --button-primary-text: #ffffff;
     --button-outline-bg: transparent;
-    --button-outline-hover: #f3f4f6;
+    --button-outline-hover: #dde1e9;
     --button-outline-text: var(--text-primary);
     --button-border: var(--border);
-    --button-ghost-hover: #f3f4f6;
+    --button-ghost-hover: #dde1e9;
     --button-ghost-text: var(--text-primary);
     --button-disabled-opacity: 0.5;
     --button-focus: #38bdf8;
     --radius-sm: 6px;
     --radius-md: 8px;
     --surface-1: #ffffff;
-    --surface-2: #f3f4f6;
+    --surface-2: #dfe3ea;
     --surface-secondary: var(--surface-2);
+
+    /* Модальные окна */
+    --overlay-bg: rgb(15 23 42 / 40%);
+    --modal-bg: #ffffff;
+    --modal-border: rgb(15 23 42 / 8%);
+    --modal-shadow: 0 20px 60px rgb(15 23 42 / 18%);
+
+    /* Полупрозрачные подложки поверх поверхностей */
+    --hover-overlay: rgb(15 23 42 / 6%);
+    --row-bg: rgb(15 23 42 / 4%);
+    --row-bg-hover: rgb(15 23 42 / 7%);
+
+    /* Поля ввода, выпадающие списки */
+    --input-bg: #ffffff;
+    --input-border: #c5cbd6;
+    --input-border-hover: #9aa3b2;
+    --input-border-focus: #2563eb;
+
+    /* Выпадающее меню */
+    --dropdown-item-hover: #eceef3;
+    --dropdown-shadow: 0 8px 24px rgb(15 23 42 / 15%);
+    --scrollbar-thumb: #b6bdca;
+
+    color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
-        --text-primary: #bcb7b7;
-        --text-secondary: #a1a1aa;
-        --border: #27272a;
-        --border-color: var(--border);
-        --error: #ef4444;
-        --white: #ffffff;
-        --blue: #1078cd;
-        --button-primary-hover: #1689e5;
-        --button-primary-text: #ffffff;
-        --button-outline-bg: transparent;
-        --button-outline-hover: #1e293b;
-        --button-outline-text: var(--text-primary);
-        --button-border: var(--border);
-        --button-ghost-hover: #1e293b;
-        --button-ghost-text: var(--text-primary);
-        --surface-1: #1e293b;
-        --surface-2: #2d3748;
-        --surface-secondary: var(--surface-2);
-    }
+:root.dark {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --text-primary: #bcb7b7;
+    --text-secondary: #a1a1aa;
+    --text-strong: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-placeholder: #64748b;
+    --border: #27272a;
+    --border-color: var(--border);
+    --error: #ef4444;
+    --success: #22c55e;
+    --white: #ffffff;
+    --blue: #1078cd;
+    --black: #000000;
+    --warning: #a1d110;
+    --accent-icon: #4d85d6;
+    --button-primary-hover: #1689e5;
+    --button-primary-text: #ffffff;
+    --button-outline-bg: transparent;
+    --button-outline-hover: #1e293b;
+    --button-outline-text: var(--text-primary);
+    --button-border: var(--border);
+    --button-ghost-hover: #1e293b;
+    --button-ghost-text: var(--text-primary);
+    --button-disabled-opacity: 0.5;
+    --button-focus: #38bdf8;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --surface-1: #1e293b;
+    --surface-2: #2d3748;
+    --surface-secondary: var(--surface-2);
+
+    /* Модальные окна */
+    --overlay-bg: rgb(0 0 0 / 60%);
+    --modal-bg: #181827;
+    --modal-border: rgb(255 255 255 / 6%);
+    --modal-shadow: 0 20px 60px rgb(0 0 0 / 50%);
+
+    /* Полупрозрачные подложки поверх поверхностей */
+    --hover-overlay: rgb(255 255 255 / 5%);
+    --row-bg: rgb(255 255 255 / 3%);
+    --row-bg-hover: rgb(255 255 255 / 5%);
+
+    /* Поля ввода, выпадающие списки */
+    --input-bg: #1e293b;
+    --input-border: #334155;
+    --input-border-hover: #475569;
+    --input-border-focus: #3b82f6;
+
+    /* Выпадающее меню */
+    --dropdown-item-hover: #2d3748;
+    --dropdown-shadow: 0 8px 24px rgb(0 0 0 / 40%);
+    --scrollbar-thumb: #475569;
+
+    color-scheme: dark;
 }
 
 html {
@@ -87,10 +147,4 @@ body {
 a {
     color: inherit;
     text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-    html {
-        color-scheme: dark;
-    }
 }

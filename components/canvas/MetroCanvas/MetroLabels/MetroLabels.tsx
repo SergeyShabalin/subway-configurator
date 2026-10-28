@@ -1,5 +1,12 @@
 'use client'
 
+import {
+  CANVAS_LABEL_FILL,
+  CANVAS_LABEL_FONT_STYLE,
+  CANVAS_LABEL_HOVER_FILL,
+  CANVAS_LABEL_STROKE,
+} from '@/components/canvas/shared/themeColors'
+import { useTheme } from '@/context/theme-context'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { useCallback, useState } from 'react'
@@ -10,11 +17,17 @@ import type { MetroLabelsProps } from './types'
 const LABEL_WIDTH = 60
 
 export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsProps) => {
+  const { theme } = useTheme()
   const visuals = useMetroStore((state) => state.visuals)
 
   const { labelData } = useMetroLabels(visuals, stationNames)
 
   const [hoveredLabelId, setHoveredLabelId] = useState<string | null>(null)
+
+  const labelFill = CANVAS_LABEL_FILL[theme]
+  const labelHoverFill = CANVAS_LABEL_HOVER_FILL[theme]
+  const labelStroke = CANVAS_LABEL_STROKE[theme]
+  const labelFontStyle = CANVAS_LABEL_FONT_STYLE[theme]
 
   const handleMouseEnter = useCallback((e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
     const stage = e.target.getStage()
@@ -54,13 +67,14 @@ export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsP
             text={label.text}
             fontSize={12}
             fontFamily="Arial"
-            fill={isHovered ? '#fbc901' : '#e2e8f0'}
+            fontStyle={labelFontStyle}
+            fill={isHovered ? labelHoverFill : labelFill}
             align="center"
             verticalAlign="middle"
             listening
             draggable
             letterSpacing={2}
-            stroke="#020913"
+            stroke={labelStroke}
             strokeWidth={0.3}
             onMouseEnter={(e) => handleMouseEnter(e, label.id)}
             onMouseLeave={handleMouseLeave}

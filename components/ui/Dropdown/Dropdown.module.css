@@ -18,9 +18,9 @@
     width: 100%;
     padding: 8px 12px;
     border-radius: 6px;
-    border: 1px solid #334155;
-    background: #1e293b;
-    color: #e2e8f0;
+    border: 1px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--text-strong);
     font-family: inherit;
     font-size: 14px;
     cursor: pointer;
@@ -30,11 +30,11 @@
 }
 
 .trigger:hover {
-    border-color: #475569;
+    border-color: var(--input-border-hover);
 }
 
 .trigger.open {
-    border-color: #3b82f6;
+    border-color: var(--input-border-focus);
 }
 
 .trigger.disabled {
@@ -50,11 +50,11 @@
 }
 
 .placeholder {
-    color: #64748b;
+    color: var(--text-placeholder);
 }
 
 .arrow {
-    color: #64748b;
+    color: var(--text-placeholder);
     font-size: 10px;
     transition: transform 0.2s;
 }

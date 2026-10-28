@@ -1,5 +1,7 @@
 'use client'
 
+import { CANVAS_HOVER_COLOR, CANVAS_TRANSFER_OUTLINE } from '@/components/canvas/shared/themeColors'
+import { useTheme } from '@/context/theme-context'
 import { useMetroStore } from '@/store'
 import type { VisualStation } from '@/types/metro'
 import type Konva from 'konva'
@@ -12,8 +14,6 @@ interface MetroTransfersProps {
 }
 
 const FALLBACK_COLOR = '#94a3b8'
-const OUTLINE_COLOR = '#0f172a'
-const HOVER_COLOR = '#ffffff'
 
 const buildGradientStops = (fromColor: string, toColor: string) => [
   0,
@@ -27,11 +27,15 @@ const buildGradientStops = (fromColor: string, toColor: string) => [
 ]
 
 export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps) => {
+  const { theme } = useTheme()
   const visualTransfers = useMetroStore((state) => state.visualTransfers)
   const visualToStations = useMetroStore((state) => state.visualToStations)
   const stations = useMetroStore((state) => state.stations)
   const lines = useMetroStore((state) => state.lines)
   const [hoveredTransfer, setHoveredTransfer] = useState<string | null>(null)
+
+  const outlineColor = CANVAS_TRANSFER_OUTLINE[theme]
+  const hoverColor = CANVAS_HOVER_COLOR[theme]
 
   const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
     const stage = e.target.getStage()
@@ -90,7 +94,7 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
           <Fragment key={transfer.id}>
             <Line
               points={points}
-              stroke={OUTLINE_COLOR}
+              stroke={outlineColor}
               strokeWidth={5}
               dash={[6, 6]}
               opacity={0.8}
@@ -100,7 +104,7 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
 
             <Line
               points={points}
-              stroke={isHovered ? HOVER_COLOR : undefined}
+              stroke={isHovered ? hoverColor : undefined}
               strokeWidth={3}
               dash={[6, 6]}
               opacity={0.95}

@@ -1,5 +1,6 @@
 'use client'
 
+import { CreateTransferModal } from '@/components/canvas/features'
 import { Button } from '@/components/ui/Button'
 import { StationIcon } from '@/components/ui/Icons/StationIcon/StationIcon'
 import { InfoRow } from '@/components/ui/InfoRow/InfoRow'
@@ -8,7 +9,6 @@ import { Modal } from '@/components/ui/Modal/Modal'
 import { useTranslations } from 'next-intl'
 import type { ChangeEvent } from 'react'
 import { useCallback, useState } from 'react'
-import { CreateTransferModal } from '../../CreateTransferModal/CreateTransferModal'
 import type { DeleteScope, LineOption } from './DeleteFromLineModal/DeleteFromLineModal'
 import { DeleteFromLineModal } from './DeleteFromLineModal/DeleteFromLineModal'
 import styles from './EditStationModal.module.css'
@@ -124,6 +124,8 @@ export const EditStationModal = ({
 
   const isSaveDisabled = isLoading || !stationName.trim() || stationName === initialName
 
+  const isMultiLine = lineOptions.length > 1
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} title={t('title')} icon={<StationIcon />}>
@@ -136,12 +138,26 @@ export const EditStationModal = ({
               onChange={handleChange}
               disabled={isLoading}
             />
-            <InfoRow
-              label={t('currentLine')}
-              value={currentLineName}
-              color={currentLineColor}
-              indicatorType="dot"
-            />
+
+            {isMultiLine ? (
+              <div className={styles.linesList}>
+                <span className={styles.linesLabel}>{t('currentLines')}</span>
+                <ul className={styles.linesItems}>
+                  {lineOptions.map((line) => (
+                    <li key={line.stationId}>
+                      <InfoRow value={line.lineName} color={line.lineColor} indicatorType="dot" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <InfoRow
+                label={t('currentLine')}
+                value={currentLineName}
+                color={currentLineColor}
+                indicatorType="dot"
+              />
+            )}
           </div>
 
           <div className={styles.section}>

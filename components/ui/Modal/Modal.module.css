@@ -1,21 +1,21 @@
 .overlay {
     position: fixed;
     inset: 0;
-    background: rgb(0 0 0 / 60%);
+    background: var(--overlay-bg);
     backdrop-filter: blur(1px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    animation: fadeIn 0.2s ease-out;
+    animation: fade-in 0.2s ease-out;
 }
 
 .modal {
-    background: #181827;
+    background: var(--modal-bg);
     border-radius: 16px;
-    box-shadow: 0 20px 60px rgb(0 0 0 / 50%);
-    border: 1px solid rgb(255 255 255 / 6%);
-    animation: slideUp 0.3s ease-out;
+    box-shadow: var(--modal-shadow);
+    border: 1px solid var(--modal-border);
+    animation: slide-up 0.3s ease-out;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -42,12 +42,12 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    border-bottom: 1px solid rgb(255 255 255 / 6%);
+    border-bottom: 1px solid var(--modal-border);
     flex-shrink: 0;
 }
 
 .title {
-    color: #e2e8f0;
+    color: var(--text-strong);
     font-size: 20px;
     font-weight: 600;
     margin: 0;
@@ -56,7 +56,7 @@
 .closeButton {
     background: none;
     border: none;
-    color: #94a3b8;
+    color: var(--text-muted);
     font-size: 24px;
     cursor: pointer;
     padding: 4px 8px;
@@ -66,12 +66,12 @@
 }
 
 .closeButton:hover {
-    background: rgb(255 255 255 / 5%);
-    color: #e2e8f0;
+    background: var(--hover-overlay);
+    color: var(--text-strong);
 }
 
 .closeButton:focus-visible {
-    outline: 2px solid #38bdf8;
+    outline: 2px solid var(--button-focus);
     outline-offset: 2px;
 }
 
@@ -101,7 +101,7 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    color: #4d85d6;
+    color: var(--accent-icon);
 }
 
 .headerIcon svg {
