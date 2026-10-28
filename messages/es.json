@@ -126,7 +126,8 @@
     "noTransfers": "Sin transbordos",
     "currentLine": "Línea actual",
     "errorSave": "No se pudo guardar el nombre de la estación",
-    "transferTimeLabel": "min"
+    "transferTimeLabel": "min",
+    "currentLines": "Líneas actuales"
   },
   "CreateTransferModal": {
     "title": "Crear transbordo",

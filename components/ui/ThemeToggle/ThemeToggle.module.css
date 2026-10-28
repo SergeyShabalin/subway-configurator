@@ -1,0 +1,103 @@
+.container {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    border: 1px solid rgb(226 232 240 / 20%);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
+    font-family: Arial, sans-serif;
+    backdrop-filter: blur(3px);
+    height: 40px;
+}
+
+.toggle {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Анимации включаются только после монтирования,
+   чтобы при загрузке иконка не «переезжала» с дефолтного состояния */
+.ready {
+    transition: transform 0.2s ease;
+}
+
+.ready:hover {
+    transform: scale(1.05);
+}
+
+.input {
+    display: none;
+}
+
+.icon {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0.1;
+}
+
+.ready .icon {
+    transition: transform 500ms;
+}
+
+.iconMoon {
+    color: #0aa2e4;
+}
+
+.iconSun {
+    color: #ffa500;
+}
+
+/* Не checked = тёмная тема → луна */
+.input:not(:checked) ~ .iconMoon {
+    transform: scale(1);
+}
+
+.input:not(:checked) ~ .iconSun {
+    transform: scale(0) rotate(-360deg);
+}
+
+/* Checked = светлая тема → солнце */
+.input:checked ~ .iconMoon {
+    transform: scale(0) rotate(360deg);
+}
+
+.input:checked ~ .iconSun {
+    transform: scale(1) rotate(360deg);
+}
+
+@media (max-width: 768px) {
+    .toggle {
+        width: 48px;
+        height: 48px;
+    }
+
+    .icon svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .toggle {
+        width: 44px;
+        height: 44px;
+    }
+
+    .icon svg {
+        width: 20px;
+        height: 20px;
+    }
+}

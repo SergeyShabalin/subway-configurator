@@ -1,4 +1,3 @@
-
 .row {
     display: flex;
     align-items: center;
@@ -7,12 +6,12 @@
     padding: 12px 14px;
     border: none;
     border-radius: 10px;
-    background: rgb(255 255 255 / 3%);
+    background: var(--row-bg);
     transition: background 0.2s ease;
 }
 
 .row:hover {
-    background: rgb(255 255 255 / 5%);
+    background: var(--row-bg-hover);
 }
 
 .indicatorWrapper {
@@ -49,7 +48,7 @@
 }
 
 .label {
-    color: #94a3b8;
+    color: var(--text-muted);
     font-size: 12px;
     font-weight: 500;
     line-height: 1.4;
@@ -70,7 +69,7 @@
     gap: 9px;
     flex: 1;
     min-width: 0;
-    color: #e2e8f0;
+    color: var(--text-strong);
     font-size: 16px;
     font-weight: 600;
     line-height: 1.4;
@@ -88,7 +87,7 @@
     flex-shrink: 0;
     gap: 8px;
     margin-left: auto;
-    color: #94a3b8;
+    color: var(--text-muted);
     font-size: 12px;
     line-height: 1.4;
     white-space: nowrap;

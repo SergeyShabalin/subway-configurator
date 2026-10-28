@@ -126,7 +126,8 @@
     "noTransfers": "No transfers",
     "currentLine": "Current line",
     "errorSave": "Failed to save station name",
-    "transferTimeLabel": "min"
+    "transferTimeLabel": "min",
+    "currentLines": "Current lines"
   },
   "CreateTransferModal": {
     "title": "Create transfer",
