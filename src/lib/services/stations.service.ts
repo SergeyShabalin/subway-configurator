@@ -6,7 +6,7 @@ import {
   visualStationLinksRepo,
   visualTransfersRepo,
 } from '@/src/lib/indexeddb/repositories'
-import type { Line, Segment, Station, VisualStationLink } from '@/types/metro'
+import type { InsertPosition, Line, Segment, Station, VisualStationLink } from '@/types/metro'
 import { BaseService } from './base.service'
 import { segmentsService } from './segments.service'
 
@@ -20,6 +20,7 @@ const CONTEXT = {
 } as const
 
 const DEFAULT_LABEL_OFFSET = { x: 0, y: -30 }
+const DEFAULT_INSERT_POSITION: InsertPosition = 'end'
 
 interface CreateStationInput {
   name: string
@@ -28,6 +29,7 @@ interface CreateStationInput {
   y: number
   transferToVisualId?: string
   timeMinutes: number
+  insertPosition?: InsertPosition
 }
 
 interface CreateStationResult {
@@ -51,6 +53,9 @@ export class StationsService extends BaseService {
 
   async create(data: CreateStationInput): Promise<CreateStationResult> {
     return this.run(CONTEXT.create, async () => {
+      const position = data.insertPosition ?? DEFAULT_INSERT_POSITION
+      const isStart = position === 'start'
+
       const line = await linesRepo.getById(data.lineId)
       if (!line) {
         throw new Error(`Line ${data.lineId} not found`)
@@ -58,6 +63,18 @@ export class StationsService extends BaseService {
 
       const { visualId, name, isNewVisual } = await this.resolveVisual(data, line)
       const stationId = this.generateId()
+
+      const previousLogicalIds = line.logicalStationIds ?? []
+      const neighborId = isStart
+        ? previousLogicalIds[0]
+        : previousLogicalIds[previousLogicalIds.length - 1]
+      const isCircular = line.is_circular === 1
+
+      // Замыкающий сегмент связывает крайние станции, а они меняются.
+      // Снимаем его после валидаций и строим заново для новых крайних станций.
+      if (isCircular) {
+        await segmentsService.deleteClosing(line)
+      }
 
       if (isNewVisual) {
         await visualsRepo.save({
@@ -84,10 +101,10 @@ export class StationsService extends BaseService {
         station_id: stationId,
       })
 
-      const updatedLogicalIds = [...(line.logicalStationIds ?? []), stationId]
+      const updatedLogicalIds = this.insertId(previousLogicalIds, stationId, position)
       const updatedVisualIds = line.visualStationIds?.includes(visualId)
         ? line.visualStationIds
-        : [...(line.visualStationIds ?? []), visualId]
+        : this.insertId(line.visualStationIds ?? [], visualId, position)
 
       await linesRepo.update(data.lineId, {
         visualStationIds: updatedVisualIds,
@@ -98,16 +115,22 @@ export class StationsService extends BaseService {
         await visualsRepo.update(visualId, { is_transfer: 1 })
       }
 
-      const previousStationId = updatedLogicalIds[updatedLogicalIds.length - 2]
-
-      const segment = previousStationId
+      // Направление сегмента совпадает с порядком станций на линии
+      const segment = neighborId
         ? await segmentsService.create({
-            fromStationId: previousStationId,
-            toStationId: stationId,
+            fromStationId: isStart ? stationId : neighborId,
+            toStationId: isStart ? neighborId : stationId,
             lineId: data.lineId,
             timeMinutes: data.timeMinutes,
           })
         : undefined
+
+      if (isCircular) {
+        await segmentsService.createClosing({
+          id: data.lineId,
+          logicalStationIds: updatedLogicalIds,
+        })
+      }
 
       return { station: newStation, visualId, segment }
     })
@@ -264,6 +287,14 @@ export class StationsService extends BaseService {
       const { stationIds } = await this.collectNode(stationId)
       return stationIds.size
     })
+  }
+
+  private insertId(
+    ids: ReadonlyArray<string>,
+    id: string,
+    position: InsertPosition
+  ): Array<string> {
+    return position === 'start' ? [id, ...ids] : [...ids, id]
   }
 
   /** Узел = все визуалы станции и все станции, привязанные к этим визуалам. */

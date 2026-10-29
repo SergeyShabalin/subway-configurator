@@ -1,3 +1,5 @@
+import type { InsertPosition } from '@/types/metro'
+
 export interface CreateStationPayload {
   name: string
   lineId: string
@@ -5,6 +7,7 @@ export interface CreateStationPayload {
   y: number
   transferToVisualId?: string
   timeMinutes: number
+  insertPosition: InsertPosition
 }
 
 export interface CreateLinePayload {

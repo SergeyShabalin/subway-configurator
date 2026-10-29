@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/Button'
 import type { DropdownOption } from '@/components/ui/Dropdown'
 import { Dropdown } from '@/components/ui/Dropdown'
 import { Input } from '@/components/ui/Input/Input'
+import type { InsertPosition } from '@/types/metro'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useState } from 'react'
 import type { CreateStationPayload, TransferNode } from '../../types'
 import styles from './CreateStationForm.module.css'
+import { useInsertPositionOptions } from './hooks/useInsertPositionOptions'
 import { useTimeField } from './hooks/useTimeField'
 
 interface CreateStationFormProps {
@@ -21,6 +23,7 @@ interface CreateStationFormProps {
 }
 
 const DEFAULT_TIME_MINUTES = 2
+const DEFAULT_INSERT_POSITION: InsertPosition = 'end'
 
 export const CreateStationForm = ({
   position,
@@ -36,6 +39,7 @@ export const CreateStationForm = ({
   const [stationName, setStationName] = useState('')
   const [selectedLineId, setSelectedLineId] = useState('')
   const [transferVisualId, setTransferVisualId] = useState('')
+  const [insertPosition, setInsertPosition] = useState<InsertPosition>(DEFAULT_INSERT_POSITION)
   const [isLoading, setIsLoading] = useState(false)
 
   const {
@@ -45,6 +49,8 @@ export const CreateStationForm = ({
     handleTimeChange,
     reset: resetTime,
   } = useTimeField(DEFAULT_TIME_MINUTES)
+
+  const insertPositionOptions = useInsertPositionOptions(selectedLineId)
 
   useEffect(() => {
     onLoadingChange?.(isLoading)
@@ -66,6 +72,7 @@ export const CreateStationForm = ({
   const handleLineChange = (lineId: string) => {
     setSelectedLineId(lineId)
     setTransferVisualId('')
+    setInsertPosition(DEFAULT_INSERT_POSITION)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,17 +89,20 @@ export const CreateStationForm = ({
         y: position.y,
         transferToVisualId: transferVisualId || undefined,
         timeMinutes,
+        insertPosition,
       })
 
       setStationName('')
       setSelectedLineId('')
       setTransferVisualId('')
+      setInsertPosition(DEFAULT_INSERT_POSITION)
       resetTime()
       onSuccess?.()
     } catch (error) {
       console.error('Error creating station:', error)
 
-      if (error instanceof Error && error.message === 'ALREADY_ON_LINE') {
+      // BaseService.handleError добавляет к сообщению префикс контекста, поэтому endsWith
+      if (error instanceof Error && error.message.endsWith('ALREADY_ON_LINE')) {
         alert(t('errorAlreadyOnLine'))
       } else {
         alert(t('errorCreate'))
@@ -112,6 +122,18 @@ export const CreateStationForm = ({
           label={t('lineLabel')}
           placeholder={t('linePlaceholder')}
           emptyMessage={t('noLines')}
+        />
+      </div>
+
+      <div className={styles.field}>
+        <Dropdown
+          value={insertPosition}
+          options={insertPositionOptions}
+          onChange={setInsertPosition}
+          label={t('insertPositionLabel')}
+          placeholder={t('insertPositionPlaceholder')}
+          emptyMessage={t('noInsertPositionOptions')}
+          disabled={!selectedLineId || insertPositionOptions.length === 0}
         />
       </div>
 

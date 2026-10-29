@@ -116,3 +116,5 @@ export interface GraphData {
   visualToStations: Record<string, Array<string>>
   visualTransfers: Array<GraphTransfer>
 }
+
+export type InsertPosition = 'start' | 'end'
