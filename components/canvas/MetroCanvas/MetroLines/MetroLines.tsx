@@ -136,8 +136,11 @@ export const MetroLines = ({ visuals, lineRef, onSegmentClick }: MetroLinesProps
                   }}
                   perfectDrawEnabled={false}
                   data={segment.path}
-                  stroke={isHovered ? hoverColor : line.color}
-                  strokeWidth={isHovered ? 8 : 6}
+                  shadowColor={isHovered ? hoverColor : undefined}
+                  shadowBlur={isHovered ? 3 : 0}
+                  shadowOpacity={isHovered ? 1 : 0}
+                  stroke={line.color}
+                  strokeWidth={isHovered ? 6 : 6}
                   lineCap="round"
                   lineJoin="round"
                   hitStrokeWidth={20}

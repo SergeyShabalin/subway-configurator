@@ -12,8 +12,8 @@ const TRANSFER_BASE_RADIUS = 12
 const RING_STEP = 2.5
 const RING_WIDTH = 2.5
 const MIN_RING_RADIUS = 3
-const HOVER_STROKE_WIDTH = 4
 const DRAG_THRESHOLD = 2
+const HOVER_SHADOW_BLUR = 4
 
 const StationCircle = memo(
   ({
@@ -38,8 +38,8 @@ const StationCircle = memo(
 
     const multiColors = isTransfer && colors && colors.length >= 2 ? colors : null
     const baseRadius = multiColors ? TRANSFER_BASE_RADIUS : BASE_RADIUS
-    const strokeColor = isHovered ? hoverColor : color || '#888888'
-    const strokeWidth = isHovered ? HOVER_STROKE_WIDTH : RING_WIDTH
+    const strokeColor = color || '#888888'
+    const strokeWidth = RING_WIDTH
 
     const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>) => {
       const stage = e.target.getStage()
@@ -87,6 +87,14 @@ const StationCircle = memo(
       onStationClick?.(stationId)
     }
 
+    const hoverShadowProps = {
+      shadowColor: isHovered ? hoverColor : undefined,
+      shadowBlur: isHovered ? HOVER_SHADOW_BLUR : 0,
+      shadowOpacity: isHovered ? 1 : 0,
+      shadowOffsetX: 0,
+      shadowOffsetY: 0,
+    }
+
     if (!multiColors) {
       return (
         <Circle
@@ -96,6 +104,7 @@ const StationCircle = memo(
           fill={fillColor}
           stroke={strokeColor}
           strokeWidth={strokeWidth}
+          {...hoverShadowProps}
           draggable
           onMouseDown={handleMouseDown}
           onDragStart={handleStationDragStart}
@@ -116,8 +125,9 @@ const StationCircle = memo(
           y={visual.y ?? 0}
           radius={baseRadius}
           fill={fillColor}
-          stroke={isHovered ? hoverColor : (multiColors[0] ?? color)}
+          stroke={multiColors[0] ?? color}
           strokeWidth={strokeWidth}
+          {...hoverShadowProps}
           draggable
           onMouseDown={handleMouseDown}
           onDragStart={handleStationDragStart}
@@ -141,8 +151,9 @@ const StationCircle = memo(
               y={visual.y ?? 0}
               radius={innerRadius}
               fill="transparent"
-              stroke={isHovered ? hoverColor : c}
+              stroke={c}
               strokeWidth={RING_WIDTH}
+              {...hoverShadowProps}
               listening={false}
             />
           )

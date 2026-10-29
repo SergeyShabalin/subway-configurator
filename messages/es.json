@@ -29,7 +29,12 @@
     "transferPlaceholder": "Selecciona una estación con el mismo nombre",
     "noTransferOptions": "No hay estaciones en otras líneas",
     "errorAlreadyOnLine": "Esta estación ya existe en la línea seleccionada",
-    "timeLabel": "Tiempo hasta la estación anterior (min)"
+    "timeLabel": "Tiempo hasta la estación anterior (min)",
+    "insertPositionLabel": "Dónde añadir la estación",
+    "insertPositionPlaceholder": "Seleccionar posición",
+    "noInsertPositionOptions": "La línea aún no tiene estaciones",
+    "insertBefore": "Antes de la estación «{name}»",
+    "insertAfter": "Después de la estación «{name}»"
   },
   "CreateLineForm": {
     "nameLabel": "Nombre de la línea",

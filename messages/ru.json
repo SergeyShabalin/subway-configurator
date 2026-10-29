@@ -29,7 +29,12 @@
     "transferPlaceholder": "Выберите одноимённую станцию",
     "noTransferOptions": "Нет станций на других линиях",
     "errorAlreadyOnLine": "Эта станция уже есть на выбранной линии",
-    "timeLabel": "Время до предыдущей станции (мин)"
+    "timeLabel": "Время до предыдущей станции (мин)",
+    "insertPositionLabel": "Куда добавить станцию",
+    "insertPositionPlaceholder": "Выберите положение",
+    "noInsertPositionOptions": "На линии пока нет станций",
+    "insertBefore": "Перед первой станцией «{name}»",
+    "insertAfter": "После последней станции «{name}»"
   },
   "CreateLineForm": {
     "nameLabel": "Название ветки",
