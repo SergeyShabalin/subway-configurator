@@ -25,7 +25,6 @@ export const WalkIcon = ({
       viewBox="20 10 50 80"
       fill={`url(#${gradientId})`}
       aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
         <linearGradient

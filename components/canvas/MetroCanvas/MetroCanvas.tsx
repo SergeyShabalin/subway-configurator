@@ -13,6 +13,7 @@ import { useTransferSelection } from '@/components/canvas/MetroCanvas/hooks/useT
 import { MetroTransfers } from '@/components/canvas/MetroCanvas/MetroTransfers/MetroTransfers'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import { visualsService } from '@/src/lib/services'
+import { setStage } from '@/src/lib/stageRegistry/stageRegistry'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { forwardRef, useCallback, useEffect, useMemo, useRef } from 'react'
@@ -26,7 +27,6 @@ import { MetroLabels } from './MetroLabels/MetroLabels'
 import { useMetroLines } from './MetroLines/hooks/useMetroLines'
 import { MetroLines } from './MetroLines/MetroLines'
 import { MetroStations } from './MetroStations/MetroStations'
-import { setStage } from '@/src/lib/stageRegistry/stageRegistry'
 
 export interface MetroCanvasRef {
   openAddStationModal: () => void

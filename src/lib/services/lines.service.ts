@@ -1,4 +1,4 @@
-import { linesRepo } from '@/src/lib/indexeddb/repositories'
+import { linesRepo, visualStationLinksRepo } from '@/src/lib/indexeddb/repositories'
 import type { Line } from '@/types/metro'
 import { BaseService } from './base.service'
 import { segmentsService } from './segments.service'
@@ -7,6 +7,7 @@ const CONTEXT = {
   getAll: 'LinesService.getAll',
   create: 'LinesService.create',
   update: 'LinesService.update',
+  reorderStations: 'LinesService.reorderStations',
 } as const
 
 export class LinesService extends BaseService {
@@ -59,6 +60,32 @@ export class LinesService extends BaseService {
       } else if (wasCircular && !willBeCircular) {
         await segmentsService.deleteClosing(line)
       }
+    })
+  }
+
+  /** Новый порядок станций на линии: сегменты, logicalStationIds и visualStationIds. */
+  async reorderStations(lineId: string, orderedStationIds: Array<string>): Promise<void> {
+    return this.run(CONTEXT.reorderStations, async () => {
+      const line = await linesRepo.getById(lineId)
+      if (!line) {
+        throw new Error(`Line ${lineId} not found`)
+      }
+
+      // Проверка набора станций и пересборка сегментов идут по старому порядку линии
+      await segmentsService.reorder(line, orderedStationIds)
+
+      // Карта рисует линию по visualStationIds, поэтому порядок визуалов пересчитываем тоже
+      const links = await visualStationLinksRepo.getAll()
+      const visualByStation = new Map(links.map((l) => [l.station_id, l.visual_id]))
+
+      const visualStationIds = orderedStationIds
+        .map((id) => visualByStation.get(id))
+        .filter((id): id is string => id !== undefined)
+
+      await linesRepo.update(lineId, {
+        logicalStationIds: orderedStationIds,
+        visualStationIds,
+      })
     })
   }
 }
