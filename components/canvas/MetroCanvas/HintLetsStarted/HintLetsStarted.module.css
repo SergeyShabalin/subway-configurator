@@ -9,14 +9,13 @@
     gap: 12px;
     padding: 28px 36px;
     max-width: 420px;
-    background: rgb(2 9 19 / 85%);
+    background: var(--hint-lets-started-bg);
     border: 1px solid rgb(226 232 240 / 25%);
     border-radius: 16px;
     box-shadow:
             0 20px 60px rgb(0 0 0 / 55%),
             0 0 0 1px rgb(226 232 240 / 5%) inset;
-    color: #e2e8f0;
-    font-family: Arial, sans-serif;
+     font-family: Arial, sans-serif;
     font-size: 16px;
     line-height: 1.5;
     letter-spacing: 1px;
@@ -29,7 +28,7 @@
 .icon {
     width: 42px;
     height: 42px;
-    color: #e2e8f0;
+    color: var(--hint-lets-started-color);
     opacity: 0.9;
     flex-shrink: 0;
 }
@@ -37,11 +36,11 @@
 .title {
     font-size: 17px;
     font-weight: 600;
-    color: #f1f5f9;
+    color: var(--hint-lets-started-color);
 }
 
 .text {
     font-size: 14px;
-    color: #cbd5e1;
+    color: var(--hint-lets-started-color);
     max-width: 360px;
 }

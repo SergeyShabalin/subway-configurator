@@ -1,0 +1,31 @@
+.item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    color: var(--text-primary);
+    position: relative;
+    will-change: transform;
+}
+
+.item:last-child {
+    margin-bottom: 0;
+}
+
+.dragging {
+    box-shadow: var(--drag-shadow);
+    border-color: var(--input-border-focus);
+    background: var(--surface-2);
+    opacity: 0.95;
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
+    color: var(--text-primary);
+    pointer-events: none;
+}

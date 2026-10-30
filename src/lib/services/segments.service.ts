@@ -8,9 +8,11 @@ const CONTEXT = {
   createClosing: 'SegmentsService.createClosing',
   deleteClosing: 'SegmentsService.deleteClosing',
   bridgeRemoved: 'SegmentsService.bridgeRemoved',
+  reorder: 'SegmentsService.reorder',
 } as const
 
 const DEFAULT_CLOSING_SEGMENT_MINUTES = 2
+const DEFAULT_NEW_SEGMENT_MINUTES = 2
 const MIN_STATIONS_FOR_CLOSING = 3
 
 interface LineStationsRef {
@@ -130,6 +132,60 @@ export class SegmentsService extends BaseService {
       }
 
       await Promise.all(bridges.map((bridge) => this.save(bridge)))
+    })
+  }
+
+  /**
+   * Пересобирает цепочку сегментов под новый порядок станций.
+   * Пары соседей, которые уже были соединены, сохраняют id и время перегона (направление выравнивается).
+   * Для новых пар время по умолчанию. Ненужные сегменты удаляются после записи новых.
+   */
+  async reorder(line: LineWithCircularFlag, orderedStationIds: Array<string>): Promise<void> {
+    return this.run(CONTEXT.reorder, async () => {
+      const ids = orderedStationIds
+      const current = line.logicalStationIds ?? []
+
+      const isSameSet =
+        ids.length === current.length &&
+        new Set(ids).size === ids.length &&
+        ids.every((id) => current.includes(id))
+
+      if (!isSameSet) {
+        throw new Error(`Line ${line.id}: station set does not match the line`)
+      }
+
+      const isCircular = line.is_circular === 1 && ids.length >= MIN_STATIONS_FOR_CLOSING
+
+      const pairs: Array<[string, string]> = []
+      for (let i = 0; i < ids.length - 1; i++) pairs.push([ids[i], ids[i + 1]])
+      if (isCircular) pairs.push([ids[ids.length - 1], ids[0]])
+
+      const pairKey = (a: string, b: string) => (a < b ? `${a}|${b}` : `${b}|${a}`)
+
+      const oldSegments = await segmentsRepo.getByLineId(line.id)
+      const oldByPair = new Map(
+        oldSegments.map((s) => [pairKey(s.from_station_id, s.to_station_id), s])
+      )
+
+      const newSegments: Array<Segment> = pairs.map(([from, to]) => {
+        const existing = oldByPair.get(pairKey(from, to))
+
+        return {
+          ...existing,
+          id: existing?.id ?? this.generateId(),
+          from_station_id: from,
+          to_station_id: to,
+          line_id: line.id,
+          time_minutes: existing?.time_minutes ?? DEFAULT_NEW_SEGMENT_MINUTES,
+        }
+      })
+
+      const newIds = new Set(newSegments.map((s) => s.id))
+
+      await segmentsRepo.saveMany(newSegments)
+      await Promise.all(
+        oldSegments.filter((s) => !newIds.has(s.id)).map((s) => segmentsRepo.delete(s.id))
+      )
     })
   }
 

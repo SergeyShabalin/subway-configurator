@@ -159,7 +159,12 @@
   "EditLine": {
     "title": "Edit line",
     "tabSegment": "Segment",
-    "tabLine": "Line"
+    "tabLine": "Line",
+    "tabStations": "Stations"
+  },
+  "LineStationsTab": {
+    "dragHandle": "Drag to reorder",
+    "errorReorder": "Failed to reorder the stations"
   },
   "EditLineForm": {
     "nameLabel": "Line name",

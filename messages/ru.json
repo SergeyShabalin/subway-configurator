@@ -159,7 +159,12 @@
   "EditLine": {
     "title": "Изменить линию",
     "tabSegment": "Сегмент",
-    "tabLine": "Ветка"
+    "tabLine": "Ветка",
+    "tabStations": "Станции"
+  },
+  "LineStationsTab": {
+    "dragHandle": "Перетащить, чтобы изменить порядок",
+    "errorReorder": "Не удалось изменить порядок станций"
   },
   "EditLineForm": {
     "nameLabel": "Название ветки",

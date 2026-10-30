@@ -159,7 +159,12 @@
   "EditLine": {
     "title": "Editar línea",
     "tabSegment": "Segmento",
-    "tabLine": "Línea"
+    "tabLine": "Línea",
+    "tabStations": "Estaciones"
+  },
+  "LineStationsTab": {
+    "dragHandle": "Arrastrar para cambiar el orden",
+    "errorReorder": "No se pudo cambiar el orden de las estaciones"
   },
   "EditLineForm": {
     "nameLabel": "Nombre de la línea",
