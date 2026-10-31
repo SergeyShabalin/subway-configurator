@@ -33,9 +33,6 @@ const DEFAULT_TENSION = 0.3
 const TENSION_MULTIPLIER = 3
 const CONTROL_POINT_DIVISOR = 6
 
-// Цвет сегментов вне маршрута. Если в themeColors есть подходящая константа, возьми её оттуда
-const DIMMED_LINE_COLOR = { light: '#CBD0D6', dark: '#222325' } as const
-
 const getControlPoints = (p0: Point, p1: Point, p2: Point, p3: Point, tension: number) => {
   const cp1x = p1.x + ((p2.x - p0.x) / CONTROL_POINT_DIVISOR) * tension * TENSION_MULTIPLIER
   const cp1y = p1.y + ((p2.y - p0.y) / CONTROL_POINT_DIVISOR) * tension * TENSION_MULTIPLIER
@@ -107,8 +104,6 @@ interface SegmentPathProps {
   onSegmentClick: MetroLinesProps['onSegmentClick']
 }
 
-// Все пропсы примитивы или стабильные ссылки, поэтому memo не даёт перерисовываться
-// сегментам, у которых ничего не изменилось. Hover хранится здесь, а не в MetroLines.
 const SegmentPath = memo(
   ({
     segmentKey,
