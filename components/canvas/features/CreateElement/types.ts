@@ -1,5 +1,12 @@
 import type { InsertPosition } from '@/types/metro'
 
+export interface AddElementProps {
+  isOpen: boolean
+  position: { x: number; y: number }
+  onClose: () => void
+  reloadData: () => Promise<void>
+}
+
 export interface CreateStationPayload {
   name: string
   lineId: string

@@ -186,5 +186,23 @@
     "confirmDelete": "Удалить переход между \"{from}\" и \"{to}\"?",
     "errorSave": "Не удалось сохранить время перехода",
     "errorDelete": "Не удалось удалить переход"
+  },
+  "RoutePanel": {
+    "title": "Маршрут",
+    "open": "Построить маршрут",
+    "close": "Закрыть",
+    "from": "Откуда",
+    "to": "Куда",
+    "placeholder": "Выберите станцию",
+    "swap": "Поменять",
+    "reset": "Сбросить",
+    "sameStation": "Начальная и конечная станции совпадают",
+    "notFound": "Маршрут не найден",
+    "total": "{minutes} мин в пути",
+    "transfers": "{count, plural, one {# пересадка} few {# пересадки} many {# пересадок} other {# пересадки}}",
+    "transfer": "Пересадка",
+    "minutes": "{minutes} мин",
+    "transferAt": "Пересадка: {from} → {to} ({minutes} мин)",
+    "legMeta": "{count} станций · {minutes} мин"
   }
 }

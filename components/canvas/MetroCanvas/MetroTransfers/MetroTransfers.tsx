@@ -1,5 +1,7 @@
 'use client'
 
+import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
+import { CANVAS_DIMMED_COLOR } from '@/components/canvas/shared/dimmedColors'
 import { CANVAS_HOVER_COLOR, CANVAS_TRANSFER_OUTLINE } from '@/components/canvas/shared/themeColors'
 import { useTheme } from '@/context/theme-context'
 import { useMetroStore } from '@/store'
@@ -32,10 +34,14 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
   const visualToStations = useMetroStore((state) => state.visualToStations)
   const stations = useMetroStore((state) => state.stations)
   const lines = useMetroStore((state) => state.lines)
+
+  const routeVisualIds = useRoute()?.visualIds
+
   const [hoveredTransfer, setHoveredTransfer] = useState<string | null>(null)
 
   const outlineColor = CANVAS_TRANSFER_OUTLINE[theme]
   const hoverColor = CANVAS_HOVER_COLOR[theme]
+  const dimmedColor = CANVAS_DIMMED_COLOR[theme]
 
   const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
     const stage = e.target.getStage()
@@ -82,13 +88,21 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
         const points = [from.x, from.y, to.x, to.y]
         const isHovered = hoveredTransfer === transfer.id
 
-        const gradientProps = isHovered
-          ? {}
-          : {
-              strokeLinearGradientStartPoint: { x: from.x, y: from.y },
-              strokeLinearGradientEndPoint: { x: to.x, y: to.y },
-              strokeLinearGradientColorStops: buildGradientStops(fromColor, toColor),
-            }
+        const isDimmed = routeVisualIds
+          ? !routeVisualIds.has(transfer.from_visual_id) ||
+            !routeVisualIds.has(transfer.to_visual_id)
+          : false
+
+        const gradientProps =
+          isHovered || isDimmed
+            ? {}
+            : {
+                strokeLinearGradientStartPoint: { x: from.x, y: from.y },
+                strokeLinearGradientEndPoint: { x: to.x, y: to.y },
+                strokeLinearGradientColorStops: buildGradientStops(fromColor, toColor),
+              }
+
+        const baseColor = isDimmed ? dimmedColor : undefined
 
         return (
           <Fragment key={transfer.id}>
@@ -104,7 +118,7 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
 
             <Line
               points={points}
-              stroke={isHovered ? hoverColor : undefined}
+              stroke={isHovered ? hoverColor : baseColor}
               strokeWidth={3}
               dash={[6, 6]}
               opacity={0.95}

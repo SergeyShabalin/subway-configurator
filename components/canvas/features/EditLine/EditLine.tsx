@@ -2,7 +2,7 @@
 
 import { EditLineForm } from '@/components/canvas/features/EditLine/EditLineForm/EditLineForm'
 import type { SelectedSegment } from '@/components/canvas/MetroCanvas/MetroLines/types'
-import { LineIcon } from '@/components/ui/Icons/LineIcon/LineIcon'
+import { LineIcon } from '@/components/ui/Icons'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { Tabs } from '@/components/ui/Tabs'
 import { linesService, segmentsService } from '@/src/lib/services'

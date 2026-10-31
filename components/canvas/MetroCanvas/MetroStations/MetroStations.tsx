@@ -1,5 +1,6 @@
 'use client'
 
+import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { useCallback } from 'react'
@@ -10,6 +11,7 @@ import type { MetroStationsProps, StationData } from './types'
 export const MetroStations = ({ lineRef, textRef, onStationClick }: MetroStationsProps) => {
   const visuals = useMetroStore((state) => state.visuals)
   const visualToStations = useMetroStore((state) => state.visualToStations)
+  const routeVisualIds = useRoute()?.visualIds
 
   const { visualData } = useMetroStations()
   const { savePosition } = useMetroPosition()
@@ -51,6 +53,7 @@ export const MetroStations = ({ lineRef, textRef, onStationClick }: MetroStation
             color={data.color}
             colors={data.colors}
             stationId={stationId}
+            isDimmed={routeVisualIds ? !routeVisualIds.has(visual.id) : false}
             onDragStart={handleDragStart}
             onDragMove={onDragMove}
             onDragEnd={onDragEnd}

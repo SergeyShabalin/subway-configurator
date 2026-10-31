@@ -1,9 +1,11 @@
 'use client'
 
+import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
+import { CANVAS_DIMMED_COLOR } from '@/components/canvas/shared/dimmedColors'
 import { CANVAS_HOVER_COLOR } from '@/components/canvas/shared/themeColors'
 import { useTheme } from '@/context/theme-context'
 import type Konva from 'konva'
-import { Fragment, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { Path } from 'react-konva'
 import { useMetroLines } from './hooks/useMetroLines'
 import type { MetroLinesProps } from './types'
@@ -18,6 +20,13 @@ interface Segment {
   key: string
   fromId: string
   toId: string
+}
+
+interface SegmentItem {
+  segment: Segment
+  lineId: string
+  color: string
+  isDimmed: boolean
 }
 
 const DEFAULT_TENSION = 0.3
@@ -82,79 +91,142 @@ const buildSegments = (
   return segments
 }
 
-export const MetroLines = ({ visuals, lineRef, onSegmentClick }: MetroLinesProps) => {
+interface SegmentPathProps {
+  segmentKey: string
+  path: string
+  fromId: string
+  toId: string
+  lineId: string
+  color: string
+  hoverColor: string
+  isDimmed: boolean
+  lineRef: MetroLinesProps['lineRef']
+  onSegmentClick: MetroLinesProps['onSegmentClick']
+}
+
+const SegmentPath = memo(
+  ({
+    segmentKey,
+    path,
+    fromId,
+    toId,
+    lineId,
+    color,
+    hoverColor,
+    isDimmed,
+    lineRef,
+    onSegmentClick,
+  }: SegmentPathProps) => {
+    const [isHovered, setIsHovered] = useState(false)
+
+    const setRef = useCallback(
+      (node: Konva.Path | null) => {
+        if (node) {
+          lineRef.current[segmentKey] = node as unknown as Konva.Line
+        }
+      },
+      [lineRef, segmentKey]
+    )
+
+    const handleClick = (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) => {
+      e.cancelBubble = true
+      onSegmentClick?.({ lineId, fromVisualId: fromId, toVisualId: toId })
+    }
+
+    const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>) => {
+      const stage = e.target.getStage()
+      if (stage) stage.container().style.cursor = 'pointer'
+      setIsHovered(true)
+    }
+
+    const handleMouseLeave = (e: Konva.KonvaEventObject<MouseEvent>) => {
+      const stage = e.target.getStage()
+      if (stage) stage.container().style.cursor = 'default'
+      setIsHovered(false)
+    }
+
+    // Формируем пропсы интерактивности динамически
+    const interactiveProps = isDimmed
+      ? { listening: false }
+      : {
+          listening: true,
+          onClick: handleClick,
+          onTap: handleClick,
+          onMouseEnter: handleMouseEnter,
+          onMouseLeave: handleMouseLeave,
+        }
+
+    return (
+      <Path
+        ref={setRef}
+        perfectDrawEnabled={false}
+        data={path}
+        shadowColor={isHovered ? hoverColor : undefined}
+        shadowBlur={isHovered ? 3 : 0}
+        shadowOpacity={isHovered ? 1 : 0}
+        stroke={color}
+        strokeWidth={6}
+        lineCap="round"
+        lineJoin="round"
+        hitStrokeWidth={20}
+        {...interactiveProps}
+      />
+    )
+  }
+)
+
+SegmentPath.displayName = 'SegmentPath'
+
+export const MetroLines = memo(({ visuals, lineRef, onSegmentClick }: MetroLinesProps) => {
   const { theme } = useTheme()
   const { lineData } = useMetroLines()
-  const [hoveredKey, setHoveredKey] = useState<string | null>(null)
+  const route = useRoute()
+  const dimmedColor = CANVAS_DIMMED_COLOR[theme]
 
   const hoverColor = CANVAS_HOVER_COLOR[theme]
+  const routeKeys = route?.segmentKeys
 
-  const handleClick = (
-    e: Konva.KonvaEventObject<MouseEvent | TouchEvent>,
-    lineId: string,
-    segment: Segment
-  ) => {
-    e.cancelBubble = true
-    onSegmentClick?.({
-      lineId,
-      fromVisualId: segment.fromId,
-      toVisualId: segment.toId,
-    })
-  }
+  const items = useMemo<Array<SegmentItem>>(() => {
+    const result: Array<SegmentItem> = []
 
-  const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>, key: string) => {
-    const stage = e.target.getStage()
-    if (stage) stage.container().style.cursor = 'pointer'
-    setHoveredKey(key)
-  }
+    for (const line of lineData) {
+      const segments = buildSegments(line.id, line.visualStationIds, line.isCircular, visuals)
 
-  const handleMouseLeave = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    const stage = e.target.getStage()
-    if (stage) stage.container().style.cursor = 'default'
-    setHoveredKey(null)
-  }
+      for (const segment of segments) {
+        result.push({
+          segment,
+          lineId: String(line.id),
+          color: line.color,
+          isDimmed: routeKeys ? !routeKeys.has(segment.key) : false,
+        })
+      }
+    }
+
+    // Без маршрута порядок прежний. С маршрутом: сначала серые, поверх них маршрут
+    return routeKeys
+      ? [...result.filter((i) => i.isDimmed), ...result.filter((i) => !i.isDimmed)]
+      : result
+  }, [lineData, visuals, routeKeys])
 
   return (
     <>
-      {lineData.map((line) => {
-        const segments = buildSegments(line.id, line.visualStationIds, line.isCircular, visuals)
-
-        if (segments.length === 0) return null
-
-        return (
-          <Fragment key={line.id}>
-            {segments.map((segment) => {
-              const isHovered = hoveredKey === segment.key
-
-              return (
-                <Path
-                  key={segment.key}
-                  ref={(node) => {
-                    if (node) {
-                      lineRef.current[segment.key] = node as unknown as Konva.Line
-                    }
-                  }}
-                  perfectDrawEnabled={false}
-                  data={segment.path}
-                  shadowColor={isHovered ? hoverColor : undefined}
-                  shadowBlur={isHovered ? 3 : 0}
-                  shadowOpacity={isHovered ? 1 : 0}
-                  stroke={line.color}
-                  strokeWidth={isHovered ? 6 : 6}
-                  lineCap="round"
-                  lineJoin="round"
-                  hitStrokeWidth={20}
-                  listening
-                  onClick={(e) => handleClick(e, String(line.id), segment)}
-                  onTap={(e) => handleClick(e, String(line.id), segment)}
-                  onMouseEnter={(e) => handleMouseEnter(e, segment.key)}
-                  onMouseLeave={handleMouseLeave}
-                />
-              )
-            })}
-          </Fragment>
-        )
-      })}
+      {items.map(({ segment, lineId, color, isDimmed }) => (
+        <SegmentPath
+          key={segment.key}
+          segmentKey={segment.key}
+          path={segment.path}
+          fromId={segment.fromId}
+          toId={segment.toId}
+          lineId={lineId}
+          color={isDimmed ? dimmedColor : color}
+          hoverColor={hoverColor}
+          isDimmed={isDimmed}
+          lineRef={lineRef}
+          onSegmentClick={onSegmentClick}
+        />
+      ))}
     </>
   )
-}
+})
+
+MetroLines.displayName = 'MetroLines'

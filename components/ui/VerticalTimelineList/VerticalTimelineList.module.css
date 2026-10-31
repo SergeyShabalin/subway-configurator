@@ -1,0 +1,42 @@
+.container {
+    position: relative;
+    padding-left: 22px;
+}
+
+.line {
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 26px;
+    width: 4px;
+    border-radius: 4px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.item {
+    display: grid;
+    grid-template-columns: 12px 1fr;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 1;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: var(--background);
+    box-sizing: border-box;
+}

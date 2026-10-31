@@ -1,3 +1,4 @@
+export { VerticalTimelineList } from '@/components/ui/VerticalTimelineList/VerticalTimelineList'
 export { Button } from './Button/Button'
 export { Dropdown } from './Dropdown/Dropdown'
 export { InfoRow } from './InfoRow/InfoRow'

@@ -186,5 +186,23 @@
     "confirmDelete": "Delete the transfer between \"{from}\" and \"{to}\"?",
     "errorSave": "Failed to save transfer time",
     "errorDelete": "Failed to delete the transfer"
+  },
+  "RoutePanel": {
+    "title": "Route",
+    "open": "Build route",
+    "close": "Close",
+    "from": "From",
+    "to": "To",
+    "placeholder": "Select station",
+    "swap": "Swap",
+    "reset": "Reset",
+    "sameStation": "Start and end stations are the same",
+    "notFound": "Route not found",
+    "total": "{minutes} min total",
+    "transfers": "{count, plural, one {# transfer} other {# transfers}}",
+    "transfer": "Transfer",
+    "minutes": "{minutes} min",
+    "transferAt": "Transfer: {from} → {to} ({minutes} min)",
+    "legMeta": "{count} stations · {minutes} min"
   }
 }

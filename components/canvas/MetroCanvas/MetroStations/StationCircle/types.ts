@@ -11,4 +11,5 @@ export interface StationCircleProps {
   onDragMove: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
   onDragEnd: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
   onStationClick?: (stationId: string) => void
+  isDimmed?: boolean
 }

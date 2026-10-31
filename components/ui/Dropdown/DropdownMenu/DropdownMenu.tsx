@@ -12,6 +12,7 @@ export interface DropdownMenuProps<T extends string> {
   value: T | ''
   onSelect: (value: T) => void
   emptyMessage?: string
+  largeList?: boolean
   position: {
     top: number
     left: number
@@ -28,6 +29,7 @@ export const DropdownMenu = <T extends string>({
   emptyMessage = '',
   position,
   menuRef,
+  largeList = false,
 }: DropdownMenuProps<T>) => {
   const positionStyle = {
     '--dropdown-top': `${position.top}px`,
@@ -36,7 +38,13 @@ export const DropdownMenu = <T extends string>({
   } as CSSProperties
 
   return createPortal(
-    <ul ref={menuRef} id={id} className={styles.menu} style={positionStyle} role="listbox">
+    <ul
+      ref={menuRef}
+      id={id}
+      className={`${styles.menu} ${largeList ? styles.largeList : ''}`}
+      style={positionStyle}
+      role="listbox"
+    >
       {options.length === 0 ? (
         <li className={styles.empty}>{emptyMessage}</li>
       ) : (
