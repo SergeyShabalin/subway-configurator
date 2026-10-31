@@ -27,6 +27,7 @@ interface DropdownProps<T extends string> {
   emptyMessage?: string
   disabled?: boolean
   className?: string
+  largeList?: boolean
 }
 
 export const Dropdown = <T extends string>({
@@ -38,6 +39,7 @@ export const Dropdown = <T extends string>({
   emptyMessage = '',
   disabled = false,
   className,
+  largeList = false,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false)
   const [position, setPosition] = useState<DropdownPosition>({ top: 0, left: 0, width: 0 })
@@ -97,47 +99,47 @@ export const Dropdown = <T extends string>({
     .join(' ')
 
   return (
-    <>
+    <div className={styles.wrapper}>
       {label && (
         <label id={labelId} className={styles.label} htmlFor={triggerId}>
           {label}
         </label>
       )}
-      <div className={styles.wrapper}>
-        <button
-          ref={triggerRef}
-          id={triggerId}
-          type="button"
-          className={triggerClassName}
-          onClick={toggleDropdown}
-          disabled={disabled}
-          aria-haspopup="listbox"
-          aria-expanded={isOpen}
-          aria-labelledby={label ? labelId : undefined}
-        >
-          {selectedOption ? (
-            <span className={styles.optionLine}>
-              <OptionColors colors={selectedOption.colors} color={selectedOption.color} />
-              {selectedOption.label}
-            </span>
-          ) : (
-            <span className={styles.placeholder}>{placeholder}</span>
-          )}
-          <span className={styles.arrow}>▼</span>
-        </button>
 
-        {isOpen && (
-          <DropdownMenu
-            menuRef={menuRef}
-            id={menuId}
-            options={options}
-            value={value}
-            onSelect={handleSelect}
-            emptyMessage={emptyMessage}
-            position={position}
-          />
+      <button
+        ref={triggerRef}
+        id={triggerId}
+        type="button"
+        className={triggerClassName}
+        onClick={toggleDropdown}
+        disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-labelledby={label ? labelId : undefined}
+      >
+        {selectedOption ? (
+          <span className={styles.optionLine}>
+            <OptionColors colors={selectedOption.colors} color={selectedOption.color} />
+            {selectedOption.label}
+          </span>
+        ) : (
+          <span className={styles.placeholder}>{placeholder}</span>
         )}
-      </div>
-    </>
+        <span className={styles.arrow}>▼</span>
+      </button>
+
+      {isOpen && (
+        <DropdownMenu
+          menuRef={menuRef}
+          id={menuId}
+          options={options}
+          value={value}
+          onSelect={handleSelect}
+          emptyMessage={emptyMessage}
+          position={position}
+          largeList={largeList}
+        />
+      )}
+    </div>
   )
 }

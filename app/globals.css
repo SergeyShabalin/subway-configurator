@@ -89,6 +89,11 @@
     --scrollbar-track: transparent;
 
     color-scheme: light;
+
+
+    --timeline-padding: 16px;
+    --timeline-icon-width: 16px;
+    --timeline-gap: 12px;
 }
 
 :root.dark {
@@ -125,7 +130,7 @@
     --surface-2: #2d3748;
     --surface-secondary: var(--surface-2);
 
-    /* Тени (глубже в тёмной теме) */
+    /* Тени */
     --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
     --shadow-md: 0 4px 12px rgb(0 0 0 / 50%);
     --shadow-lg: 0 6px 18px rgb(0 0 0 / 50%);

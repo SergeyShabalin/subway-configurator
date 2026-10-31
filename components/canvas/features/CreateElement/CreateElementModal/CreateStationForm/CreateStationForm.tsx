@@ -1,163 +1,68 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import type { DropdownOption } from '@/components/ui/Dropdown'
 import { Dropdown } from '@/components/ui/Dropdown'
 import { Input } from '@/components/ui/Input/Input'
-import type { InsertPosition } from '@/types/metro'
 import { useTranslations } from 'next-intl'
-import { useEffect, useMemo, useState } from 'react'
-import type { CreateStationPayload, TransferNode } from '../../types'
 import styles from './CreateStationForm.module.css'
-import { useInsertPositionOptions } from './hooks/useInsertPositionOptions'
-import { useTimeField } from './hooks/useTimeField'
+import { handleCreateStationError } from './helpers/handleCreateStationError'
+import { useCreateStationForm } from './hooks/useCreateStationForm'
+import type { CreateStationFormProps } from './types'
 
-interface CreateStationFormProps {
-  position: { x: number; y: number }
-  lineOptions: Array<DropdownOption<string>>
-  transferNodes: Array<TransferNode>
-  onSubmit: (data: CreateStationPayload) => Promise<void>
-  onSuccess?: () => void
-  onCancel?: () => void
-  onLoadingChange?: (isLoading: boolean) => void
-}
-
-const DEFAULT_TIME_MINUTES = 2
-const DEFAULT_INSERT_POSITION: InsertPosition = 'end'
-
-export const CreateStationForm = ({
-  position,
-  lineOptions,
-  transferNodes,
-  onSubmit,
-  onSuccess,
-  onCancel,
-  onLoadingChange,
-}: CreateStationFormProps) => {
+export const CreateStationForm = (props: CreateStationFormProps) => {
   const t = useTranslations('CreateStationForm')
 
-  const [stationName, setStationName] = useState('')
-  const [selectedLineId, setSelectedLineId] = useState('')
-  const [transferVisualId, setTransferVisualId] = useState('')
-  const [insertPosition, setInsertPosition] = useState<InsertPosition>(DEFAULT_INSERT_POSITION)
-  const [isLoading, setIsLoading] = useState(false)
+  const { state, actions } = useCreateStationForm(props)
 
-  const {
-    time,
-    minutes: timeMinutes,
-    isValidTime,
-    handleTimeChange,
-    reset: resetTime,
-  } = useTimeField(DEFAULT_TIME_MINUTES)
-
-  const insertPositionOptions = useInsertPositionOptions(selectedLineId)
-
-  useEffect(() => {
-    onLoadingChange?.(isLoading)
-  }, [isLoading, onLoadingChange])
-
-  const transferOptions = useMemo((): Array<DropdownOption<string>> => {
-    if (!selectedLineId) return []
-
-    return transferNodes
-      .filter((node) => !node.lineIds.includes(String(selectedLineId)))
-      .map((node) => ({ value: node.visualId, label: node.name, colors: node.colors }))
-  }, [transferNodes, selectedLineId])
-
-  const selectedTransfer = transferOptions.find((o) => o.value === transferVisualId)
-  const resolvedName = selectedTransfer?.label ?? stationName
-
-  const isSubmitDisabled = isLoading || !resolvedName.trim() || !selectedLineId || !isValidTime
-
-  const handleLineChange = (lineId: string) => {
-    setSelectedLineId(lineId)
-    setTransferVisualId('')
-    setInsertPosition(DEFAULT_INSERT_POSITION)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (isSubmitDisabled) return
-
-    setIsLoading(true)
-
-    try {
-      await onSubmit({
-        name: resolvedName.trim(),
-        lineId: selectedLineId,
-        x: position.x,
-        y: position.y,
-        transferToVisualId: transferVisualId || undefined,
-        timeMinutes,
-        insertPosition,
-      })
-
-      setStationName('')
-      setSelectedLineId('')
-      setTransferVisualId('')
-      setInsertPosition(DEFAULT_INSERT_POSITION)
-      resetTime()
-      onSuccess?.()
-    } catch (error) {
-      console.error('Error creating station:', error)
-
-      // BaseService.handleError добавляет к сообщению префикс контекста, поэтому endsWith
-      if (error instanceof Error && error.message.endsWith('ALREADY_ON_LINE')) {
-        alert(t('errorAlreadyOnLine'))
-      } else {
-        alert(t('errorCreate'))
-      }
-    } finally {
-      setIsLoading(false)
+  const onSubmit = async (e: React.FormEvent) => {
+    const result = await actions.handleSubmit(e)
+    if (!result.success) {
+      handleCreateStationError(result.error, t)
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <div className={styles.field}>
-        <Dropdown
-          value={selectedLineId}
-          options={lineOptions}
-          onChange={handleLineChange}
-          label={t('lineLabel')}
-          placeholder={t('linePlaceholder')}
-          emptyMessage={t('noLines')}
-        />
-      </div>
+    <form onSubmit={onSubmit} className={styles.form}>
+      <Dropdown
+        value={state.selectedLineId}
+        options={props.lineOptions}
+        onChange={actions.handleLineChange}
+        label={t('lineLabel')}
+        placeholder={t('linePlaceholder')}
+        emptyMessage={t('noLines')}
+      />
 
-      <div className={styles.field}>
-        <Dropdown
-          value={insertPosition}
-          options={insertPositionOptions}
-          onChange={setInsertPosition}
-          label={t('insertPositionLabel')}
-          placeholder={t('insertPositionPlaceholder')}
-          emptyMessage={t('noInsertPositionOptions')}
-          disabled={!selectedLineId || insertPositionOptions.length === 0}
-        />
-      </div>
+      <Dropdown
+        value={state.insertPosition}
+        options={state.insertPositionOptions}
+        onChange={actions.setInsertPosition}
+        label={t('insertPositionLabel')}
+        placeholder={t('insertPositionPlaceholder')}
+        emptyMessage={t('noInsertPositionOptions')}
+        disabled={!state.selectedLineId || state.insertPositionOptions.length === 0}
+      />
 
       <div className={styles.field}>
         <Input
           type="text"
           label={t('nameLabel')}
-          value={resolvedName}
-          onChange={(e) => setStationName(e.target.value)}
+          value={state.resolvedName}
+          onChange={(e) => actions.setStationName(e.target.value)}
           placeholder={t('namePlaceholder')}
-          disabled={!!transferVisualId}
+          disabled={!!state.transferVisualId}
           autoFocus
         />
       </div>
 
       <div className={styles.field}>
         <Dropdown
-          value={transferVisualId}
-          options={transferOptions}
-          onChange={setTransferVisualId}
+          value={state.transferVisualId}
+          options={state.transferOptions}
+          onChange={actions.setTransferVisualId}
           label={t('transferLabel')}
           placeholder={t('transferPlaceholder')}
           emptyMessage={t('noTransferOptions')}
-          disabled={!selectedLineId}
+          disabled={!state.selectedLineId}
         />
       </div>
 
@@ -166,14 +71,16 @@ export const CreateStationForm = ({
           type="text"
           inputMode="numeric"
           label={t('timeLabel')}
-          value={time}
-          onChange={handleTimeChange}
-          disabled={isLoading}
+          value={state.time}
+          onChange={actions.handleTimeChange}
+          disabled={state.isLoading}
         />
       </div>
 
       <div className={styles.coordinates}>
-        <span>{t('coordinates', { x: Math.round(position.x), y: Math.round(position.y) })}</span>
+        <span>
+          {t('coordinates', { x: Math.round(props.position.x), y: Math.round(props.position.y) })}
+        </span>
       </div>
 
       <div className={styles.spacer} />
@@ -183,15 +90,15 @@ export const CreateStationForm = ({
           title={t('cancel')}
           variant="outline"
           size="medium"
-          onClick={onCancel}
-          disabled={isLoading}
+          onClick={props.onCancel}
+          disabled={state.isLoading}
         />
         <Button
           title={t('submit')}
           size="medium"
           type="submit"
-          loading={isLoading}
-          disabled={isSubmitDisabled}
+          loading={state.isLoading}
+          disabled={state.isSubmitDisabled}
         />
       </div>
     </form>

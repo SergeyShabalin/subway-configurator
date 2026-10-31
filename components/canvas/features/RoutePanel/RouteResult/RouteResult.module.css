@@ -1,0 +1,27 @@
+.result {
+    display: flex;
+    flex-direction: column;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.summary strong {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-strong);
+}
+
+.summary span {
+    font-size: 13px;
+    color: var(--text-muted);
+}

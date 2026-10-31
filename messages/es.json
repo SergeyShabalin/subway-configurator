@@ -186,5 +186,23 @@
     "confirmDelete": "¿Eliminar el transbordo entre \"{from}\" y \"{to}\"?",
     "errorSave": "No se pudo guardar el tiempo de transbordo",
     "errorDelete": "No se pudo eliminar el transbordo"
+  },
+  "RoutePanel": {
+    "title": "Ruta",
+    "open": "Construir ruta",
+    "close": "Cerrar",
+    "from": "Desde",
+    "to": "Hasta",
+    "placeholder": "Selecciona estación",
+    "swap": "Cambiar",
+    "reset": "Restablecer",
+    "sameStation": "Las estaciones de origen y destino coinciden",
+    "notFound": "Ruta no encontrada",
+    "total": "{minutes} min en total",
+    "transfers": "{count, plural, one {# transbordo} other {# transbordos}}",
+    "transfer": "Transbordo",
+    "minutes": "{minutes} min",
+    "transferAt": "Transbordo: {from} → {to} ({minutes} min)",
+    "legMeta": "{count} estaciones · {minutes} min"
   }
 }

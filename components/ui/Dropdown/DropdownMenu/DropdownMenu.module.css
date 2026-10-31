@@ -16,6 +16,10 @@
     margin: 0;
 }
 
+.largeList {
+    max-height: 600px;
+}
+
 .menu::-webkit-scrollbar {
     width: 4px;
 }

@@ -1,0 +1,42 @@
+.leg {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 var(--timeline-padding);
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.titleRow {
+    display: grid;
+    grid-template-columns: var(--timeline-icon-width) 1fr;
+    align-items: center;
+    gap: var(--timeline-gap);
+}
+
+.dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    justify-self: center;
+    flex-shrink: 0;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-strong);
+    line-height: 1.2;
+}
+
+.meta {
+    font-size: 13px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+}

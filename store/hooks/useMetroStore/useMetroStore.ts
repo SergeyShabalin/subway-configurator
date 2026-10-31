@@ -14,9 +14,12 @@ interface MetroState {
   mode: 'view' | 'edit' | 'route'
   isLoading: boolean
   error: string | null
+  routeFromId: string
+  routeToId: string
   setSelectedStation: (id: string | null) => void
   setMode: (mode: 'view' | 'edit' | 'route') => void
   setDragging: (isDragging: boolean) => void
+  setRoutePoints: (fromId: string, toId: string) => void
   updateVisualPosition: (visualId: string, x: number, y: number) => void
   updateVisualLabelOffset: (visualId: string, labelX: number, labelY: number) => void
   loadData: () => Promise<void>
@@ -34,10 +37,13 @@ export const useMetroStore = create<MetroState>((set) => ({
   mode: 'view',
   isLoading: false,
   error: null,
+  routeFromId: '',
+  routeToId: '',
 
   setSelectedStation: (id) => set({ selectedStationId: id }),
   setMode: (mode) => set({ mode }),
   setDragging: (isDragging) => set({ isDragging }),
+  setRoutePoints: (fromId, toId) => set({ routeFromId: fromId, routeToId: toId }),
 
   updateVisualPosition: (visualId, x, y) =>
     set((state) => {

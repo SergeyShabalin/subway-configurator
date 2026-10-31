@@ -1,0 +1,75 @@
+.transfer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 16px 0;
+    padding: 0 var(--timeline-padding);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.titleRow {
+    display: grid;
+    grid-template-columns: var(--timeline-icon-width) 1fr;
+    align-items: center;
+    gap: var(--timeline-gap);
+    padding-left: 20px;
+}
+
+.icon {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ }
+
+.title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-strong);
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    flex-shrink: 0;
+}
+
+.stations {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-left: calc(var(--timeline-icon-width) + var(--timeline-gap));
+}
+
+.stationWithColor {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.colorBar {
+    width: 4px;
+    height: 14px;
+    border-radius: 2px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.arrow {
+    color: var(--text-muted);
+}
