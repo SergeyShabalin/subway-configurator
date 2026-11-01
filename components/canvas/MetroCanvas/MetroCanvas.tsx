@@ -4,11 +4,13 @@ import { CreateElement } from '@/components/canvas/features/CreateElement/Create
 import { EditLine } from '@/components/canvas/features/EditLine'
 import { EditStation } from '@/components/canvas/features/EditStation'
 import { EditTransfer } from '@/components/canvas/features/EditTransfer'
+import { useRouteFocus } from '@/components/canvas/features/RoutePanel/hooks/useRouteFocus'
 import { HintLetsStarted } from '@/components/canvas/MetroCanvas/HintLetsStarted/HintLetsStarted'
 import { useInitialCenterCanvas } from '@/components/canvas/MetroCanvas/hooks/useInitialCenterCanvas'
 import { useMetroLoader } from '@/components/canvas/MetroCanvas/hooks/useMetroLoader'
 import { useSegmentSelection } from '@/components/canvas/MetroCanvas/hooks/useSegmentSelection'
 import { useStationSelection } from '@/components/canvas/MetroCanvas/hooks/useStationSelection'
+import { useTouchGestures } from '@/components/canvas/MetroCanvas/hooks/useTouchGestures'
 import { useTransferSelection } from '@/components/canvas/MetroCanvas/hooks/useTransferSelection'
 import { MetroTransfers } from '@/components/canvas/MetroCanvas/MetroTransfers/MetroTransfers'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
@@ -69,6 +71,23 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
     useStageZoom(0.05, 20, 1.1)
 
   useInitialCenterCanvas({ isLoaded, visuals, width, height, centerStage })
+  useRouteFocus(centerStage, width, height)
+
+  const handleLongPress = useCallback(
+    (worldX: number, worldY: number) => {
+      openModal(worldX, worldY)
+    },
+    [openModal]
+  )
+
+  useTouchGestures({
+    stageRef,
+    stageScale,
+    stagePosition,
+    handleWheel,
+    onLongPress: handleLongPress,
+    enabled: !isBusy,
+  })
 
   const stationNames = useMemo(() => {
     const map: Record<string, string> = {}

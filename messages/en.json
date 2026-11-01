@@ -205,6 +205,9 @@
     "transferAt": "Transfer: {from} → {to} ({minutes} min)",
     "legMeta": "{count} stations · {minutes} min",
     "alternativeTab": "{minutes} min",
-    "slowerBy": "{minutes} min longer than the fastest"
+    "slowerBy": "{minutes} min longer than the fastest",
+    "via": "Via {n}",
+    "addVia": "Add stop",
+    "removeVia": "Remove stop"
   }
 }

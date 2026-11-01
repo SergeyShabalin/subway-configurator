@@ -16,11 +16,15 @@ interface MetroState {
   error: string | null
   routeFromId: string
   routeToId: string
+  routeViaIds: Array<string>
   routeAlternativeIndex: number
   setSelectedStation: (id: string | null) => void
   setMode: (mode: 'view' | 'edit' | 'route') => void
   setDragging: (isDragging: boolean) => void
-  setRoutePoints: (fromId: string, toId: string) => void
+  setRoutePoints: (fromId: string, toId: string, viaIds?: Array<string>) => void
+  setRouteVia: (index: number, stationId: string) => void
+  addRouteVia: () => void
+  removeRouteVia: (index: number) => void
   setRouteAlternativeIndex: (index: number) => void
   updateVisualPosition: (visualId: string, x: number, y: number) => void
   updateVisualLabelOffset: (visualId: string, labelX: number, labelY: number) => void
@@ -41,6 +45,7 @@ export const useMetroStore = create<MetroState>((set) => ({
   error: null,
   routeFromId: '',
   routeToId: '',
+  routeViaIds: [],
   routeAlternativeIndex: 0,
 
   setSelectedStation: (id) => set({ selectedStationId: id }),
@@ -48,8 +53,33 @@ export const useMetroStore = create<MetroState>((set) => ({
   setDragging: (isDragging) => set({ isDragging }),
 
   // При смене точек вкладка сбрасывается на самый быстрый маршрут
-  setRoutePoints: (fromId, toId) =>
-    set({ routeFromId: fromId, routeToId: toId, routeAlternativeIndex: 0 }),
+  setRoutePoints: (fromId, toId, viaIds) =>
+    set({
+      routeFromId: fromId,
+      routeToId: toId,
+      routeViaIds: viaIds ?? [],
+      routeAlternativeIndex: 0,
+    }),
+
+  setRouteVia: (index, stationId) =>
+    set((state) => {
+      const next = [...state.routeViaIds]
+      next[index] = stationId
+      return { routeViaIds: next, routeAlternativeIndex: 0 }
+    }),
+
+  addRouteVia: () =>
+    set((state) => ({
+      routeViaIds: [...state.routeViaIds, ''],
+      routeAlternativeIndex: 0,
+    })),
+
+  removeRouteVia: (index) =>
+    set((state) => ({
+      routeViaIds: state.routeViaIds.filter((_, i) => i !== index),
+      routeAlternativeIndex: 0,
+    })),
+
   setRouteAlternativeIndex: (index) => set({ routeAlternativeIndex: index }),
 
   updateVisualPosition: (visualId, x, y) =>

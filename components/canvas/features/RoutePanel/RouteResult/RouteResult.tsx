@@ -26,12 +26,14 @@ export const RouteResult = ({ routes, activeIndex, onSelect }: RouteResultProps)
   return (
     <div className={styles.result}>
       {routes.length > 1 && (
-        <Tabs
-          variant="outline"
-          value={String(activeIndex)}
-          onChange={(value) => onSelect(Number(value))}
-          tabs={tabs}
-        />
+        <div className={styles.tabs}>
+          <Tabs
+            variant="outline"
+            value={String(activeIndex)}
+            onChange={(value) => onSelect(Number(value))}
+            tabs={tabs}
+          />
+        </div>
       )}
 
       <div className={styles.summary}>
@@ -40,7 +42,9 @@ export const RouteResult = ({ routes, activeIndex, onSelect }: RouteResultProps)
         {slowerBy > 0 && <span>{t('slowerBy', { minutes: slowerBy })}</span>}
       </div>
 
-      <RouteTimeline legs={route.legs} />
+      <div className={styles.timeline}>
+        <RouteTimeline legs={route.legs} />
+      </div>
     </div>
   )
 }
