@@ -104,8 +104,22 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
 
         const baseColor = isDimmed ? dimmedColor : undefined
 
+        const interactiveProps = isDimmed
+          ? { listening: false }
+          : {
+              listening: true,
+              onMouseEnter: (e: Konva.KonvaEventObject<MouseEvent>) =>
+                handleMouseEnter(e, transfer.id),
+              onMouseLeave: handleMouseLeave,
+              onClick: (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) =>
+                handleClick(e, transfer.id),
+              onTap: (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) =>
+                handleClick(e, transfer.id),
+            }
+
         return (
           <Fragment key={transfer.id}>
+            {/* Подложка (не слушает события) */}
             <Line
               points={points}
               stroke={outlineColor}
@@ -115,7 +129,7 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
               lineCap="round"
               listening={false}
             />
-
+            {/* Основная линия */}
             <Line
               points={points}
               stroke={isHovered ? hoverColor : baseColor}
@@ -125,10 +139,7 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
               lineCap="round"
               hitStrokeWidth={20}
               {...gradientProps}
-              onMouseEnter={(e) => handleMouseEnter(e, transfer.id)}
-              onMouseLeave={handleMouseLeave}
-              onClick={(e) => handleClick(e, transfer.id)}
-              onTap={(e) => handleClick(e, transfer.id)}
+              {...interactiveProps}
             />
           </Fragment>
         )

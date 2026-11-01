@@ -203,6 +203,8 @@
     "transfer": "Transbordo",
     "minutes": "{minutes} min",
     "transferAt": "Transbordo: {from} → {to} ({minutes} min)",
-    "legMeta": "{count} estaciones · {minutes} min"
+    "legMeta": "{count} estaciones · {minutes} min",
+    "alternativeTab": "{minutes} min",
+    "slowerBy": "{minutes} min más que el más rápido"
   }
 }

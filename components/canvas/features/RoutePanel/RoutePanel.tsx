@@ -1,6 +1,7 @@
 'use client'
 
-import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
+import { useRoutes } from '@/components/canvas/MetroCanvas/hooks/useRoute'
+import { Button } from '@/components/ui'
 import { Dropdown } from '@/components/ui/Dropdown'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
@@ -19,7 +20,7 @@ type RouteStatus = 'idle' | 'sameStation' | 'notFound' | 'found'
  * Вся работа с данными вынесена в хуки:
  * - `useRouteOptions` — собирает опции для `Dropdown`.
  * - `useRouteSync` — сбрасывает неактуальные выбранные станции.
- * - `useRoute` — вычисляет сам маршрут.
+ * - `useRoutes` — вычисляет самый быстрый маршрут и похожие варианты.
  *
  * Если на схеме нет ни одной станции, панель не рендерится.
  */
@@ -30,7 +31,7 @@ export const RoutePanel = () => {
   const toId = useMetroStore((state) => state.routeToId)
   const setRoutePoints = useMetroStore((state) => state.setRoutePoints)
 
-  const route = useRoute()
+  const { routes, activeIndex, route, selectRoute } = useRoutes()
   const [isOpen, setIsOpen] = useState(false)
 
   const { options, dropdownOptions } = useRouteOptions()
@@ -88,27 +89,29 @@ export const RoutePanel = () => {
         </div>
 
         <div className={styles.actions}>
-          <button
-            type="button"
+          <Button
+            variant="ghost"
             className={styles.link}
             onClick={() => setRoutePoints(toId, fromId)}
             disabled={!hasPoints}
           >
             {t('swap')}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="ghost"
             className={styles.link}
             onClick={() => setRoutePoints('', '')}
             disabled={!hasPoints}
           >
             {t('reset')}
-          </button>
+          </Button>
         </div>
 
         {status === 'sameStation' && <p className={styles.message}>{t('sameStation')}</p>}
         {status === 'notFound' && <p className={styles.message}>{t('notFound')}</p>}
-        {status === 'found' && route && <RouteResult route={route} />}
+        {status === 'found' && (
+          <RouteResult routes={routes} activeIndex={activeIndex} onSelect={selectRoute} />
+        )}
       </section>
     </div>
   )

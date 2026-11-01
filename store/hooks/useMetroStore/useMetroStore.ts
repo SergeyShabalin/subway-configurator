@@ -16,10 +16,12 @@ interface MetroState {
   error: string | null
   routeFromId: string
   routeToId: string
+  routeAlternativeIndex: number
   setSelectedStation: (id: string | null) => void
   setMode: (mode: 'view' | 'edit' | 'route') => void
   setDragging: (isDragging: boolean) => void
   setRoutePoints: (fromId: string, toId: string) => void
+  setRouteAlternativeIndex: (index: number) => void
   updateVisualPosition: (visualId: string, x: number, y: number) => void
   updateVisualLabelOffset: (visualId: string, labelX: number, labelY: number) => void
   loadData: () => Promise<void>
@@ -39,11 +41,16 @@ export const useMetroStore = create<MetroState>((set) => ({
   error: null,
   routeFromId: '',
   routeToId: '',
+  routeAlternativeIndex: 0,
 
   setSelectedStation: (id) => set({ selectedStationId: id }),
   setMode: (mode) => set({ mode }),
   setDragging: (isDragging) => set({ isDragging }),
-  setRoutePoints: (fromId, toId) => set({ routeFromId: fromId, routeToId: toId }),
+
+  // При смене точек вкладка сбрасывается на самый быстрый маршрут
+  setRoutePoints: (fromId, toId) =>
+    set({ routeFromId: fromId, routeToId: toId, routeAlternativeIndex: 0 }),
+  setRouteAlternativeIndex: (index) => set({ routeAlternativeIndex: index }),
 
   updateVisualPosition: (visualId, x, y) =>
     set((state) => {
