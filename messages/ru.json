@@ -203,6 +203,8 @@
     "transfer": "Пересадка",
     "minutes": "{minutes} мин",
     "transferAt": "Пересадка: {from} → {to} ({minutes} мин)",
-    "legMeta": "{count} станций · {minutes} мин"
+    "legMeta": "{count} станций · {minutes} мин",
+    "alternativeTab": "{minutes} мин",
+    "slowerBy": "На {minutes} мин дольше самого быстрого"
   }
 }

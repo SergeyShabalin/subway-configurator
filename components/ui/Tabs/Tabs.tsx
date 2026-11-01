@@ -1,8 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { useMemo } from 'react'
+import { useMemo, type ComponentProps } from 'react'
 import styles from './Tabs.module.css'
+
+type TabVariant = NonNullable<ComponentProps<typeof Button>['variant']>
+
+const DEFAULT_ACTIVE_VARIANT: TabVariant = 'underline'
+const INACTIVE_VARIANT: TabVariant = 'ghost'
 
 export interface Tab<T extends string> {
   value: T
@@ -13,10 +18,17 @@ interface TabsProps<T extends string> {
   value: T
   onChange: (value: T) => void
   tabs: Array<Tab<T>>
+  variant?: TabVariant
   className?: string
 }
 
-export const Tabs = <T extends string>({ value, onChange, tabs, className }: TabsProps<T>) => {
+export const Tabs = <T extends string>({
+  value,
+  onChange,
+  tabs,
+  variant = DEFAULT_ACTIVE_VARIANT,
+  className,
+}: TabsProps<T>) => {
   const classNames = [styles.tabs, className].filter(Boolean).join(' ')
 
   const handlers = useMemo(() => {
@@ -40,7 +52,7 @@ export const Tabs = <T extends string>({ value, onChange, tabs, className }: Tab
             key={tab.value}
             role="tab"
             color="primary"
-            variant={isActive ? 'underline' : 'ghost'}
+            variant={isActive ? variant : INACTIVE_VARIANT}
             className={styles.tab}
             aria-selected={isActive}
             onClick={handlers[tab.value]}
