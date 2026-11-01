@@ -3,10 +3,11 @@
 import {
   buildRouteGraph,
   findRoutes,
+  findRoutesThrough,
   type RouteGraph,
   type RouteLookup,
   type RouteResult,
-} from '@/src/lib/routing/findRoute'
+} from '@/src/lib/routing'
 import { useMetroStore } from '@/store'
 import type { Line, Segment, Station, VisualTransfer } from '@/types/metro'
 import { useMemo } from 'react'
@@ -26,13 +27,12 @@ interface GraphCache extends Pick<DataRefs, 'segments' | 'visualToStations' | 'v
 }
 
 interface RoutesCache extends DataRefs {
-  fromId: string
-  toId: string
+  pointsKey: string
   routes: Array<RouteResult>
 }
 
 // Хук вызывают панель, линии и станции. Граф и маршруты считаются один раз на набор данных
-// и пару станций, пока ссылки на массивы в сторе не изменились.
+// и набор точек, пока ссылки на массивы в сторе не изменились.
 let graphCache: GraphCache | null = null
 let routesCache: RoutesCache | null = null
 
@@ -52,13 +52,16 @@ const getGraph = ({ segments, visualToStations, visualTransfers }: DataRefs): Ro
   return graph
 }
 
-const getRoutes = (data: DataRefs, fromId: string, toId: string): Array<RouteResult> => {
-  if (!fromId || !toId || fromId === toId) return NO_ROUTES
+const getRoutes = (data: DataRefs, pointIds: ReadonlyArray<string>): Array<RouteResult> => {
+  const points = pointIds.filter(Boolean)
+  if (points.length < 2) return NO_ROUTES
+  if (points.some((id, i) => i > 0 && id === points[i - 1])) return NO_ROUTES
+
+  const pointsKey = points.join('>')
 
   if (
     routesCache &&
-    routesCache.fromId === fromId &&
-    routesCache.toId === toId &&
+    routesCache.pointsKey === pointsKey &&
     routesCache.stations === data.stations &&
     routesCache.segments === data.segments &&
     routesCache.lines === data.lines &&
@@ -73,16 +76,22 @@ const getRoutes = (data: DataRefs, fromId: string, toId: string): Array<RouteRes
     linesById: new Map(data.lines.map((line) => [String(line.id), line])),
   }
 
-  const routes = findRoutes(getGraph(data), lookup, fromId, toId)
-  routesCache = { ...data, fromId, toId, routes }
+  const graph = getGraph(data)
+  const routes =
+    points.length === 2
+      ? findRoutes(graph, lookup, points[0], points[1])
+      : findRoutesThrough(graph, lookup, points)
+
+  routesCache = { ...data, pointsKey, routes }
 
   return routes
 }
 
-/** Самый быстрый маршрут и похожие варианты между выбранными точками. Считается из данных, поэтому не устаревает. */
+/** Самый быстрый маршрут (с учётом промежуточных точек) и варианты между выбранными точками. */
 export const useRoutes = () => {
   const fromId = useMetroStore((state) => state.routeFromId)
   const toId = useMetroStore((state) => state.routeToId)
+  const viaIds = useMetroStore((state) => state.routeViaIds)
   const stations = useMetroStore((state) => state.stations)
   const segments = useMetroStore((state) => state.segments)
   const lines = useMetroStore((state) => state.lines)
@@ -91,9 +100,11 @@ export const useRoutes = () => {
   const storedIndex = useMetroStore((state) => state.routeAlternativeIndex)
   const selectRoute = useMetroStore((state) => state.setRouteAlternativeIndex)
 
+  const pointIds = useMemo(() => [fromId, ...viaIds, toId], [fromId, viaIds, toId])
+
   const routes = useMemo(
-    () => getRoutes({ stations, segments, lines, visualToStations, visualTransfers }, fromId, toId),
-    [stations, segments, lines, visualToStations, visualTransfers, fromId, toId]
+    () => getRoutes({ stations, segments, lines, visualToStations, visualTransfers }, pointIds),
+    [stations, segments, lines, visualToStations, visualTransfers, pointIds]
   )
 
   // Индекс может быть не задан (старый стор) или указывать на вариант, которого после правки данных уже нет

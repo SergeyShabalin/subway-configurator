@@ -1,6 +1,6 @@
 .root {
     position: fixed;
-    top: 60px;
+    top: 10px;
     left: 10px;
     z-index: 5;
 }
@@ -44,6 +44,7 @@
     max-height: calc(100vh - 32px);
     padding: 16px;
     border-radius: var(--radius-lg);
+    overflow-y: auto;
 }
 
 .header {
@@ -64,6 +65,25 @@
     flex-direction: column;
     gap: 12px;
     flex-shrink: 0;
+}
+
+.viaRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.viaRow > :first-child {
+    flex: 1;
+    min-width: 0;
+}
+
+.iconButton {
+    flex: none;
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
 }
 
 .actions {
