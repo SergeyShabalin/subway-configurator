@@ -1,3 +1,4 @@
+import { TransferStyle } from '@/src/lib/services/transfers.service'
 import { useMetroStore } from '@/store'
 import { useMemo } from 'react'
 
@@ -8,6 +9,7 @@ export interface SelectedTransferData {
   fromColor?: string
   toColor?: string
   timeMinutes: number
+  style: TransferStyle
 }
 
 export const useSelectedTransferData = (transferId: string | null): SelectedTransferData | null => {
@@ -40,6 +42,7 @@ export const useSelectedTransferData = (transferId: string | null): SelectedTran
       fromColor: from.color,
       toColor: to.color,
       timeMinutes: transfer.time_minutes,
+      style: transfer.style ?? 'dashed',
     }
   }, [transferId, visualTransfers, visualToStations, stations, lines])
 }

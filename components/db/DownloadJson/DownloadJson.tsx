@@ -7,6 +7,7 @@ import { stationsRepo } from '@/src/lib/indexeddb/repositories/stations.reposito
 import { visualStationLinksRepo } from '@/src/lib/indexeddb/repositories/visual-station-links.repository'
 import { visualTransfersRepo } from '@/src/lib/indexeddb/repositories/visual-transfers.repository'
 import { useMetroStore } from '@/store'
+import type { LineType } from '@/types/metro'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import styles from './DownloadJson.module.css'
@@ -23,6 +24,7 @@ interface LineRecord {
   name: string
   color: string
   is_circular: number
+  type?: LineType
   visualStationIds: Array<string>
   logicalStationIds: Array<string>
 }
@@ -68,6 +70,7 @@ const buildLines = (lines: Array<LineRecord>) =>
       name: line.name,
       color: line.color,
       isCircular: Boolean(line.is_circular),
+      type: line.type ?? 'subway',
       visualStationIds: line.visualStationIds,
       logicalStationIds: line.logicalStationIds,
     }

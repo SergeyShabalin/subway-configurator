@@ -14,7 +14,6 @@ export const useMetroLoader = () => {
         labelOffset: v.labelOffset,
         connections: v.connections,
         displayMode: v.displayMode,
-        is_transfer: v.isTransfer ? 1 : 0,
       }
     }
 

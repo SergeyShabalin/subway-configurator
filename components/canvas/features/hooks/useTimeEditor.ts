@@ -2,6 +2,7 @@ import { type ChangeEvent, useCallback, useState } from 'react'
 
 interface UseTimeEditorOptions {
   initialMinutes: number
+  hasExternalChanges?: boolean
   onSave: (minutes: number) => Promise<void>
   onSuccess: () => void
   onSaveError?: (error: unknown) => void
@@ -9,6 +10,7 @@ interface UseTimeEditorOptions {
 
 export const useTimeEditor = ({
   initialMinutes,
+  hasExternalChanges = false,
   onSave,
   onSuccess,
   onSaveError,
@@ -18,7 +20,6 @@ export const useTimeEditor = ({
 
   const handleTimeChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-
     if (/^\d*$/.test(value)) {
       setTime(value)
     }
@@ -26,13 +27,12 @@ export const useTimeEditor = ({
 
   const parsedTime = Number(time)
   const isValidTime = time.trim() !== '' && parsedTime > 0
-  const isSaveDisabled = isLoading || !isValidTime || parsedTime === initialMinutes
+  const isTimeDirty = parsedTime !== initialMinutes
+  const isSaveDisabled = isLoading || !isValidTime || (!isTimeDirty && !hasExternalChanges)
 
-  // Общая обёртка: включает загрузку, закрывает модалку при успехе, ловит ошибку
   const runAction = useCallback(
     async (action: () => Promise<void>, onError: (error: unknown) => void) => {
       setIsLoading(true)
-
       try {
         await action()
         onSuccess()
@@ -47,7 +47,6 @@ export const useTimeEditor = ({
 
   const handleSave = useCallback(async () => {
     if (isSaveDisabled) return
-
     await runAction(
       () => onSave(parsedTime),
       (error) => {

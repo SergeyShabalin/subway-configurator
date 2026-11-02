@@ -8,7 +8,7 @@ import { visualStationLinksRepo } from '@/src/lib/indexeddb/repositories/visual-
 import { visualTransfersRepo } from '@/src/lib/indexeddb/repositories/visual-transfers.repository'
 import { visualsRepo } from '@/src/lib/indexeddb/repositories/visuals.repository'
 import { useMetroStore } from '@/store'
-import type { VisualStationLink, VisualTransfer } from '@/types/metro'
+import type { LineType, VisualStationLink, VisualTransfer } from '@/types/metro'
 import { useTranslations } from 'next-intl'
 import { ChangeEvent, DragEvent, useRef, useState } from 'react'
 import styles from './UploadJson.module.css'
@@ -30,6 +30,7 @@ interface LineInput {
   name: string
   color: string
   isCircular?: boolean
+  type?: LineType
   visualStationIds?: Array<string>
   logicalStationIds?: Array<string>
 }
@@ -84,6 +85,7 @@ interface LineRecord {
   name: string
   color: string
   is_circular: number
+  type: LineType
   visualStationIds: Array<string>
   logicalStationIds: Array<string>
 }
@@ -220,6 +222,7 @@ const buildLineRecords = (lines: Record<string, LineInput>): Array<LineRecord> =
     name: line.name,
     color: line.color,
     is_circular: line.isCircular ? 1 : 0,
+    type: line.type ?? 'subway',
     visualStationIds: line.visualStationIds ?? [],
     logicalStationIds: line.logicalStationIds ?? [],
   }))

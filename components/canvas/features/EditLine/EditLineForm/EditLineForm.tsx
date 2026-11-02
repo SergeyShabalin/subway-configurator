@@ -1,11 +1,12 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
+import { Dropdown, type DropdownOption } from '@/components/ui/Dropdown'
 import { Input } from '@/components/ui/Input/Input'
 import { linesService } from '@/src/lib/services'
-import type { Line } from '@/types/metro'
+import type { Line, LineType } from '@/types/metro'
 import { useTranslations } from 'next-intl'
-import { type ChangeEvent, useCallback, useState } from 'react'
+import { type ChangeEvent, useCallback, useMemo, useState } from 'react'
 import styles from './EditLineForm.module.css'
 
 interface EditLineFormProps {
@@ -20,7 +21,16 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
   const [name, setName] = useState(line.name)
   const [color, setColor] = useState(line.color)
   const [isCircular, setIsCircular] = useState(line.is_circular === 1)
+  const [lineType, setLineType] = useState<LineType>(line.type ?? 'subway')
   const [isLoading, setIsLoading] = useState(false)
+
+  const typeOptions = useMemo<Array<DropdownOption<LineType>>>(
+    () => [
+      { value: 'subway', label: t('typeSubway') },
+      { value: 'commuter_rail', label: t('typeCommuterRail') },
+    ],
+    [t]
+  )
 
   const handleNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value)
@@ -34,10 +44,15 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
     setIsCircular(e.target.checked)
   }, [])
 
+  const isDirty =
+    name !== line.name ||
+    color !== line.color ||
+    isCircular !== (line.is_circular === 1) ||
+    lineType !== (line.type ?? 'subway')
+
   const handleSave = useCallback(async () => {
     if (!name.trim()) return
-    if (name === line.name && color === line.color && isCircular === (line.is_circular === 1))
-      return
+    if (!isDirty) return
 
     setIsLoading(true)
 
@@ -46,6 +61,7 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
         name: name.trim(),
         color,
         is_circular: isCircular ? 1 : 0,
+        type: lineType,
       })
       await reloadData()
       onClose()
@@ -55,12 +71,9 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
     } finally {
       setIsLoading(false)
     }
-  }, [name, color, isCircular, line, reloadData, onClose, t])
+  }, [name, color, isCircular, lineType, line, isDirty, reloadData, onClose, t])
 
-  const isDisabled =
-    isLoading ||
-    !name.trim() ||
-    (name === line.name && color === line.color && isCircular === (line.is_circular === 1))
+  const isDisabled = isLoading || !name.trim() || !isDirty
 
   return (
     <div className={styles.content}>
@@ -70,6 +83,17 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
           type="text"
           value={name}
           onChange={handleNameChange}
+          disabled={isLoading}
+        />
+      </div>
+
+      <div className={styles.field}>
+        <Dropdown
+          value={lineType}
+          options={typeOptions}
+          onChange={setLineType}
+          label={t('typeLabel')}
+          placeholder={t('typePlaceholder')}
           disabled={isLoading}
         />
       </div>

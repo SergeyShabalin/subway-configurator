@@ -5,7 +5,7 @@ import { CANVAS_DIMMED_COLOR } from '@/components/canvas/shared/dimmedColors'
 import { CANVAS_HOVER_COLOR, CANVAS_TRANSFER_OUTLINE } from '@/components/canvas/shared/themeColors'
 import { useTheme } from '@/context/theme-context'
 import { useMetroStore } from '@/store'
-import type { VisualStation } from '@/types/metro'
+import type { VisualStation, VisualTransfer } from '@/types/metro'
 import type Konva from 'konva'
 import { Fragment, useMemo, useState } from 'react'
 import { Line } from 'react-konva'
@@ -17,6 +17,14 @@ interface MetroTransfersProps {
 
 const FALLBACK_COLOR = '#94a3b8'
 
+type TransferStyle = NonNullable<VisualTransfer['style']>
+
+const DASH_PATTERN: Record<TransferStyle, Array<number> | undefined> = {
+  dashed: [6, 6],
+  dotted: [1.5, 5],
+  solid: undefined,
+}
+
 const buildGradientStops = (fromColor: string, toColor: string) => [
   0,
   fromColor,
@@ -27,6 +35,11 @@ const buildGradientStops = (fromColor: string, toColor: string) => [
   1,
   toColor,
 ]
+
+const resolveStyle = (style?: string): TransferStyle => {
+  if (style === 'dotted' || style === 'solid' || style === 'dashed') return style
+  return 'dashed'
+}
 
 export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps) => {
   const { theme } = useTheme()
@@ -79,7 +92,6 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
       {visualTransfers.map((transfer) => {
         const from = visuals[transfer.from_visual_id]
         const to = visuals[transfer.to_visual_id]
-
         if (!from || !to) return null
 
         const fromColor = visualColors[transfer.from_visual_id] ?? FALLBACK_COLOR
@@ -87,6 +99,8 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
 
         const points = [from.x, from.y, to.x, to.y]
         const isHovered = hoveredTransfer === transfer.id
+        const style = resolveStyle(transfer.style)
+        const dash = DASH_PATTERN[style]
 
         const isDimmed = routeVisualIds
           ? !routeVisualIds.has(transfer.from_visual_id) ||
@@ -119,22 +133,20 @@ export const MetroTransfers = ({ visuals, onTransferClick }: MetroTransfersProps
 
         return (
           <Fragment key={transfer.id}>
-            {/* Подложка (не слушает события) */}
             <Line
               points={points}
               stroke={outlineColor}
               strokeWidth={5}
-              dash={[6, 6]}
+              dash={dash}
               opacity={0.8}
               lineCap="round"
               listening={false}
             />
-            {/* Основная линия */}
             <Line
               points={points}
               stroke={isHovered ? hoverColor : baseColor}
               strokeWidth={3}
-              dash={[6, 6]}
+              dash={dash}
               opacity={0.95}
               lineCap="round"
               hitStrokeWidth={20}

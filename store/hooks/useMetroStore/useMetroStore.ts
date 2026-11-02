@@ -133,6 +133,7 @@ export const useMetroStore = create<MetroState>((set) => ({
         name: l.name,
         color: l.color,
         is_circular: l.isCircular ? 1 : 0,
+        type: l.type ?? 'subway',
         visualStationIds: l.visualStationIds,
         logicalStationIds: l.logicalStationIds,
       }))
@@ -150,7 +151,6 @@ export const useMetroStore = create<MetroState>((set) => ({
           },
           connections: v.connections ?? [],
           displayMode: v.displayMode ?? 'single',
-          is_transfer: v.isTransfer ? 1 : 0,
         }
       }
 

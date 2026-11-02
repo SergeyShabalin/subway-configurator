@@ -1,4 +1,4 @@
-import type { InsertPosition } from '@/types/metro'
+import type { InsertPosition, LineType } from '@/types/metro'
 
 export interface AddElementProps {
   isOpen: boolean
@@ -20,6 +20,7 @@ export interface CreateStationPayload {
 export interface CreateLinePayload {
   name: string
   color: string
+  type?: LineType
 }
 
 export interface TransferNode {

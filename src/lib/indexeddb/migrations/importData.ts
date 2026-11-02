@@ -5,7 +5,7 @@ import {
   visualsRepo,
   visualStationLinksRepo,
 } from '@/src/lib/indexeddb/repositories'
-import type { Segment, Station, Visual, VisualStationLink } from '@/types/metro'
+import type { Line, LineType, Segment, Station, Visual, VisualStationLink } from '@/types/metro'
 import { linesRepo } from '../repositories/lines.repository'
 
 interface MetroJsonLine {
@@ -13,6 +13,7 @@ interface MetroJsonLine {
   name: string
   color: string
   isCircular?: boolean
+  type?: LineType
   visualStationIds?: Array<string>
   logicalStationIds?: Array<string>
 }
@@ -49,26 +50,18 @@ interface MetroJson {
   }
 }
 
-interface LineRecord {
-  id: string
-  name: string
-  color: string
-  is_circular: number
-  visualStationIds: Array<string>
-  logicalStationIds: Array<string>
-}
-
 const data = metroData as unknown as MetroJson
 
 export async function importMetroData() {
   console.log('Starting migration to IndexedDB...')
 
   try {
-    const lines: Array<LineRecord> = Object.values(data.lines).map((line) => ({
+    const lines: Array<Line> = Object.values(data.lines).map((line) => ({
       id: String(line.id),
       name: line.name,
       color: line.color,
       is_circular: line.isCircular ? 1 : 0,
+      type: line.type ?? 'subway',
       visualStationIds: line.visualStationIds ?? [],
       logicalStationIds: line.logicalStationIds ?? [],
     }))
@@ -78,6 +71,7 @@ export async function importMetroData() {
       lines.map((l) => ({
         id: l.id,
         name: l.name,
+        type: l.type,
         visualStationIds: l.visualStationIds.length,
         logicalStationIds: l.logicalStationIds.length,
       }))
@@ -120,7 +114,6 @@ export async function importMetroData() {
         x: v.labelOffset?.x ?? 0,
         y: v.labelOffset?.y ?? -60,
       },
-      is_transfer: v.connections.length > 1 ? 1 : 0,
     }))
 
     await visualsRepo.clear()

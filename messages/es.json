@@ -37,12 +37,15 @@
     "insertAfter": "Después de la estación «{name}»"
   },
   "CreateLineForm": {
+    "typeLabel": "Tipo de línea",
+    "typePlaceholder": "Selecciona el tipo",
+    "typeSubway": "Metro",
+    "typeCommuterRail": "Tren de cercanías",
     "nameLabel": "Nombre de la línea",
-    "namePlaceholder": "Introduce el nombre de la línea...",
+    "namePlaceholder": "Introduce el nombre de la línea",
     "colorLabel": "Color de la línea",
     "cancel": "Cancelar",
-    "submit": "Añadir línea",
-    "submitting": "Añadiendo...",
+    "submit": "Crear",
     "errorCreate": "No se pudo crear la línea"
   },
   "ToolsMenu": {
@@ -144,7 +147,12 @@
     "submit": "Crear",
     "errorCreate": "No se pudo crear el transbordo",
     "errorAlreadyExists": "Este transbordo ya existe",
-    "errorSameVisual": "No se puede crear un transbordo a la misma estación"
+    "errorSameVisual": "No se puede crear un transbordo a la misma estación",
+    "styleLabel": "Tipo de transbordo",
+    "stylePlaceholder": "Selecciona el tipo",
+    "styleDashed": "Estándar (discontinuo)",
+    "styleDotted": "Superficie (punteado)",
+    "styleSolid": "Continuo"
   },
   "EditSegmentModal": {
     "title": "Información del tramo",
@@ -171,10 +179,28 @@
     "colorLabel": "Color de la línea",
     "save": "Guardar",
     "errorSave": "Error al guardar la línea",
-    "circularLabel": "Línea circular"
+    "circularLabel": "Línea circular",
+    "typeLabel": "Tipo de línea",
+    "typePlaceholder": "Selecciona el tipo",
+    "typeSubway": "Metro",
+    "typeCommuterRail": "Tren de cercanías"
   },
   "EditTransfer": {
-    "title": "Editar transbordo"
+    "title": "Editar transbordo",
+    "from": "Desde la estación",
+    "to": "Hasta la estación",
+    "timeLabel": "Tiempo de transbordo",
+    "minutes": "minutos",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Eliminar el transbordo entre \"{from}\" y \"{to}\"?",
+    "errorSave": "No se pudo guardar el tiempo de transbordo",
+    "errorDelete": "No se pudo eliminar el transbordo",
+    "styleLabel": "Tipo de transbordo",
+    "stylePlaceholder": "Selecciona el tipo",
+    "styleDashed": "Estándar (discontinuo)",
+    "styleDotted": "Superficie (punteado)",
+    "styleSolid": "Continuo"
   },
   "EditTransferModal": {
     "from": "Desde la estación",

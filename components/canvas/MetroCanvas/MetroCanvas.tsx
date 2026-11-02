@@ -37,7 +37,6 @@ export interface MetroCanvasRef {
 
 export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
   const lineRef = useRef<Record<string, Konva.Line>>({})
-  const circleRef = useRef<Record<string, Konva.Circle>>({})
   const textRef = useRef<Record<string, Konva.Text>>({})
 
   const visuals = useMetroStore((state) => state.visuals)
@@ -167,12 +166,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
         <Layer>
           <MetroLines visuals={visuals} lineRef={lineRef} onSegmentClick={selectSegment} />
           <MetroTransfers visuals={visuals} onTransferClick={selectTransfer} />
-          <MetroStations
-            circleRef={circleRef}
-            lineRef={lineRef}
-            textRef={textRef}
-            onStationClick={selectStation}
-          />
+          <MetroStations lineRef={lineRef} textRef={textRef} onStationClick={selectStation} />
           <MetroLabels
             stationNames={stationNames}
             textRef={textRef}

@@ -6,14 +6,17 @@ const CONTEXT = {
   getAll: 'TransfersService.getAll',
   create: 'TransfersService.create',
   updateTime: 'TransfersService.updateTime',
+  updateStyle: 'TransfersService.updateStyle',
   delete: 'TransfersService.delete',
 } as const
+
+export type TransferStyle = NonNullable<VisualTransfer['style']>
 
 interface CreateTransferInput {
   fromVisualId: string
   toVisualId: string
   timeMinutes: number
-  style?: 'dashed' | 'dotted' | 'solid'
+  style?: TransferStyle
 }
 
 export class TransfersService extends BaseService {
@@ -36,7 +39,6 @@ export class TransfersService extends BaseService {
       }
 
       const id = `transfer-${data.fromVisualId}-${data.toVisualId}`
-
       const existing = await visualTransfersRepo.getById(id)
 
       if (existing) {
@@ -52,7 +54,6 @@ export class TransfersService extends BaseService {
       }
 
       await visualTransfersRepo.save(transfer)
-
       return transfer
     })
   }
@@ -61,6 +62,10 @@ export class TransfersService extends BaseService {
     return this.run(CONTEXT.updateTime, () =>
       visualTransfersRepo.update(transferId, { time_minutes: timeMinutes })
     )
+  }
+
+  async updateStyle(transferId: string, style: TransferStyle): Promise<void> {
+    return this.run(CONTEXT.updateStyle, () => visualTransfersRepo.update(transferId, { style }))
   }
 
   async delete(transferId: string): Promise<void> {

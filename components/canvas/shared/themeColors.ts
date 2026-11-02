@@ -7,6 +7,11 @@ export const CANVAS_HOVER_COLOR = {
   [THEME_VALUE.LIGHT]: '#191818',
 } as const
 
+export const CANVAS_BACKGROUND_COLOR = {
+  light: '#ffffff',
+  dark: '#1a1a1a',
+} as const
+
 export const CANVAS_STATION_FILL = {
   [THEME_VALUE.DARK]: '#020913',
   [THEME_VALUE.LIGHT]: LIGHT_BACKGROUND,

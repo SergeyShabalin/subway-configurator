@@ -27,12 +27,14 @@ export const RouteResult = ({ routes, activeIndex, onSelect }: RouteResultProps)
     <div className={styles.result}>
       {routes.length > 1 && (
         <div className={styles.tabs}>
-          <Tabs
-            variant="outline"
-            value={String(activeIndex)}
-            onChange={(value) => onSelect(Number(value))}
-            tabs={tabs}
-          />
+          <div className={styles.tabsInner}>
+            <Tabs
+              variant="outline"
+              value={String(activeIndex)}
+              onChange={(value) => onSelect(Number(value))}
+              tabs={tabs}
+            />
+          </div>
         </div>
       )}
 
