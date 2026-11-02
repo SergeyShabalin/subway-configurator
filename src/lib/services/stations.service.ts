@@ -82,7 +82,6 @@ export class StationsService extends BaseService {
           x: data.x,
           y: data.y,
           labelOffset: { ...DEFAULT_LABEL_OFFSET },
-          is_transfer: 0,
         })
       }
 
@@ -110,10 +109,6 @@ export class StationsService extends BaseService {
         visualStationIds: updatedVisualIds,
         logicalStationIds: updatedLogicalIds,
       })
-
-      if (!isNewVisual) {
-        await visualsRepo.update(visualId, { is_transfer: 1 })
-      }
 
       // Направление сегмента совпадает с порядком станций на линии
       const segment = neighborId
@@ -276,8 +271,6 @@ export class StationsService extends BaseService {
           visualsRepo.delete(visualId),
           ...transfers.map((tr) => visualTransfersRepo.delete(tr.id)),
         ])
-      } else if (remainingCount === 1) {
-        await visualsRepo.update(visualId, { is_transfer: 0 })
       }
     })
   }

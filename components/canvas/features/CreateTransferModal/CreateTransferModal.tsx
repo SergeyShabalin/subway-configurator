@@ -1,12 +1,12 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import type { DropdownOption } from '@/components/ui/Dropdown'
-import { Dropdown } from '@/components/ui/Dropdown'
+import { Dropdown, type DropdownOption } from '@/components/ui/Dropdown'
 import { TransferIcon } from '@/components/ui/Icons/TransferIcon/TransferIcon'
 import { Input } from '@/components/ui/Input/Input'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { transfersService } from '@/src/lib/services'
+import { TransferStyle } from '@/src/lib/services/transfers.service'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
@@ -20,6 +20,8 @@ interface CreateTransferModalProps {
   onSuccess?: () => Promise<void>
 }
 
+const DEFAULT_STYLE: TransferStyle = 'dashed'
+
 export const CreateTransferModal = ({
   isOpen,
   fromVisualId,
@@ -32,11 +34,20 @@ export const CreateTransferModal = ({
 
   const [selectedVisualId, setSelectedVisualId] = useState('')
   const [timeMinutes, setTimeMinutes] = useState(3)
+  const [transferStyle, setTransferStyle] = useState<TransferStyle>(DEFAULT_STYLE)
   const [isLoading, setIsLoading] = useState(false)
 
+  const styleOptions = useMemo<Array<DropdownOption<TransferStyle>>>(
+    () => [
+      { value: 'dashed', label: t('styleDashed') },
+      { value: 'dotted', label: t('styleDotted') },
+      { value: 'solid', label: t('styleSolid') },
+    ],
+    [t]
+  )
+
   const options: Array<DropdownOption<string>> = useMemo(() => {
-    const fromStationIds = visualToStations[fromVisualId] ?? []
-    const fromStationId = fromStationIds[0]
+    const fromStationId = (visualToStations[fromVisualId] ?? [])[0]
     const fromStation = fromStationId ? stations.find((s) => s.id === fromStationId) : undefined
     const fromLineId = fromStation?.line_id
 
@@ -44,14 +55,12 @@ export const CreateTransferModal = ({
       .filter((v) => v.id !== fromVisualId)
       .filter((v) => !existingTransferIds.includes(v.id))
       .filter((v) => {
-        const stationIds = visualToStations[v.id] ?? []
-        const stationId = stationIds[0]
+        const stationId = (visualToStations[v.id] ?? [])[0]
         const station = stationId ? stations.find((s) => s.id === stationId) : undefined
         return station?.line_id !== fromLineId
       })
       .map((v) => {
-        const stationIds = visualToStations[v.id] ?? []
-        const stationId = stationIds[0]
+        const stationId = (visualToStations[v.id] ?? [])[0]
         const station = stations.find((s) => s.id === stationId)
         const line = station
           ? lines.find((l) => String(l.id) === String(station.line_id))
@@ -77,11 +86,13 @@ export const CreateTransferModal = ({
         fromVisualId,
         toVisualId: selectedVisualId,
         timeMinutes,
+        style: transferStyle,
       })
 
       await loadData()
       setSelectedVisualId('')
       setTimeMinutes(3)
+      setTransferStyle(DEFAULT_STYLE)
       onSuccess?.()
     } catch (error) {
       console.error('Error creating transfer:', error)
@@ -108,6 +119,14 @@ export const CreateTransferModal = ({
           label={t('targetLabel')}
           placeholder={t('targetPlaceholder')}
           emptyMessage={t('noTargets')}
+        />
+
+        <Dropdown
+          value={transferStyle}
+          options={styleOptions}
+          onChange={setTransferStyle}
+          label={t('styleLabel')}
+          placeholder={t('stylePlaceholder')}
         />
 
         <Input

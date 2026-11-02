@@ -33,6 +33,7 @@ export const graphService = {
         name: l.name,
         color: l.color,
         isCircular: Boolean(l.is_circular),
+        type: l.type ?? 'subway',
         visualStationIds: l.visualStationIds || [],
         logicalStationIds: l.logicalStationIds || [],
       })),
@@ -54,7 +55,6 @@ export const graphService = {
           },
           connections,
           displayMode: connections.length > 1 ? 'multiple' : 'single',
-          isTransfer: Boolean(v.is_transfer),
         }
       }),
       segments: segments.map((s) => ({

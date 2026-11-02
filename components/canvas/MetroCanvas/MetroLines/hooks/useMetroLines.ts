@@ -1,4 +1,5 @@
 import { useMetroStore } from '@/store'
+import type { LineType } from '@/types/metro'
 import { useMemo } from 'react'
 
 export interface MetroLineData {
@@ -7,6 +8,7 @@ export interface MetroLineData {
   color: string
   visualStationIds: Array<string>
   isCircular: boolean
+  type: LineType
 }
 
 export interface UseMetroLinesResult {
@@ -23,6 +25,7 @@ export const useMetroLines = (): UseMetroLinesResult => {
       color: line.color,
       visualStationIds: line.visualStationIds ?? [],
       isCircular: line.is_circular === 1,
+      type: line.type ?? 'subway',
     }))
   }, [lines])
 

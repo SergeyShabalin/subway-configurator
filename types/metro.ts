@@ -6,7 +6,6 @@ export interface Visual {
     x: number
     y: number
   }
-  is_transfer: number
 }
 
 export interface VisualStation {
@@ -19,7 +18,6 @@ export interface VisualStation {
   }
   connections: Array<string>
   displayMode: 'single' | 'multiple'
-  is_transfer: number
 }
 
 export interface Station {
@@ -37,6 +35,8 @@ export interface Segment {
   time_minutes: number
 }
 
+export type LineType = 'subway' | 'commuter_rail'
+
 export interface Line {
   id: string
   name: string
@@ -44,6 +44,7 @@ export interface Line {
   is_circular: number
   visualStationIds: Array<string>
   logicalStationIds: Array<string>
+  type: LineType
 }
 
 export interface VisualTransfer {
@@ -71,6 +72,7 @@ export interface GraphLine {
   isCircular: boolean
   visualStationIds: Array<string>
   logicalStationIds: Array<string>
+  type: LineType
 }
 
 export interface GraphStation {
@@ -89,7 +91,6 @@ export interface GraphVisual {
   }
   connections: Array<string>
   displayMode: 'single' | 'multiple'
-  isTransfer: boolean
 }
 
 export interface GraphSegment {

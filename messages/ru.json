@@ -37,6 +37,10 @@
     "insertAfter": "После последней станции «{name}»"
   },
   "CreateLineForm": {
+    "typeLabel": "Тип линии",
+    "typePlaceholder": "Выберите тип",
+    "typeSubway": "Метро",
+    "typeCommuterRail": "Наземные поезда",
     "nameLabel": "Название ветки",
     "namePlaceholder": "Введите название ветки...",
     "colorLabel": "Цвет ветки",
@@ -144,7 +148,12 @@
     "submit": "Создать",
     "errorCreate": "Не удалось создать переход",
     "errorAlreadyExists": "Такой переход уже существует",
-    "errorSameVisual": "Нельзя создать переход на ту же станцию"
+    "errorSameVisual": "Нельзя создать переход на ту же станцию",
+    "styleLabel": "Тип перехода",
+    "stylePlaceholder": "Выберите тип",
+    "styleDashed": "Стандартный (пунктир)",
+    "styleDotted": "Наземный (точки)",
+    "styleSolid": "Сплошной"
   },
   "EditSegmentModal": {
     "title": "Информация о сегменте",
@@ -171,10 +180,28 @@
     "colorLabel": "Цвет ветки",
     "save": "Сохранить",
     "errorSave": "Ошибка при сохранении ветки",
-    "circularLabel": "Кольцевая линия"
+    "circularLabel": "Кольцевая линия",
+    "typeLabel": "Тип линии",
+    "typePlaceholder": "Выберите тип",
+    "typeSubway": "Метро",
+    "typeCommuterRail": "Наземные поезда"
   },
   "EditTransfer": {
-    "title": "Изменить переход"
+    "title": "Изменить переход",
+    "from": "от станции",
+    "to": "до станции",
+    "timeLabel": "Время перехода",
+    "minutes": "минут",
+    "save": "Сохранить",
+    "delete": "Удалить",
+    "confirmDelete": "Удалить переход между \"{from}\" и \"{to}\"?",
+    "errorSave": "Не удалось сохранить время перехода",
+    "errorDelete": "Не удалось удалить переход",
+    "styleLabel": "Тип перехода",
+    "stylePlaceholder": "Выберите тип",
+    "styleDashed": "Стандартный (пунктир)",
+    "styleDotted": "Наземный (точки)",
+    "styleSolid": "Сплошной"
   },
   "EditTransferModal": {
     "from": "от станции",

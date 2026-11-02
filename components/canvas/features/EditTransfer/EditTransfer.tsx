@@ -2,7 +2,8 @@
 
 import { TransferIcon } from '@/components/ui/Icons/TransferIcon/TransferIcon'
 import { Modal } from '@/components/ui/Modal/Modal'
-import { transfersService } from '@/src/lib/services/'
+import { transfersService } from '@/src/lib/services'
+import { TransferStyle } from '@/src/lib/services/transfers.service'
 import { useTranslations } from 'next-intl'
 import { useSelectedTransferData } from '../../MetroCanvas/hooks/useSelectedTransferData'
 import { EditTransferModal } from './EditTransferModal/EditTransferModal'
@@ -18,9 +19,12 @@ export const EditTransfer = ({ isOpen, transferId, onClose, reloadData }: EditTr
   const t = useTranslations('EditTransfer')
   const transferData = useSelectedTransferData(transferId)
 
-  const handleSave = async (timeMinutes: number) => {
+  const handleSave = async (timeMinutes: number, style: TransferStyle) => {
     if (!transferId) return
-    await transfersService.updateTime(transferId, timeMinutes)
+    await Promise.all([
+      transfersService.updateTime(transferId, timeMinutes),
+      transfersService.updateStyle(transferId, style),
+    ])
     await reloadData()
   }
 
@@ -42,6 +46,7 @@ export const EditTransfer = ({ isOpen, transferId, onClose, reloadData }: EditTr
         fromColor={transferData.fromColor}
         toColor={transferData.toColor}
         timeMinutes={transferData.timeMinutes}
+        style={transferData.style ?? 'dashed'}
         onSave={handleSave}
         onDelete={handleDelete}
       />

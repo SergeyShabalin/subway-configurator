@@ -6,15 +6,17 @@ import { useTheme } from '@/context/theme-context'
 import type Konva from 'konva'
 import { memo, useRef, useState } from 'react'
 import { Circle } from 'react-konva'
-import type { StationCircleProps } from './types'
-
-const BASE_RADIUS = 7
-const TRANSFER_BASE_RADIUS = 12
-const RING_STEP = 2.5
-const RING_WIDTH = 2.5
-const MIN_RING_RADIUS = 3
-const DRAG_THRESHOLD = 2
-const HOVER_SHADOW_BLUR = 4
+import type { StationCircleProps } from '../types'
+import {
+  BASE_RADIUS,
+  DRAG_THRESHOLD,
+  HOVER_SHADOW_BLUR,
+  MIN_RING_RADIUS,
+  MULTI_LINE_BASE_RADIUS,
+  RING_STEP,
+  RING_WIDTH,
+  TRANSFER_STATION_RADIUS,
+} from './constants'
 
 interface StationCircleUIProps extends StationCircleProps {
   isLocked: boolean
@@ -23,7 +25,8 @@ interface StationCircleUIProps extends StationCircleProps {
 const StationCircleUI = memo(
   ({
     visual,
-    isTransfer,
+    isMultiLine,
+    isTransferStation,
     color,
     colors,
     stationId,
@@ -44,12 +47,17 @@ const StationCircleUI = memo(
     const hoverColor = CANVAS_HOVER_COLOR[theme]
     const dimmedColor = CANVAS_DIMMED_COLOR[theme]
 
-    const multiColors = isTransfer && colors && colors.length >= 2 ? colors : null
-    const baseRadius = multiColors ? TRANSFER_BASE_RADIUS : BASE_RADIUS
+    const baseRadius = isMultiLine
+      ? MULTI_LINE_BASE_RADIUS
+      : isTransferStation
+        ? TRANSFER_STATION_RADIUS
+        : BASE_RADIUS
+
     const strokeColor = isDimmed ? dimmedColor : color || '#888888'
     const strokeWidth = RING_WIDTH
 
-    // События навешиваются только если элемент не заблокирован
+    const multiColors = isMultiLine && colors && colors.length >= 2 ? colors : null
+
     const interactiveProps = isLocked
       ? { listening: false }
       : {
@@ -150,9 +158,7 @@ const StationCircleUI = memo(
 
 StationCircleUI.displayName = 'StationCircleUI'
 
-// Экспортируем оригинальный компонент, который сам решает, заблокирован ли он
 export const StationCircle = (props: StationCircleProps) => {
-  // В оригинальном компоненте isDimmed приходит снаружи из MetroStations
   return <StationCircleUI {...props} isLocked={props.isDimmed ?? false} />
 }
 

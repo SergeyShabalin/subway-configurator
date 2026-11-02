@@ -6,7 +6,7 @@ import type Konva from 'konva'
 import { useCallback } from 'react'
 import { StationCircle } from './StationCircle'
 import { useMetroDrag, useMetroPosition, useMetroStations } from './hooks'
-import type { MetroStationsProps, StationData } from './types'
+import type { MetroStationsProps } from './types'
 
 export const MetroStations = ({ lineRef, textRef, onStationClick }: MetroStationsProps) => {
   const visuals = useMetroStore((state) => state.visuals)
@@ -36,20 +36,19 @@ export const MetroStations = ({ lineRef, textRef, onStationClick }: MetroStation
   return (
     <>
       {visualValues.map((visual) => {
-        const data: StationData | undefined = visualData[visual.id]
-
+        const data = visualData[visual.id]
         if (!data) return null
 
         const stationIds = visualToStations[visual.id] ?? []
         const stationId = stationIds[0]
-
         if (!stationId) return null
 
         return (
           <StationCircle
             key={visual.id}
             visual={visual}
-            isTransfer={data.isTransfer}
+            isMultiLine={data.isMultiLine}
+            isTransferStation={data.isTransferStation}
             color={data.color}
             colors={data.colors}
             stationId={stationId}

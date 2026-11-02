@@ -37,12 +37,15 @@
     "insertAfter": "After the station «{name}»"
   },
   "CreateLineForm": {
+    "typeLabel": "Line type",
+    "typePlaceholder": "Select type",
+    "typeSubway": "Metro",
+    "typeCommuterRail": "Commuter rail",
     "nameLabel": "Line name",
-    "namePlaceholder": "Enter line name...",
+    "namePlaceholder": "Enter line name",
     "colorLabel": "Line color",
     "cancel": "Cancel",
-    "submit": "Add line",
-    "submitting": "Adding...",
+    "submit": "Create",
     "errorCreate": "Failed to create line"
   },
   "ToolsMenu": {
@@ -144,7 +147,12 @@
     "submit": "Create",
     "errorCreate": "Failed to create transfer",
     "errorAlreadyExists": "This transfer already exists",
-    "errorSameVisual": "Cannot create a transfer to the same station"
+    "errorSameVisual": "Cannot create a transfer to the same station",
+    "styleLabel": "Transfer type",
+    "stylePlaceholder": "Select type",
+    "styleDashed": "Standard (dashed)",
+    "styleDotted": "Overground (dotted)",
+    "styleSolid": "Solid"
   },
   "EditSegmentModal": {
     "title": "Segment information",
@@ -171,10 +179,28 @@
     "colorLabel": "Line color",
     "save": "Save",
     "errorSave": "Failed to save line",
-    "circularLabel": "Loop line"
+    "circularLabel": "Loop line",
+    "typeLabel": "Line type",
+    "typePlaceholder": "Select type",
+    "typeSubway": "Metro",
+    "typeCommuterRail": "Commuter rail"
   },
   "EditTransfer": {
-    "title": "Edit transfer"
+    "title": "Edit transfer",
+    "from": "From station",
+    "to": "To station",
+    "timeLabel": "Transfer time",
+    "minutes": "minutes",
+    "save": "Save",
+    "delete": "Delete",
+    "confirmDelete": "Delete the transfer between \"{from}\" and \"{to}\"?",
+    "errorSave": "Failed to save transfer time",
+    "errorDelete": "Failed to delete the transfer",
+    "styleLabel": "Transfer type",
+    "stylePlaceholder": "Select type",
+    "styleDashed": "Standard (dashed)",
+    "styleDotted": "Overground (dotted)",
+    "styleSolid": "Solid"
   },
   "EditTransferModal": {
     "from": "From station",

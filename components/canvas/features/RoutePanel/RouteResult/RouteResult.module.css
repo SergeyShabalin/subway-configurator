@@ -10,6 +10,34 @@
 
 .tabs {
     flex-shrink: 0;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.tabs::-webkit-scrollbar {
+    height: 4px;
+}
+
+.tabs::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.tabs::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 2px;
+}
+
+.tabsInner {
+    display: inline-flex;
+    min-width: 100%;
+}
+
+.tabsInner > * {
+    flex-shrink: 0;
 }
 
 .summary {

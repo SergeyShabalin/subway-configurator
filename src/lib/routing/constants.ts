@@ -2,7 +2,7 @@
 export const DEFAULT_INTERCHANGE_MINUTES = 3
 
 /** Сколько вариантов показываем, включая самый быстрый. */
-export const MAX_ROUTE_ALTERNATIVES = 3
+export const MAX_ROUTE_ALTERNATIVES = 5
 
 /** Сколько кратчайших путей перебираем, чтобы выбрать из них заметно разные. */
 export const CANDIDATE_POOL_SIZE = 24

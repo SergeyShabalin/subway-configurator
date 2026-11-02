@@ -1,5 +1,5 @@
 import { linesRepo, visualStationLinksRepo } from '@/src/lib/indexeddb/repositories'
-import type { Line } from '@/types/metro'
+import type { Line, LineType } from '@/types/metro'
 import { BaseService } from './base.service'
 import { segmentsService } from './segments.service'
 
@@ -23,13 +23,19 @@ export class LinesService extends BaseService {
     return this.run(CONTEXT.getAll, () => linesRepo.getAll())
   }
 
-  async create(data: { name: string; color: string; isCircular?: boolean }): Promise<Line> {
+  async create(data: {
+    name: string
+    color: string
+    isCircular?: boolean
+    type?: LineType
+  }): Promise<Line> {
     return this.run(CONTEXT.create, async () => {
       const newLine: Line = {
         id: this.generateId(),
         name: data.name,
         color: data.color,
         is_circular: data.isCircular ? 1 : 0,
+        type: data.type ?? 'subway',
         visualStationIds: [],
         logicalStationIds: [],
       }
@@ -41,7 +47,12 @@ export class LinesService extends BaseService {
 
   async update(
     lineId: string,
-    data: { name?: string; color?: string; is_circular?: number }
+    data: {
+      name?: string
+      color?: string
+      is_circular?: number
+      type?: LineType
+    }
   ): Promise<void> {
     return this.run(CONTEXT.update, async () => {
       const line = await linesRepo.getById(lineId)
