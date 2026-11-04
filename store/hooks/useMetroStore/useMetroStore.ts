@@ -27,6 +27,7 @@ interface MetroState {
   removeRouteVia: (index: number) => void
   setRouteAlternativeIndex: (index: number) => void
   updateVisualPosition: (visualId: string, x: number, y: number) => void
+  updateVisualPositions: (items: ReadonlyArray<{ id: string; x: number; y: number }>) => void
   updateVisualLabelOffset: (visualId: string, labelX: number, labelY: number) => void
   loadData: () => Promise<void>
 }
@@ -93,6 +94,18 @@ export const useMetroStore = create<MetroState>((set) => ({
           [visualId]: { ...current, x, y },
         },
       }
+    }),
+
+  updateVisualPositions: (items) =>
+    set((state) => {
+      const visuals = { ...state.visuals }
+
+      for (const { id, x, y } of items) {
+        const current = visuals[id]
+        if (current) visuals[id] = { ...current, x, y }
+      }
+
+      return { visuals }
     }),
 
   updateVisualLabelOffset: (visualId, labelX, labelY) =>

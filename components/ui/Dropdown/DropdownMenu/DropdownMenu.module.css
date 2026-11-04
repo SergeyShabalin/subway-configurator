@@ -3,7 +3,7 @@
     top: var(--dropdown-top, 0);
     left: var(--dropdown-left, 0);
     width: var(--dropdown-width, auto);
-    max-height: 180px;
+    max-height: var(--dropdown-max-height, 320px);
     overflow-y: auto;
     border-radius: 6px;
     border: 1px solid var(--input-border);
@@ -16,8 +16,9 @@
     margin: 0;
 }
 
+/* largeList больше не задаёт высоту — она считается динамически */
 .largeList {
-    max-height: 600px;
+    /* при желании: чуть шире/больше отступы, но без max-height */
 }
 
 .menu::-webkit-scrollbar {

@@ -168,7 +168,22 @@
     "title": "Editar línea",
     "tabSegment": "Segmento",
     "tabLine": "Línea",
-    "tabStations": "Estaciones"
+    "tabStations": "Estaciones",
+    "tabAlign": "Alinear"
+  },
+  "AlignStationsTab": {
+    "hint": "Elige una estación inicial y una final: las estaciones intermedias se colocarán en línea recta con espacios iguales.",
+    "hintCircular": "Elige dos estaciones: las estaciones de la primera a la segunda, siguiendo la línea, se colocarán en línea recta con espacios iguales.",
+    "from": "Estación inicial",
+    "to": "Estación final",
+    "placeholder": "Selecciona una estación",
+    "apply": "Alinear",
+    "undo": "Deshacer",
+    "sameStation": "Selecciona dos estaciones distintas",
+    "noBetween": "No hay estaciones entre estas dos",
+    "sharedWarning": "Estaciones de transbordo entre ellas: {count}. Las otras líneas que pasan por ellas también cambiarán.",
+    "done": "Estaciones alineadas: {count}",
+    "error": "No se pudo guardar la nueva posición de las estaciones"
   },
   "LineStationsTab": {
     "dragHandle": "Arrastrar para cambiar el orden",

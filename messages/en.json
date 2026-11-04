@@ -168,7 +168,22 @@
     "title": "Edit line",
     "tabSegment": "Segment",
     "tabLine": "Line",
-    "tabStations": "Stations"
+    "tabStations": "Stations",
+    "tabAlign": "Align"
+  },
+  "AlignStationsTab": {
+    "hint": "Pick a start and an end station: the stations between them will be arranged in a straight line with equal spacing.",
+    "hintCircular": "Pick two stations: the stations from the first to the second along the line will be arranged in a straight line with equal spacing.",
+    "from": "Start station",
+    "to": "End station",
+    "placeholder": "Select a station",
+    "apply": "Align",
+    "undo": "Undo",
+    "sameStation": "Select two different stations",
+    "noBetween": "There are no stations between these two",
+    "sharedWarning": "Interchange stations among them: {count}. Other lines through them will change too.",
+    "done": "Stations aligned: {count}",
+    "error": "Failed to save the new station positions"
   },
   "LineStationsTab": {
     "dragHandle": "Drag to reorder",
