@@ -10,12 +10,13 @@ import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 import { useSelectedSegmentData } from '../../MetroCanvas/hooks/useSelectedSegmentData'
+import { AlignStationsTab } from './AlignStationsTab/AlignStationsTab'
 import styles from './EditLine.module.css'
 import { EditSegmentModal } from './EditSegmentModal/EditSegmentModal'
 import { useLineStations } from './hooks/useLineStations'
 import { LineStationsTab } from './LineStationsTab/LineStationsTab'
 
-type TabType = 'segment' | 'line' | 'stations'
+type TabType = 'segment' | 'line' | 'stations' | 'align'
 
 interface EditLineProps {
   isOpen: boolean
@@ -62,6 +63,7 @@ export const EditLine = ({ isOpen, selectedSegment, onClose, reloadData }: EditL
     { value: 'line' as const, label: t('tabLine') },
     ...(hasSegment ? [{ value: 'segment' as const, label: t('tabSegment') }] : []),
     { value: 'stations' as const, label: t('tabStations') },
+    { value: 'align' as const, label: t('tabAlign') },
   ]
 
   if (!isOpen || !currentLine) return null
@@ -91,6 +93,8 @@ export const EditLine = ({ isOpen, selectedSegment, onClose, reloadData }: EditL
         {currentTab === 'stations' && (
           <LineStationsTab stations={lineStations} onReorder={handleStationsReorder} />
         )}
+
+        {currentTab === 'align' && <AlignStationsTab line={currentLine} />}
       </div>
     </Modal>
   )

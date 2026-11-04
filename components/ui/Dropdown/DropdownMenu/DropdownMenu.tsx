@@ -21,6 +21,10 @@ export interface DropdownMenuProps<T extends string> {
   menuRef?: Ref<HTMLUListElement>
 }
 
+const VIEWPORT_PADDING = 8
+const MENU_MAX_HEIGHT_SMALL = 320
+const MENU_MAX_HEIGHT_LARGE = 600
+
 export const DropdownMenu = <T extends string>({
   id,
   options,
@@ -31,10 +35,16 @@ export const DropdownMenu = <T extends string>({
   menuRef,
   largeList = false,
 }: DropdownMenuProps<T>) => {
+  // Сколько места реально есть под меню до низа экрана
+  const spaceBelow = window.innerHeight - position.top - VIEWPORT_PADDING
+  const cap = largeList ? MENU_MAX_HEIGHT_LARGE : MENU_MAX_HEIGHT_SMALL
+  const maxHeight = Math.max(80, Math.min(cap, spaceBelow))
+
   const positionStyle = {
     '--dropdown-top': `${position.top}px`,
     '--dropdown-left': `${position.left}px`,
     '--dropdown-width': `${position.width}px`,
+    '--dropdown-max-height': `${maxHeight}px`,
   } as CSSProperties
 
   return createPortal(
