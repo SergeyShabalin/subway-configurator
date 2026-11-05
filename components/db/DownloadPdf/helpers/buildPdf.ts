@@ -1,10 +1,6 @@
-import type { RenderedImage, Rgb } from '../types'
+import type { RenderedImage } from '../types'
 
-interface BuildPdfParams extends RenderedImage {
-  background: Rgb
-}
-
-export const buildPdf = async ({ dataUrl, width, height, background }: BuildPdfParams) => {
+export const buildPdf = async ({ bytes, width, height }: RenderedImage) => {
   const { jsPDF } = await import('jspdf')
 
   const pdf = new jsPDF({
@@ -14,9 +10,8 @@ export const buildPdf = async ({ dataUrl, width, height, background }: BuildPdfP
     compress: true,
   })
 
-  pdf.setFillColor(...background)
-  pdf.rect(0, 0, width, height, 'F')
-  pdf.addImage(dataUrl, 'PNG', 0, 0, width, height)
+  // JPEG встраивается как есть, без декодирования и пережатия
+  pdf.addImage(bytes, 'JPEG', 0, 0, width, height, undefined, 'NONE')
 
   return pdf
 }

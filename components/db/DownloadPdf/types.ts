@@ -10,7 +10,7 @@ export type ExportStatus =
 export type ExportStatusType = ExportStatus['type']
 
 export interface RenderedImage {
-  dataUrl: string
+  bytes: Uint8Array
   width: number
   height: number
 }

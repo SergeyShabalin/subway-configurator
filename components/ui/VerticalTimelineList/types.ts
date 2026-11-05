@@ -3,7 +3,10 @@ export interface TimelineItem {
   label: string
 }
 
+export type TimelineLineVariant = 'single' | 'double'
+
 export interface VerticalTimelineListProps {
   items: Array<TimelineItem>
   color: string
+  variant?: TimelineLineVariant
 }

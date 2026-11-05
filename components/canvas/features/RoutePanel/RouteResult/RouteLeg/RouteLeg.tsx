@@ -1,16 +1,23 @@
+import { VerticalTimelineList } from '@/components/ui'
+import type { TimelineItem, TimelineLineVariant } from '@/components/ui/VerticalTimelineList/types'
+import { useMetroStore } from '@/store'
+import type { Line } from '@/types/metro'
 import { useTranslations } from 'next-intl'
 import type { RouteResult } from '../../types'
-
-import { VerticalTimelineList } from '@/components/ui'
-import { TimelineItem } from '@/components/ui/VerticalTimelineList/types'
 import styles from './RouteLeg.module.css'
 
 interface RouteLegProps {
   leg: RouteResult['legs'][0]
 }
 
+const LINE_VARIANT: Partial<Record<Line['type'], TimelineLineVariant>> = {
+  commuter_rail: 'double',
+}
+
 export const RouteLeg = ({ leg }: RouteLegProps) => {
   const t = useTranslations('RoutePanel')
+
+  const lineType = useMetroStore((state) => state.lines.find((l) => l.id === leg.lineId)?.type)
 
   const timelineItems: Array<TimelineItem> = leg.stationNames.map((name, i) => ({
     id: `${leg.stationIds[i]}-${i}`,
@@ -29,7 +36,11 @@ export const RouteLeg = ({ leg }: RouteLegProps) => {
         </span>
       </div>
 
-      <VerticalTimelineList items={timelineItems} color={leg.lineColor} />
+      <VerticalTimelineList
+        items={timelineItems}
+        color={leg.lineColor}
+        variant={(lineType && LINE_VARIANT[lineType]) ?? 'single'}
+      />
     </div>
   )
 }

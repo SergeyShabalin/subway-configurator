@@ -12,6 +12,18 @@
     border-radius: 4px;
 }
 
+/* Две параллельные линии: ширина 8px = 2px + 4px просвет + 2px.
+   left: 24px, чтобы центр остался на 28px, как у точек станций */
+.lineDouble {
+    left: 24px;
+    width: 8px;
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 0 2px;
+    border-radius: 0;
+    background: transparent;
+}
+
 .list {
     display: flex;
     flex-direction: column;

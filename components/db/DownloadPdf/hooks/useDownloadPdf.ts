@@ -6,6 +6,7 @@ import { buildPdf } from '../helpers/buildPdf'
 import { getBackgroundColor, waitForPaint } from '../helpers/dom'
 import { renderStageToImage } from '../helpers/renderStageToImage'
 import type { ExportStatus, ExportStatusType } from '../types'
+import { lightenStage } from '@/components/db/DownloadPdf/helpers/lightenStage'
 
 const LOADING_STATUSES: ReadonlySet<ExportStatusType> = new Set(['rendering', 'creatingFile'])
 
@@ -20,13 +21,22 @@ export const useDownloadPdf = () => {
       setStatus({ type: 'rendering' })
       await waitForPaint()
 
-      const image = renderStageToImage(stage)
       const background = getBackgroundColor(stage.container())
+
+
+      const restore = lightenStage(stage)
+      let image
+      try {
+        image = await renderStageToImage(stage, background)
+      } finally {
+        restore()
+      }
+
 
       setStatus({ type: 'creatingFile' })
       await waitForPaint()
 
-      const pdf = await buildPdf({ ...image, background })
+      const pdf = await buildPdf(image)
       pdf.save(PDF_FILE_NAME)
 
       setStatus({ type: 'success' })
