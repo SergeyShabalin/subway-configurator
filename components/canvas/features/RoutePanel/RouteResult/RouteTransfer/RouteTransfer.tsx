@@ -28,7 +28,6 @@ export const RouteTransfer = ({
         </div>
         <span className={styles.badge}>{t('minutes', { minutes })}</span>
       </div>
-
       <div className={styles.stations}>
         <div className={styles.stationWithColor}>
           <span className={styles.colorBar} style={{ backgroundColor: fromColor }} />
