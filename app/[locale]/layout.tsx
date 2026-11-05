@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher/LanguageSwitcher'
 import { routing } from '@/i18n/routing'
+import { MetroStoreProvider } from '@/providers/MetroStoreProvider'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -41,8 +42,10 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <LanguageSwitcher />
-      {children}
+      <MetroStoreProvider>
+        <LanguageSwitcher />
+        {children}
+      </MetroStoreProvider>
     </NextIntlClientProvider>
   )
 }

@@ -7,7 +7,7 @@ import {
   type PositionedVisual,
 } from '@/src/lib/layout/alignStations'
 import { visualsService } from '@/src/lib/services'
-import { useMetroStore } from '@/store'
+import { useMetroStore, useMetroStoreApi } from '@/store'
 import type { Line } from '@/types/metro'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -20,6 +20,7 @@ interface Alignment {
 }
 
 export const useAlignStations = (line: Line) => {
+  const store = useMetroStoreApi()
   const stations = useMetroStore((state) => state.stations)
   const visualToStations = useMetroStore((state) => state.visualToStations)
   const updateVisualPositions = useMetroStore((state) => state.updateVisualPositions)
@@ -74,7 +75,7 @@ export const useAlignStations = (line: Line) => {
 
   const align = useCallback(async () => {
     // Координаты берём из стора в момент нажатия, чтобы не перерисовывать вкладку при каждом движении станций
-    const { visuals } = useMetroStore.getState()
+    const { visuals } = store.getState()
 
     const positioned = path
       .map((id) => visuals[id])
@@ -102,7 +103,7 @@ export const useAlignStations = (line: Line) => {
     } finally {
       setIsSaving(false)
     }
-  }, [path, updateVisualPositions])
+  }, [store, path, updateVisualPositions])
 
   const undo = useCallback(async () => {
     if (!lastAlignment) return
