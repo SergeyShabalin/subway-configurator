@@ -1,8 +1,9 @@
-import { useMetroStore } from '@/store'
+import { useMetroStore, useMetroStoreApi } from '@/store'
 import type Konva from 'konva'
 import { useCallback } from 'react'
 
 export const useMetroDrag = () => {
+  const store = useMetroStoreApi()
   const setDragging = useMetroStore((state) => state.setDragging)
   const updateVisualPosition = useMetroStore((state) => state.updateVisualPosition)
 
@@ -20,7 +21,8 @@ export const useMetroDrag = () => {
       const newX = e.target.x()
       const newY = e.target.y()
 
-      const state = useMetroStore.getState()
+      // Актуальное состояние берём в момент события, без подписки на стор
+      const state = store.getState()
       const currentVisual = state.visuals[visualId]
       if (!currentVisual) return
 
@@ -50,7 +52,7 @@ export const useMetroDrag = () => {
 
       updateVisualPosition(visualId, newX, newY)
     },
-    [updateVisualPosition]
+    [store, updateVisualPosition]
   )
 
   const handleDragEnd = useCallback(
