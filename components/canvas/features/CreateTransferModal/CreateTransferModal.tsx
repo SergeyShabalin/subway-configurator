@@ -30,7 +30,12 @@ export const CreateTransferModal = ({
   onSuccess,
 }: CreateTransferModalProps) => {
   const t = useTranslations('CreateTransferModal')
-  const { visuals, stations, visualToStations, lines, loadData } = useMetroStore()
+
+  const visuals = useMetroStore((state) => state.visuals)
+  const stations = useMetroStore((state) => state.stations)
+  const visualToStations = useMetroStore((state) => state.visualToStations)
+  const lines = useMetroStore((state) => state.lines)
+  const loadData = useMetroStore((state) => state.loadData)
 
   const [selectedVisualId, setSelectedVisualId] = useState('')
   const [timeMinutes, setTimeMinutes] = useState(3)
@@ -46,7 +51,7 @@ export const CreateTransferModal = ({
     [t]
   )
 
-  const options: Array<DropdownOption<string>> = useMemo(() => {
+  const options = useMemo<Array<DropdownOption<string>>>(() => {
     const fromStationId = (visualToStations[fromVisualId] ?? [])[0]
     const fromStation = fromStationId ? stations.find((s) => s.id === fromStationId) : undefined
     const fromLineId = fromStation?.line_id
@@ -93,7 +98,7 @@ export const CreateTransferModal = ({
       setSelectedVisualId('')
       setTimeMinutes(3)
       setTransferStyle(DEFAULT_STYLE)
-      onSuccess?.()
+      await onSuccess?.()
     } catch (error) {
       console.error('Error creating transfer:', error)
 

@@ -179,7 +179,7 @@ export const DownloadJson = () => {
   const t = useTranslations('DownloadJson')
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState<Status | null>(null)
-  const { visuals } = useMetroStore()
+  const visuals = useMetroStore((state) => state.visuals)
 
   const handleDownload = async () => {
     setLoading(true)

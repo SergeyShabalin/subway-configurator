@@ -321,7 +321,7 @@ export const UploadJson = ({ onSuccess, onError }: UploadJsonProps) => {
   const [status, setStatus] = useState<Status | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const { loadData } = useMetroStore()
+  const loadData = useMetroStore((state) => state.loadData)
 
   const translateError = (error: unknown): string => {
     if (error instanceof MetroDataError) {
