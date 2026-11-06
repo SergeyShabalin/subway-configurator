@@ -8,6 +8,7 @@ import { useFilteredOptions } from './hooks/useFilteredOptions'
 import { useListBoxNavigation } from './hooks/useListBoxNavigation'
 import { defaultOptionSearcher } from './search/createOptionSearcher'
 import type { OptionSearcher } from './search/types'
+import { titleIfTruncated } from './utils/titleIfTruncated'
 
 export interface DropdownOption<T extends string> {
   value: T
@@ -157,7 +158,12 @@ export const Dropdown = <T extends string>({
         {selectedOption ? (
           <span className={styles.optionLine}>
             <OptionColors colors={selectedOption.colors} color={selectedOption.color} />
-            {selectedOption.label}
+            <span
+              className={styles.optionLabel}
+              onMouseEnter={(e) => titleIfTruncated(e, selectedOption.label)}
+            >
+              {selectedOption.label}
+            </span>
           </span>
         ) : (
           <span className={styles.placeholder}>{placeholder}</span>
