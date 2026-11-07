@@ -5,6 +5,7 @@ import { BaseService } from './base.service'
 const CONTEXT = {
   getAll: 'TransfersService.getAll',
   create: 'TransfersService.create',
+  update: 'TransfersService.update',
   updateTime: 'TransfersService.updateTime',
   updateStyle: 'TransfersService.updateStyle',
   delete: 'TransfersService.delete',
@@ -16,6 +17,11 @@ interface CreateTransferInput {
   fromVisualId: string
   toVisualId: string
   timeMinutes: number
+  style?: TransferStyle
+}
+
+interface UpdateTransferInput {
+  timeMinutes?: number
   style?: TransferStyle
 }
 
@@ -56,6 +62,20 @@ export class TransfersService extends BaseService {
       await visualTransfersRepo.save(transfer)
       return transfer
     })
+  }
+
+  /**
+   * Обновляет несколько полей пересадки одной записью.
+   * Отдельные параллельные update (время и стиль) могут затереть друг друга:
+   * обе операции читают старую запись, а побеждает последняя записанная.
+   */
+  async update(transferId: string, data: UpdateTransferInput): Promise<void> {
+    return this.run(CONTEXT.update, () =>
+      visualTransfersRepo.update(transferId, {
+        ...(data.timeMinutes !== undefined && { time_minutes: data.timeMinutes }),
+        ...(data.style !== undefined && { style: data.style }),
+      })
+    )
   }
 
   async updateTime(transferId: string, timeMinutes: number): Promise<void> {
