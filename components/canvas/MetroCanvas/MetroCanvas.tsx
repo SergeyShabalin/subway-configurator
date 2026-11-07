@@ -16,7 +16,7 @@ import { MetroTransfers } from '@/components/canvas/MetroCanvas/MetroTransfers/M
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import { visualsService } from '@/src/lib/services'
 import { setStage } from '@/src/lib/stageRegistry/stageRegistry'
-import { useMetroStore } from '@/store'
+import { useMetroStore, useMetroStoreApi } from '@/store'
 import type Konva from 'konva'
 import { forwardRef, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Layer, Stage } from 'react-konva'
@@ -26,6 +26,8 @@ import { useStageResize } from '../shared/useStageResize'
 import { useStageZoom } from '../shared/useStageZoom'
 import styles from './MetroCanvas.module.css'
 import { MetroLabels } from './MetroLabels/MetroLabels'
+import { MetroLineBadges } from './MetroLineBadges/MetroLineBadges'
+import { useLineBadgeMove } from './MetroLineBadges/useLineBadgeMove'
 import { useMetroLines } from './MetroLines/hooks/useMetroLines'
 import { MetroLines } from './MetroLines/MetroLines'
 import { MetroStations } from './MetroStations/MetroStations'
@@ -39,6 +41,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
   const lineRef = useRef<Record<string, Konva.Line>>({})
   const textRef = useRef<Record<string, Konva.Text>>({})
 
+  const store = useMetroStoreApi()
   const visuals = useMetroStore((state) => state.visuals)
   const stations = useMetroStore((state) => state.stations)
   const updateVisualLabelOffset = useMetroStore((state) => state.updateVisualLabelOffset)
@@ -123,7 +126,8 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
 
   const handleLabelMove = useCallback(
     async (visualId: string, x: number, y: number) => {
-      const visual = visuals[visualId]
+      // Позицию читаем в момент события: колбэк не зависит от visuals
+      const visual = store.getState().visuals[visualId]
       if (!visual) return
 
       const labelX = x - visual.x
@@ -132,8 +136,10 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
       updateVisualLabelOffset(visualId, labelX, labelY)
       await visualsService.updateLabelPosition(visualId, labelX, labelY)
     },
-    [visuals, updateVisualLabelOffset]
+    [store, updateVisualLabelOffset]
   )
+
+  const handleBadgeMove = useLineBadgeMove()
 
   useEffect(() => {
     setStage(stageRef.current)
@@ -167,6 +173,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
           <MetroLines visuals={visuals} lineRef={lineRef} onSegmentClick={selectSegment} />
           <MetroTransfers visuals={visuals} onTransferClick={selectTransfer} />
           <MetroStations lineRef={lineRef} textRef={textRef} onStationClick={selectStation} />
+          <MetroLineBadges onBadgeMove={handleBadgeMove} />
           <MetroLabels
             stationNames={stationNames}
             textRef={textRef}

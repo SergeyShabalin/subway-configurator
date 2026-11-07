@@ -17,6 +17,7 @@ interface SegmentItem {
   lineType: LineType
   color: string
   isDimmed: boolean
+  lineBadge?: string
 }
 
 const byType = (a: SegmentItem, b: SegmentItem) =>
@@ -27,7 +28,6 @@ const useSegmentItems = (
   routeKeys: Set<string> | undefined
 ): Array<SegmentItem> => {
   const { lineData } = useMetroLines()
-
   return useMemo(() => {
     const items: Array<SegmentItem> = []
 
@@ -39,6 +39,7 @@ const useSegmentItems = (
           lineId: String(line.id),
           lineType: line.type ?? 'subway',
           color: line.color,
+          lineBadge: line.lineBadge,
           isDimmed: routeKeys ? !routeKeys.has(segment.key) : false,
         })
       }
@@ -63,7 +64,6 @@ export const MetroLines = memo(({ visuals, lineRef, onSegmentClick }: MetroLines
   const hoverColor = CANVAS_HOVER_COLOR[theme]
 
   const items = useSegmentItems(visuals, route?.segmentKeys)
-
   return (
     <>
       {items.map(({ segment, lineId, lineType, color, isDimmed }) => (

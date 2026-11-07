@@ -46,7 +46,8 @@
     "colorLabel": "Color de la línea",
     "cancel": "Cancelar",
     "submit": "Crear",
-    "errorCreate": "No se pudo crear la línea"
+    "errorCreate": "No se pudo crear la línea",
+    "lineBadge": "Número de línea"
   },
   "ToolsMenu": {
     "open": "Abrir menú",
@@ -198,7 +199,8 @@
     "typeLabel": "Tipo de línea",
     "typePlaceholder": "Selecciona el tipo",
     "typeSubway": "Metro",
-    "typeCommuterRail": "Tren de cercanías"
+    "typeCommuterRail": "Tren de cercanías",
+    "lineBadge": "Número de línea"
   },
   "EditTransfer": {
     "title": "Editar transbordo",

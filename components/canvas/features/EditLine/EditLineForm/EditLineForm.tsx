@@ -20,6 +20,7 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
 
   const [name, setName] = useState(line.name)
   const [color, setColor] = useState(line.color)
+  const [lineBadge, setLineBadge] = useState(line.lineBadge)
   const [isCircular, setIsCircular] = useState(line.is_circular === 1)
   const [lineType, setLineType] = useState<LineType>(line.type ?? 'subway')
   const [isLoading, setIsLoading] = useState(false)
@@ -36,6 +37,10 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
     setName(e.target.value)
   }, [])
 
+  const handleLineBadge = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setLineBadge(e.target.value)
+  }, [])
+
   const handleColorChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setColor(e.target.value)
   }, [])
@@ -47,6 +52,7 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
   const isDirty =
     name !== line.name ||
     color !== line.color ||
+    lineBadge !== line.lineBadge ||
     isCircular !== (line.is_circular === 1) ||
     lineType !== (line.type ?? 'subway')
 
@@ -60,6 +66,7 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
       await linesService.update(line.id, {
         name: name.trim(),
         color,
+        lineBadge,
         is_circular: isCircular ? 1 : 0,
         type: lineType,
       })
@@ -71,7 +78,7 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
     } finally {
       setIsLoading(false)
     }
-  }, [name, color, isCircular, lineType, line, isDirty, reloadData, onClose, t])
+  }, [name, color, isCircular, lineType, line, isDirty, lineBadge, reloadData, onClose, t])
 
   const isDisabled = isLoading || !name.trim() || !isDirty
 
@@ -110,6 +117,15 @@ export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) =
           />
           <span className={styles.colorValue}>{color}</span>
         </div>
+      </div>
+      <div className={styles.field}>
+        <Input
+          label={t('lineBadge')}
+          type="text"
+          value={lineBadge}
+          onChange={handleLineBadge}
+          disabled={isLoading}
+        />
       </div>
 
       <div className={styles.field}>

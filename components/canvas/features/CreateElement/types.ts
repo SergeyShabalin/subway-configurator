@@ -21,6 +21,7 @@ export interface CreateLinePayload {
   name: string
   color: string
   type?: LineType
+  lineBadge: string
 }
 
 export interface TransferNode {

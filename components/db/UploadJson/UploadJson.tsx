@@ -8,7 +8,7 @@ import { visualStationLinksRepo } from '@/src/lib/indexeddb/repositories/visual-
 import { visualTransfersRepo } from '@/src/lib/indexeddb/repositories/visual-transfers.repository'
 import { visualsRepo } from '@/src/lib/indexeddb/repositories/visuals.repository'
 import { useMetroStore } from '@/store'
-import type { LineType, VisualStationLink, VisualTransfer } from '@/types/metro'
+import type { LineBadgeOffsets, LineType, VisualStationLink, VisualTransfer } from '@/types/metro'
 import { useTranslations } from 'next-intl'
 import { ChangeEvent, DragEvent, useRef, useState } from 'react'
 import styles from './UploadJson.module.css'
@@ -31,6 +31,8 @@ interface LineInput {
   color: string
   isCircular?: boolean
   type?: LineType
+  lineBadge?: string
+  badgeOffsets?: LineBadgeOffsets
   visualStationIds?: Array<string>
   logicalStationIds?: Array<string>
 }
@@ -86,6 +88,8 @@ interface LineRecord {
   color: string
   is_circular: number
   type: LineType
+  lineBadge?: string
+  badgeOffsets?: LineBadgeOffsets
   visualStationIds: Array<string>
   logicalStationIds: Array<string>
 }
@@ -223,6 +227,8 @@ const buildLineRecords = (lines: Record<string, LineInput>): Array<LineRecord> =
     color: line.color,
     is_circular: line.isCircular ? 1 : 0,
     type: line.type ?? 'subway',
+    lineBadge: line.lineBadge,
+    badgeOffsets: line.badgeOffsets,
     visualStationIds: line.visualStationIds ?? [],
     logicalStationIds: line.logicalStationIds ?? [],
   }))
@@ -346,7 +352,6 @@ export const UploadJson = ({ onSuccess, onError }: UploadJsonProps) => {
     validateMetroData(metroData)
 
     setStatus({ type: 'info', message: t('status.importing') })
-
     const lines = buildLineRecords(metroData.lines)
     await linesRepo.clear()
     await linesRepo.saveMany(lines)

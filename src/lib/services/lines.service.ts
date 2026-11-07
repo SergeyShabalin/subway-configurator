@@ -1,5 +1,5 @@
 import { linesRepo, visualStationLinksRepo } from '@/src/lib/indexeddb/repositories'
-import type { Line, LineType } from '@/types/metro'
+import type { BadgeEnd, Line, LineType, Point } from '@/types/metro'
 import { BaseService } from './base.service'
 import { segmentsService } from './segments.service'
 
@@ -7,6 +7,7 @@ const CONTEXT = {
   getAll: 'LinesService.getAll',
   create: 'LinesService.create',
   update: 'LinesService.update',
+  updateBadgeOffset: 'LinesService.updateBadgeOffset',
   reorderStations: 'LinesService.reorderStations',
 } as const
 
@@ -28,6 +29,7 @@ export class LinesService extends BaseService {
     color: string
     isCircular?: boolean
     type?: LineType
+    lineBadge?: string
   }): Promise<Line> {
     return this.run(CONTEXT.create, async () => {
       const newLine: Line = {
@@ -36,6 +38,7 @@ export class LinesService extends BaseService {
         color: data.color,
         is_circular: data.isCircular ? 1 : 0,
         type: data.type ?? 'subway',
+        lineBadge: data.lineBadge,
         visualStationIds: [],
         logicalStationIds: [],
       }
@@ -52,6 +55,7 @@ export class LinesService extends BaseService {
       color?: string
       is_circular?: number
       type?: LineType
+      lineBadge?: string
     }
   ): Promise<void> {
     return this.run(CONTEXT.update, async () => {
@@ -74,7 +78,19 @@ export class LinesService extends BaseService {
     })
   }
 
-  /** Новый порядок станций на линии: сегменты, logicalStationIds и visualStationIds. */
+  async updateBadgeOffset(lineId: string, end: BadgeEnd, offset: Point): Promise<void> {
+    return this.run(CONTEXT.updateBadgeOffset, async () => {
+      const line = await linesRepo.getById(lineId)
+      if (!line) {
+        throw new Error(`Line ${lineId} not found`)
+      }
+
+      await linesRepo.update(lineId, {
+        badgeOffsets: { ...line.badgeOffsets, [end]: offset },
+      })
+    })
+  }
+
   async reorderStations(lineId: string, orderedStationIds: Array<string>): Promise<void> {
     return this.run(CONTEXT.reorderStations, async () => {
       const line = await linesRepo.getById(lineId)
