@@ -41,6 +41,8 @@ export const mapGraph = (data: GraphData): MappedGraph => {
     color: l.color,
     is_circular: l.isCircular ? 1 : 0,
     type: l.type ?? DEFAULT_LINE_TYPE,
+    lineBadge: l.lineBadge,
+    badgeOffsets: l.badgeOffsets,
     visualStationIds: l.visualStationIds,
     logicalStationIds: l.logicalStationIds,
   }))

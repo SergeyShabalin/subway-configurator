@@ -37,6 +37,16 @@ export interface Segment {
 
 export type LineType = 'subway' | 'commuter_rail'
 
+export interface Point {
+  x: number
+  y: number
+}
+
+export type BadgeEnd = 'start' | 'end'
+
+/** Смещение значка относительно крайней станции. Нет записи: используется значение по умолчанию. */
+export type LineBadgeOffsets = Partial<Record<BadgeEnd, Point>>
+
 export interface Line {
   id: string
   name: string
@@ -45,6 +55,8 @@ export interface Line {
   visualStationIds: Array<string>
   logicalStationIds: Array<string>
   type: LineType
+  lineBadge?: string
+  badgeOffsets?: LineBadgeOffsets
 }
 
 export interface VisualTransfer {
@@ -73,6 +85,8 @@ export interface GraphLine {
   visualStationIds: Array<string>
   logicalStationIds: Array<string>
   type: LineType
+  lineBadge?: string
+  badgeOffsets?: LineBadgeOffsets
 }
 
 export interface GraphStation {

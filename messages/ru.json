@@ -47,7 +47,8 @@
     "cancel": "Отмена",
     "submit": "Добавить ветку",
     "submitting": "Добавление...",
-    "errorCreate": "Ошибка при создании ветки"
+    "errorCreate": "Ошибка при создании ветки",
+    "lineBadge": "Номер линии"
   },
   "ToolsMenu": {
     "open": "Открыть меню",
@@ -199,7 +200,8 @@
     "typeLabel": "Тип линии",
     "typePlaceholder": "Выберите тип",
     "typeSubway": "Метро",
-    "typeCommuterRail": "Наземные поезда"
+    "typeCommuterRail": "Наземные поезда",
+    "lineBadge": "Номер линии"
   },
   "EditTransfer": {
     "title": "Изменить переход",

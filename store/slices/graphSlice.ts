@@ -1,5 +1,5 @@
-import type { Line, Segment, Station, VisualTransfer } from '@/types/metro'
-import type { SliceCreator } from '../types'
+import type { BadgeEnd, Line, Point, Segment, Station, VisualTransfer } from '@/types/metro'
+import type { MetroStore, SliceCreator } from '../types'
 
 /** Данные графа без раскладки (раскладка хранится в layoutSlice). */
 export interface GraphEntities {
@@ -44,6 +44,7 @@ export interface GraphSlice extends GraphEntities {
   linesById: Record<string, Line>
   /** Замена всего графа и пересборка индексов. */
   setGraph: (graph: GraphEntities) => void
+  updateLineBadgeOffset: (lineId: string, end: BadgeEnd, offset: Point) => void
 }
 
 const indexById = <T extends { id: string }>(items: ReadonlyArray<T>): Record<string, T> => {
@@ -52,7 +53,7 @@ const indexById = <T extends { id: string }>(items: ReadonlyArray<T>): Record<st
   return index
 }
 
-export const createGraphSlice: SliceCreator<GraphSlice> = (set) => ({
+export const createGraphSlice: SliceCreator<GraphSlice, MetroStore> = (set) => ({
   stations: [],
   segments: [],
   lines: [],
@@ -66,5 +67,23 @@ export const createGraphSlice: SliceCreator<GraphSlice> = (set) => ({
       ...graph,
       stationsById: indexById(graph.stations),
       linesById: indexById(graph.lines),
+    }),
+  updateLineBadgeOffset: (lineId, end, offset) =>
+    set((state) => {
+      const line = state.linesById[lineId]
+      if (!line) return state
+
+      const updated: Line = {
+        ...line,
+        badgeOffsets: {
+          ...(line.badgeOffsets ?? {}),
+          [end]: offset,
+        },
+      }
+
+      return {
+        lines: state.lines.map((l) => (l.id === lineId ? updated : l)),
+        linesById: { ...state.linesById, [lineId]: updated },
+      }
     }),
 })

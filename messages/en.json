@@ -46,7 +46,8 @@
     "colorLabel": "Line color",
     "cancel": "Cancel",
     "submit": "Create",
-    "errorCreate": "Failed to create line"
+    "errorCreate": "Failed to create line",
+    "lineBadge": "Line Badge"
   },
   "ToolsMenu": {
     "open": "Open menu",
@@ -198,7 +199,8 @@
     "typeLabel": "Line type",
     "typePlaceholder": "Select type",
     "typeSubway": "Metro",
-    "typeCommuterRail": "Commuter rail"
+    "typeCommuterRail": "Commuter rail",
+    "lineBadge": "Line Badge"
   },
   "EditTransfer": {
     "title": "Edit transfer",

@@ -34,6 +34,8 @@ export const graphService = {
         color: l.color,
         isCircular: Boolean(l.is_circular),
         type: l.type ?? 'subway',
+        lineBadge: l.lineBadge,
+        badgeOffsets: l.badgeOffsets,
         visualStationIds: l.visualStationIds || [],
         logicalStationIds: l.logicalStationIds || [],
       })),

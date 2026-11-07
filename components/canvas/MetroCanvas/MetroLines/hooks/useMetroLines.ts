@@ -9,6 +9,7 @@ export interface MetroLineData {
   visualStationIds: Array<string>
   isCircular: boolean
   type: LineType
+  lineBadge?: string
 }
 
 export interface UseMetroLinesResult {
@@ -26,6 +27,7 @@ export const useMetroLines = (): UseMetroLinesResult => {
       visualStationIds: line.visualStationIds ?? [],
       isCircular: line.is_circular === 1,
       type: line.type ?? 'subway',
+      lineBadge: line.lineBadge,
     }))
   }, [lines])
 
