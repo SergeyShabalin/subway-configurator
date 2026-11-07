@@ -21,10 +21,7 @@ export const EditTransfer = ({ isOpen, transferId, onClose, reloadData }: EditTr
 
   const handleSave = async (timeMinutes: number, style: TransferStyle) => {
     if (!transferId) return
-    await Promise.all([
-      transfersService.updateTime(transferId, timeMinutes),
-      transfersService.updateStyle(transferId, style),
-    ])
+    await transfersService.update(transferId, { timeMinutes, style })
     await reloadData()
   }
 

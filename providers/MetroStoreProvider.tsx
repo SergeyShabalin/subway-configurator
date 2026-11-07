@@ -2,7 +2,7 @@
 
 import { graphService } from '@/src/lib/services'
 import { createMetroStore, type MetroInitState, type MetroStoreApi } from '@/store/createMetroStore'
-import type { GraphSource } from '@/store/slices/dataSlice'
+import type { GraphSource } from '@/store/slices/loaderSlice'
 import type { MetroStore } from '@/store/types'
 import { createContext, useContext, useState, type ReactNode } from 'react'
 import { useStore } from 'zustand'

@@ -12,10 +12,9 @@
     background: var(--hint-lets-started-bg);
     border: 1px solid rgb(226 232 240 / 25%);
     border-radius: 16px;
-    box-shadow:
-            0 20px 60px rgb(0 0 0 / 55%),
-            0 0 0 1px rgb(226 232 240 / 5%) inset;
-     font-family: Arial, sans-serif;
+    box-shadow: 0 4px 10px 0 rgb(0 0 0 / 35%),
+    0 4px 100px 10px rgb(57 53 53 / 35%);
+    font-family: Arial, sans-serif;
     font-size: 16px;
     line-height: 1.5;
     letter-spacing: 1px;
