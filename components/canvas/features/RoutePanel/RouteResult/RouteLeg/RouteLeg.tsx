@@ -1,4 +1,5 @@
 import { VerticalTimelineList } from '@/components/ui'
+import { LineBadgeIcon } from '@/components/ui/LineBadgeIcon/LineBadgeIcon'
 import type { TimelineItem, TimelineLineVariant } from '@/components/ui/VerticalTimelineList/types'
 import { useMetroStore } from '@/store'
 import type { Line } from '@/types/metro'
@@ -17,18 +18,31 @@ const LINE_VARIANT: Partial<Record<Line['type'], TimelineLineVariant>> = {
 export const RouteLeg = ({ leg }: RouteLegProps) => {
   const t = useTranslations('RoutePanel')
 
-  const lineType = useMetroStore((state) => state.lines.find((l) => l.id === leg.lineId)?.type)
+  // Объект линии стабилен между обновлениями стора, лишних перерисовок не будет
+  const line = useMetroStore((state) => state.lines.find((l) => l.id === leg.lineId))
 
   const timelineItems: Array<TimelineItem> = leg.stationNames.map((name, i) => ({
     id: `${leg.stationIds[i]}-${i}`,
     label: name,
   }))
 
+  const isRail = line?.type === 'commuter_rail'
+
   return (
     <div className={styles.leg}>
       <div className={styles.header}>
         <div className={styles.titleRow}>
-          <div className={styles.dot} style={{ background: leg.lineColor }} />
+          {line?.lineBadge ? (
+            <span className={styles.badge}>
+              <LineBadgeIcon
+                text={line.lineBadge}
+                color={leg.lineColor}
+                shape={isRail ? 'parallelogram' : 'circle'}
+              />
+            </span>
+          ) : (
+            <div className={styles.dot} style={{ background: leg.lineColor }} />
+          )}
           <span className={styles.title}>{leg.lineName}</span>
         </div>
         <span className={styles.meta}>
@@ -39,7 +53,7 @@ export const RouteLeg = ({ leg }: RouteLegProps) => {
       <VerticalTimelineList
         items={timelineItems}
         color={leg.lineColor}
-        variant={(lineType && LINE_VARIANT[lineType]) ?? 'single'}
+        variant={(line?.type && LINE_VARIANT[line.type]) ?? 'single'}
       />
     </div>
   )

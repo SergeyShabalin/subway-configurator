@@ -1,5 +1,6 @@
 'use client'
 
+import { useNodeOptions } from '@/components/canvas/shared/options/useNodeOptions'
 import { Button } from '@/components/ui/Button'
 import { Dropdown, type DropdownOption } from '@/components/ui/Dropdown'
 import { TransferIcon } from '@/components/ui/Icons/TransferIcon/TransferIcon'
@@ -31,11 +32,8 @@ export const CreateTransferModal = ({
 }: CreateTransferModalProps) => {
   const t = useTranslations('CreateTransferModal')
 
-  const visuals = useMetroStore((state) => state.visuals)
-  const stations = useMetroStore((state) => state.stations)
-  const visualToStations = useMetroStore((state) => state.visualToStations)
-  const lines = useMetroStore((state) => state.lines)
   const loadData = useMetroStore((state) => state.loadData)
+  const nodeOptions = useNodeOptions()
 
   const [selectedVisualId, setSelectedVisualId] = useState('')
   const [timeMinutes, setTimeMinutes] = useState(3)
@@ -51,34 +49,17 @@ export const CreateTransferModal = ({
     [t]
   )
 
-  const options = useMemo<Array<DropdownOption<string>>>(() => {
-    const fromStationId = (visualToStations[fromVisualId] ?? [])[0]
-    const fromStation = fromStationId ? stations.find((s) => s.id === fromStationId) : undefined
-    const fromLineId = fromStation?.line_id
+  // Пересадка возможна на узлы без общих линий с исходным и без уже созданной пересадки
+  const options = useMemo(() => {
+    const fromLineIds = nodeOptions.find((o) => o.value === fromVisualId)?.lineIds ?? []
 
-    return Object.values(visuals)
-      .filter((v) => v.id !== fromVisualId)
-      .filter((v) => !existingTransferIds.includes(v.id))
-      .filter((v) => {
-        const stationId = (visualToStations[v.id] ?? [])[0]
-        const station = stationId ? stations.find((s) => s.id === stationId) : undefined
-        return station?.line_id !== fromLineId
-      })
-      .map((v) => {
-        const stationId = (visualToStations[v.id] ?? [])[0]
-        const station = stations.find((s) => s.id === stationId)
-        const line = station
-          ? lines.find((l) => String(l.id) === String(station.line_id))
-          : undefined
-
-        return {
-          value: v.id,
-          label: station?.name ?? v.id,
-          color: line?.color,
-        }
-      })
-      .sort((a, b) => a.label.localeCompare(b.label))
-  }, [visuals, stations, lines, visualToStations, fromVisualId, existingTransferIds])
+    return nodeOptions.filter(
+      (o) =>
+        o.value !== fromVisualId &&
+        !existingTransferIds.includes(o.value) &&
+        !o.lineIds.some((id) => fromLineIds.includes(id))
+    )
+  }, [nodeOptions, fromVisualId, existingTransferIds])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

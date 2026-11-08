@@ -1,9 +1,8 @@
 'use client'
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import styles from './Dropdown.module.css'
 import { DropdownMenu } from './DropdownMenu/DropdownMenu'
-import { OptionColors } from './DropdownMenu/OptionColors/OptionColors'
 import { useFilteredOptions } from './hooks/useFilteredOptions'
 import { useListBoxNavigation } from './hooks/useListBoxNavigation'
 import { defaultOptionSearcher } from './search/createOptionSearcher'
@@ -13,8 +12,7 @@ import { titleIfTruncated } from './utils/titleIfTruncated'
 export interface DropdownOption<T extends string> {
   value: T
   label: string
-  color?: string
-  colors?: Array<string>
+  leading?: ReactNode
 }
 
 interface DropdownPosition {
@@ -157,7 +155,7 @@ export const Dropdown = <T extends string>({
       >
         {selectedOption ? (
           <span className={styles.optionLine}>
-            <OptionColors colors={selectedOption.colors} color={selectedOption.color} />
+            {selectedOption.leading}
             <span
               className={styles.optionLabel}
               onMouseEnter={(e) => titleIfTruncated(e, selectedOption.label)}

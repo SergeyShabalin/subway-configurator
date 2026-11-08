@@ -97,7 +97,7 @@ export const LineBadge = memo(
           verticalAlign="middle"
           fontStyle="bold"
           fontSize={fontSize}
-          fill={isDimmed ? '#ffffff' : textColorFor(color)}
+          fill={isDimmed ? '#393737' : textColorFor(color)}
           listening={false}
         />
       </Group>

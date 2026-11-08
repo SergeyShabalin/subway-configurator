@@ -1,3 +1,4 @@
+import { lineMarker } from '@/components/canvas/shared/options/optionMarkers'
 import type { DropdownOption } from '@/components/ui/Dropdown'
 import type { InsertPosition } from '@/types/metro'
 import { useEffect, useMemo, useState } from 'react'
@@ -42,7 +43,7 @@ export const useCreateStationForm = ({
 
     return (transferNodes ?? [])
       .filter((node) => !node.lineIds.includes(String(selectedLineId)))
-      .map((node) => ({ value: node.visualId, label: node.name, colors: node.colors }))
+      .map((node) => ({ value: node.visualId, label: node.name, leading: lineMarker(node.lines) }))
   }, [transferNodes, selectedLineId])
 
   const selectedTransfer = transferOptions.find((o) => o.value === transferVisualId)
