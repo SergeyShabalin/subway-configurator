@@ -18,7 +18,7 @@ import { visualsService } from '@/src/lib/services'
 import { setStage } from '@/src/lib/stageRegistry/stageRegistry'
 import { useMetroStore, useMetroStoreApi } from '@/store'
 import type Konva from 'konva'
-import { forwardRef, useCallback, useEffect, useMemo, useRef } from 'react'
+import { forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { Layer, Stage } from 'react-konva'
 import { useMetroCanvas } from '../hooks'
 import { useMetroModal } from '../hooks/useMetroModal'
@@ -37,11 +37,17 @@ export interface MetroCanvasRef {
   getClickPosition: () => { x: number; y: number }
 }
 
+const MIN_SCALE = 0.05
+const MAX_SCALE = 20
+const SCALE_STEP = 1.1
+const LABELS_MIN_SCALE = 0.35
+
 export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
   const lineRef = useRef<Record<string, Konva.Line>>({})
   const textRef = useRef<Record<string, Konva.Text>>({})
 
   const store = useMetroStoreApi()
+
   const visuals = useMetroStore((state) => state.visuals)
   const stations = useMetroStore((state) => state.stations)
   const updateVisualLabelOffset = useMetroStore((state) => state.updateVisualLabelOffset)
@@ -69,10 +75,38 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
 
   const { width, height } = useStageResize()
 
-  const { stageRef, stageScale, stagePosition, handleWheel, handleStageDragEnd, centerStage } =
-    useStageZoom(0.05, 20, 1.1)
+  const labelsRef = useRef<Konva.Group>(null)
 
-  useInitialCenterCanvas({ isLoaded, visuals, width, height, centerStage })
+  const handleScaleChange = useCallback((scale: number) => {
+    const group = labelsRef.current
+    if (!group) return
+
+    const show = scale >= LABELS_MIN_SCALE
+
+    if (group.visible() !== show) {
+      group.visible(show)
+    }
+  }, [])
+
+  const {
+    stageRef,
+    handleWheel,
+    zoomAt,
+    panBy,
+    beginInteraction,
+    endInteraction,
+    refreshHitGraph,
+    centerStage,
+  } = useStageZoom(MIN_SCALE, MAX_SCALE, SCALE_STEP, handleScaleChange)
+
+  useInitialCenterCanvas({
+    isLoaded,
+    visuals,
+    width,
+    height,
+    centerStage,
+  })
+
   useRouteFocus(centerStage, width, height)
 
   const handleLongPress = useCallback(
@@ -84,12 +118,18 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
 
   useTouchGestures({
     stageRef,
-    stageScale,
-    stagePosition,
-    handleWheel,
     onLongPress: handleLongPress,
+    zoomAt,
+    panBy,
+    flush: endInteraction,
     enabled: !isBusy,
   })
+
+  useLayoutEffect(() => {
+    if (isBusy) return
+
+    refreshHitGraph()
+  }, [visuals, isBusy, refreshHitGraph])
 
   const stationNames = useMemo(() => {
     const map: Record<string, string> = {}
@@ -111,22 +151,17 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
     e.evt.preventDefault()
 
     const stage = stageRef.current
-    if (!stage) return
+    const pointer = stage?.getPointerPosition()
 
-    const pointer = stage.getPointerPosition()
-    if (!pointer) return
+    if (!stage || !pointer) return
 
-    const worldPos = {
-      x: (pointer.x - stagePosition.x) / stageScale,
-      y: (pointer.y - stagePosition.y) / stageScale,
-    }
+    const worldPos = stage.getAbsoluteTransform().copy().invert().point(pointer)
 
     openModal(worldPos.x, worldPos.y)
   }
 
   const handleLabelMove = useCallback(
     async (visualId: string, x: number, y: number) => {
-      // Позицию читаем в момент события: колбэк не зависит от visuals
       const visual = store.getState().visuals[visualId]
       if (!visual) return
 
@@ -134,6 +169,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
       const labelY = y - visual.y
 
       updateVisualLabelOffset(visualId, labelX, labelY)
+
       await visualsService.updateLabelPosition(visualId, labelX, labelY)
     },
     [store, updateVisualLabelOffset]
@@ -143,6 +179,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
 
   useEffect(() => {
     setStage(stageRef.current)
+
     return () => setStage(null)
   }, [isBusy, stageRef])
 
@@ -160,14 +197,11 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
         ref={stageRef}
         width={width}
         height={height}
-        scaleX={stageScale}
-        scaleY={stageScale}
-        x={stagePosition.x}
-        y={stagePosition.y}
         onWheel={handleWheel}
         onContextMenu={handleContextMenu}
+        onDragStart={beginInteraction}
+        onDragEnd={endInteraction}
         draggable
-        onDragEnd={handleStageDragEnd}
       >
         <Layer>
           <MetroLines visuals={visuals} lineRef={lineRef} onSegmentClick={selectSegment} />
@@ -183,6 +217,7 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
       </Stage>
 
       {showHint && <HintLetsStarted hasLines={hasLines} />}
+
       <CreateElement
         key={isModalOpen ? 'open' : 'closed'}
         isOpen={isModalOpen}
@@ -190,18 +225,21 @@ export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
         position={clickPosition}
         reloadData={reloadData}
       />
+
       <EditStation
         isOpen={selectedStationId !== null}
         stationId={selectedStationId}
         onClose={clearSelection}
         reloadData={reloadData}
       />
+
       <EditLine
         isOpen={selectedSegment !== null}
         selectedSegment={selectedSegment}
         onClose={clearSegmentSelection}
         reloadData={reloadData}
       />
+
       <EditTransfer
         isOpen={selectedTransferId !== null}
         transferId={selectedTransferId}

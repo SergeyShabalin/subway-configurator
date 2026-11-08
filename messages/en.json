@@ -251,7 +251,9 @@
     "slowerBy": "{minutes} min longer than the fastest",
     "via": "Via {n}",
     "addVia": "Add stop",
-    "removeVia": "Remove stop"
+    "removeVia": "Remove stop",
+    "access": "Walk to the station",
+    "exit": "Exit the station"
   },
   "VerticalTimelineList": {
     "showMore": "Show {count, plural, one {# more station} other {# more stations}}",

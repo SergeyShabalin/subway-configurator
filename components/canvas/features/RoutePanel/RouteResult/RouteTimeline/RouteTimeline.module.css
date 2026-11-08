@@ -9,3 +9,17 @@
     display: flex;
     flex-direction: column;
 }
+
+.accessSection {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.accessTitle {
+    padding: 10px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    line-height: 1.2;
+}
