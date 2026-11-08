@@ -252,5 +252,9 @@
     "via": "Vía {n}",
     "addVia": "Añadir parada",
     "removeVia": "Eliminar parada"
+  },
+  "VerticalTimelineList": {
+    "showMore": "Ver {count, plural, one {# estación más} other {# estaciones más}}",
+    "collapse": "Mostrar menos"
   }
 }

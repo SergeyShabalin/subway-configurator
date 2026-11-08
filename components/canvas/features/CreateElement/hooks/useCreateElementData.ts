@@ -1,10 +1,11 @@
-import type { DropdownOption } from '@/components/ui/Dropdown'
+import { useLineOptions } from '@/components/canvas/shared/options/useLineOptions'
 import { useMetroStore } from '@/store'
+import type { Line } from '@/types/metro'
 import { useMemo } from 'react'
 import type { TransferNode } from '../types'
 
 interface AddElementData {
-  lineOptions: Array<DropdownOption<string>>
+  lineOptions: ReturnType<typeof useLineOptions>
   transferNodes: Array<TransferNode>
   hasLines: boolean
 }
@@ -14,14 +15,11 @@ export const useCreateElementData = (): AddElementData => {
   const stations = useMetroStore((state) => state.stations)
   const visualToStations = useMetroStore((state) => state.visualToStations)
 
-  const lineOptions = useMemo(
-    () => lines.map((line) => ({ value: line.id, label: line.name, color: line.color })),
-    [lines]
-  )
+  const lineOptions = useLineOptions()
 
   const transferNodes = useMemo((): Array<TransferNode> => {
     const stationById = new Map(stations.map((s) => [s.id, s]))
-    const colorByLineId = new Map(lines.map((l) => [String(l.id), l.color]))
+    const lineById = new Map(lines.map((l) => [String(l.id), l]))
 
     const nodes: Array<TransferNode> = []
 
@@ -33,20 +31,19 @@ export const useCreateElementData = (): AddElementData => {
 
       if (nodeStations.length === 0) continue
 
-      const colors = [
-        ...new Set(
-          nodeStations.flatMap((s) => {
-            const color = colorByLineId.get(String(s.line_id))
-            return color ? [color] : []
-          })
-        ),
-      ]
+      const nodeLines = new Map<string, Line>()
+      for (const station of nodeStations) {
+        const line = lineById.get(String(station.line_id))
+        if (line) nodeLines.set(line.id, line)
+      }
+      const lineList = [...nodeLines.values()]
 
       nodes.push({
         visualId,
         name: nodeStations[0].name,
         lineIds: nodeStations.map((s) => String(s.line_id)),
-        colors,
+        colors: lineList.map((l) => l.color),
+        lines: lineList,
       })
     }
 

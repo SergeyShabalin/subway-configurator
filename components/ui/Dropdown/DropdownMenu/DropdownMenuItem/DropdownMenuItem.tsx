@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react'
 import type { DropdownOption } from '../../Dropdown'
 import { titleIfTruncated } from '../../utils/titleIfTruncated'
 import styles from '../DropdownMenu.module.css'
-import { OptionColors } from '../OptionColors/OptionColors'
 
 interface DropdownMenuItemProps {
   id: string
@@ -40,7 +39,7 @@ export const DropdownMenuItem = ({
       aria-selected={isSelected}
     >
       <span className={styles.optionLine}>
-        <OptionColors colors={option.colors} color={option.color} />
+        {option.leading}
         <span
           className={styles.optionLabel}
           onMouseEnter={(e) => titleIfTruncated(e, option.label)}

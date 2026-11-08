@@ -1,3 +1,4 @@
+
 .container {
     position: relative;
     padding-left: 22px;
@@ -12,8 +13,10 @@
     border-radius: 4px;
 }
 
-/* Две параллельные линии: ширина 8px = 2px + 4px просвет + 2px.
-   left: 24px, чтобы центр остался на 28px, как у точек станций */
+.lineExpanded {
+    bottom: 46px;
+}
+
 .lineDouble {
     left: 24px;
     width: 8px;
@@ -51,4 +54,23 @@
     border: 2px solid;
     background: var(--background);
     box-sizing: border-box;
+}
+
+.expandItem {
+    position: relative;
+    z-index: 1;
+    padding-left: 24px;
+}
+
+.expandButton {
+    display: block;
+    padding: 0;
+    min-height: auto;
+    font-size: 13px;
+}
+
+.collapseItem {
+    position: relative;
+    z-index: 1;
+    padding-left: 24px;
 }

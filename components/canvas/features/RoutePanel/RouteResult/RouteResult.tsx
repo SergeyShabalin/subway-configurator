@@ -37,13 +37,11 @@ export const RouteResult = ({ routes, activeIndex, onSelect }: RouteResultProps)
           </div>
         </div>
       )}
-
       <div className={styles.summary}>
         <strong>{t('total', { minutes: route.totalMinutes })}</strong>
         <span>{t('transfers', { count: route.transfersCount })}</span>
         {slowerBy > 0 && <span>{t('slowerBy', { minutes: slowerBy })}</span>}
       </div>
-
       <div className={styles.timeline}>
         <RouteTimeline legs={route.legs} />
       </div>

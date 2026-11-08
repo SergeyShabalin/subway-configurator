@@ -253,5 +253,9 @@
     "via": "Через {n}",
     "addVia": "Добавить точку",
     "removeVia": "Удалить точку"
+  },
+  "VerticalTimelineList": {
+    "showMore": "Ещё {count, plural, one {# станция} few {# станции} many {# станций} other {# станции}}",
+    "collapse": "Свернуть"
   }
 }
