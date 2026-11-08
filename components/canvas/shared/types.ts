@@ -10,4 +10,5 @@ export interface UseStageZoomReturn {
   handleWheel: (e: Konva.KonvaEventObject<WheelEvent>) => void
   handleStageDragEnd: (e: Konva.KonvaEventObject<DragEvent>) => void
   centerStage: (points: Array<{ x: number; y: number }>, width?: number, height?: number) => void
+  scheduleCommit: () => void
 }

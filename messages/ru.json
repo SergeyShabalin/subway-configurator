@@ -252,7 +252,9 @@
     "slowerBy": "На {minutes} мин дольше самого быстрого",
     "via": "Через {n}",
     "addVia": "Добавить точку",
-    "removeVia": "Удалить точку"
+    "removeVia": "Удалить точку",
+    "access": "Пройдите на станцию",
+    "exit": "Выйдите из станции"
   },
   "VerticalTimelineList": {
     "showMore": "Ещё {count, plural, one {# станция} few {# станции} many {# станций} other {# станции}}",

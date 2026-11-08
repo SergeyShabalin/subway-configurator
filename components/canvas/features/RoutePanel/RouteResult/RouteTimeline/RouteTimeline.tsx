@@ -1,39 +1,37 @@
-import type { RouteResult as RouteResultType } from '../../types'
+import { useTranslations } from 'next-intl'
+import { memo } from 'react'
 import { RouteLeg } from '../RouteLeg/RouteLeg'
 import { RouteTransfer } from '../RouteTransfer/RouteTransfer'
 import styles from './RouteTimeline.module.css'
+import type { TimelineEntry } from './types'
 
 interface RouteTimelineProps {
-  legs: RouteResultType['legs']
+  entries: ReadonlyArray<TimelineEntry>
 }
 
-export const RouteTimeline = ({ legs }: RouteTimelineProps) => {
-  if (legs.length === 0) return null
+export const RouteTimeline = memo(({ entries }: RouteTimelineProps) => {
+  const t = useTranslations('RoutePanel')
+
+  if (entries.length === 0) return null
 
   return (
     <div className={styles.timeline}>
-      {legs.map((leg, index) => {
-        const prevLeg = index > 0 ? legs[index - 1] : null
+      <p className={styles.accessTitle}>{t('access')}</p>
 
-        const fromStation = prevLeg ? prevLeg.stationNames[prevLeg.stationNames.length - 1] : ''
-        const toStation = leg.stationNames[0]
-
-        return (
-          <div key={`${leg.lineId}-${index}`} className={styles.segment}>
-            {index > 0 && prevLeg && (
-              <RouteTransfer
-                fromStation={fromStation}
-                toStation={toStation}
-                fromColor={prevLeg.lineColor}
-                toColor={leg.lineColor}
-                minutes={leg.transferMinutesBefore}
-              />
-            )}
-
-            <RouteLeg leg={leg} />
+      {entries.map((entry) =>
+        entry.kind === 'access' ? (
+          <RouteTransfer key={entry.key} {...entry.transfer} />
+        ) : (
+          <div key={entry.key} className={styles.segment}>
+            {entry.transferBefore && <RouteTransfer {...entry.transferBefore} />}
+            <RouteLeg leg={entry.leg} />
           </div>
         )
-      })}
+      )}
+
+      <p className={styles.accessTitle}>{t('exit')}</p>
     </div>
   )
-}
+})
+
+RouteTimeline.displayName = 'RouteTimeline'

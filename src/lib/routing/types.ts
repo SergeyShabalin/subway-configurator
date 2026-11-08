@@ -1,4 +1,4 @@
-import type { Line, Segment, Station, VisualTransfer } from '@/types/metro'
+import type { Line, LineType, Segment, Station, VisualTransfer } from '@/types/metro'
 
 export type EdgeKind = 'ride' | 'transfer' | 'virtual'
 
@@ -36,10 +36,28 @@ export interface RouteLeg {
   lineId: string
   lineName: string
   lineColor: string
+  lineBadge?: string
+  lineType?: LineType
   stationIds: Array<string>
   stationNames: Array<string>
   minutes: number
   transferMinutesBefore: number
+}
+
+export interface RouteAccess {
+  fromStationId: string
+  fromStationName: string
+  fromLineId?: string
+  fromLineColor?: string
+  fromLineBadge?: string
+  fromLineType?: LineType
+  toStationId: string
+  toStationName: string
+  toLineId?: string
+  toLineColor?: string
+  toLineBadge?: string
+  toLineType?: LineType
+  minutes: number
 }
 
 export interface RouteResult {
@@ -48,10 +66,11 @@ export interface RouteResult {
   totalMinutes: number
   transfersCount: number
   legs: Array<RouteLeg>
-  /** Ключи сегментов в формате MetroLines: `${lineId}-${fromVisualId}-${toVisualId}` (в обе стороны). */
   segmentKeys: Set<string>
-  /** Визуалы на маршруте, по ним подсвечиваются станции. */
   visualIds: Set<string>
+
+  startAccess: RouteAccess | null
+  endAccess: RouteAccess | null
 }
 
 export interface BuildGraphInput {

@@ -1,4 +1,75 @@
-import type { RawPath, RouteGraph, RouteLeg, RouteLookup, RouteResult, Step } from '../types'
+import { collectLegs, PendingTransfer } from '@/src/lib/routing/build/colectLegs'
+import type {
+  RawPath,
+  RouteAccess,
+  RouteGraph,
+  RouteLeg,
+  RouteLookup,
+  RouteResult,
+  Step,
+} from '../types'
+import { createAccessBuilder, type AccessBuilder } from './access'
+import { countTransfers } from './countTransfers'
+import { createStationInfo } from './stationInfo'
+
+const toSteps = (path: RawPath): Array<Step> =>
+  path.edges.map((edge, i) => ({ from: path.nodes[i], to: path.nodes[i + 1], edge }))
+
+/** Отбрасывает служебные (виртуальные) шаги по краям пути. */
+const sliceRealSteps = (steps: ReadonlyArray<Step>): Array<Step> => {
+  let first = -1
+  let last = -1
+
+  for (let i = 0; i < steps.length; i++) {
+    if (steps[i].edge.kind === 'virtual') continue
+    if (first === -1) first = i
+    last = i
+  }
+
+  return first === -1 ? [] : steps.slice(first, last + 1)
+}
+
+const lastRealStation = (path: RawPath): string | null => {
+  for (let i = path.nodes.length - 1; i >= 0; i--) {
+    const node = path.nodes[i]
+    if (node !== '__source__' && node !== '__target__') return node
+  }
+  return null
+}
+
+/**
+ * Переход перед первым участком становится отдельным `startAccess`.
+ * Побочный эффект: обнуляет `transferMinutesBefore` у первого участка.
+ */
+const extractStartAccess = (
+  legs: ReadonlyArray<RouteLeg>,
+  firstTransferFrom: string | null,
+  buildAccess: AccessBuilder
+): RouteAccess | null => {
+  const firstLeg = legs[0]
+  if (!firstLeg || firstLeg.transferMinutesBefore <= 0) return null
+
+  const toStationId = firstLeg.stationIds[0]
+  const access = buildAccess(
+    firstTransferFrom ?? toStationId,
+    toStationId,
+    firstLeg.transferMinutesBefore
+  )
+
+  firstLeg.transferMinutesBefore = 0
+  return access
+}
+
+const buildEndAccess = (
+  path: RawPath,
+  pending: PendingTransfer | null,
+  buildAccess: AccessBuilder
+): RouteAccess | null => {
+  if (!pending || pending.minutes <= 0) return null
+
+  const actualEnd = lastRealStation(path)
+  return actualEnd ? buildAccess(pending.from, actualEnd, pending.minutes) : null
+}
 
 export const buildRouteResult = (
   graph: RouteGraph,
@@ -7,69 +78,43 @@ export const buildRouteResult = (
   toVisualId: string,
   path: RawPath
 ): RouteResult => {
-  const nameOf = (stationId: string) => lookup.stationsById.get(stationId)?.name ?? stationId
+  const realSteps = sliceRealSteps(toSteps(path))
 
-  const steps: Array<Step> = path.edges
-    .map((edge, i) => ({ from: path.nodes[i], to: path.nodes[i + 1], edge }))
-    .filter(({ edge }) => edge.kind !== 'virtual')
-
-  const legs: Array<RouteLeg> = []
-  const segmentKeys = new Set<string>()
-  const visualIds = new Set<string>()
-
-  let hasPendingTransfer = false
-  let pendingTransferMinutes = 0
-
-  for (const { from, to, edge } of steps) {
-    const fromVisual = graph.stationToVisual.get(from)
-    const toVisual = graph.stationToVisual.get(to)
-    if (fromVisual) visualIds.add(fromVisual)
-    if (toVisual) visualIds.add(toVisual)
-
-    if (edge.kind === 'transfer') {
-      hasPendingTransfer = true
-      pendingTransferMinutes += edge.minutes
-      continue
-    }
-
-    const lineId = edge.lineId ?? ''
-
-    if (fromVisual && toVisual) {
-      segmentKeys.add(`${lineId}-${fromVisual}-${toVisual}`)
-      segmentKeys.add(`${lineId}-${toVisual}-${fromVisual}`)
-    }
-
-    const lastLeg = legs[legs.length - 1]
-
-    if (lastLeg && lastLeg.lineId === lineId && !hasPendingTransfer) {
-      lastLeg.stationIds.push(to)
-      lastLeg.stationNames.push(nameOf(to))
-      lastLeg.minutes += edge.minutes
-    } else {
-      const line = lookup.linesById.get(lineId)
-
-      legs.push({
-        lineId,
-        lineName: line?.name ?? lineId,
-        lineColor: line?.color ?? '#888888',
-        stationIds: [from, to],
-        stationNames: [nameOf(from), nameOf(to)],
-        minutes: edge.minutes,
-        transferMinutesBefore: pendingTransferMinutes,
-      })
-
-      hasPendingTransfer = false
-      pendingTransferMinutes = 0
+  if (realSteps.length === 0) {
+    return {
+      fromVisualId,
+      toVisualId,
+      totalMinutes: path.minutes,
+      transfersCount: 0,
+      legs: [],
+      segmentKeys: new Set(),
+      visualIds: new Set(),
+      startAccess: null,
+      endAccess: null,
     }
   }
+
+  const info = createStationInfo(lookup)
+  const buildAccess = createAccessBuilder(info)
+
+  const { legs, segmentKeys, visualIds, pending, firstTransferFrom } = collectLegs(
+    realSteps,
+    graph,
+    info
+  )
+
+  const startAccess = extractStartAccess(legs, firstTransferFrom, buildAccess)
+  const endAccess = buildEndAccess(path, pending, buildAccess)
 
   return {
     fromVisualId,
     toVisualId,
     totalMinutes: path.minutes,
-    transfersCount: Math.max(0, legs.length - 1),
+    transfersCount: countTransfers(legs, startAccess, endAccess),
     legs,
     segmentKeys,
     visualIds,
+    startAccess,
+    endAccess,
   }
 }

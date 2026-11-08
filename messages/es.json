@@ -251,7 +251,9 @@
     "slowerBy": "{minutes} min más que el más rápido",
     "via": "Vía {n}",
     "addVia": "Añadir parada",
-    "removeVia": "Eliminar parada"
+    "removeVia": "Eliminar parada",
+    "access": "Camine hasta la estación",
+    "exit": "Salga de la estación"
   },
   "VerticalTimelineList": {
     "showMore": "Ver {count, plural, one {# estación más} other {# estaciones más}}",

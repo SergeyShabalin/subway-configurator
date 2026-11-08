@@ -36,7 +36,6 @@ export const LineBadge = memo(
   ({ x, y, text, lineType, color, fill, isDimmed, onDragEnd }: LineBadgeProps) => {
     const isRail = lineType === 'commuter_rail'
 
-    // Ширина параллелограмма растёт с длиной текста, круг остаётся фиксированным
     const width = isRail
       ? Math.max(RAIL_MIN_WIDTH, text.length * CHAR_WIDTH + RAIL_SKEW * 2 + 8)
       : CIRCLE_RADIUS * 2
@@ -55,7 +54,7 @@ export const LineBadge = memo(
         listening={!isDimmed}
         onDragEnd={handleDragEnd}
         onMouseDown={(e) => {
-          e.cancelBubble = true // не тянуть весь холст
+          e.cancelBubble = true
         }}
         onMouseEnter={(e) => {
           const stage = e.target.getStage()
@@ -97,7 +96,7 @@ export const LineBadge = memo(
           verticalAlign="middle"
           fontStyle="bold"
           fontSize={fontSize}
-          fill={isDimmed ? '#393737' : textColorFor(color)}
+          fill={isDimmed ? '#151414' : textColorFor(color)}
           listening={false}
         />
       </Group>
