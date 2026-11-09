@@ -9,15 +9,19 @@ export const useLineBadgeMove = () => {
 
   return useCallback(
     async (lineId: string, end: BadgeEnd, anchorId: string, x: number, y: number) => {
-      // Координаты якоря читаются в момент события, подписка на visuals не нужна
       const anchor = store.getState().visuals[anchorId]
+
       if (!anchor) return
 
-      const offset = { x: x - anchor.x, y: y - anchor.y }
+      const offset = {
+        x: x - anchor.x,
+        y: y - anchor.y,
+      }
 
-      updateLineBadgeOffset(lineId, end, offset) // сразу на карте
+      updateLineBadgeOffset(lineId, end, offset)
+
       try {
-        await linesService.updateBadgeOffset(lineId, end, offset) // затем в БД
+        await linesService.updateBadgeOffset(lineId, end, offset)
       } catch (error) {
         console.error('Failed to save badge position:', error)
       }

@@ -1,253 +1,63 @@
 'use client'
 
-import { CreateElement } from '@/components/canvas/features/CreateElement/CreateElement'
-import { EditLine } from '@/components/canvas/features/EditLine'
-import { EditStation } from '@/components/canvas/features/EditStation'
-import { EditTransfer } from '@/components/canvas/features/EditTransfer'
-import { useRouteFocus } from '@/components/canvas/features/RoutePanel/hooks/useRouteFocus'
 import { HintLetsStarted } from '@/components/canvas/MetroCanvas/HintLetsStarted/HintLetsStarted'
-import { useInitialCenterCanvas } from '@/components/canvas/MetroCanvas/hooks/useInitialCenterCanvas'
 import { useMetroLoader } from '@/components/canvas/MetroCanvas/hooks/useMetroLoader'
-import { useSegmentSelection } from '@/components/canvas/MetroCanvas/hooks/useSegmentSelection'
-import { useStationSelection } from '@/components/canvas/MetroCanvas/hooks/useStationSelection'
-import { useTouchGestures } from '@/components/canvas/MetroCanvas/hooks/useTouchGestures'
-import { useTransferSelection } from '@/components/canvas/MetroCanvas/hooks/useTransferSelection'
-import { MetroTransfers } from '@/components/canvas/MetroCanvas/MetroTransfers/MetroTransfers'
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
-import { visualsService } from '@/src/lib/services'
-import { setStage } from '@/src/lib/stageRegistry/stageRegistry'
-import { useMetroStore, useMetroStoreApi } from '@/store'
+import { useMetroStore } from '@/store'
 import type Konva from 'konva'
-import { forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
-import { Layer, Stage } from 'react-konva'
+import { useRef } from 'react'
+import { Stage } from 'react-konva'
 import { useMetroCanvas } from '../hooks'
-import { useMetroModal } from '../hooks/useMetroModal'
-import { useStageResize } from '../shared/useStageResize'
-import { useStageZoom } from '../shared/useStageZoom'
+import { useCanvasContextMenu } from './hooks/useCanvasContextMenu'
+import { useCanvasSelection } from './hooks/useCanvasSelection'
+import { useCanvasViewport } from './hooks/useCanvasViewport'
 import styles from './MetroCanvas.module.css'
-import { MetroLabels } from './MetroLabels/MetroLabels'
-import { MetroLineBadges } from './MetroLineBadges/MetroLineBadges'
-import { useLineBadgeMove } from './MetroLineBadges/useLineBadgeMove'
-import { useMetroLines } from './MetroLines/hooks/useMetroLines'
-import { MetroLines } from './MetroLines/MetroLines'
-import { MetroStations } from './MetroStations/MetroStations'
+import { MetroCanvasDialogs } from './MetroCanvasDialogs'
+import { MetroMapLayer } from './MetroMapLayer/MetroMapLayer'
 
-export interface MetroCanvasRef {
-  openAddStationModal: () => void
-  getClickPosition: () => { x: number; y: number }
-}
-
-const MIN_SCALE = 0.05
-const MAX_SCALE = 20
-const SCALE_STEP = 1.1
-const LABELS_MIN_SCALE = 0.35
-
-export const MetroCanvas = forwardRef<MetroCanvasRef>(() => {
-  const lineRef = useRef<Record<string, Konva.Line>>({})
-  const textRef = useRef<Record<string, Konva.Text>>({})
-
-  const store = useMetroStoreApi()
-
-  const visuals = useMetroStore((state) => state.visuals)
-  const stations = useMetroStore((state) => state.stations)
-  const updateVisualLabelOffset = useMetroStore((state) => state.updateVisualLabelOffset)
+export const MetroCanvas = () => {
+  const hasStations = useMetroStore((state) => Object.keys(state.visuals).length > 0)
+  const hasLines = useMetroStore((state) => state.lines.length > 0)
 
   const { isLoaded, isInitializing, reloadData } = useMetroCanvas()
-
-  const { selectedStationId, selectStation, clearSelection } = useStationSelection()
-
-  const {
-    selectedSegment,
-    selectSegment,
-    clearSelection: clearSegmentSelection,
-  } = useSegmentSelection()
-
-  const {
-    selectedTransferId,
-    selectTransfer,
-    clearSelection: clearTransferSelection,
-  } = useTransferSelection()
-
   const isBusy = !isLoaded || isInitializing
   const { showLoader } = useMetroLoader(isBusy)
 
-  const { isModalOpen, clickPosition, openModal, closeModal } = useMetroModal()
+  const selection = useCanvasSelection()
 
-  const { width, height } = useStageResize()
+  const stageRefForMenu = useRef<Konva.Stage | null>(null)
 
-  const labelsRef = useRef<Konva.Group>(null)
+  const { modal, handleContextMenu, handleLongPress } = useCanvasContextMenu(stageRefForMenu)
 
-  const handleScaleChange = useCallback((scale: number) => {
-    const group = labelsRef.current
-    if (!group) return
-
-    const show = scale >= LABELS_MIN_SCALE
-
-    if (group.visible() !== show) {
-      group.visible(show)
-    }
-  }, [])
-
-  const {
-    stageRef,
-    handleWheel,
-    zoomAt,
-    panBy,
-    beginInteraction,
-    endInteraction,
-    refreshHitGraph,
-    centerStage,
-  } = useStageZoom(MIN_SCALE, MAX_SCALE, SCALE_STEP, handleScaleChange)
-
-  useInitialCenterCanvas({
+  const { width, height, stageRef, stageHandlers } = useCanvasViewport({
     isLoaded,
-    visuals,
-    width,
-    height,
-    centerStage,
-  })
-
-  useRouteFocus(centerStage, width, height)
-
-  const handleLongPress = useCallback(
-    (worldX: number, worldY: number) => {
-      openModal(worldX, worldY)
-    },
-    [openModal]
-  )
-
-  useTouchGestures({
-    stageRef,
+    isBusy,
     onLongPress: handleLongPress,
-    zoomAt,
-    panBy,
-    flush: endInteraction,
-    enabled: !isBusy,
   })
 
-  useLayoutEffect(() => {
-    if (isBusy) return
-
-    refreshHitGraph()
-  }, [visuals, isBusy, refreshHitGraph])
-
-  const stationNames = useMemo(() => {
-    const map: Record<string, string> = {}
-
-    for (const station of stations) {
-      map[station.id] = station.name
-    }
-
-    return map
-  }, [stations])
-
-  const { lineData } = useMetroLines()
-
-  const hasLines = lineData.length > 0
-  const hasStations = Object.keys(visuals).length > 0
-  const showHint = !hasStations
-
-  const handleContextMenu = (e: Konva.KonvaEventObject<PointerEvent>) => {
-    e.evt.preventDefault()
-
-    const stage = stageRef.current
-    const pointer = stage?.getPointerPosition()
-
-    if (!stage || !pointer) return
-
-    const worldPos = stage.getAbsoluteTransform().copy().invert().point(pointer)
-
-    openModal(worldPos.x, worldPos.y)
+  const setStageRefs = (stage: Konva.Stage | null) => {
+    stageRef.current = stage
+    stageRefForMenu.current = stage
   }
 
-  const handleLabelMove = useCallback(
-    async (visualId: string, x: number, y: number) => {
-      const visual = store.getState().visuals[visualId]
-      if (!visual) return
-
-      const labelX = x - visual.x
-      const labelY = y - visual.y
-
-      updateVisualLabelOffset(visualId, labelX, labelY)
-
-      await visualsService.updateLabelPosition(visualId, labelX, labelY)
-    },
-    [store, updateVisualLabelOffset]
-  )
-
-  const handleBadgeMove = useLineBadgeMove()
-
-  useEffect(() => {
-    setStage(stageRef.current)
-
-    return () => setStage(null)
-  }, [isBusy, stageRef])
-
-  if (isBusy && showLoader) {
-    return <SubwayLoader />
-  }
-
-  if (isBusy) {
-    return null
-  }
+  if (isBusy) return showLoader ? <SubwayLoader /> : null
 
   return (
     <div className={styles.container} style={{ width, height }}>
       <Stage
-        ref={stageRef}
+        ref={setStageRefs}
         width={width}
         height={height}
-        onWheel={handleWheel}
         onContextMenu={handleContextMenu}
-        onDragStart={beginInteraction}
-        onDragEnd={endInteraction}
         draggable
+        {...stageHandlers}
       >
-        <Layer>
-          <MetroLines visuals={visuals} lineRef={lineRef} onSegmentClick={selectSegment} />
-          <MetroTransfers visuals={visuals} onTransferClick={selectTransfer} />
-          <MetroStations lineRef={lineRef} textRef={textRef} onStationClick={selectStation} />
-          <MetroLineBadges onBadgeMove={handleBadgeMove} />
-          <MetroLabels
-            stationNames={stationNames}
-            textRef={textRef}
-            onLabelMove={handleLabelMove}
-          />
-        </Layer>
+        <MetroMapLayer selection={selection} />
       </Stage>
 
-      {showHint && <HintLetsStarted hasLines={hasLines} />}
+      {!hasStations && <HintLetsStarted hasLines={hasLines} />}
 
-      <CreateElement
-        key={isModalOpen ? 'open' : 'closed'}
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        position={clickPosition}
-        reloadData={reloadData}
-      />
-
-      <EditStation
-        isOpen={selectedStationId !== null}
-        stationId={selectedStationId}
-        onClose={clearSelection}
-        reloadData={reloadData}
-      />
-
-      <EditLine
-        isOpen={selectedSegment !== null}
-        selectedSegment={selectedSegment}
-        onClose={clearSegmentSelection}
-        reloadData={reloadData}
-      />
-
-      <EditTransfer
-        isOpen={selectedTransferId !== null}
-        transferId={selectedTransferId}
-        onClose={clearTransferSelection}
-        reloadData={reloadData}
-      />
+      <MetroCanvasDialogs modal={modal} selection={selection} reloadData={reloadData} />
     </div>
   )
-})
-
-MetroCanvas.displayName = 'MetroCanvas'
+}
