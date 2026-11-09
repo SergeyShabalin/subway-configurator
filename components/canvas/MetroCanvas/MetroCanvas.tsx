@@ -29,7 +29,7 @@ export const MetroCanvas = () => {
 
   const { modal, handleContextMenu, handleLongPress } = useCanvasContextMenu(stageRefForMenu)
 
-  const { width, height, stageRef, labelsRef, stageHandlers } = useCanvasViewport({
+  const { width, height, stageRef, stageHandlers } = useCanvasViewport({
     isLoaded,
     isBusy,
     onLongPress: handleLongPress,
@@ -52,7 +52,7 @@ export const MetroCanvas = () => {
         draggable
         {...stageHandlers}
       >
-        <MetroMapLayer selection={selection} labelsRef={labelsRef} />
+        <MetroMapLayer selection={selection} />
       </Stage>
 
       {!hasStations && <HintLetsStarted hasLines={hasLines} />}

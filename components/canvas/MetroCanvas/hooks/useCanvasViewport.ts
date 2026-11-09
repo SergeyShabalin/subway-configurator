@@ -83,7 +83,6 @@ export const useCanvasViewport = ({ isLoaded, isBusy, onLongPress }: Params) => 
     width,
     height,
     stageRef,
-    labelsRef,
     stageHandlers: {
       onWheel: handleWheel,
       onDragStart: handleDragStart,

@@ -3,7 +3,7 @@
 import { MetroTransfers } from '@/components/canvas/MetroCanvas/MetroMapLayer/MetroTransfers/MetroTransfers'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
-import { memo, useMemo, useRef, type RefObject } from 'react'
+import { memo, useMemo, useRef } from 'react'
 import { Layer } from 'react-konva'
 import type { CanvasSelection } from '../hooks/useCanvasSelection'
 import { useLabelMove } from '../hooks/useLabelMove'
@@ -15,11 +15,10 @@ import { MetroStations } from './MetroStations/MetroStations'
 
 interface MetroMapLayerProps {
   selection: CanvasSelection
-  labelsRef: RefObject<Konva.Group | null>
 }
 
 /** Содержимое слоя карты. Imperative-ссылки на узлы нужны только ему. */
-export const MetroMapLayer = memo(({ selection, labelsRef }: MetroMapLayerProps) => {
+export const MetroMapLayer = memo(({ selection }: MetroMapLayerProps) => {
   const lineRef = useRef<Record<string, Konva.Line>>({})
   const textRef = useRef<Record<string, Konva.Text>>({})
 

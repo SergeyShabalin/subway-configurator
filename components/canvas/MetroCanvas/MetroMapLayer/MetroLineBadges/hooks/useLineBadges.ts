@@ -26,7 +26,7 @@ export interface LineBadgeViewModel {
   appearance: BadgeAppearance
   onDragEnd: (e: Konva.KonvaEventObject<DragEvent>) => void
 }
-export const useLineBadges = ({ onBadgeMove }: UseLineBadgesParams): LineBadgeViewModel[] => {
+export const useLineBadges = ({ onBadgeMove }: UseLineBadgesParams): Array<LineBadgeViewModel> => {
   const lines = useMetroStore((state) => state.lines)
   const visuals = useMetroStore((state) => state.visuals)
 
