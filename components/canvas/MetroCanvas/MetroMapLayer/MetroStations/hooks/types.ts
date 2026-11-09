@@ -1,4 +1,4 @@
-import { VisualData } from '@/components/canvas/MetroCanvas/MetroStations/types'
+import { VisualData } from '@/components/canvas/MetroCanvas/MetroMapLayer/MetroStations/types'
 import { MutableRefObject } from 'react'
 
 export interface UseMetroStationsParams {

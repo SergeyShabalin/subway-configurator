@@ -1,7 +1,7 @@
 'use client'
 
 import { EditLineForm } from '@/components/canvas/features/EditLine/EditLineForm/EditLineForm'
-import type { SelectedSegment } from '@/components/canvas/MetroCanvas/MetroLines/types'
+import type { SelectedSegment } from '@/components/canvas/MetroCanvas/MetroMapLayer/MetroLines/types'
 import { LineIcon } from '@/components/ui/Icons'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { Tabs } from '@/components/ui/Tabs'
