@@ -1,4 +1,3 @@
-export { CreateElement } from './CreateElement/CreateElement'
 export { CreateTransferModal } from './CreateTransferModal/CreateTransferModal'
 export { EditLine } from './EditLine/EditLine'
 export { EditStation } from './EditStation/EditStation'

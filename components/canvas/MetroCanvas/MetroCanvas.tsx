@@ -12,7 +12,7 @@ import { useCanvasContextMenu } from './hooks/useCanvasContextMenu'
 import { useCanvasSelection } from './hooks/useCanvasSelection'
 import { useCanvasViewport } from './hooks/useCanvasViewport'
 import styles from './MetroCanvas.module.css'
-import { MetroCanvasDialogs } from './MetroCanvasDialogs'
+import { MetroCanvasDialogs } from './MetroCanvasDialogs/MetroCanvasDialogs'
 import { MetroMapLayer } from './MetroMapLayer/MetroMapLayer'
 
 export const MetroCanvas = () => {

@@ -1,10 +1,11 @@
-import { lineMarker } from '@/components/canvas/shared/options/optionMarkers'
-import type { DropdownOption } from '@/components/ui/Dropdown'
+import { useAsyncAction, type ActionResult } from '@/components/canvas/shared/useAsyncAction'
 import type { InsertPosition } from '@/types/metro'
-import { useEffect, useMemo, useState } from 'react'
+import type { FormEvent } from 'react'
+import { useState } from 'react'
 import type { CreateStationFormProps } from '../types'
 import { useInsertPositionOptions } from './useInsertPositionOptions'
 import { useTimeField } from './useTimeField'
+import { useTransferOptions } from './useTransferOptions'
 
 const DEFAULT_TIME_MINUTES = 2
 const DEFAULT_INSERT_POSITION: InsertPosition = 'end'
@@ -22,7 +23,8 @@ export const useCreateStationForm = ({
   const [selectedLineId, setSelectedLineId] = useState('')
   const [transferVisualId, setTransferVisualId] = useState('')
   const [insertPosition, setInsertPosition] = useState<InsertPosition>(DEFAULT_INSERT_POSITION)
-  const [isLoading, setIsLoading] = useState(false)
+
+  const { isLoading, run } = useAsyncAction({ onLoadingChange })
 
   const {
     time,
@@ -33,18 +35,7 @@ export const useCreateStationForm = ({
   } = useTimeField(DEFAULT_TIME_MINUTES)
 
   const insertPositionOptions = useInsertPositionOptions(selectedLineId)
-
-  useEffect(() => {
-    onLoadingChange?.(isLoading)
-  }, [isLoading, onLoadingChange])
-
-  const transferOptions = useMemo((): Array<DropdownOption<string>> => {
-    if (!selectedLineId) return []
-
-    return (transferNodes ?? [])
-      .filter((node) => !node.lineIds.includes(String(selectedLineId)))
-      .map((node) => ({ value: node.visualId, label: node.name, leading: lineMarker(node.lines) }))
-  }, [transferNodes, selectedLineId])
+  const transferOptions = useTransferOptions(transferNodes, selectedLineId)
 
   const selectedTransfer = transferOptions.find((o) => o.value === transferVisualId)
   const resolvedName = selectedTransfer?.label ?? stationName
@@ -65,15 +56,11 @@ export const useCreateStationForm = ({
     resetTime()
   }
 
-  const handleSubmit = async (
-    e: React.FormEvent
-  ): Promise<{ success: true } | { success: false; error: unknown }> => {
+  const handleSubmit = async (e: FormEvent): Promise<ActionResult> => {
     e.preventDefault()
     if (isSubmitDisabled) return { success: true }
 
-    setIsLoading(true)
-
-    try {
+    return run(async () => {
       await onSubmit({
         name: resolvedName.trim(),
         lineId: selectedLineId,
@@ -86,12 +73,7 @@ export const useCreateStationForm = ({
 
       resetForm()
       onSuccess?.()
-      return { success: true }
-    } catch (error: unknown) {
-      return { success: false, error }
-    } finally {
-      setIsLoading(false)
-    }
+    })
   }
 
   return {

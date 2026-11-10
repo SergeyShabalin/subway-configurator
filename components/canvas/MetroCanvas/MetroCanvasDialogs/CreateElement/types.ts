@@ -1,6 +1,6 @@
 import type { InsertPosition, Line, LineType } from '@/types/metro'
 
-export interface AddElementProps {
+export interface CreateElementProps {
   isOpen: boolean
   position: { x: number; y: number }
   onClose: () => void
