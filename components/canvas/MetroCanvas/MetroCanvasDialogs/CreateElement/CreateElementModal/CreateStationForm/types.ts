@@ -1,5 +1,8 @@
+import {
+  CreateStationPayload,
+  TransferNode,
+} from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/CreateElement/types'
 import { DropdownOption } from '@/components/ui/Dropdown'
-import type { CreateStationPayload, TransferNode } from '../../types'
 
 export interface CreateStationFormProps {
   position: { x: number; y: number }

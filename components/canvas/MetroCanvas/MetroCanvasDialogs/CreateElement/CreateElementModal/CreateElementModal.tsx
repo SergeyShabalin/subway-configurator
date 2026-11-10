@@ -1,15 +1,16 @@
 'use client'
 
-import { CreateLineForm } from '@/components/canvas/features/CreateElement/CreateElementModal/CreateLineForm/CreateLineForm'
-import { CreateStationForm } from '@/components/canvas/features/CreateElement/CreateElementModal/CreateStationForm/CreateStationForm'
+import { CreateLineForm } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/CreateElement/CreateElementModal/CreateLineForm/CreateLineForm'
+import { CreateStationForm } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/CreateElement/CreateElementModal/CreateStationForm/CreateStationForm'
 import { LineIcon } from '@/components/ui/Icons/LineIcon/LineIcon'
 import { StationIcon } from '@/components/ui/Icons/StationIcon/StationIcon'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { Tabs } from '@/components/ui/Tabs'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import styles from './CreateElementModal.module.css'
-import type { AddElementModalProps, TabType } from './types'
+import { useDeferredClose } from './hooks/useDeferredClose'
+import type { CreateElementModalProps, TabType } from './types'
 
 export const CreateElementModal = ({
   isOpen,
@@ -20,28 +21,12 @@ export const CreateElementModal = ({
   transferNodes,
   onCreateStation,
   onCreateLine,
-}: AddElementModalProps) => {
+}: CreateElementModalProps) => {
   const t = useTranslations('CreateElementModal')
 
   const [activeTab, setActiveTab] = useState<TabType>(initialTab)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [pendingClose, setPendingClose] = useState(false)
-
-  useEffect(() => {
-    if (!pendingClose) return
-    if (isSubmitting) return
-
-    const timer = setTimeout(() => {
-      setPendingClose(false)
-      onClose()
-    }, 200)
-
-    return () => clearTimeout(timer)
-  }, [pendingClose, isSubmitting, onClose])
-
-  const handleSuccess = () => {
-    setPendingClose(true)
-  }
+  const { pendingClose, requestClose } = useDeferredClose(isSubmitting, onClose)
 
   if (!isOpen) return null
 
@@ -59,7 +44,7 @@ export const CreateElementModal = ({
     line: (
       <CreateLineForm
         onSubmit={onCreateLine}
-        onSuccess={handleSuccess}
+        onSuccess={requestClose}
         onCancel={onClose}
         onLoadingChange={setIsSubmitting}
       />
@@ -70,7 +55,7 @@ export const CreateElementModal = ({
         lineOptions={lineOptions}
         transferNodes={transferNodes}
         onSubmit={onCreateStation}
-        onSuccess={handleSuccess}
+        onSuccess={requestClose}
         onCancel={onClose}
         onLoadingChange={setIsSubmitting}
       />

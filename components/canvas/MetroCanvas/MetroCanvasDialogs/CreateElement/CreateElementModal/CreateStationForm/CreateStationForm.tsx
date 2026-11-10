@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { Dropdown } from '@/components/ui/Dropdown'
 import { Input } from '@/components/ui/Input/Input'
 import { useTranslations } from 'next-intl'
+import type { FormEvent } from 'react'
 import styles from './CreateStationForm.module.css'
 import { handleCreateStationError } from './helpers/handleCreateStationError'
 import { useCreateStationForm } from './hooks/useCreateStationForm'
@@ -14,7 +15,7 @@ export const CreateStationForm = (props: CreateStationFormProps) => {
 
   const { state, actions } = useCreateStationForm(props)
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     const result = await actions.handleSubmit(e)
     if (!result.success) {
       handleCreateStationError(result.error, t)

@@ -1,12 +1,12 @@
 'use client'
 
-import { CreateElement } from '@/components/canvas/features/CreateElement/CreateElement'
 import { EditLine } from '@/components/canvas/features/EditLine'
 import { EditStation } from '@/components/canvas/features/EditStation'
 import { EditTransfer } from '@/components/canvas/features/EditTransfer'
+import { CreateElement } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/CreateElement/CreateElement'
 import { memo } from 'react'
-import type { useCanvasContextMenu } from './hooks/useCanvasContextMenu'
-import type { CanvasSelection } from './hooks/useCanvasSelection'
+import type { useCanvasContextMenu } from '../hooks/useCanvasContextMenu'
+import type { CanvasSelection } from '../hooks/useCanvasSelection'
 
 interface MetroCanvasDialogsProps {
   modal: ReturnType<typeof useCanvasContextMenu>['modal']

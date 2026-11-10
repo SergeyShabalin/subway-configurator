@@ -2,12 +2,12 @@ import {
   CreateLinePayload,
   CreateStationPayload,
   TransferNode,
-} from '@/components/canvas/features/CreateElement/types'
-import { DropdownOption } from '@/components/ui/Dropdown'
+} from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/CreateElement/types'
+import type { DropdownOption } from '@/components/ui/Dropdown'
 
 export type TabType = 'station' | 'line'
 
-export interface AddElementModalProps {
+export interface CreateElementModalProps {
   isOpen: boolean
   onClose: () => void
   position: { x: number; y: number }
