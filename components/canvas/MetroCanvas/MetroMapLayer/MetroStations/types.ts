@@ -1,3 +1,4 @@
+import { TransferDropApi } from '@/components/canvas/MetroCanvas/transferDrop/types'
 import type { VisualStation } from '@/types/metro'
 import type Konva from 'konva'
 
@@ -13,6 +14,7 @@ export interface StationData {
 export interface MetroStationsProps {
   lineRef: React.MutableRefObject<Record<string, Konva.Line>>
   textRef: React.MutableRefObject<Record<string, Konva.Text>>
+  transferDrop: TransferDropApi
   onStationClick?: (stationId: string) => void
 }
 

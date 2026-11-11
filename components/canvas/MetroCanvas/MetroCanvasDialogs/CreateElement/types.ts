@@ -3,6 +3,12 @@ import type { InsertPosition, Line, LineType } from '@/types/metro'
 export interface CreateElementProps {
   isOpen: boolean
   position: { x: number; y: number }
+  /** Предвыбранная линия (вкладка станции) */
+  initialLineId?: string
+  /** Предвыбранная позиция вставки (вкладка станции) */
+  initialInsertPosition?: InsertPosition
+  /** Предвыбранный узел для пересадки (вкладка станции) */
+  initialTransferVisualId?: string
   onClose: () => void
   reloadData: () => Promise<void>
 }

@@ -17,6 +17,9 @@ export const CreateElementModal = ({
   onClose,
   position,
   initialTab = 'station',
+  initialLineId,
+  initialInsertPosition,
+  initialTransferVisualId,
   lineOptions,
   transferNodes,
   onCreateStation,
@@ -54,6 +57,9 @@ export const CreateElementModal = ({
         position={position}
         lineOptions={lineOptions}
         transferNodes={transferNodes}
+        initialLineId={initialLineId}
+        initialInsertPosition={initialInsertPosition}
+        initialTransferVisualId={initialTransferVisualId}
         onSubmit={onCreateStation}
         onSuccess={requestClose}
         onCancel={onClose}

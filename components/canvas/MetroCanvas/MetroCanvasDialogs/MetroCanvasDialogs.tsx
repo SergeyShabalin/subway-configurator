@@ -3,19 +3,29 @@
 import { EditLine } from '@/components/canvas/features/EditLine'
 import { EditStation } from '@/components/canvas/features/EditStation'
 import { EditTransfer } from '@/components/canvas/features/EditTransfer'
-import { CreateElement } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/CreateElement/CreateElement'
 import { memo } from 'react'
 import type { useCanvasContextMenu } from '../hooks/useCanvasContextMenu'
 import type { CanvasSelection } from '../hooks/useCanvasSelection'
+import type { TransferDraft } from '../transferDrop/types'
+import { CreateElement } from './CreateElement/CreateElement'
+import { TransferDropDialog } from './TransferDropDialog/TransferDropDialog'
 
 interface MetroCanvasDialogsProps {
   modal: ReturnType<typeof useCanvasContextMenu>['modal']
   selection: CanvasSelection
+  transferDraft: TransferDraft | null
+  onTransferDraftClose: () => void
   reloadData: () => Promise<void>
 }
 
 export const MetroCanvasDialogs = memo(
-  ({ modal, selection, reloadData }: MetroCanvasDialogsProps) => (
+  ({
+    modal,
+    selection,
+    transferDraft,
+    onTransferDraftClose,
+    reloadData,
+  }: MetroCanvasDialogsProps) => (
     <>
       <CreateElement
         key={modal.isModalOpen ? 'open' : 'closed'}
@@ -40,6 +50,11 @@ export const MetroCanvasDialogs = memo(
         isOpen={selection.transfer.selectedId !== null}
         transferId={selection.transfer.selectedId}
         onClose={selection.transfer.clear}
+        reloadData={reloadData}
+      />
+      <TransferDropDialog
+        draft={transferDraft}
+        onClose={onTransferDraftClose}
         reloadData={reloadData}
       />
     </>

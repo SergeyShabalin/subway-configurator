@@ -1,6 +1,9 @@
+// MetroMapLayer/MetroMapLayer.tsx
 'use client'
 
 import { MetroTransfers } from '@/components/canvas/MetroCanvas/MetroMapLayer/MetroTransfers/MetroTransfers'
+import { useTransferDrop } from '@/components/canvas/MetroCanvas/transferDrop/hooks/useTransferDrop'
+import type { TransferDraft } from '@/components/canvas/MetroCanvas/transferDrop/types'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { memo, useMemo, useRef } from 'react'
@@ -15,10 +18,11 @@ import { MetroStations } from './MetroStations/MetroStations'
 
 interface MetroMapLayerProps {
   selection: CanvasSelection
+  onTransferDrop: (draft: TransferDraft) => void
 }
 
 /** Содержимое слоя карты. Imperative-ссылки на узлы нужны только ему. */
-export const MetroMapLayer = memo(({ selection }: MetroMapLayerProps) => {
+export const MetroMapLayer = memo(({ selection, onTransferDrop }: MetroMapLayerProps) => {
   const lineRef = useRef<Record<string, Konva.Line>>({})
   const textRef = useRef<Record<string, Konva.Text>>({})
 
@@ -27,6 +31,7 @@ export const MetroMapLayer = memo(({ selection }: MetroMapLayerProps) => {
 
   const handleLabelMove = useLabelMove()
   const handleBadgeMove = useLineBadgeMove()
+  const transferDrop = useTransferDrop({ onDrop: onTransferDrop })
 
   const stationNames = useMemo(() => {
     const map: Record<string, string> = {}
@@ -42,6 +47,7 @@ export const MetroMapLayer = memo(({ selection }: MetroMapLayerProps) => {
         lineRef={lineRef}
         textRef={textRef}
         onStationClick={selection.station.select}
+        transferDrop={transferDrop}
       />
       <MetroLineBadges onBadgeMove={handleBadgeMove} />
       <MetroLabels stationNames={stationNames} textRef={textRef} onLabelMove={handleLabelMove} />
