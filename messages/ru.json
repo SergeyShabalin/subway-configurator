@@ -259,5 +259,11 @@
   "VerticalTimelineList": {
     "showMore": "Ещё {count, plural, one {# станция} few {# станции} many {# станций} other {# станции}}",
     "collapse": "Свернуть"
+  },
+  "TransferDropChoice": {
+    "title": "Что создать?",
+    "createTransfer": "Создать пересадку",
+    "createSameNameStation": "Создать одноимённую станцию",
+    "cancel": "Отмена"
   }
 }

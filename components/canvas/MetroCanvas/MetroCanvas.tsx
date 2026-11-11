@@ -1,3 +1,4 @@
+// MetroCanvas/MetroCanvas.tsx
 'use client'
 
 import { HintLetsStarted } from '@/components/canvas/MetroCanvas/HintLetsStarted/HintLetsStarted'
@@ -5,7 +6,7 @@ import { useMetroLoader } from '@/components/canvas/MetroCanvas/hooks/useMetroLo
 import { SubwayLoader } from '@/components/ui/SubwayLoader/SubwayLoader'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
-import { useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Stage } from 'react-konva'
 import { useMetroCanvas } from '../hooks'
 import { useCanvasContextMenu } from './hooks/useCanvasContextMenu'
@@ -14,6 +15,7 @@ import { useCanvasViewport } from './hooks/useCanvasViewport'
 import styles from './MetroCanvas.module.css'
 import { MetroCanvasDialogs } from './MetroCanvasDialogs/MetroCanvasDialogs'
 import { MetroMapLayer } from './MetroMapLayer/MetroMapLayer'
+import type { TransferDraft } from './transferDrop/types'
 
 export const MetroCanvas = () => {
   const hasStations = useMetroStore((state) => Object.keys(state.visuals).length > 0)
@@ -24,6 +26,9 @@ export const MetroCanvas = () => {
   const { showLoader } = useMetroLoader(isBusy)
 
   const selection = useCanvasSelection()
+
+  const [transferDraft, setTransferDraft] = useState<TransferDraft | null>(null)
+  const clearTransferDraft = useCallback(() => setTransferDraft(null), [])
 
   const stageRefForMenu = useRef<Konva.Stage | null>(null)
 
@@ -52,12 +57,18 @@ export const MetroCanvas = () => {
         draggable
         {...stageHandlers}
       >
-        <MetroMapLayer selection={selection} />
+        <MetroMapLayer selection={selection} onTransferDrop={setTransferDraft} />
       </Stage>
 
       {!hasStations && <HintLetsStarted hasLines={hasLines} />}
 
-      <MetroCanvasDialogs modal={modal} selection={selection} reloadData={reloadData} />
+      <MetroCanvasDialogs
+        modal={modal}
+        selection={selection}
+        transferDraft={transferDraft}
+        onTransferDraftClose={clearTransferDraft}
+        reloadData={reloadData}
+      />
     </div>
   )
 }

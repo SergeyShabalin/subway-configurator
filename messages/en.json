@@ -258,5 +258,11 @@
   "VerticalTimelineList": {
     "showMore": "Show {count, plural, one {# more station} other {# more stations}}",
     "collapse": "Show less"
+  },
+  "TransferDropChoice": {
+    "title": "What to create?",
+    "createTransfer": "Create transfer",
+    "createSameNameStation": "Create same-name station",
+    "cancel": "Cancel"
   }
 }

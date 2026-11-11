@@ -5,7 +5,15 @@ import { useCreateElementActions } from './hooks/useCreateElementActions'
 import { useCreateElementData } from './hooks/useCreateElementData'
 import type { CreateElementProps } from './types'
 
-export const CreateElement = ({ isOpen, position, onClose, reloadData }: CreateElementProps) => {
+export const CreateElement = ({
+  isOpen,
+  position,
+  initialLineId,
+  initialInsertPosition,
+  initialTransferVisualId,
+  onClose,
+  reloadData,
+}: CreateElementProps) => {
   const { lineOptions, transferNodes, hasLines } = useCreateElementData()
   const { createStation, createLine } = useCreateElementActions(reloadData)
 
@@ -15,6 +23,9 @@ export const CreateElement = ({ isOpen, position, onClose, reloadData }: CreateE
       onClose={onClose}
       position={position}
       initialTab={hasLines ? 'station' : 'line'}
+      initialLineId={initialLineId}
+      initialInsertPosition={initialInsertPosition}
+      initialTransferVisualId={initialTransferVisualId}
       lineOptions={lineOptions}
       transferNodes={transferNodes}
       onCreateStation={createStation}

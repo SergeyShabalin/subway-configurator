@@ -26,7 +26,7 @@ export const CreateStationForm = (props: CreateStationFormProps) => {
     <form onSubmit={onSubmit} className={styles.form}>
       <Dropdown
         value={state.selectedLineId}
-        options={props.lineOptions}
+        options={state.lineOptions}
         onChange={actions.handleLineChange}
         label={t('lineLabel')}
         placeholder={t('linePlaceholder')}

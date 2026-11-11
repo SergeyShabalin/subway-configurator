@@ -1,44 +1,35 @@
 'use client'
 
-import { useNodeOptions } from '@/components/canvas/shared/options/useNodeOptions'
 import { Button } from '@/components/ui/Button'
 import { Dropdown, type DropdownOption } from '@/components/ui/Dropdown'
 import { TransferIcon } from '@/components/ui/Icons/TransferIcon/TransferIcon'
 import { Input } from '@/components/ui/Input/Input'
 import { Modal } from '@/components/ui/Modal/Modal'
-import { transfersService } from '@/src/lib/services'
-import { TransferStyle } from '@/src/lib/services/transfers.service'
-import { useMetroStore } from '@/store'
+import type { TransferStyle } from '@/src/lib/services/transfers.service'
 import { useTranslations } from 'next-intl'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import styles from './CreateTransferModal.module.css'
-
-interface CreateTransferModalProps {
-  isOpen: boolean
-  fromVisualId: string
-  existingTransferIds: Array<string>
-  onCancel: () => void
-  onSuccess?: () => Promise<void>
-}
-
-const DEFAULT_STYLE: TransferStyle = 'dashed'
+import { handleCreateTransferError } from './helpers/handleCreateTransferError'
+import { useCreateTransferForm } from './hooks/useCreateTransferForm'
+import type { CreateTransferModalProps } from './types'
 
 export const CreateTransferModal = ({
   isOpen,
   fromVisualId,
+  initialToVisualId,
   existingTransferIds,
   onCancel,
   onSuccess,
 }: CreateTransferModalProps) => {
   const t = useTranslations('CreateTransferModal')
 
-  const loadData = useMetroStore((state) => state.loadData)
-  const nodeOptions = useNodeOptions()
-
-  const [selectedVisualId, setSelectedVisualId] = useState('')
-  const [timeMinutes, setTimeMinutes] = useState(3)
-  const [transferStyle, setTransferStyle] = useState<TransferStyle>(DEFAULT_STYLE)
-  const [isLoading, setIsLoading] = useState(false)
+  const { state, actions } = useCreateTransferForm({
+    fromVisualId,
+    initialToVisualId,
+    existingTransferIds,
+    onSuccess,
+    onError: (error) => handleCreateTransferError(error, t),
+  })
 
   const styleOptions = useMemo<Array<DropdownOption<TransferStyle>>>(
     () => [
@@ -49,68 +40,22 @@ export const CreateTransferModal = ({
     [t]
   )
 
-  // Пересадка возможна на узлы без общих линий с исходным и без уже созданной пересадки
-  const options = useMemo(() => {
-    const fromLineIds = nodeOptions.find((o) => o.value === fromVisualId)?.lineIds ?? []
-
-    return nodeOptions.filter(
-      (o) =>
-        o.value !== fromVisualId &&
-        !existingTransferIds.includes(o.value) &&
-        !o.lineIds.some((id) => fromLineIds.includes(id))
-    )
-  }, [nodeOptions, fromVisualId, existingTransferIds])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!selectedVisualId) return
-
-    setIsLoading(true)
-
-    try {
-      await transfersService.create({
-        fromVisualId,
-        toVisualId: selectedVisualId,
-        timeMinutes,
-        style: transferStyle,
-      })
-
-      await loadData()
-      setSelectedVisualId('')
-      setTimeMinutes(3)
-      setTransferStyle(DEFAULT_STYLE)
-      await onSuccess?.()
-    } catch (error) {
-      console.error('Error creating transfer:', error)
-
-      if (error instanceof Error && error.message.includes('ALREADY_EXISTS')) {
-        alert(t('errorAlreadyExists'))
-      } else if (error instanceof Error && error.message.includes('SAME_VISUAL')) {
-        alert(t('errorSameVisual'))
-      } else {
-        alert(t('errorCreate'))
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   return (
     <Modal isOpen={isOpen} onClose={onCancel} title={t('title')} icon={<TransferIcon />}>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form onSubmit={actions.handleSubmit} className={styles.form}>
         <Dropdown
-          value={selectedVisualId}
-          options={options}
-          onChange={setSelectedVisualId}
+          value={state.selectedVisualId}
+          options={state.options}
+          onChange={actions.setSelectedVisualId}
           label={t('targetLabel')}
           placeholder={t('targetPlaceholder')}
           emptyMessage={t('noTargets')}
         />
 
         <Dropdown
-          value={transferStyle}
+          value={state.transferStyle}
           options={styleOptions}
-          onChange={setTransferStyle}
+          onChange={actions.setTransferStyle}
           label={t('styleLabel')}
           placeholder={t('stylePlaceholder')}
         />
@@ -118,8 +63,8 @@ export const CreateTransferModal = ({
         <Input
           type="text"
           label={t('timeLabel')}
-          value={String(timeMinutes)}
-          onChange={(e) => setTimeMinutes(Number(e.target.value) || 0)}
+          value={String(state.timeMinutes)}
+          onChange={(e) => actions.setTimeMinutes(Number(e.target.value) || 0)}
         />
 
         <div className={styles.actions}>
@@ -128,14 +73,14 @@ export const CreateTransferModal = ({
             variant="outline"
             size="medium"
             onClick={onCancel}
-            disabled={isLoading}
+            disabled={state.isLoading}
           />
           <Button
             title={t('submit')}
             size="medium"
             type="submit"
-            loading={isLoading}
-            disabled={!selectedVisualId}
+            loading={state.isLoading}
+            disabled={state.isSubmitDisabled}
           />
         </div>
       </form>
