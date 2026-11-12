@@ -1,20 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Dropdown, type DropdownOption } from '@/components/ui/Dropdown'
+import { Dropdown } from '@/components/ui/Dropdown'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
+import type { DeleteScope, LineOption } from '../../types'
 import styles from './DeleteFromLineModal.module.css'
-
-export type DeleteScope = { type: 'all' } | { type: 'line'; stationId: string }
-
-export interface LineOption {
-  stationId: string
-  lineId: string
-  lineName: string
-  lineColor: string
-}
+import { buildDeleteScopeOptions, getInitialSelection, toDeleteScope } from './helpers/deleteScope'
 
 interface DeleteFromLineModalProps {
   isOpen: boolean
@@ -25,8 +18,6 @@ interface DeleteFromLineModalProps {
   loading: boolean
   onConfirm: (scope: DeleteScope) => void
 }
-
-const ALL = '__all__'
 
 export const DeleteFromLineModal = ({
   isOpen,
@@ -39,24 +30,15 @@ export const DeleteFromLineModal = ({
 }: DeleteFromLineModalProps) => {
   const t = useTranslations('EditStation')
 
-  const [selected, setSelected] = useState(
-    options.some((o) => o.stationId === defaultStationId)
-      ? (defaultStationId as string)
-      : (options[0]?.stationId ?? ALL)
+  const [selected, setSelected] = useState(() => getInitialSelection(options, defaultStationId))
+
+  const dropdownOptions = useMemo(
+    () => buildDeleteScopeOptions(options, t('deleteFromLineAll')),
+    [options, t]
   )
 
-  const dropdownOptions = useMemo((): Array<DropdownOption<string>> => {
-    const lineItems = options.map((option) => ({
-      value: option.stationId,
-      label: option.lineName,
-      color: option.lineColor,
-    }))
-
-    return [...lineItems, { value: ALL, label: t('deleteFromLineAll') }]
-  }, [options, t])
-
   const handleConfirm = () => {
-    onConfirm(selected === ALL ? { type: 'all' } : { type: 'line', stationId: selected })
+    onConfirm(toDeleteScope(selected))
   }
 
   return (

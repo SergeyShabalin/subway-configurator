@@ -2,7 +2,7 @@
 
 import { CreateTransferModal } from '@/components/canvas/features'
 import { useState } from 'react'
-import type { TransferDraft } from '../../transferDrop/types'
+import type { TransferDraft } from '../../MetroMapLayer/MetroStations/TransferDrop/types'
 import { CreateElement } from '../CreateElement/CreateElement'
 import { useTransferDropPlan } from './hooks/useTransferDropPlan'
 import { TransferDropChoiceModal } from './TransferDropChoiceModal'

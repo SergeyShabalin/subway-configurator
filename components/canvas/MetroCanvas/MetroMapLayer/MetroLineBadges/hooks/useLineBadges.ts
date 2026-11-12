@@ -26,16 +26,51 @@ export interface LineBadgeViewModel {
   appearance: BadgeAppearance
   onDragEnd: (e: Konva.KonvaEventObject<DragEvent>) => void
 }
+
+const NO_VISUAL_IDS = new Set<string>()
+
 export const useLineBadges = ({ onBadgeMove }: UseLineBadgesParams): Array<LineBadgeViewModel> => {
   const lines = useMetroStore((state) => state.lines)
   const visuals = useMetroStore((state) => state.visuals)
+  const visualToStations = useMetroStore((state) => state.visualToStations)
 
   const { theme } = useTheme()
-  const routeVisualIds = useRoute()?.visualIds
+  const route = useRoute()
+  const routeVisualIds = route?.visualIds
+
+  // Станции, которые маршрут реально использует
+  const routeStationIds = useMemo(() => {
+    if (!route) return null
+
+    const ids = new Set<string>()
+    for (const leg of route.legs) leg.stationIds.forEach((id) => ids.add(String(id)))
+    for (const access of [route.startAccess, route.endAccess]) {
+      if (!access) continue
+      ids.add(String(access.fromStationId))
+      ids.add(String(access.toStationId))
+    }
+    return ids
+  }, [route])
 
   return useMemo(() => {
     const badges = resolveBadges(lines, visuals)
     const dimmedColor = CANVAS_DIMMED_COLOR[theme]
+
+    const lineStations = new Map(
+      lines.map((line) => [String(line.id), new Set((line.logicalStationIds ?? []).map(String))])
+    )
+
+    // Станция этой линии на узле бейджа участвует в маршруте
+    const isLineUsedAtAnchor = (lineId: string, anchorId: string) => {
+      if (!routeStationIds) return true
+
+      const ownStations = lineStations.get(String(lineId))
+      if (!ownStations) return true
+
+      return (visualToStations[anchorId] ?? []).some(
+        (stationId) => ownStations.has(String(stationId)) && routeStationIds.has(String(stationId))
+      )
+    }
 
     return badges.map((badge) => ({
       key: badge.key,
@@ -48,7 +83,9 @@ export const useLineBadges = ({ onBadgeMove }: UseLineBadgesParams): Array<LineB
       appearance: resolveBadgeAppearance({
         color: badge.color,
         anchorId: badge.anchorId,
-        routeVisualIds,
+        routeVisualIds: isLineUsedAtAnchor(badge.lineId, badge.anchorId)
+          ? routeVisualIds
+          : NO_VISUAL_IDS,
         dimmedColor,
       }),
 
@@ -56,5 +93,5 @@ export const useLineBadges = ({ onBadgeMove }: UseLineBadgesParams): Array<LineB
         onMove: (x, y) => onBadgeMove(badge.lineId, badge.end, badge.anchorId, x, y),
       }),
     }))
-  }, [lines, visuals, theme, routeVisualIds, onBadgeMove])
+  }, [lines, visuals, visualToStations, theme, routeVisualIds, routeStationIds, onBadgeMove])
 }

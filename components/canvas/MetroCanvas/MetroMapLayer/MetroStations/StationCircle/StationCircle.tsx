@@ -29,6 +29,7 @@ const StationCircleUI = memo(
     isTransferStation,
     color,
     colors,
+    colorsActive,
     stationId,
     isDimmed = false,
     isLocked,
@@ -57,6 +58,9 @@ const StationCircleUI = memo(
     const strokeWidth = RING_WIDTH
 
     const multiColors = isMultiLine && colors && colors.length >= 2 ? colors : null
+
+    const ringColor = (c: string, index: number) =>
+      colorsActive?.[index] === false ? dimmedColor : c
 
     const interactiveProps = isLocked
       ? { listening: false }
@@ -129,7 +133,7 @@ const StationCircleUI = memo(
           y={visual.y ?? 0}
           radius={baseRadius}
           fill={fillColor}
-          stroke={multiColors[0] ?? color}
+          stroke={ringColor(multiColors[0], 0)}
           strokeWidth={strokeWidth}
           {...hoverShadowProps}
           {...interactiveProps}
@@ -145,7 +149,7 @@ const StationCircleUI = memo(
               y={visual.y ?? 0}
               radius={innerRadius}
               fill="transparent"
-              stroke={c}
+              stroke={ringColor(c, index + 1)}
               strokeWidth={RING_WIDTH}
               listening={false}
             />

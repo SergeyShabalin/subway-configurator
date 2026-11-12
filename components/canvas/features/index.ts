@@ -1,4 +1,3 @@
 export { CreateTransferModal } from './CreateTransferModal/CreateTransferModal'
 export { EditLine } from './EditLine/EditLine'
-export { EditStation } from './EditStation/EditStation'
 export { EditTransfer } from './EditTransfer/EditTransfer'

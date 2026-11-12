@@ -8,7 +8,7 @@ interface DropTargetRingProps {
   armed: boolean
 }
 
-export const DropTargetRing = memo(({ x, y, armed }: DropTargetRingProps) => (
+export const TransferDropRing = memo(({ x, y, armed }: DropTargetRingProps) => (
   <Circle
     x={x}
     y={y}
@@ -20,4 +20,4 @@ export const DropTargetRing = memo(({ x, y, armed }: DropTargetRingProps) => (
   />
 ))
 
-DropTargetRing.displayName = 'DropTargetRing'
+TransferDropRing.displayName = 'TransferDropRing'
