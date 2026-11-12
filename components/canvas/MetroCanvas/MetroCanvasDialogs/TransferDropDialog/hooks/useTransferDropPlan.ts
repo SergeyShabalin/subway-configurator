@@ -2,7 +2,7 @@ import { getExistingTransferTargetIds } from '@/components/canvas/shared/transfe
 import { getLineEdges } from '@/components/canvas/shared/transfers/getLineEdges'
 import { useMetroStore } from '@/store'
 import { useMemo } from 'react'
-import type { TransferDraft } from '../../../transferDrop/types'
+import type { TransferDraft } from '../../../MetroMapLayer/MetroStations/TransferDrop/types'
 
 export const useTransferDropPlan = (draft: TransferDraft) => {
   const visualTransfers = useMetroStore((state) => state.visualTransfers)

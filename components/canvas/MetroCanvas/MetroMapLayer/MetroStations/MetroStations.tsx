@@ -1,11 +1,12 @@
 'use client'
+
 import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
-import { DropTargetRing } from '@/components/canvas/MetroCanvas/transferDrop/DropTargetRing'
+import { TransferDropRing } from '@/components/canvas/MetroCanvas/MetroMapLayer/MetroStations/TransferDrop/TransferDropRing'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
-import { useCallback } from 'react'
-import { StationCircle } from './StationCircle'
+import { useCallback, useMemo } from 'react'
 import { useMetroDrag, useMetroPosition, useMetroStations } from './hooks'
+import { StationCircle } from './StationCircle'
 import type { MetroStationsProps } from './types'
 
 export const MetroStations = ({
@@ -16,9 +17,23 @@ export const MetroStations = ({
 }: MetroStationsProps) => {
   const visuals = useMetroStore((state) => state.visuals)
   const visualToStations = useMetroStore((state) => state.visualToStations)
-  const routeVisualIds = useRoute()?.visualIds
+  const route = useRoute()
+  const routeVisualIds = route?.visualIds
 
-  const { visualData } = useMetroStations()
+  const routeStationIds = useMemo(() => {
+    if (!route) return null
+
+    const ids = new Set<string>()
+    for (const leg of route.legs) leg.stationIds.forEach((id) => ids.add(id))
+    for (const access of [route.startAccess, route.endAccess]) {
+      if (!access) continue
+      ids.add(access.fromStationId)
+      ids.add(access.toStationId)
+    }
+    return ids
+  }, [route])
+
+  const { visualData } = useMetroStations(routeStationIds)
   const { savePosition } = useMetroPosition()
   const { handleDragStart, handleDragMove, handleDragEnd } = useMetroDrag()
 
@@ -52,6 +67,8 @@ export const MetroStations = ({
         const data = visualData[visual.id]
         if (!data) return null
 
+        const { isMultiLine, isTransferStation, color, colors, colorsActive } = data
+
         const stationIds = visualToStations[visual.id] ?? []
         const stationId = stationIds[0]
         if (!stationId) return null
@@ -60,10 +77,11 @@ export const MetroStations = ({
           <StationCircle
             key={visual.id}
             visual={visual}
-            isMultiLine={data.isMultiLine}
-            isTransferStation={data.isTransferStation}
-            color={data.color}
-            colors={data.colors}
+            isMultiLine={isMultiLine}
+            isTransferStation={isTransferStation}
+            color={color}
+            colors={colors}
+            colorsActive={colorsActive}
             stationId={stationId}
             isDimmed={routeVisualIds ? !routeVisualIds.has(visual.id) : false}
             onDragStart={handleDragStart}
@@ -75,7 +93,7 @@ export const MetroStations = ({
       })}
 
       {transferDrop.target && dropVisual && (
-        <DropTargetRing x={dropVisual.x} y={dropVisual.y} armed={transferDrop.target.armed} />
+        <TransferDropRing x={dropVisual.x} y={dropVisual.y} armed={transferDrop.target.armed} />
       )}
     </>
   )

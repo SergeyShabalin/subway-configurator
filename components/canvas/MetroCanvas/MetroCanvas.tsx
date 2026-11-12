@@ -15,7 +15,7 @@ import { useCanvasViewport } from './hooks/useCanvasViewport'
 import styles from './MetroCanvas.module.css'
 import { MetroCanvasDialogs } from './MetroCanvasDialogs/MetroCanvasDialogs'
 import { MetroMapLayer } from './MetroMapLayer/MetroMapLayer'
-import type { TransferDraft } from './transferDrop/types'
+import type { TransferDraft } from './MetroMapLayer/MetroStations/TransferDrop/types'
 
 export const MetroCanvas = () => {
   const hasStations = useMetroStore((state) => Object.keys(state.visuals).length > 0)

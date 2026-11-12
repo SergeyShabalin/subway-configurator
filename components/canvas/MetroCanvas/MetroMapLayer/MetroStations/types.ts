@@ -1,4 +1,4 @@
-import { TransferDropApi } from '@/components/canvas/MetroCanvas/transferDrop/types'
+import { TransferDropApi } from '@/components/canvas/MetroCanvas/MetroMapLayer/MetroStations/TransferDrop/types'
 import type { VisualStation } from '@/types/metro'
 import type Konva from 'konva'
 
@@ -9,6 +9,7 @@ export interface StationData {
   isTransferStation: boolean
   color?: string
   colors?: Array<string>
+  colorsActive?: Array<boolean>
 }
 
 export interface MetroStationsProps {
@@ -30,4 +31,5 @@ export interface StationCircleProps {
   onDragMove: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
   onDragEnd: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
   onStationClick?: (stationId: string) => void
+  colorsActive?: Array<boolean>
 }
