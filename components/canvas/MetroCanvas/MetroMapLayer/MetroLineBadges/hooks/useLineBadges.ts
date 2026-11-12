@@ -1,7 +1,10 @@
 import { useMemo } from 'react'
 
 import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
-import { CANVAS_DIMMED_COLOR } from '@/components/canvas/shared/dimmedColors'
+import {
+  CANVAS_DIMMED_BADGE_TEXT_COLOR,
+  CANVAS_DIMMED_COLOR,
+} from '@/components/canvas/shared/dimmedColors'
 import { useTheme } from '@/context/theme-context'
 import { useMetroStore } from '@/store'
 import type { BadgeEnd } from '@/types/metro'
@@ -55,6 +58,7 @@ export const useLineBadges = ({ onBadgeMove }: UseLineBadgesParams): Array<LineB
   return useMemo(() => {
     const badges = resolveBadges(lines, visuals)
     const dimmedColor = CANVAS_DIMMED_COLOR[theme]
+    const dimmedTextColor = CANVAS_DIMMED_BADGE_TEXT_COLOR[theme]
 
     const lineStations = new Map(
       lines.map((line) => [String(line.id), new Set((line.logicalStationIds ?? []).map(String))])
@@ -87,6 +91,7 @@ export const useLineBadges = ({ onBadgeMove }: UseLineBadgesParams): Array<LineB
           ? routeVisualIds
           : NO_VISUAL_IDS,
         dimmedColor,
+        dimmedTextColor,
       }),
 
       onDragEnd: createBadgeDragHandler({

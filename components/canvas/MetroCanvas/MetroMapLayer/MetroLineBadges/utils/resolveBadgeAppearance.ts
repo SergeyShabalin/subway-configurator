@@ -6,6 +6,7 @@ interface ResolveBadgeAppearanceParams {
   anchorId: string
   routeVisualIds?: Set<string>
   dimmedColor: string
+  dimmedTextColor: string
 }
 
 export const resolveBadgeAppearance = ({
@@ -13,12 +14,13 @@ export const resolveBadgeAppearance = ({
   anchorId,
   routeVisualIds,
   dimmedColor,
+  dimmedTextColor,
 }: ResolveBadgeAppearanceParams): BadgeAppearance => {
   const isDimmed = routeVisualIds ? !routeVisualIds.has(anchorId) : false
 
   return {
     isDimmed,
     fill: isDimmed ? dimmedColor : color,
-    textColor: isDimmed ? '#151414' : resolveBadgeTextColor(color),
+    textColor: isDimmed ? dimmedTextColor : resolveBadgeTextColor(color),
   }
 }
