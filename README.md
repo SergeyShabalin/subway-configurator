@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Subway Configurator
 
-## Getting Started
+Редактор схем метро. Позволяет рисовать линии и станции на холсте, создавать пересадки, строить маршруты между станциями и выравнивать станции по прямой.
 
-First, run the development server:
+## Возможности
+
+- Линии (метро и пригородные) со своим цветом и значком.
+- Станции на холсте с перетаскиванием. Одноимённые станции разных линий отображаются одним узлом с градиентной обводкой.
+- Пересадки между станциями, в том числе создание перетаскиванием одной станции на другую.
+- Построение маршрута с промежуточными точками и несколькими вариантами. Неиспользуемые линии узла и их значки подсвечиваются серым.
+- Выравнивание станций линии по прямой с возможностью отмены.
+- Светлая и тёмная темы, несколько языков интерфейса.
+
+## Стек
+
+- Next.js 16, React 19, TypeScript
+- Konva и react-konva для холста
+- Zustand для состояния
+- next-intl для переводов
+- ESLint, Prettier, Stylelint
+
+## Быстрый старт
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Приложение откроется на [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/[locale]/page.tsx`. The page auto-updates as you edit the file.
+## Скрипты
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Команда | Что делает |
+|---|---|
+| `npm run dev` | Запуск dev-сервера (webpack) |
+| `npm run build` | Продакшен-сборка (перед ней запускается линт) |
+| `npm run start` | Запуск собранного приложения |
+| `npm run lint` | ESLint без предупреждений |
+| `npm run lint:fix` | ESLint с автоисправлением |
+| `npm run lint:css` | Stylelint для CSS |
+| `npm run type-check` | Проверка типов без сборки |
 
-## Learn More
+## Структура проекта
 
-To learn more about Next.js, take a look at the following resources:
+```
+components/
+  canvas/
+    MetroCanvas/        холст, слои, диалоги
+    features/           панель маршрута и другие фичи
+    shared/             общие хуки, опции и цвета
+  ui/                   переиспользуемые компоненты
+src/lib/
+  routing/              построение графа и поиск маршрутов
+  layout/               выравнивание станций
+  services/             работа с API
+store/                  состояние (Zustand)
+types/                  общие типы
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Соглашения
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Компоненты разбиты по ответственностям: контейнер, представление, хуки с логикой, чистые функции в `helpers`.
+- Хуки и хелперы лежат рядом с единственным компонентом, который их использует.
+- Ошибки пользователю показываются через `handle*Error`, вызовы сервисов собраны в `use*Actions`.
+- Перед коммитом: `npm run type-check && npm run lint`.
