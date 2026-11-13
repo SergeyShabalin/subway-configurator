@@ -10,17 +10,11 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "type-check": "tsc --noEmit",
-    "lint:css": "stylelint **/*.css",
-    "migrate": "tsx scripts/migrate.ts",
-    "db:init": "tsx scripts/init-db.ts",
-    "db:reset": "npx rimraf metro.db && tsx scripts/init-db.ts",
-    "db:seed": "tsx migrate.ts"
+    "lint:css": "stylelint **/*.css"
   },
   "dependencies": {
     "@dnd-kit/modifiers": "^9.0.0",
     "axios": "^1.20.0",
-    "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^13.0.3",
     "jspdf": "^4.2.1",
     "konva": "^10.3.0",
     "next": "^16.4.1",
@@ -31,8 +25,6 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -48,7 +40,6 @@
     "stylelint": "^17.14.1",
     "stylelint-config-clean-order": "^10.0.0",
     "stylelint-config-standard": "^40.0.0",
-    "tsx": "^4.23.11",
     "typescript": "^5"
   }
 }
