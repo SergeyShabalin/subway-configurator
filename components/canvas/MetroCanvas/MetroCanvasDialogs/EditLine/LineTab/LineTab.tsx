@@ -5,16 +5,16 @@ import { Dropdown } from '@/components/ui/Dropdown'
 import { Input } from '@/components/ui/Input/Input'
 import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
-import styles from './EditLineForm.module.css'
+import styles from './LineTab.module.css'
 import { buildLineTypeOptions } from './helpers/buildLineTypeOptions'
 import { handleEditLineError } from './helpers/handleEditLineError'
-import { useEditLineForm } from './hooks/useEditLineForm'
-import type { EditLineFormProps } from './types'
+import { useLineTab } from './hooks/useLineTab'
+import type { LineTabProps } from './types'
 
-export const EditLineForm = ({ line, onClose, reloadData }: EditLineFormProps) => {
-  const t = useTranslations('EditLineForm')
+export const LineTab = ({ line, onClose, reloadData }: LineTabProps) => {
+  const t = useTranslations('LineTab')
 
-  const { state, actions } = useEditLineForm({
+  const { state, actions } = useLineTab({
     line,
     onClose,
     reloadData,

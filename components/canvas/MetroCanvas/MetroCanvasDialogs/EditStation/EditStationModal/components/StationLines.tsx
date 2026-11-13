@@ -35,9 +35,9 @@ export const StationLines = ({
     <div className={styles.linesList}>
       <span className={styles.linesLabel}>{t('currentLines')}</span>
       <ul className={styles.linesItems}>
-        {lineOptions.map((line) => (
-          <li key={line.stationId}>
-            <InfoRow value={line.lineName} color={line.lineColor} indicatorType="dot" />
+        {lineOptions.map(({ stationId, line }) => (
+          <li key={stationId}>
+            <InfoRow value={line.name} color={line.color} indicatorType="dot" />
           </li>
         ))}
       </ul>

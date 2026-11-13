@@ -1,11 +1,8 @@
+import { StationOnLine } from '@/components/canvas/shared/options/lineLookup'
+
 export type DeleteScope = { type: 'all' } | { type: 'line'; stationId: string }
 
-export interface LineOption {
-  stationId: string
-  lineId: string
-  lineName: string
-  lineColor: string
-}
+export type LineOption = StationOnLine
 
 export interface TransferItem {
   id: string

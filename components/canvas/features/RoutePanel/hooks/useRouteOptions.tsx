@@ -1,6 +1,6 @@
-import { lineMarker } from '@/components/canvas/shared/options/optionMarkers'
+import { createLineLookup } from '@/components/canvas/shared/options/lineLookup'
+import { buildLineMarkedOption } from '@/components/canvas/shared/options/lineOptionHelpers'
 import { useMetroStore } from '@/store'
-import type { Line } from '@/types/metro'
 import { useLocale } from 'next-intl'
 import { useMemo } from 'react'
 import { buildDropdownOptions, buildStationOptions } from '../utils/routeUtils'
@@ -26,20 +26,11 @@ export const useRouteOptions = () => {
 
   const dropdownOptions = useMemo(() => {
     const base = buildDropdownOptions(options, stations, lines, visualToStations)
+    const { getNodeLines } = createLineLookup(stations, lines)
 
-    const stationById = new Map(stations.map((station) => [station.id, station]))
-    const lineById = new Map(lines.map((line) => [line.id, line]))
-
-    return base.map(({ value, label }) => {
-      const nodeLines = new Map<string, Line>()
-      for (const stationId of visualToStations[value] ?? [value]) {
-        const station = stationById.get(stationId)
-        const line = station ? lineById.get(station.line_id) : undefined
-        if (line) nodeLines.set(line.id, line)
-      }
-
-      return { value, label, leading: lineMarker([...nodeLines.values()]) }
-    })
+    return base.map(({ value, label }) =>
+      buildLineMarkedOption(value, label, getNodeLines(visualToStations[value] ?? [value]))
+    )
   }, [options, stations, lines, visualToStations])
 
   return { options, dropdownOptions }

@@ -1,6 +1,6 @@
 import type { Line } from '@/types/metro'
 
-export interface EditLineFormProps {
+export interface LineTabProps {
   line: Line
   onClose: () => void
   reloadData: () => Promise<void>

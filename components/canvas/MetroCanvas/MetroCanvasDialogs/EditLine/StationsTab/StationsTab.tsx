@@ -2,10 +2,12 @@
 
 import { SortableList } from '@/components/ui/SortableList'
 import { useStationsOrder } from './hooks/useStationsOrder'
-import type { LineStationsTabProps } from './types'
+import { useStationsTabItems } from './hooks/useStationsTabItems'
+import type { StationsTabProps } from './types'
 
-export const LineStationsTab = ({ stations, onReorder }: LineStationsTabProps) => {
-  const { orderedStations, handleReorder } = useStationsOrder({ stations, onReorder })
+export const StationsTab = ({ line, onReorder }: StationsTabProps) => {
+  const items = useStationsTabItems(line)
+  const { orderedStations, handleReorder } = useStationsOrder({ items, onReorder })
 
   return (
     <SortableList

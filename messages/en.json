@@ -155,16 +155,6 @@
     "styleDotted": "Overground (dotted)",
     "styleSolid": "Solid"
   },
-  "EditSegmentModal": {
-    "title": "Segment information",
-    "from": "From station",
-    "to": "To station",
-    "line": "Line",
-    "timeLabel": "Travel time",
-    "minutes": "minutes",
-    "save": "Save",
-    "errorSave": "Failed to save travel time"
-  },
   "EditLine": {
     "title": "Edit line",
     "tabSegment": "Segment",
@@ -190,7 +180,7 @@
     "dragHandle": "Drag to reorder",
     "errorReorder": "Failed to reorder the stations"
   },
-  "EditLineForm": {
+  "LineTab": {
     "nameLabel": "Line name",
     "colorLabel": "Line color",
     "save": "Save",
@@ -201,6 +191,16 @@
     "typeSubway": "Metro",
     "typeCommuterRail": "Commuter rail",
     "lineBadge": "Line Badge"
+  },
+  "SegmentTab": {
+    "title": "Segment information",
+    "from": "From station",
+    "to": "To station",
+    "line": "Line",
+    "timeLabel": "Travel time",
+    "minutes": "minutes",
+    "save": "Save",
+    "errorSave": "Failed to save travel time"
   },
   "EditTransfer": {
     "title": "Edit transfer",

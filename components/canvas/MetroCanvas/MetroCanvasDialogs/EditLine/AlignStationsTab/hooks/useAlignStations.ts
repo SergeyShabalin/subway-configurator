@@ -1,5 +1,9 @@
 'use client'
 
+import {
+  Alignment,
+  AlignStatus,
+} from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine/AlignStationsTab/types'
 import { alignOnStraightLine, getPathBetween } from '@/src/lib/layout/alignStations'
 import { visualsService } from '@/src/lib/services'
 import { useMetroStore, useMetroStoreApi } from '@/store'
@@ -9,7 +13,6 @@ import { buildAlignOptions } from '../helpers/buildAlignOptions'
 import { countSharedStations } from '../helpers/countSharedStations'
 import { getPositionedPath } from '../helpers/getPositionedPath'
 import { resolveAlignProblem } from '../helpers/resolveAlignProblem'
-import type { AlignStatus, Alignment } from '../types'
 
 export const useAlignStations = (line: Line) => {
   const store = useMetroStoreApi()

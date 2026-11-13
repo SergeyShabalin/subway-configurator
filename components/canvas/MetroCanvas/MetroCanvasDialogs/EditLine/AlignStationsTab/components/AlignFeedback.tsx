@@ -1,8 +1,8 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import type { useAlignStations } from '../../hooks/useAlignStations'
 import styles from '../AlignStationsTab.module.css'
+import type { useAlignStations } from '../hooks/useAlignStations'
 
 interface AlignFeedbackProps {
   feedback: ReturnType<typeof useAlignStations>['feedback']
