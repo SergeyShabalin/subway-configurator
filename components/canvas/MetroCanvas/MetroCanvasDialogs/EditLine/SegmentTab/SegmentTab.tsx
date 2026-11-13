@@ -6,12 +6,12 @@ import { InfoRow } from '@/components/ui/InfoRow/InfoRow'
 import { Input } from '@/components/ui/Input/Input'
 import { useTranslations } from 'next-intl'
 import { useTimeEditor } from '../hooks/useTimeEditor'
-import styles from './EditSegmentForm.module.css'
+import styles from './SegmentTab.module.css'
 import { handleSaveSegmentError } from './helpers/handleSaveSegmentError'
-import type { EditSegmentFormProps } from './types'
+import type { SegmentTabProps } from './types'
 
-export const EditSegmentForm = ({ segment, onSave, onClose }: EditSegmentFormProps) => {
-  const t = useTranslations('EditSegmentModal')
+export const SegmentTab = ({ segment, onSave, onClose }: SegmentTabProps) => {
+  const t = useTranslations('SegmentTab')
 
   const { fromStationName, toStationName, timeMinutes, lineName, lineColor } = segment
 

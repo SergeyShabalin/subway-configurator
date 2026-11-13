@@ -3,13 +3,11 @@ import { linesService } from '@/src/lib/services'
 import type { LineType } from '@/types/metro'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
-import type { EditLineFormProps } from '../types'
+import type { LineTabProps } from '../types'
 
-type UseEditLineFormParams = EditLineFormProps & {
-  onError: (error: unknown) => void
-}
+type UseLineTabParams = LineTabProps & { onError: (error: unknown) => void }
 
-export const useEditLineForm = ({ line, onClose, reloadData, onError }: UseEditLineFormParams) => {
+export const useLineTab = ({ line, onClose, reloadData, onError }: UseLineTabParams) => {
   const [name, setName] = useState(line.name)
   const [color, setColor] = useState(line.color)
   const [lineBadge, setLineBadge] = useState(line.lineBadge)

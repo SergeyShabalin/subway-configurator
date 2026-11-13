@@ -3,10 +3,10 @@
 import { Dropdown } from '@/components/ui/Dropdown'
 import type { Line } from '@/types/metro'
 import { useTranslations } from 'next-intl'
-import { useAlignStations } from '../hooks/useAlignStations'
 import styles from './AlignStationsTab.module.css'
 import { AlignControls } from './components/AlignControls'
 import { AlignFeedback } from './components/AlignFeedback'
+import { useAlignStations } from './hooks/useAlignStations'
 
 interface AlignStationsTabProps {
   line: Line

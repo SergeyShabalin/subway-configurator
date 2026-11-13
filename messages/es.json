@@ -155,16 +155,6 @@
     "styleDotted": "Superficie (punteado)",
     "styleSolid": "Continuo"
   },
-  "EditSegmentModal": {
-    "title": "Información del tramo",
-    "from": "Desde la estación",
-    "to": "Hasta la estación",
-    "line": "Línea",
-    "timeLabel": "Tiempo de viaje",
-    "minutes": "minutos",
-    "save": "Guardar",
-    "errorSave": "No se pudo guardar el tiempo de viaje"
-  },
   "EditLine": {
     "title": "Editar línea",
     "tabSegment": "Segmento",
@@ -190,7 +180,7 @@
     "dragHandle": "Arrastrar para cambiar el orden",
     "errorReorder": "No se pudo cambiar el orden de las estaciones"
   },
-  "EditLineForm": {
+  "LineTab": {
     "nameLabel": "Nombre de la línea",
     "colorLabel": "Color de la línea",
     "save": "Guardar",
@@ -201,6 +191,16 @@
     "typeSubway": "Metro",
     "typeCommuterRail": "Tren de cercanías",
     "lineBadge": "Número de línea"
+  },
+  "SegmentTab": {
+    "title": "Información del tramo",
+    "from": "Desde la estación",
+    "to": "Hasta la estación",
+    "line": "Línea",
+    "timeLabel": "Tiempo de viaje",
+    "minutes": "minutos",
+    "save": "Guardar",
+    "errorSave": "No se pudo guardar el tiempo de viaje"
   },
   "EditTransfer": {
     "title": "Editar transbordo",

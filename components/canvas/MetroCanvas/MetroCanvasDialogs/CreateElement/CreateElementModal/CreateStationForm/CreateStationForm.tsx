@@ -32,7 +32,6 @@ export const CreateStationForm = (props: CreateStationFormProps) => {
         placeholder={t('linePlaceholder')}
         emptyMessage={t('noLines')}
       />
-
       <Dropdown
         value={state.insertPosition}
         options={state.insertPositionOptions}
@@ -42,7 +41,6 @@ export const CreateStationForm = (props: CreateStationFormProps) => {
         emptyMessage={t('noInsertPositionOptions')}
         disabled={!state.selectedLineId || state.insertPositionOptions.length === 0}
       />
-
       <div className={styles.field}>
         <Input
           type="text"
@@ -54,7 +52,6 @@ export const CreateStationForm = (props: CreateStationFormProps) => {
           autoFocus
         />
       </div>
-
       <div className={styles.field}>
         <Dropdown
           value={state.transferVisualId}
@@ -66,7 +63,6 @@ export const CreateStationForm = (props: CreateStationFormProps) => {
           disabled={!state.selectedLineId}
         />
       </div>
-
       <div className={styles.field}>
         <Input
           type="text"
@@ -77,15 +73,12 @@ export const CreateStationForm = (props: CreateStationFormProps) => {
           disabled={state.isLoading}
         />
       </div>
-
       <div className={styles.coordinates}>
         <span>
           {t('coordinates', { x: Math.round(props.position.x), y: Math.round(props.position.y) })}
         </span>
       </div>
-
       <div className={styles.spacer} />
-
       <div className={styles.actions}>
         <Button
           title={t('cancel')}

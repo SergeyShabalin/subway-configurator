@@ -2,8 +2,8 @@
 
 import { Button } from '@/components/ui/Button'
 import { useTranslations } from 'next-intl'
-import type { useAlignStations } from '../../hooks/useAlignStations'
 import styles from '../AlignStationsTab.module.css'
+import type { useAlignStations } from '../hooks/useAlignStations'
 
 interface AlignControlsProps {
   controls: ReturnType<typeof useAlignStations>['controls']

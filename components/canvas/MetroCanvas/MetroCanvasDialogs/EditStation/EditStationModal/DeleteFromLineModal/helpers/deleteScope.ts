@@ -1,3 +1,4 @@
+import { buildLineMarkedOption } from '@/components/canvas/shared/options/lineOptionHelpers'
 import type { DropdownOption } from '@/components/ui/Dropdown'
 import type { DeleteScope, LineOption } from '../../../types'
 
@@ -17,12 +18,12 @@ export const toDeleteScope = (selected: string): DeleteScope =>
 export const buildDeleteScopeOptions = (
   options: ReadonlyArray<LineOption>,
   allLabel: string
-): Array<DropdownOption<string>> => {
-  const lineItems = options.map((option) => ({
-    value: option.stationId,
-    label: option.lineName,
-    color: option.lineColor,
-  }))
-
-  return [...lineItems, { value: DELETE_ALL, label: allLabel }]
-}
+): Array<DropdownOption<string>> => [
+  ...options.map(({ stationId, line }) => buildLineMarkedOption(stationId, line.name, [line])),
+  // «Со всех линий»: значки всех линий узла
+  buildLineMarkedOption(
+    DELETE_ALL,
+    allLabel,
+    options.map(({ line }) => line)
+  ),
+]

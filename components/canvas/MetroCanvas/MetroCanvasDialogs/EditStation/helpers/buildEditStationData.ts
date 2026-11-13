@@ -1,6 +1,6 @@
+import { createLineLookup } from '@/components/canvas/shared/options/lineLookup'
 import type { Line, Station, VisualTransfer } from '@/types/metro'
 import type { EditStationData } from '../types'
-import { buildLineOptions } from './buildLineOptions'
 import { buildTransferItems, getOtherVisualId } from './buildTransferItems'
 
 interface BuildEditStationDataParams {
@@ -24,6 +24,8 @@ export const buildEditStationData = ({
 }: BuildEditStationDataParams): EditStationData | null => {
   if (!station || !stationId) return null
 
+  const { getLineOfStation, getStationLines } = createLineLookup(stations, lines)
+
   const fromVisualId = Object.entries(visualToStations).find(([, stationIds]) =>
     stationIds.includes(stationId)
   )?.[0]
@@ -34,7 +36,7 @@ export const buildEditStationData = ({
       )
     : []
 
-  const currentLine = lines.find((line) => String(line.id) === String(station.line_id))
+  const currentLine = getLineOfStation(stationId)
 
   const existingTransferIds = stationTransfers.map((tr) => getOtherVisualId(tr, fromVisualId))
 
@@ -52,7 +54,7 @@ export const buildEditStationData = ({
       visualToStations
     ),
     transferCount,
-    lineOptions: buildLineOptions(nodeStationIds, stations, lines),
+    lineOptions: getStationLines(nodeStationIds),
     fromVisualId,
     existingTransferIds,
   }

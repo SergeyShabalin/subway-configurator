@@ -1,3 +1,4 @@
+import { createLineLookup } from '@/components/canvas/shared/options/lineLookup'
 import type { Line, Station } from '@/types/metro'
 import type { TransferNode } from '../types'
 
@@ -7,7 +8,7 @@ export const buildTransferNodes = (
   visualToStations: Readonly<Record<string, ReadonlyArray<string>>>
 ): Array<TransferNode> => {
   const stationById = new Map(stations.map((s) => [s.id, s]))
-  const lineById = new Map(lines.map((l) => [String(l.id), l]))
+  const { getNodeLines } = createLineLookup(stations, lines)
 
   const nodes: Array<TransferNode> = []
 
@@ -19,19 +20,14 @@ export const buildTransferNodes = (
 
     if (nodeStations.length === 0) continue
 
-    const nodeLines = new Map<string, Line>()
-    for (const station of nodeStations) {
-      const line = lineById.get(String(station.line_id))
-      if (line) nodeLines.set(line.id, line)
-    }
-    const lineList = [...nodeLines.values()]
+    const nodeLines = getNodeLines(nodeStations.map((s) => s.id))
 
     nodes.push({
       visualId,
       name: nodeStations[0].name,
       lineIds: nodeStations.map((s) => String(s.line_id)),
-      colors: lineList.map((l) => l.color),
-      lines: lineList,
+      colors: nodeLines.map((l) => l.color),
+      lines: nodeLines,
     })
   }
 
