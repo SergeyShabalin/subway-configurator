@@ -1,4 +1,3 @@
-// MetroCanvas/MetroCanvas.tsx
 'use client'
 
 import { HintLetsStarted } from '@/components/canvas/MetroCanvas/HintLetsStarted/HintLetsStarted'

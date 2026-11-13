@@ -1,8 +1,8 @@
 'use client'
 
-import { EditLine } from '@/components/canvas/features/EditLine'
-import { EditTransfer } from '@/components/canvas/features/EditTransfer'
-import { EditStation } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditStation/EditStation'
+import { EditLine } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine'
+import { EditStation } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditStation'
+import { EditTransfer } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditTransfer'
 import { memo } from 'react'
 import type { useCanvasContextMenu } from '../hooks/useCanvasContextMenu'
 import type { CanvasSelection } from '../hooks/useCanvasSelection'

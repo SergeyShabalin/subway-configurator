@@ -4,12 +4,19 @@ import type Konva from 'konva'
 
 export type VisualData = Pick<VisualStation, 'id' | 'x' | 'y'>
 
-export interface StationData {
+export interface StationAppearance {
   isMultiLine: boolean
   isTransferStation: boolean
   color?: string
   colors?: Array<string>
   colorsActive?: Array<boolean>
+}
+
+export interface StationHandlers {
+  onDragStart: () => void
+  onDragMove: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
+  onDragEnd: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
+  onStationClick?: (stationId: string) => void
 }
 
 export interface MetroStationsProps {
@@ -21,15 +28,8 @@ export interface MetroStationsProps {
 
 export interface StationCircleProps {
   visual: VisualStation
-  isMultiLine: boolean
-  isTransferStation: boolean
-  color?: string
-  colors?: Array<string>
+  appearance: StationAppearance
   stationId: string
   isDimmed?: boolean
-  onDragStart: () => void
-  onDragMove: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
-  onDragEnd: (e: Konva.KonvaEventObject<DragEvent>, visualId: string) => void
-  onStationClick?: (stationId: string) => void
-  colorsActive?: Array<boolean>
+  handlers: StationHandlers
 }
