@@ -5,16 +5,12 @@ export const BASE_RADIUS = 5
 export const TRANSFER_STATION_RADIUS = 7
 
 // Одноимённые multi-line (несколько линий на одном визуале)
-export const MULTI_LINE_BASE_RADIUS = 12
+export const MULTI_LINE_BASE_RADIUS = 11
 
-// Шаг между кольцами разных линий у multi-line станции
-export const RING_STEP = 2.5
-
-// Толщина обводки станции и колец
-export const RING_WIDTH = 2.5
-
-// Минимальный радиус внутреннего кольца (меньше — не рисуем)
-export const MIN_RING_RADIUS = 3
+// Толщина обводки по типу станции
+export const BASE_STROKE_WIDTH = 2.5
+export const TRANSFER_STATION_STROKE_WIDTH = 2.5
+export const MULTI_LINE_STROKE_WIDTH = 4
 
 // Порог смещения, ниже которого drag считается кликом
 export const DRAG_THRESHOLD = 2

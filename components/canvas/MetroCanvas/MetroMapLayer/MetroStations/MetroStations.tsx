@@ -6,8 +6,8 @@ import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { useCallback, useMemo } from 'react'
 import { useMetroDrag, useMetroPosition, useMetroStations } from './hooks'
-import { StationCircle } from './StationCircle'
-import type { MetroStationsProps } from './types'
+import { StationCircle } from './StationCircle/StationCircle'
+import type { MetroStationsProps, StationHandlers } from './types'
 
 export const MetroStations = ({
   lineRef,
@@ -33,7 +33,7 @@ export const MetroStations = ({
     return ids
   }, [route])
 
-  const { visualData } = useMetroStations(routeStationIds)
+  const { appearanceByVisual } = useMetroStations(routeStationIds)
   const { savePosition } = useMetroPosition()
   const { handleDragStart, handleDragMove, handleDragEnd } = useMetroDrag()
 
@@ -58,16 +58,19 @@ export const MetroStations = ({
     [handleDragEnd, savePosition, endDrop]
   )
 
+  const handlers = useMemo<StationHandlers>(
+    () => ({ onDragStart: handleDragStart, onDragMove, onDragEnd, onStationClick }),
+    [handleDragStart, onDragMove, onDragEnd, onStationClick]
+  )
+
   const visualValues = Object.values(visuals).filter((v) => v && v.id)
   const dropVisual = transferDrop.target ? visuals[transferDrop.target.visualId] : null
 
   return (
     <>
       {visualValues.map((visual) => {
-        const data = visualData[visual.id]
-        if (!data) return null
-
-        const { isMultiLine, isTransferStation, color, colors, colorsActive } = data
+        const appearance = appearanceByVisual[visual.id]
+        if (!appearance) return null
 
         const stationIds = visualToStations[visual.id] ?? []
         const stationId = stationIds[0]
@@ -77,17 +80,10 @@ export const MetroStations = ({
           <StationCircle
             key={visual.id}
             visual={visual}
-            isMultiLine={isMultiLine}
-            isTransferStation={isTransferStation}
-            color={color}
-            colors={colors}
-            colorsActive={colorsActive}
+            appearance={appearance}
             stationId={stationId}
             isDimmed={routeVisualIds ? !routeVisualIds.has(visual.id) : false}
-            onDragStart={handleDragStart}
-            onDragMove={onDragMove}
-            onDragEnd={onDragEnd}
-            onStationClick={onStationClick}
+            handlers={handlers}
           />
         )
       })}

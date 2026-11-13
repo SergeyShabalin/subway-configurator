@@ -1,14 +1,14 @@
 import { useMetroStore } from '@/store'
 import { useMemo } from 'react'
-import type { StationData } from '../types'
+import type { StationAppearance } from '../types'
 
 interface UseMetroStationsReturn {
-  visualData: Record<string, StationData>
+  appearanceByVisual: Record<string, StationAppearance>
 }
 
 /**
  * @param routeStationIds станции активного маршрута. null, если маршрута нет:
- * тогда все кольца цветные.
+ * тогда все линии считаются активными.
  */
 export const useMetroStations = (
   routeStationIds: ReadonlySet<string> | null
@@ -18,8 +18,8 @@ export const useMetroStations = (
   const visualToStations = useMetroStore((state) => state.visualToStations)
   const visualTransfers = useMetroStore((state) => state.visualTransfers)
 
-  const visualData = useMemo((): Record<string, StationData> => {
-    const result: Record<string, StationData> = {}
+  const appearanceByVisual = useMemo((): Record<string, StationAppearance> => {
+    const result: Record<string, StationAppearance> = {}
     if (!visuals) return result
 
     // stationId -> { lineId, color }
@@ -89,5 +89,5 @@ export const useMetroStations = (
     return result
   }, [visuals, lines, visualToStations, visualTransfers, routeStationIds])
 
-  return { visualData }
+  return { appearanceByVisual }
 }
