@@ -264,5 +264,13 @@
     "createTransfer": "Create transfer",
     "createSameNameStation": "Create same-name station",
     "cancel": "Cancel"
-  }
+  },
+  "MetroSidebar": {
+    "branches": "Lines",
+    "styles": "Styles",
+    "route": "Route",
+    "close": "Close panel",
+    "unavailable": "The \"{tab}\" tab is not available yet"
+  },
+  "Sidebar": { "close": "Close panel" }
 }

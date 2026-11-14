@@ -6,20 +6,21 @@
     display: flex;
     gap: 4px;
     padding: 4px;
-    border: 1px solid rgb(226 232 240 / 20%);
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
-    font-family: Arial, sans-serif;
-    backdrop-filter: blur(3px);
     height: 40px;
+    background: var(--glass-toolbar-bg);
+    border-radius: var(--glass-radius);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    box-shadow: var(--glass-shadow);
+    font-family: Arial, sans-serif;
 }
 
 .button {
     padding: 6px 12px;
     background: transparent;
     border: none;
-    border-radius: 6px;
-    color: #6c9fdc;
+    border-radius: 12px;
+    color: var(--glass-text);
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -31,21 +32,21 @@
 }
 
 .button:hover {
-    background: rgb(226 232 240 / 8%);
-    color: #f1f5f9;
+    background: var(--glass-item-hover-bg);
+    color: var(--glass-text-hover);
 }
 
 .button:focus-visible {
-    outline: 2px solid #38bdf8;
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 3px var(--glass-focus);
 }
 
 .active {
-    background: rgb(56 189 248 / 15%);
-    color: #38bdf8;
+    background: var(--glass-accent-bg);
+    color: var(--glass-accent-text);
 }
 
 .active:hover {
-    background: rgb(56 189 248 / 20%);
-    color: #38bdf8;
+    background: var(--glass-accent-bg);
+    color: var(--glass-accent-text);
 }

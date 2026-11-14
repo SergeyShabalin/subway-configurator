@@ -1,0 +1,41 @@
+.toolbar {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    bottom: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 76px;
+    padding: 12px 0;
+    background: var(--sidebar-toolbar-bg);
+    border-radius: var(--glass-radius);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    box-shadow: var(--sidebar-shadow-soft);
+    font-family: Arial, sans-serif;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.button {
+    --button-icon-size: 52px;
+    --button-icon-glyph: 24px;
+    --button-radius: 14px;
+    --button-focus: var(--sidebar-focus);
+    --button-soft-bg: var(--sidebar-button-bg);
+    --button-soft-hover: var(--sidebar-button-hover);
+    --button-soft-text: var(--sidebar-icon-color);
+    --button-soft-hover-text: var(--sidebar-icon-hover);
+    --button-active-bg: var(--sidebar-accent);
+    --button-active-text: var(--white);
+    --button-active-border: var(--sidebar-accent-border);
+    --button-active-shadow: 0 4px 14px var(--sidebar-accent-shadow);
+}

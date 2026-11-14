@@ -1,7 +1,8 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import styles from './Button.module.css'
 
-export type ButtonVariant = 'primary' | 'outline' | 'outlineColored' | 'ghost' | 'underline'
+export type ButtonVariant =
+  'primary' | 'outline' | 'outlineColored' | 'ghost' | 'underline' | 'soft'
 
 export type ButtonSize = 'small' | 'medium' | 'large'
 
@@ -24,6 +25,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize
   loading?: boolean
   color?: ButtonColor
+  iconOnly?: boolean
+  active?: boolean
   children?: ReactNode
 }
 
@@ -34,6 +37,8 @@ export const Button = ({
   loading = false,
   disabled = false,
   color,
+  iconOnly = false,
+  active,
   children,
   className,
   type = 'button',
@@ -44,6 +49,8 @@ export const Button = ({
     styles[variant],
     styles[size],
     color && COLOR_CLASS[color],
+    iconOnly && styles.iconOnly,
+    active && styles.active,
     className,
   ]
     .filter(Boolean)
@@ -55,6 +62,7 @@ export const Button = ({
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
+      aria-pressed={active}
       className={classNames}
     >
       {loading && <span className={styles.spinner} aria-hidden="true" />}

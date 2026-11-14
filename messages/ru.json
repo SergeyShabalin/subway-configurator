@@ -265,5 +265,13 @@
     "createTransfer": "Создать пересадку",
     "createSameNameStation": "Создать одноимённую станцию",
     "cancel": "Отмена"
-  }
+  },
+  "MetroSidebar": {
+    "branches": "Ветки",
+    "styles": "Стили",
+    "route": "Маршрут",
+    "close": "Закрыть панель",
+    "unavailable": "Вкладка \"{tab}\" пока недоступна"
+  },
+  "Sidebar": { "close": "Закрыть панель" }
 }

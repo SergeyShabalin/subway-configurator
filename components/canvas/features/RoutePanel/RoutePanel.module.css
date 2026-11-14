@@ -5,6 +5,20 @@
     z-index: 5;
 }
 
+.content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+    min-height: 0;
+}
+
+.fields,
+.actions,
+.message {
+    flex-shrink: 0;
+}
+
 .toggle,
 .panel {
     border: 1px solid var(--border);

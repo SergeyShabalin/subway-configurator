@@ -60,6 +60,17 @@
     --modal-bg: #ffffff;
     --modal-border: rgb(15 23 42 / 8%);
     --modal-shadow: 0 20px 60px rgb(15 23 42 / 18%);
+    --glass-modal-bg: rgb(255 255 255 / 90%);
+    --modal-panel-bg: rgb(255 255 255 / 90%);
+    --modal-blur: 16px;
+    --modal-saturate: 40%;
+    --modal-radius: 20px;
+    --modal-shadow-soft: 0 8px 24px rgb(15 23 42 / 18%);
+    --modal-text: #172033;
+    --modal-icon-color: #64708a;
+    --modal-icon-hover: #1e293b;
+    --modal-focus: #4385ff;
+
 
     /* Окно старта */
     --hint-lets-started-bg: #ffffff;
@@ -87,6 +98,40 @@
     /* Скроллбар */
     --scrollbar-thumb: #b6bdca;
     --scrollbar-track: transparent;
+
+    /* Стекло (glassy surface) — общий фон и blur */
+    --glass-toolbar-bg: rgb(255 255 255 / 12%);
+    --glass-panel-bg: rgb(255 255 255 / 18%);
+    --glass-blur: 16px;
+    --glass-saturate: 40%;
+    --glass-shadow: 0 8px 24px rgb(15 23 42 / 18%);
+    --glass-radius: 10px;
+    --glass-item-bg: rgb(15 23 42 / 5%);
+    --glass-item-hover-bg: rgb(15 23 42 / 10%);
+    --glass-text: #64708a;
+    --glass-text-hover: #1e293b;
+    --glass-accent-bg: #155eef;
+    --glass-accent-text: var(--white);
+    --glass-focus: #4385ff;
+
+    /* Сайдбар */
+    --sidebar-toolbar-bg: var(--glass-toolbar-bg);
+    --sidebar-panel-bg: var(--glass-panel-bg);
+    --sidebar-border: rgb(15 23 42 / 8%);
+    --sidebar-border-soft: rgb(226 232 240 / 40%);
+    --sidebar-shadow: 0 8px 32px rgb(15 23 42 / 14%);
+    --sidebar-shadow-soft: var(--glass-shadow);
+    --sidebar-blur: var(--glass-blur);
+    --sidebar-saturate: var(--glass-saturate);
+    --sidebar-button-bg: var(--glass-item-bg);
+    --sidebar-button-hover: var(--glass-item-hover-bg);
+    --sidebar-icon-color: var(--glass-text);
+    --sidebar-icon-hover: var(--glass-text-hover);
+    --sidebar-text: #172033;
+    --sidebar-accent: var(--glass-accent-bg);
+    --sidebar-accent-border: #3478ff;
+    --sidebar-accent-shadow: rgb(21 94 239 / 25%);
+    --sidebar-focus: var(--glass-focus);
 
     color-scheme: light;
 
@@ -158,6 +203,16 @@
     --modal-bg: #181827;
     --modal-border: rgb(255 255 255 / 6%);
     --modal-shadow: 0 20px 60px rgb(0 0 0 / 50%);
+    --glass-modal-bg: rgb(25 28 36 / 85%);
+    --modal-panel-bg: rgb(25 28 36 / 78%);
+    --modal-blur: 10px;
+    --modal-saturate: 40%;
+    --modal-radius: 20px;
+    --modal-shadow-soft: 0 8px 24px rgb(0 0 0 / 45%);
+    --modal-text: #edf0f7;
+    --modal-icon-color: #a6afc2;
+    --modal-icon-hover: #ffffff;
+    --modal-focus: #4385ff;
 
     /* Окно старта */
     --hint-lets-started-bg: #181827;
@@ -185,6 +240,40 @@
     /* Скроллбар */
     --scrollbar-thumb: #475569;
     --scrollbar-track: transparent;
+
+    /* Стекло (glassy surface) — общий фон и blur */
+    --glass-toolbar-bg: rgb(25 28 36 / 72%);
+    --glass-panel-bg: rgb(25 28 36 / 78%);
+    --glass-blur: 10px;
+    --glass-saturate: 40%;
+    --glass-shadow: 0 8px 24px rgb(0 0 0 / 45%);
+    --glass-radius: 10px;
+    --glass-item-bg: rgb(255 255 255 / 6%);
+    --glass-item-hover-bg: rgb(255 255 255 / 12%);
+    --glass-text: #a6afc2;
+    --glass-text-hover: #ffffff;
+    --glass-accent-bg: #155eef;
+    --glass-accent-text: var(--white);
+    --glass-focus: #4385ff;
+
+    /* Сайдбар */
+    --sidebar-toolbar-bg: var(--glass-toolbar-bg);
+    --sidebar-panel-bg: var(--glass-panel-bg);
+    --sidebar-border: rgb(255 255 255 / 7%);
+    --sidebar-border-soft: rgb(226 232 240 / 20%);
+    --sidebar-shadow: 0 8px 32px rgb(0 0 0 / 16%);
+    --sidebar-shadow-soft: var(--glass-shadow);
+    --sidebar-blur: var(--glass-blur);
+    --sidebar-saturate: var(--glass-saturate);
+    --sidebar-button-bg: var(--glass-item-bg);
+    --sidebar-button-hover: var(--glass-item-hover-bg);
+    --sidebar-icon-color: var(--glass-text);
+    --sidebar-icon-hover: var(--glass-text-hover);
+    --sidebar-text: #edf0f7;
+    --sidebar-accent: var(--glass-accent-bg);
+    --sidebar-accent-border: #3478ff;
+    --sidebar-accent-shadow: rgb(21 94 239 / 25%);
+    --sidebar-focus: var(--glass-focus);
 
     color-scheme: dark;
 }
