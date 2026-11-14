@@ -1,0 +1,68 @@
+.panel {
+    position: fixed;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 20px);
+    color: var(--sidebar-text);
+    background: var(--sidebar-panel-bg);
+    border-radius: var(--glass-radius);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    box-shadow: var(--sidebar-shadow-soft);
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    animation: panelEnter 180ms ease;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 68px;
+    padding: 0 20px;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+}
+
+.header:active {
+    cursor: grabbing;
+}
+
+.title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.closeButton {
+    --button-icon-size: 36px;
+    --button-radius: 10px;
+    --button-focus: var(--sidebar-focus);
+    --button-soft-bg: transparent;
+    --button-soft-hover: var(--sidebar-button-hover);
+    --button-soft-text: var(--sidebar-icon-color);
+}
+
+.content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    padding: 5px 15px 15px;
+    overflow-y: auto;
+}
+
+@keyframes panelEnter {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

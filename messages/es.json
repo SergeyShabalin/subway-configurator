@@ -264,5 +264,13 @@
     "createTransfer": "Crear transbordo",
     "createSameNameStation": "Crear estación con el mismo nombre",
     "cancel": "Cancelar"
-  }
+  },
+  "MetroSidebar": {
+    "branches": "Líneas",
+    "styles": "Estilos",
+    "route": "Ruta",
+    "close": "Cerrar panel",
+    "unavailable": "La pestaña \"{tab}\" aún no está disponible"
+  },
+  "Sidebar": { "close": "Cerrar panel" }
 }

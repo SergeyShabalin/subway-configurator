@@ -2,7 +2,6 @@
     position: fixed;
     inset: 0;
     background: var(--overlay-bg);
-    backdrop-filter: blur(1px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,15 +10,18 @@
 }
 
 .modal {
-    background: var(--modal-bg);
-    border-radius: 16px;
-    box-shadow: var(--modal-shadow);
-    border: 1px solid var(--modal-border);
-    animation: slide-up 0.3s ease-out;
+    background: var(--modal-panel-bg);
+    border-radius: var(--modal-radius);
+    -webkit-backdrop-filter: blur(var(--modal-blur)) saturate(var(--modal-saturate));
+    backdrop-filter: blur(var(--modal-blur)) saturate(var(--modal-saturate));
+    box-shadow: var(--modal-shadow-soft);
+    color: var(--modal-text);
+    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     flex-shrink: 0;
+    animation: slide-up 0.3s ease-out;
 }
 
 .small {
@@ -39,40 +41,43 @@
 
 .header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     padding: 20px 24px;
-    border-bottom: 1px solid var(--modal-border);
+    border-bottom: 1px solid var(--sidebar-border-soft);
     flex-shrink: 0;
 }
 
 .title {
-    color: var(--text-strong);
+    margin: 0;
     font-size: 20px;
     font-weight: 600;
-    margin: 0;
+    letter-spacing: 0.2px;
+    color: var(--modal-text);
 }
 
 .closeButton {
     background: none;
     border: none;
-    color: var(--text-muted);
+    color: var(--modal-icon-color);
     font-size: 24px;
     cursor: pointer;
     padding: 4px 8px;
     border-radius: 6px;
-    transition: all 0.2s;
     line-height: 1;
+    transition:
+            background 0.15s ease,
+            color 0.15s ease;
 }
 
 .closeButton:hover {
-    background: var(--hover-overlay);
-    color: var(--text-strong);
+    background: var(--sidebar-button-hover);
+    color: var(--modal-icon-hover);
 }
 
 .closeButton:focus-visible {
-    outline: 2px solid var(--button-focus);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 3px var(--modal-focus);
 }
 
 .closeButton:disabled {
@@ -86,6 +91,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    color: var(--modal-text);
 }
 
 .headerActions {
@@ -101,7 +107,7 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    color: var(--accent-icon);
+    color: var(--modal-icon-color);
 }
 
 .headerIcon svg {
