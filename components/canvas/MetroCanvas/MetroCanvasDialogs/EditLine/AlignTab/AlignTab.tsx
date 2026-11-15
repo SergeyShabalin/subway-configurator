@@ -3,17 +3,17 @@
 import { Dropdown } from '@/components/ui/Dropdown'
 import type { Line } from '@/types/metro'
 import { useTranslations } from 'next-intl'
-import styles from './AlignStationsTab.module.css'
+import styles from './AlignTab.module.css'
 import { AlignControls } from './components/AlignControls'
 import { AlignFeedback } from './components/AlignFeedback'
 import { useAlignStations } from './hooks/useAlignStations'
 
-interface AlignStationsTabProps {
+interface AlignTabProps {
   line: Line
 }
 
-export const AlignStationsTab = ({ line }: AlignStationsTabProps) => {
-  const t = useTranslations('AlignStationsTab')
+export const AlignTab = ({ line }: AlignTabProps) => {
+  const t = useTranslations('AlignTab')
 
   const { isCircular, picker, feedback, controls } = useAlignStations(line)
 

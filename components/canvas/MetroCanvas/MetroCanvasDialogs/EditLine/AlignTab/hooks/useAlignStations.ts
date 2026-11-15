@@ -3,7 +3,7 @@
 import {
   Alignment,
   AlignStatus,
-} from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine/AlignStationsTab/types'
+} from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine/AlignTab/types'
 import { alignOnStraightLine, getPathBetween } from '@/src/lib/layout/alignStations'
 import { visualsService } from '@/src/lib/services'
 import { useMetroStore, useMetroStoreApi } from '@/store'

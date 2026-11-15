@@ -1,6 +1,6 @@
 'use client'
 
-import { useTimeEditor } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine/hooks/useTimeEditor'
+import { useTimeEditor } from '@/components/canvas/shared/useTimeEditor'
 import { Button } from '@/components/ui/Button'
 import { Dropdown, type DropdownOption } from '@/components/ui/Dropdown'
 import { WalkIcon } from '@/components/ui/Icons'
@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/Input/Input'
 import { TransferStyle } from '@/src/lib/services/transfers.service'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
-import styles from './EditTransferModal.module.css'
+import styles from './EditTransferForm.module.css'
 
 interface EditTransferModalProps {
   onClose: () => void
@@ -23,7 +23,7 @@ interface EditTransferModalProps {
   onDelete: () => Promise<void>
 }
 
-export const EditTransferModal = ({
+export const EditTransferForm = ({
   onClose,
   fromStationName,
   toStationName,
@@ -34,7 +34,7 @@ export const EditTransferModal = ({
   onSave,
   onDelete,
 }: EditTransferModalProps) => {
-  const t = useTranslations('EditTransferModal')
+  const t = useTranslations('EditTransferForm')
   const tTransfer = useTranslations('EditTransfer')
   const [style, setStyle] = useState<TransferStyle>(initialStyle)
 

@@ -1,8 +1,8 @@
 'use client'
 
-import { DownloadJson } from '@/components/db/DownloadJson/DownloadJson'
-import { DownloadPdf } from '@/components/db/DownloadPdf/DownloadPdf'
-import { UploadJson } from '@/components/db/UploadJson/UploadJson'
+import { DownloadJson } from '@/components/ExportTools/DownloadJson/DownloadJson'
+import { DownloadPdf } from '@/components/ExportTools/DownloadPdf/DownloadPdf'
+import { UploadJson } from '@/components/ExportTools/UploadJson/UploadJson'
 import { CloseIcon, SettingsIcon } from '@/components/ui/Icons'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
