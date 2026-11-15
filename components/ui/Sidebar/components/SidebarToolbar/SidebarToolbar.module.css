@@ -39,3 +39,27 @@
     --button-active-border: var(--sidebar-accent-border);
     --button-active-shadow: 0 4px 14px var(--sidebar-accent-shadow);
 }
+@media (max-width: 499px) {
+    .toolbar {
+        top: auto;
+        right: 10px;
+        bottom: 10px;
+        left: 10px;
+        flex-direction: row;
+        justify-content: center;
+        width: auto;
+        height: 72px;
+        padding: 0 8px;
+    }
+
+    .navigation {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 8px;
+    }
+
+    .button {
+        --button-icon-size: 48px;
+        --button-icon-glyph: 22px;
+    }
+}

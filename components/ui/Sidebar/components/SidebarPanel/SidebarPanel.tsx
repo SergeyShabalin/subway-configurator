@@ -3,8 +3,10 @@
 import { Button } from '@/components/ui/Button'
 import { CloseIcon } from '@/components/ui/Icons'
 import { useTranslations } from 'next-intl'
-import type { PointerEvent } from 'react'
+import type { CSSProperties, PointerEvent } from 'react'
 import { useRef } from 'react'
+import { DOCKED_MEDIA_QUERY } from '../../constants'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import type { PanelPosition, SidebarPanelProps } from '../../types'
 import styles from './SidebarPanel.module.css'
 
@@ -22,9 +24,11 @@ export function SidebarPanel({
   children,
 }: SidebarPanelProps) {
   const t = useTranslations('Sidebar')
+  const isDocked = useMediaQuery(DOCKED_MEDIA_QUERY)
   const dragOffset = useRef<DragOffset | null>(null)
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (isDocked) return
     if ((event.target as HTMLElement).closest('button')) return
 
     dragOffset.current = {
@@ -62,15 +66,14 @@ export function SidebarPanel({
     dragOffset.current = null
   }
 
+  const panelStyle = {
+    '--panel-width': `${width}px`,
+    '--panel-left': `${position.left}px`,
+    '--panel-top': `${position.top}px`,
+  } as CSSProperties
+
   return (
-    <section
-      className={styles.panel}
-      style={{
-        width,
-        left: position.left,
-        top: position.top,
-      }}
-    >
+    <section className={styles.panel} style={panelStyle}>
       <div
         className={styles.header}
         onPointerDown={handlePointerDown}
