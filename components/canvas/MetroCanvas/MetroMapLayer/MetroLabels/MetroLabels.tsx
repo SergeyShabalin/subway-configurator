@@ -1,7 +1,7 @@
 'use client'
 
-import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
 import { CANVAS_DIMMED_COLOR } from '@/components/canvas/shared/dimmedColors'
+import { useRoute } from '@/components/canvas/shared/routing/useRoute'
 import {
   CANVAS_LABEL_FILL,
   CANVAS_LABEL_FONT_STYLE,

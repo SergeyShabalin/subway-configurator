@@ -1,7 +1,7 @@
 'use client'
 
-import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
 import { CANVAS_DIMMED_COLOR } from '@/components/canvas/shared/dimmedColors'
+import { useRoute } from '@/components/canvas/shared/routing/useRoute'
 import { CANVAS_HOVER_COLOR } from '@/components/canvas/shared/themeColors'
 import { useTheme } from '@/context/theme-context'
 import type { LineType } from '@/types/metro'

@@ -1,4 +1,4 @@
-import { lightenStage } from '@/components/export/DownloadPdf/helpers/lightenStage'
+import { lightenStage } from '@/components/ExportTools/DownloadPdf/helpers/lightenStage'
 import { getStage } from '@/src/lib/stageRegistry/stageRegistry'
 import { useCallback, useState } from 'react'
 import { PDF_FILE_NAME } from '../constants'
@@ -39,7 +39,7 @@ export const useDownloadPdf = () => {
 
       setStatus({ type: 'success' })
     } catch (error) {
-      console.error('PDF export failed:', error)
+      console.error('PDF ExportTools failed:', error)
       setStatus({ type: 'error', error })
     }
   }, [])

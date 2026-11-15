@@ -1,6 +1,6 @@
 'use client'
 
-import { CreateTransferModal } from '@/components/canvas/features'
+import { CreateTransferModal } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/CreateTransfer/CreateTransferModal'
 import { StationIcon } from '@/components/ui/Icons/StationIcon/StationIcon'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useTranslations } from 'next-intl'

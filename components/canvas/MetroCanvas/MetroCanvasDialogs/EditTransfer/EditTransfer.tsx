@@ -1,12 +1,12 @@
 'use client'
 
+import { EditTransferForm } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditTransfer/EditTransferForm/EditTransferForm'
 import { TransferIcon } from '@/components/ui/Icons/TransferIcon/TransferIcon'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { transfersService } from '@/src/lib/services'
 import { TransferStyle } from '@/src/lib/services/transfers.service'
 import { useTranslations } from 'next-intl'
 import { useSelectedTransferData } from '../../hooks/useSelectedTransferData'
-import { EditTransferModal } from './EditTransferModal/EditTransferModal'
 
 interface EditTransferProps {
   isOpen: boolean
@@ -35,7 +35,7 @@ export const EditTransfer = ({ isOpen, transferId, onClose, reloadData }: EditTr
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('title')} icon={<TransferIcon />}>
-      <EditTransferModal
+      <EditTransferForm
         key={transferData.transferId}
         onClose={onClose}
         fromStationName={transferData.fromStationName}

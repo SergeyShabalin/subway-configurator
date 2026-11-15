@@ -5,7 +5,7 @@ import { setStage } from '@/src/lib/stageRegistry/stageRegistry'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import { useStageResize } from '../../../shared/useStageResize'
+import { useStageResize } from './useStageResize/useStageResize'
 import { useStageZoom } from './useStageZoom/useStageZoom'
 
 const MIN_SCALE = 0.05

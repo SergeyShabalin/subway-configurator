@@ -1,5 +1,5 @@
-import { RoutePanel } from '@/components/canvas/features/RoutePanel/RoutePanel'
-import { LayersIcon, PaletteIcon, RouteIcon } from '@/components/ui/Icons'
+import { RoutePanel, ToolsPanel } from '@/components/canvas/features'
+import { LayersIcon, PaletteIcon, RouteIcon, UploadIcon } from '@/components/ui/Icons'
 import type { SidebarItem } from '@/components/ui/Sidebar/types'
 import { useTranslations } from 'next-intl'
 import styles from '../MetroSidebar.module.css'
@@ -25,6 +25,12 @@ export const useSidebarItems = (): Array<SidebarItem> => {
       label: t('styles'),
       icon: <PaletteIcon className={styles.icon} />,
       content: <div className={styles.unavailable}>{t('unavailable', { tab: t('styles') })}</div>,
+    },
+    {
+      id: 'tools',
+      label: t('tools'),
+      icon: <UploadIcon className={styles.icon} />,
+      content: <ToolsPanel />,
     },
   ]
 }

@@ -49,7 +49,7 @@
     "errorCreate": "Failed to create line",
     "lineBadge": "Line Badge"
   },
-  "ToolsMenu": {
+  "ToolsPanel": {
     "open": "Open menu",
     "close": "Close menu",
     "uploadSection": "Upload",
@@ -162,7 +162,7 @@
     "tabStations": "Stations",
     "tabAlign": "Align"
   },
-  "AlignStationsTab": {
+  "AlignTab": {
     "hint": "Pick a start and an end station: the stations between them will be arranged in a straight line with equal spacing.",
     "hintCircular": "Pick two stations: the stations from the first to the second along the line will be arranged in a straight line with equal spacing.",
     "from": "Start station",
@@ -219,7 +219,7 @@
     "styleDotted": "Overground (dotted)",
     "styleSolid": "Solid"
   },
-  "EditTransferModal": {
+  "EditTransferForm": {
     "from": "From station",
     "to": "To station",
     "timeLabel": "Transfer time",
@@ -270,7 +270,12 @@
     "styles": "Styles",
     "route": "Route",
     "close": "Close panel",
-    "unavailable": "The \"{tab}\" tab is not available yet"
+    "unavailable": "The \"{tab}\" tab is not available yet",
+    "tools": "Tools"
   },
-  "Sidebar": { "close": "Close panel" }
+  "Sidebar": { "close": "Close panel" },
+  "Dropdown": {
+    "searchPlaceholder": "Search...",
+    "noResults": "Nothing found"
+  }
 }

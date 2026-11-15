@@ -49,7 +49,7 @@
     "errorCreate": "No se pudo crear la línea",
     "lineBadge": "Número de línea"
   },
-  "ToolsMenu": {
+  "ToolsPanel": {
     "open": "Abrir menú",
     "close": "Cerrar menú",
     "uploadSection": "Cargar",
@@ -162,7 +162,7 @@
     "tabStations": "Estaciones",
     "tabAlign": "Alinear"
   },
-  "AlignStationsTab": {
+  "AlignTab": {
     "hint": "Elige una estación inicial y una final: las estaciones intermedias se colocarán en línea recta con espacios iguales.",
     "hintCircular": "Elige dos estaciones: las estaciones de la primera a la segunda, siguiendo la línea, se colocarán en línea recta con espacios iguales.",
     "from": "Estación inicial",
@@ -219,7 +219,7 @@
     "styleDotted": "Superficie (punteado)",
     "styleSolid": "Continuo"
   },
-  "EditTransferModal": {
+  "EditTransferForm": {
     "from": "Desde la estación",
     "to": "Hasta la estación",
     "timeLabel": "Tiempo de transbordo",
@@ -270,7 +270,12 @@
     "styles": "Estilos",
     "route": "Ruta",
     "close": "Cerrar panel",
-    "unavailable": "La pestaña \"{tab}\" aún no está disponible"
+    "unavailable": "La pestaña \"{tab}\" aún no está disponible",
+    "tools": "Herramientas"
   },
-  "Sidebar": { "close": "Cerrar panel" }
+  "Sidebar": { "close": "Cerrar panel" },
+  "Dropdown": {
+    "searchPlaceholder": "Buscar...",
+    "noResults": "No se encontró nada"
+  }
 }

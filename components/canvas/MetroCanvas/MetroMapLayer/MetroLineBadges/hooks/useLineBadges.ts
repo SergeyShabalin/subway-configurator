@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
-import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
 import {
   CANVAS_DIMMED_BADGE_TEXT_COLOR,
   CANVAS_DIMMED_COLOR,
 } from '@/components/canvas/shared/dimmedColors'
+import { useRoute } from '@/components/canvas/shared/routing/useRoute'
 import { useTheme } from '@/context/theme-context'
 import { useMetroStore } from '@/store'
 import type { BadgeEnd } from '@/types/metro'

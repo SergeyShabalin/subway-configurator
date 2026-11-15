@@ -3,47 +3,26 @@
 import { DownloadJson } from '@/components/ExportTools/DownloadJson/DownloadJson'
 import { DownloadPdf } from '@/components/ExportTools/DownloadPdf/DownloadPdf'
 import { UploadJson } from '@/components/ExportTools/UploadJson/UploadJson'
-import { CloseIcon, SettingsIcon } from '@/components/ui/Icons'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
-import styles from './ToolsMenu.module.css'
+import styles from './ToolsPanel.module.css'
 
-export const ToolsMenu = () => {
-  const t = useTranslations('ToolsMenu')
-  const [isOpen, setIsOpen] = useState(false)
+export const ToolsPanel = () => {
+  const t = useTranslations('ToolsPanel')
 
   return (
-    <div className={styles.wrapper}>
-      <button
-        type="button"
-        onClick={() => setIsOpen((open) => !open)}
-        className={`${styles.trigger} ${isOpen ? styles.triggerOpen : ''}`}
-        aria-label={isOpen ? t('close') : t('open')}
-        aria-expanded={isOpen}
-      >
-        {isOpen ? (
-          <CloseIcon className={styles.triggerIcon} />
-        ) : (
-          <SettingsIcon className={styles.triggerIcon} />
-        )}
-      </button>
+    <div className={styles.content}>
+      <div className={styles.section}>
+        <div className={styles.sectionTitle}>{t('uploadSection')}</div>
+        <UploadJson />
+      </div>
 
-      {isOpen && (
-        <div className={styles.menu} role="menu">
-          <div className={styles.section}>
-            <div className={styles.sectionTitle}>{t('uploadSection')}</div>
-            <UploadJson />
-          </div>
+      <div className={styles.divider} />
 
-          <div className={styles.divider} />
-
-          <div className={styles.section}>
-            <div className={styles.sectionTitle}>{t('downloadSection')}</div>
-            <DownloadJson />
-            <DownloadPdf />
-          </div>
-        </div>
-      )}
+      <div className={styles.section}>
+        <div className={styles.sectionTitle}>{t('downloadSection')}</div>
+        <DownloadJson />
+        <DownloadPdf />
+      </div>
     </div>
   )
 }
