@@ -1,6 +1,6 @@
 'use client'
 
-import { CreateTransferModal } from '@/components/canvas/features'
+import { CreateTransferModal } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/CreateTransfer/CreateTransferModal'
 import { useState } from 'react'
 import type { TransferDraft } from '../../MetroMapLayer/MetroStations/TransferDrop/types'
 import { CreateElement } from '../CreateElement/CreateElement'

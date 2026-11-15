@@ -169,7 +169,7 @@ export function useStageZoom(
       const mapWidth = maxX - minX || 1
       const mapHeight = maxY - minY || 1
 
-      const padding = 100
+      const padding = 50
 
       const scaleX = (stageWidth - padding * 2) / mapWidth
       const scaleY = (stageHeight - padding * 2) / mapHeight

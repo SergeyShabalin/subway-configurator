@@ -2,7 +2,7 @@
 
 import { Fragment } from 'react'
 
-import { useRoute } from '@/components/canvas/MetroCanvas/hooks/useRoute'
+import { useRoute } from '@/components/canvas/shared/routing/useRoute'
 import { useMetroStore } from '@/store'
 import type { VisualStation } from '@/types/metro'
 

@@ -1,18 +1,20 @@
 import { useRouteFocus } from '@/components/canvas/features/RoutePanel/hooks/useRouteFocus'
-import { useInitialCenterCanvas } from '@/components/canvas/MetroCanvas/hooks/useInitialCenterCanvas'
+import { useInitialCenterCanvas } from '@/components/canvas/MetroCanvas/hooks/useCanvasViewport/useInitialCenterCanvas/useInitialCenterCanvas'
 import { useTouchGestures } from '@/components/canvas/MetroCanvas/hooks/useTouchGestures'
 import { setStage } from '@/src/lib/stageRegistry/stageRegistry'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import { useStageResize } from '../../shared/useStageResize'
-import { useStageZoom } from '../../shared/useStageZoom'
+import { useStageResize } from './useStageResize/useStageResize'
+import { useStageZoom } from './useStageZoom/useStageZoom'
 
 const MIN_SCALE = 0.05
 const MAX_SCALE = 20
 const SCALE_STEP = 1.1
 /** Ниже этого масштаба подписи скрываются. Поставить 0, чтобы отключить. */
 const LABELS_MIN_SCALE = 0.35
+/** Ширина области слева, закрытой сайдбаром и панелью: маршрут центрируется правее неё. */
+const ROUTE_FOCUS_INSET_LEFT = 400
 
 interface Params {
   isLoaded: boolean
@@ -46,8 +48,21 @@ export const useCanvasViewport = ({ isLoaded, isBusy, onLongPress }: Params) => 
     centerStage,
   } = useStageZoom(MIN_SCALE, MAX_SCALE, SCALE_STEP, handleScaleChange)
 
+  // Центрирует в свободной области правее сайдбара: сначала в суженном холсте, затем сдвиг вправо
+  const centerStageRight = useCallback(
+    (points: Array<{ x: number; y: number }>, stageWidth: number, stageHeight: number) => {
+      const inset = Math.min(ROUTE_FOCUS_INSET_LEFT, stageWidth / 2)
+
+      centerStage(points, stageWidth - inset, stageHeight)
+
+      const stage = stageRef.current
+      if (stage) stage.x(stage.x() + inset)
+    },
+    [centerStage, stageRef]
+  )
+
   useInitialCenterCanvas({ isLoaded, visuals, width, height, centerStage })
-  useRouteFocus(centerStage, width, height)
+  useRouteFocus(centerStageRight, width, height)
 
   useTouchGestures({
     stageRef,

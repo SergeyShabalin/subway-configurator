@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import styles from '../AlignStationsTab.module.css'
+import styles from '../AlignTab.module.css'
 import type { useAlignStations } from '../hooks/useAlignStations'
 
 interface AlignFeedbackProps {
@@ -9,7 +9,7 @@ interface AlignFeedbackProps {
 }
 
 export const AlignFeedback = ({ feedback }: AlignFeedbackProps) => {
-  const t = useTranslations('AlignStationsTab')
+  const t = useTranslations('AlignTab')
   const { problem, sharedCount, status, alignedCount } = feedback
 
   return (

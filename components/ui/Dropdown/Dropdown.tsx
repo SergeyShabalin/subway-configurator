@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import styles from './Dropdown.module.css'
 import { DropdownMenu } from './DropdownMenu/DropdownMenu'
@@ -48,10 +49,15 @@ export const Dropdown = <T extends string>({
   className,
   largeList = false,
   searchable = true,
-  searchPlaceholder = 'Поиск...',
-  noResultsMessage = 'Ничего не найдено',
+  searchPlaceholder,
+  noResultsMessage,
   searcher = defaultOptionSearcher,
 }: DropdownProps<T>) => {
+  const t = useTranslations('Dropdown')
+
+  const resolvedSearchPlaceholder = searchPlaceholder ?? t('searchPlaceholder')
+  const resolvedNoResultsMessage = noResultsMessage ?? t('noResults')
+
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [position, setPosition] = useState<DropdownPosition>({ top: 0, left: 0, width: 0 })
@@ -176,12 +182,12 @@ export const Dropdown = <T extends string>({
           options={filteredOptions}
           value={value}
           onSelect={handleSelect}
-          emptyMessage={query ? noResultsMessage : emptyMessage}
+          emptyMessage={query ? resolvedNoResultsMessage : emptyMessage}
           position={position}
           largeList={largeList}
           searchable={searchable}
           query={query}
-          searchPlaceholder={searchPlaceholder}
+          searchPlaceholder={resolvedSearchPlaceholder}
           onQueryChange={setQuery}
           activeIndex={activeIndex}
           onActiveIndexChange={setActiveIndex}

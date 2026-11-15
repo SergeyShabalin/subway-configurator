@@ -1,2 +1,2 @@
-export { EditTransfer } from '../MetroCanvas/MetroCanvasDialogs/EditTransfer/EditTransfer'
-export { CreateTransferModal } from './CreateTransferModal/CreateTransferModal'
+export { RoutePanel } from './RoutePanel/RoutePanel'
+export { ToolsPanel } from './ToolsPanel/ToolsPanel'

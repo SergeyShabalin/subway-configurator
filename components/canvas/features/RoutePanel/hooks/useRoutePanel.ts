@@ -1,4 +1,4 @@
-import { useRoutes } from '@/components/canvas/MetroCanvas/hooks/useRoute'
+import { useRoutes } from '@/components/canvas/shared/routing/useRoute'
 import { useMetroStore } from '@/store'
 import { resolveRouteStatus } from '../helpers/resolveRouteStatus'
 import { useRouteOptions } from './useRouteOptions'

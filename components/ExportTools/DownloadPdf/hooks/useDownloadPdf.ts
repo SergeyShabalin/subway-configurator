@@ -1,3 +1,4 @@
+import { lightenStage } from '@/components/ExportTools/DownloadPdf/helpers/lightenStage'
 import { getStage } from '@/src/lib/stageRegistry/stageRegistry'
 import { useCallback, useState } from 'react'
 import { PDF_FILE_NAME } from '../constants'
@@ -6,7 +7,6 @@ import { buildPdf } from '../helpers/buildPdf'
 import { getBackgroundColor, waitForPaint } from '../helpers/dom'
 import { renderStageToImage } from '../helpers/renderStageToImage'
 import type { ExportStatus, ExportStatusType } from '../types'
-import { lightenStage } from '@/components/db/DownloadPdf/helpers/lightenStage'
 
 const LOADING_STATUSES: ReadonlySet<ExportStatusType> = new Set(['rendering', 'creatingFile'])
 
@@ -23,7 +23,6 @@ export const useDownloadPdf = () => {
 
       const background = getBackgroundColor(stage.container())
 
-
       const restore = lightenStage(stage)
       let image
       try {
@@ -31,7 +30,6 @@ export const useDownloadPdf = () => {
       } finally {
         restore()
       }
-
 
       setStatus({ type: 'creatingFile' })
       await waitForPaint()
@@ -41,7 +39,7 @@ export const useDownloadPdf = () => {
 
       setStatus({ type: 'success' })
     } catch (error) {
-      console.error('PDF export failed:', error)
+      console.error('PDF ExportTools failed:', error)
       setStatus({ type: 'error', error })
     }
   }, [])

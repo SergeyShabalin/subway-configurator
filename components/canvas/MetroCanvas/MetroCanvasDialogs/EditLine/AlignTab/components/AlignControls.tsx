@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/Button'
 import { useTranslations } from 'next-intl'
-import styles from '../AlignStationsTab.module.css'
+import styles from '../AlignTab.module.css'
 import type { useAlignStations } from '../hooks/useAlignStations'
 
 interface AlignControlsProps {
@@ -10,7 +10,7 @@ interface AlignControlsProps {
 }
 
 export const AlignControls = ({ controls }: AlignControlsProps) => {
-  const t = useTranslations('AlignStationsTab')
+  const t = useTranslations('AlignTab')
   const { canAlign, canUndo, isSaving, align, undo } = controls
 
   return (

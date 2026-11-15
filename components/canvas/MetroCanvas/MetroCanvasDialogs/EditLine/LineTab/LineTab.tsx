@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 import styles from './LineTab.module.css'
 import { buildLineTypeOptions } from './helpers/buildLineTypeOptions'
-import { handleEditLineError } from './helpers/handleEditLineError'
+import { handleLineTabError } from './helpers/handleLineTabError'
 import { useLineTab } from './hooks/useLineTab'
 import type { LineTabProps } from './types'
 
@@ -18,7 +18,7 @@ export const LineTab = ({ line, onClose, reloadData }: LineTabProps) => {
     line,
     onClose,
     reloadData,
-    onError: (error) => handleEditLineError(error, t),
+    onError: (error) => handleLineTabError(error, t),
   })
 
   const typeOptions = useMemo(() => buildLineTypeOptions(t), [t])
