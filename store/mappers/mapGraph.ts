@@ -43,6 +43,7 @@ export const mapGraph = (data: GraphData): MappedGraph => {
     type: l.type ?? DEFAULT_LINE_TYPE,
     lineBadge: l.lineBadge,
     badgeOffsets: l.badgeOffsets,
+    circle: l.circle,
     visualStationIds: l.visualStationIds,
     logicalStationIds: l.logicalStationIds,
   }))

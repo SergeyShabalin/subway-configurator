@@ -1,4 +1,12 @@
-import type { BadgeEnd, Line, Point, Segment, Station, VisualTransfer } from '@/types/metro'
+import type {
+  BadgeEnd,
+  Line,
+  LineCircle,
+  Point,
+  Segment,
+  Station,
+  VisualTransfer,
+} from '@/types/metro'
 import type { MetroStore, SliceCreator } from '../types'
 
 /** Данные графа без раскладки (раскладка хранится в layoutSlice). */
@@ -45,6 +53,7 @@ export interface GraphSlice extends GraphEntities {
   /** Замена всего графа и пересборка индексов. */
   setGraph: (graph: GraphEntities) => void
   updateLineBadgeOffset: (lineId: string, end: BadgeEnd, offset: Point) => void
+  updateLineCircle: (lineId: string, circle: LineCircle | undefined) => void
 }
 
 const indexById = <T extends { id: string }>(items: ReadonlyArray<T>): Record<string, T> => {
@@ -80,6 +89,18 @@ export const createGraphSlice: SliceCreator<GraphSlice, MetroStore> = (set) => (
           [end]: offset,
         },
       }
+
+      return {
+        lines: state.lines.map((l) => (l.id === lineId ? updated : l)),
+        linesById: { ...state.linesById, [lineId]: updated },
+      }
+    }),
+  updateLineCircle: (lineId, circle) =>
+    set((state) => {
+      const line = state.linesById[lineId]
+      if (!line) return state
+
+      const updated: Line = { ...line, circle }
 
       return {
         lines: state.lines.map((l) => (l.id === lineId ? updated : l)),

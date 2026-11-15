@@ -269,6 +269,7 @@
     "branches": "Lines",
     "styles": "Styles",
     "route": "Route",
+    "settings": "Settings",
     "close": "Close panel",
     "unavailable": "The \"{tab}\" tab is not available yet",
     "tools": "Tools"
@@ -277,5 +278,16 @@
   "Dropdown": {
     "searchPlaceholder": "Search...",
     "noResults": "Nothing found"
+  },
+  "BranchesPanel": {
+    "hint": "Arranges the line's stations on a perfect circle. The radius is adjustable.",
+    "lineLabel": "Line",
+    "placeholder": "Select a line",
+    "tooShort": "At least 3 stations are required",
+    "radiusLabel": "Radius: {value}",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Saved",
+    "error": "Could not save"
   }
 }

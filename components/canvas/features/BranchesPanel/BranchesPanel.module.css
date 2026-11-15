@@ -1,0 +1,40 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hint {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.radius {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.message {
+    margin: 0;
+    font-size: 14px;
+    color: var(--error);
+}
+
+.success {
+    margin: 0;
+    font-size: 14px;
+    color: var(--success);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}

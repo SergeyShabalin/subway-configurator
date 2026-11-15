@@ -32,7 +32,14 @@ const useSegmentItems = (
     const items: Array<SegmentItem> = []
 
     for (const line of lineData) {
-      const segments = buildSegments(line.id, line.visualStationIds, line.isCircular, visuals)
+      const segments = buildSegments(
+        line.id,
+        line.visualStationIds,
+        line.isCircular,
+        visuals,
+        line.circle
+      )
+
       for (const segment of segments) {
         items.push({
           segment,

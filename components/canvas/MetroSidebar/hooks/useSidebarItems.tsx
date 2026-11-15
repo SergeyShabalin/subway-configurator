@@ -1,5 +1,6 @@
 import { RoutePanel, ToolsPanel } from '@/components/canvas/features'
-import { LayersIcon, PaletteIcon, RouteIcon, UploadIcon } from '@/components/ui/Icons'
+import { BranchesPanel } from '@/components/canvas/features/BranchesPanel/BranchesPanel'
+import { LayersIcon, PaletteIcon, RouteIcon, SettingsIcon, UploadIcon } from '@/components/ui/Icons'
 import type { SidebarItem } from '@/components/ui/Sidebar/types'
 import { useTranslations } from 'next-intl'
 import styles from '../MetroSidebar.module.css'
@@ -18,7 +19,7 @@ export const useSidebarItems = (): Array<SidebarItem> => {
       id: 'layers',
       label: t('branches'),
       icon: <LayersIcon className={styles.icon} />,
-      content: <div className={styles.unavailable}>{t('unavailable', { tab: t('branches') })}</div>,
+      content: <BranchesPanel />,
     },
     {
       id: 'palette',
@@ -31,6 +32,12 @@ export const useSidebarItems = (): Array<SidebarItem> => {
       label: t('tools'),
       icon: <UploadIcon className={styles.icon} />,
       content: <ToolsPanel />,
+    },
+    {
+      id: 'settings',
+      label: t('settings'),
+      icon: <SettingsIcon className={styles.icon} />,
+      content: <div className={styles.unavailable}>{t('unavailable', { tab: t('settings') })}</div>,
     },
   ]
 }

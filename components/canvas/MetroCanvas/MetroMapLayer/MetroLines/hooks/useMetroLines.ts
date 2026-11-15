@@ -1,5 +1,5 @@
 import { useMetroStore } from '@/store'
-import type { LineType } from '@/types/metro'
+import type { LineCircle, LineType } from '@/types/metro'
 import { useMemo } from 'react'
 
 export interface MetroLineData {
@@ -9,6 +9,7 @@ export interface MetroLineData {
   visualStationIds: Array<string>
   isCircular: boolean
   type: LineType
+  circle?: LineCircle
   lineBadge?: string
 }
 
