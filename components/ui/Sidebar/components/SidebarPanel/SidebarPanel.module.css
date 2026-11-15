@@ -3,6 +3,9 @@
     z-index: 1001;
     display: flex;
     flex-direction: column;
+    width: var(--panel-width);
+    left: var(--panel-left);
+    top: var(--panel-top);
     max-height: calc(100vh - 20px);
     color: var(--sidebar-text);
     background: var(--sidebar-panel-bg);
@@ -59,6 +62,46 @@
     from {
         opacity: 0;
         transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 499px) {
+    .panel {
+        top: auto;
+        right: 10px;
+        bottom: 92px; /* 10 отступ + 72 тулбар + 10 зазор */
+        left: 10px;
+        width: auto;
+        max-height: 45vh;
+        max-height: 45dvh;
+        animation: panelSlideUp 220ms ease;
+    }
+
+    .header {
+        min-height: 52px;
+        padding: 0 16px;
+        cursor: default;
+        touch-action: auto;
+    }
+
+    .header:active {
+        cursor: default;
+    }
+
+    .title {
+        font-size: 17px;
+    }
+}
+
+@keyframes panelSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
     }
 
     to {
