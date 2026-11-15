@@ -269,6 +269,7 @@
     "branches": "Líneas",
     "styles": "Estilos",
     "route": "Ruta",
+    "settings": "Configuración",
     "close": "Cerrar panel",
     "unavailable": "La pestaña \"{tab}\" aún no está disponible",
     "tools": "Herramientas"
@@ -277,5 +278,16 @@
   "Dropdown": {
     "searchPlaceholder": "Buscar...",
     "noResults": "No se encontró nada"
+  },
+  "BranchesPanel": {
+    "hint": "Coloca las estaciones de la línea en un círculo perfecto. El radio es ajustable.",
+    "lineLabel": "Línea",
+    "placeholder": "Elige una línea",
+    "tooShort": "Se necesitan al menos 3 estaciones",
+    "radiusLabel": "Radio: {value}",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "saved": "Guardado",
+    "error": "No se pudo guardar"
   }
 }

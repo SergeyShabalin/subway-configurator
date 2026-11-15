@@ -1,5 +1,5 @@
 import { linesRepo, visualStationLinksRepo } from '@/src/lib/indexeddb/repositories'
-import type { BadgeEnd, Line, LineType, Point } from '@/types/metro'
+import type { BadgeEnd, Line, LineCircle, LineType, Point } from '@/types/metro'
 import { BaseService } from './base.service'
 import { segmentsService } from './segments.service'
 
@@ -9,6 +9,7 @@ const CONTEXT = {
   update: 'LinesService.update',
   updateBadgeOffset: 'LinesService.updateBadgeOffset',
   reorderStations: 'LinesService.reorderStations',
+  setCircle: 'LinesService.setCircle',
 } as const
 
 export class LinesService extends BaseService {
@@ -113,6 +114,11 @@ export class LinesService extends BaseService {
         logicalStationIds: orderedStationIds,
         visualStationIds,
       })
+    })
+  }
+  async setCircle(lineId: string, circle: LineCircle | undefined): Promise<void> {
+    return this.run(CONTEXT.setCircle, async () => {
+      await linesRepo.update(lineId, { circle })
     })
   }
 }

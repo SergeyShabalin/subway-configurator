@@ -27,6 +27,11 @@ export interface Station {
   createdAt?: number
 }
 
+export interface LineCircle {
+  center: Point
+  radius: number
+}
+
 export interface Segment {
   id: string
   from_station_id: string
@@ -57,6 +62,7 @@ export interface Line {
   type: LineType
   lineBadge?: string
   badgeOffsets?: LineBadgeOffsets
+  circle?: LineCircle
 }
 
 export interface VisualTransfer {
@@ -87,6 +93,7 @@ export interface GraphLine {
   type: LineType
   lineBadge?: string
   badgeOffsets?: LineBadgeOffsets
+  circle?: LineCircle
 }
 
 export interface GraphStation {
