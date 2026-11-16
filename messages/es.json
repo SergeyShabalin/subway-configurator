@@ -288,6 +288,15 @@
     "save": "Guardar",
     "cancel": "Cancelar",
     "saved": "Guardado",
-    "error": "No se pudo guardar"
+    "error": "No se pudo guardar",
+    "tabMove": "Mover",
+    "tabCircle": "Círculo",
+    "moveDescription": "Mueve la línea completa. Elige una línea, activa el movimiento y arrastra cualquiera de sus tramos en el mapa.",
+    "circleDescription": "Coloca las estaciones de la línea en un círculo perfecto. Elige una línea y ajusta el radio.",
+    "moveOn": "Activar movimiento",
+    "moveOff": "Desactivar movimiento",
+    "moveSelectLine": "Primero elige una línea",
+    "moveBlocked": "Primero guarda o cancela el cambio de radio en la pestaña Círculo",
+    "moveActive": "Movimiento activado: arrastra un tramo de la línea en el mapa"
   }
 }
