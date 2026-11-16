@@ -8,6 +8,7 @@ import type { Segment } from './buildSegments'
 import { HIT_STROKE_WIDTH, RAIL_GAP, RAIL_LINE_WIDTH, SUBWAY_WIDTH } from './constants'
 import { bezierToPath } from './geometry/bezier'
 import { offsetBezier } from './geometry/offsetBezier'
+import type { LineDragStartEvent } from './hooks/useLineDrag'
 import type { MetroLinesProps } from './types'
 
 export interface SegmentPathProps {
@@ -17,15 +18,20 @@ export interface SegmentPathProps {
   color: string
   hoverColor: string
   isDimmed: boolean
+  /** Линия выбрана для переноса: сегмент тянется вместо клика */
+  isMovable: boolean
   lineRef: MetroLinesProps['lineRef']
   onSegmentClick: MetroLinesProps['onSegmentClick']
+  onLineDragStart: (lineId: string, e: LineDragStartEvent) => void
 }
 
 const useSegmentInteraction = (
   segment: Segment,
   lineId: string,
   isDimmed: boolean,
-  onSegmentClick: MetroLinesProps['onSegmentClick']
+  isMovable: boolean,
+  onSegmentClick: MetroLinesProps['onSegmentClick'],
+  onLineDragStart: SegmentPathProps['onLineDragStart']
 ) => {
   const [isHovered, setIsHovered] = useState(false)
 
@@ -34,9 +40,11 @@ const useSegmentInteraction = (
     onSegmentClick?.({ lineId, fromVisualId: segment.fromId, toVisualId: segment.toId })
   }
 
+  const handleDragStart = (e: LineDragStartEvent) => onLineDragStart(lineId, e)
+
   const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>) => {
     const stage = e.target.getStage()
-    if (stage) stage.container().style.cursor = 'pointer'
+    if (stage) stage.container().style.cursor = isMovable ? 'move' : 'pointer'
     setIsHovered(true)
   }
 
@@ -50,8 +58,10 @@ const useSegmentInteraction = (
     ? { listening: false }
     : {
         listening: true,
-        onClick: handleClick,
-        onTap: handleClick,
+        onClick: isMovable ? undefined : handleClick,
+        onTap: isMovable ? undefined : handleClick,
+        onMouseDown: isMovable ? handleDragStart : undefined,
+        onTouchStart: isMovable ? handleDragStart : undefined,
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
       }
@@ -154,14 +164,18 @@ export const SegmentPath = memo(
     color,
     hoverColor,
     isDimmed,
+    isMovable,
     lineRef,
     onSegmentClick,
+    onLineDragStart,
   }: SegmentPathProps) => {
     const { isHovered, interactiveProps } = useSegmentInteraction(
       segment,
       lineId,
       isDimmed,
-      onSegmentClick
+      isMovable,
+      onSegmentClick,
+      onLineDragStart
     )
 
     const mainRef = useRegisterRef(

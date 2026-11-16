@@ -288,6 +288,15 @@
     "save": "Save",
     "cancel": "Cancel",
     "saved": "Saved",
-    "error": "Could not save"
+    "error": "Could not save",
+    "tabMove": "Move",
+    "tabCircle": "Circle",
+    "moveDescription": "Moves the whole line. Select a line, turn on moving and drag any of its segments on the map.",
+    "circleDescription": "Arranges the line's stations on a perfect circle. Select a line and adjust the radius.",
+    "moveOn": "Turn on moving",
+    "moveOff": "Turn off moving",
+    "moveSelectLine": "Select a line first",
+    "moveBlocked": "First save or cancel the radius change on the Circle tab",
+    "moveActive": "Moving is on: drag a line segment on the map"
   }
 }

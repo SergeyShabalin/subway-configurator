@@ -10,12 +10,9 @@ const MIN_RADIUS = 30
 const MAX_RADIUS = 3000
 const MIN_STATIONS = 3
 
-interface Session {
-  lineId: string
-  center: Point
-  /** Позиции станций, к которым откатывает «Отменить» */
+/** Состояние до первого несохранённого изменения: к нему откатывает «Отменить» */
+interface Snapshot {
   before: Array<PositionedVisual>
-  /** Окружность, сохранённая у линии на момент выбора или последнего сохранения */
   previousCircle: LineCircle | undefined
 }
 
@@ -29,73 +26,83 @@ export const useCircleLayout = () => {
 
   const [lineId, setLineId] = useState('')
   const [radius, setRadius] = useState(0)
-  const [session, setSession] = useState<Session | null>(null)
-  const [isDirty, setIsDirty] = useState(false)
+  const [isReady, setIsReady] = useState(false)
+  const [snapshot, setSnapshot] = useState<Snapshot | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [status, setStatus] = useState<CircleStatus>('idle')
   const [tooShort, setTooShort] = useState(false)
+
+  const isDirty = snapshot !== null
 
   const lineOptions = useMemo(
     () => lines.map((line) => buildLineMarkedOption(line.id, line.name, [line])),
     [lines]
   )
 
-  /** Откатывает несохранённые изменения на карте и в сторе */
+  /** Актуальные позиции станций линии из стора */
+  const readPositions = (id: string): Array<PositionedVisual> => {
+    const { linesById, visuals } = store.getState()
+    return (linesById[id]?.visualStationIds ?? []).flatMap((visualId) => {
+      const v = visuals[visualId]
+      return v ? [{ id: v.id, x: v.x, y: v.y }] : []
+    })
+  }
+
+  const readCircle = (id: string): LineCircle | undefined => store.getState().linesById[id]?.circle
+
+  const resolveCenter = (id: string, positions: ReadonlyArray<Point>): Point =>
+    readCircle(id)?.center ?? getCentroid(positions)
+
   const revert = () => {
-    if (!session || !isDirty) return
-    updateVisualPositions(session.before)
-    updateLineCircle(session.lineId, session.previousCircle)
+    if (!snapshot) return
+    updateVisualPositions(snapshot.before)
+    updateLineCircle(lineId, snapshot.previousCircle)
+    setSnapshot(null)
+  }
+
+  const resolveRadius = (id: string): number => {
+    const positions = readPositions(id)
+    const circle = readCircle(id)
+    return Math.round(circle?.radius ?? getMeanDistance(positions, resolveCenter(id, positions)))
   }
 
   const selectLine = (id: string) => {
     revert()
-    setSession(null)
-    setIsDirty(false)
-    setStatus('idle')
     setLineId(id)
+    setStatus('idle')
 
-    const line = lines.find((l) => l.id === id)
-    if (!line) return
-
-    const { visuals } = store.getState()
-    const before: Array<PositionedVisual> = []
-    for (const visualId of line.visualStationIds) {
-      const v = visuals[visualId]
-      if (v) before.push({ id: v.id, x: v.x, y: v.y })
-    }
-
-    const isTooShort = before.length < MIN_STATIONS
+    const isTooShort = readPositions(id).length < MIN_STATIONS
     setTooShort(isTooShort)
-    if (isTooShort) return
-
-    const center = line.circle?.center ?? getCentroid(before)
-    setSession({ lineId: id, center, before, previousCircle: line.circle })
-    setRadius(Math.round(line.circle?.radius ?? getMeanDistance(before, center)))
+    setIsReady(!isTooShort)
+    if (!isTooShort) setRadius(resolveRadius(id))
   }
 
   const changeRadius = (value: number) => {
-    if (!session || !Number.isFinite(value)) return
+    if (!isReady || !Number.isFinite(value)) return
+
+    const positions = readPositions(lineId)
+    if (!snapshot) setSnapshot({ before: positions, previousCircle: readCircle(lineId) })
 
     const next = Math.min(MAX_RADIUS, Math.max(MIN_RADIUS, value))
-    updateVisualPositions(arrangeOnCircle(session.before, session.center, next))
-    updateLineCircle(session.lineId, { center: session.center, radius: next })
+    const center = resolveCenter(lineId, positions)
+
+    updateVisualPositions(arrangeOnCircle(positions, center, next))
+    updateLineCircle(lineId, { center, radius: next })
     setRadius(next)
-    setIsDirty(true)
     setStatus('idle')
   }
 
   const save = async () => {
-    if (!session) return
+    if (!isReady) return
 
-    const circle: LineCircle = { center: session.center, radius }
-    const arranged = arrangeOnCircle(session.before, session.center, radius)
+    const positions = readPositions(lineId)
+    const circle: LineCircle = { center: resolveCenter(lineId, positions), radius }
 
     setIsSaving(true)
     try {
-      await visualsService.updatePositions(arranged)
-      await linesService.setCircle(session.lineId, circle)
-      setSession({ ...session, before: arranged, previousCircle: circle })
-      setIsDirty(false)
+      await visualsService.updatePositions(arrangeOnCircle(positions, circle.center, radius))
+      await linesService.setCircle(lineId, circle)
+      setSnapshot(null)
       setStatus('saved')
     } catch {
       setStatus('error')
@@ -105,18 +112,17 @@ export const useCircleLayout = () => {
   }
 
   const cancel = () => {
-    if (!session) return
+    if (!snapshot) return
 
     revert()
-    setIsDirty(false)
     setStatus('idle')
-    if (session.previousCircle) setRadius(Math.round(session.previousCircle.radius))
+    setRadius(resolveRadius(lineId))
   }
 
   return {
     picker: { lineId, lineOptions, selectLine },
     radius: { value: radius, min: MIN_RADIUS, max: MAX_RADIUS, change: changeRadius },
-    state: { isReady: session !== null, isDirty, isSaving, status, tooShort },
+    state: { isReady, isDirty, isSaving, status, tooShort },
     actions: { save, cancel },
   }
 }

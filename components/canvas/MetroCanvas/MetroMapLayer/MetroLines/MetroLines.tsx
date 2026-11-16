@@ -4,9 +4,11 @@ import { CANVAS_DIMMED_COLOR } from '@/components/canvas/shared/dimmedColors'
 import { useRoute } from '@/components/canvas/shared/routing/useRoute'
 import { CANVAS_HOVER_COLOR } from '@/components/canvas/shared/themeColors'
 import { useTheme } from '@/context/theme-context'
+import { useMetroStore } from '@/store'
 import type { LineType } from '@/types/metro'
 import { memo, useMemo } from 'react'
 import { buildSegments, type Segment } from './buildSegments'
+import { useLineDrag } from './hooks/useLineDrag'
 import { useMetroLines } from './hooks/useMetroLines'
 import { SegmentPath } from './SegmentPath'
 import type { MetroLinesProps } from './types'
@@ -39,7 +41,6 @@ const useSegmentItems = (
         visuals,
         line.circle
       )
-
       for (const segment of segments) {
         items.push({
           segment,
@@ -67,6 +68,8 @@ const useSegmentItems = (
 export const MetroLines = memo(({ visuals, lineRef, onSegmentClick }: MetroLinesProps) => {
   const { theme } = useTheme()
   const route = useRoute()
+  const movableLineId = useMetroStore((state) => state.movableLineId)
+  const { startDrag } = useLineDrag()
   const dimmedColor = CANVAS_DIMMED_COLOR[theme]
   const hoverColor = CANVAS_HOVER_COLOR[theme]
 
@@ -82,8 +85,10 @@ export const MetroLines = memo(({ visuals, lineRef, onSegmentClick }: MetroLines
           color={isDimmed ? dimmedColor : color}
           hoverColor={hoverColor}
           isDimmed={isDimmed}
+          isMovable={lineId === movableLineId}
           lineRef={lineRef}
           onSegmentClick={onSegmentClick}
+          onLineDragStart={startDrag}
         />
       ))}
     </>
