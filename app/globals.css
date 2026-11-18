@@ -139,6 +139,9 @@
     --timeline-padding: 16px;
     --timeline-icon-width: 16px;
     --timeline-gap: 12px;
+
+    /* Подсказки */
+    --hint-background: white;
 }
 
 :root.dark {
@@ -276,6 +279,9 @@
     --sidebar-focus: var(--glass-focus);
 
     color-scheme: dark;
+
+    /* Подсказки */
+    --hint-background: #0e0e0e;
 }
 
 html {
@@ -337,4 +343,12 @@ a {
 
 *::-webkit-scrollbar-track {
     background: var(--scrollbar-track);
+}
+
+@media (hover: none) and (pointer: coarse) {
+    input,
+    textarea,
+    select {
+        font-size: max(16px, 1em) !important;
+    }
 }

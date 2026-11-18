@@ -1,1 +1,1 @@
-export type BranchesTab = 'move' | 'circle' | 'align'
+export type BranchesTab = 'move' | 'circle' | 'align' | 'stations'

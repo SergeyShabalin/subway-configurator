@@ -7,7 +7,11 @@
     "hintNoLinesTitle": "Start with a new line",
     "hintNoLinesText": "Right-click anywhere to add a new line and its stations",
     "hintNoStationsTitle": "Add stations to the line",
-    "hintNoStationsText": "Right-click anywhere to place a station on the line"
+    "hintNoStationsText": "Right-click anywhere to place a station on the line",
+    "hintNoLinesTitleTouch": "Start with a new line",
+    "hintNoLinesTextTouch": "Press and hold on the screen to add a new line and its stations",
+    "hintNoStationsTitleTouch": "Add stations to the line",
+    "hintNoStationsTextTouch": "Press and hold on the screen to place a station on the line"
   },
   "CreateElementModal": {
     "title": "Add element",
@@ -302,6 +306,8 @@
     "moveBlocked": "First save or cancel the radius change on the Circle tab",
     "moveActive": "Moving is on: drag a line segment on the map",
     "tabAlign": "Align",
-    "alignDescription": "Lines up the stations between two chosen ones. Select a line, then the first and last station."
+    "alignDescription": "Lines up the stations between two chosen ones. Select a line, then the first and last station.",
+    "tabStations": "Order",
+    "stationsDescription": "Changes the order of the line's stations. Select a line and drag stations by the handle."
   }
 }

@@ -1,6 +1,5 @@
 .page {
   --background: #020913;
-
   display: flex;
   flex: 1;
   flex-direction: column;

@@ -7,5 +7,4 @@ export interface StationsTabItem {
 
 export interface StationsTabProps {
   line: Line
-  onReorder: (orderedStationIds: Array<string>) => Promise<void>
 }

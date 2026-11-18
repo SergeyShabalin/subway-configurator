@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import type { StationsTabItem, StationsTabProps } from '../types'
+import type { StationsTabItem } from '../types'
 
-type UseStationsOrderParams = {
+interface UseStationsOrderParams {
   items: Array<StationsTabItem>
-  onReorder: StationsTabProps['onReorder']
+  onReorder: (orderedStationIds: Array<string>) => Promise<void>
 }
 
 export const useStationsOrder = ({ items, onReorder }: UseStationsOrderParams) => {

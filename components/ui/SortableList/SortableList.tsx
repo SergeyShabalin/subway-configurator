@@ -1,3 +1,4 @@
+// SortableList.tsx
 'use client'
 
 import { useRef, type ReactNode } from 'react'
@@ -29,13 +30,15 @@ export function SortableList<T extends SortableItemData>({
     handlePointerDown,
   } = useSortableList({ items, onReorder, listRef })
 
+  const isActive = isDragging || isDropping
+
   return (
     <ul className={styles.list} ref={listRef}>
       {items.map((item, index) => {
         let offsetY = 0
         let isItemDragging = false
 
-        if (dragIndex !== null && overIndex !== null && isDragging) {
+        if (dragIndex !== null && overIndex !== null && isActive) {
           if (index === dragIndex) {
             offsetY = dragOffset
             isItemDragging = true

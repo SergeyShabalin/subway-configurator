@@ -1,4 +1,4 @@
-import { useEffect, type MutableRefObject, type RefObject } from 'react'
+import { useEffect, useRef, type MutableRefObject, type RefObject } from 'react'
 
 const SCROLL_SPEED = 8
 
@@ -15,6 +15,13 @@ export const useAutoScroll = ({
   scrollDirection,
   onScroll,
 }: UseAutoScrollOptions) => {
+  // Актуальный колбэк без перезапуска цикла
+  const onScrollRef = useRef(onScroll)
+
+  useEffect(() => {
+    onScrollRef.current = onScroll
+  })
+
   useEffect(() => {
     if (!isEnabled) return
     let rafId: number
@@ -30,7 +37,7 @@ export const useAutoScroll = ({
 
         if (canScrollUp || canScrollDown) {
           container.scrollTop += dir * SCROLL_SPEED
-          onScroll()
+          onScrollRef.current()
         }
       }
       rafId = requestAnimationFrame(loop)
@@ -38,5 +45,5 @@ export const useAutoScroll = ({
 
     rafId = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(rafId)
-  }, [containerRef, isEnabled, scrollDirection, onScroll])
+  }, [containerRef, isEnabled, scrollDirection])
 }
