@@ -43,3 +43,16 @@
     color: var(--hint-lets-started-color);
     max-width: 360px;
 }
+
+@media (width <= 499px) {
+    .hint {
+        width: calc(100vw - 50px);
+        max-width: none;
+        padding: 30px;
+        box-sizing: border-box;
+    }
+
+    .text {
+        max-width: none;
+    }
+}

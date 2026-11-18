@@ -6,5 +6,4 @@ export const buildEditLineTabs = (
 ): Array<EditLineTabItem> => [
   { value: 'line', label: t('tabLine') },
   ...(hasSegment ? [{ value: 'segment' as const, label: t('tabSegment') }] : []),
-  { value: 'stations', label: t('tabStations') },
 ]

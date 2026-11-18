@@ -1,6 +1,6 @@
 import { useSelectedSegmentData } from '@/components/canvas/MetroCanvas/hooks/useSelectedSegmentData'
 
-export type EditLineTab = 'segment' | 'line' | 'stations'
+export type EditLineTab = 'segment' | 'line'
 
 export interface EditLineTabItem {
   value: EditLineTab

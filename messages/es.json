@@ -7,7 +7,11 @@
     "hintNoLinesTitle": "Empieza con una nueva línea",
     "hintNoLinesText": "Haz clic derecho en cualquier lugar para añadir una nueva línea y sus estaciones",
     "hintNoStationsTitle": "Añade estaciones a la línea",
-    "hintNoStationsText": "Haz clic derecho en cualquier lugar para colocar una estación en la línea"
+    "hintNoStationsText": "Haz clic derecho en cualquier lugar para colocar una estación en la línea",
+    "hintNoLinesTitleTouch": "Empieza con una nueva línea",
+    "hintNoLinesTextTouch": "Mantén pulsado el dedo en la pantalla para añadir una nueva línea y sus estaciones",
+    "hintNoStationsTitleTouch": "Añade estaciones a la línea",
+    "hintNoStationsTextTouch": "Mantén pulsado el dedo en la pantalla para colocar una estación en la línea"
   },
   "CreateElementModal": {
     "title": "Añadir elemento",
@@ -302,6 +306,8 @@
     "moveBlocked": "Primero guarda o cancela el cambio de radio en la pestaña Círculo",
     "moveActive": "Movimiento activado: arrastra un tramo de la línea en el mapa",
     "tabAlign": "Alinear",
-    "alignDescription": "Alinea las estaciones entre dos elegidas. Elige una línea, la primera y la última estación."
+    "alignDescription": "Alinea las estaciones entre dos elegidas. Elige una línea, la primera y la última estación.",
+    "tabStations": "Orden",
+    "stationsDescription": "Cambia el orden de las estaciones de la línea. Elige una línea y arrastra las estaciones por el asa."
   }
 }

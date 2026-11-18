@@ -25,28 +25,34 @@ export function useSortableList<T extends SortableItemData>({
 
   const dragState = useRef({
     startY: 0,
-    startScrollTop: 0,
+    /** Расстояние от курсора до верхнего края перетаскиваемого элемента в момент нажатия */
+    grabOffset: 0,
     lastClientY: 0,
   })
 
   const scrollDirRef = useRef(0)
   const overIndexRef = useRef<number | null>(null)
 
-  useEffect(() => {
-    overIndexRef.current = overIndex
-  }, [overIndex])
-
-  // Сохраняем самую свежую версию функции, чтобы не пересоздавать слушатели
   const updatePosition = (clientY: number) => {
-    if (!listRef.current || dragIndex === null || itemHeight === 0) return
-    const state = dragState.current
+    const list = listRef.current
+    if (!list || dragIndex === null || itemHeight === 0) return
 
-    const scrollDelta = listRef.current.scrollTop - state.startScrollTop
-    const rawDeltaY = clientY - state.startY + scrollDelta
+    const rows = list.children
+    const dragged = rows[dragIndex] as HTMLElement | undefined
+    const first = rows[0] as HTMLElement | undefined
+    const last = rows[rows.length - 1] as HTMLElement | undefined
+    if (!dragged || !first || !last) return
 
-    const maxOffset = (items.length - 1 - dragIndex) * itemHeight
-    const minOffset = -dragIndex * itemHeight
-    const clampedOffset = Math.max(minOffset, Math.min(rawDeltaY, maxOffset))
+    // Позиция курсора в координатах содержимого списка, с учётом текущей прокрутки.
+    // offsetTop не зависит от transform, поэтому не накапливает ошибку.
+    const rect = list.getBoundingClientRect()
+    const contentY = clientY - rect.top + list.scrollTop
+    const desiredTop = contentY - dragState.current.grabOffset
+
+    const rawOffset = desiredTop - dragged.offsetTop
+    const minOffset = first.offsetTop - dragged.offsetTop
+    const maxOffset = last.offsetTop - dragged.offsetTop
+    const clampedOffset = Math.max(minOffset, Math.min(rawOffset, maxOffset))
 
     setDragOffset(clampedOffset)
 
@@ -56,10 +62,10 @@ export function useSortableList<T extends SortableItemData>({
     if (newOverIndex >= items.length) newOverIndex = items.length - 1
 
     if (newOverIndex !== overIndexRef.current) {
+      overIndexRef.current = newOverIndex
       setOverIndex(newOverIndex)
     }
 
-    const rect = listRef.current.getBoundingClientRect()
     if (clientY < rect.top + SCROLL_THRESHOLD) {
       scrollDirRef.current = -1
     } else if (clientY > rect.bottom - SCROLL_THRESHOLD) {
@@ -71,7 +77,6 @@ export function useSortableList<T extends SortableItemData>({
 
   const updatePositionRef = useRef(updatePosition)
 
-  // Обновляем ref при каждом рендере, чтобы window-слушатели видели актуальные данные
   useEffect(() => {
     updatePositionRef.current = updatePosition
   })
@@ -90,15 +95,16 @@ export function useSortableList<T extends SortableItemData>({
 
     const style = window.getComputedStyle(li)
     const marginBottom = parseFloat(style.marginBottom) || 0
-    const height = li.getBoundingClientRect().height + marginBottom
+    const liRect = li.getBoundingClientRect()
 
     dragState.current = {
       startY: e.clientY,
-      startScrollTop: listRef.current.scrollTop,
+      grabOffset: e.clientY - liRect.top,
       lastClientY: e.clientY,
     }
 
-    setItemHeight(height)
+    overIndexRef.current = index
+    setItemHeight(liRect.height + marginBottom)
     setDragIndex(index)
     setOverIndex(index)
     setDragOffset(0)
@@ -147,6 +153,7 @@ export function useSortableList<T extends SortableItemData>({
             newItems.splice(overIndexRef.current!, 0, moved)
             onReorder(newItems)
 
+            overIndexRef.current = null
             setDragIndex(null)
             setOverIndex(null)
             setIsDropping(false)
@@ -154,6 +161,7 @@ export function useSortableList<T extends SortableItemData>({
           }, 200)
         })
       } else {
+        overIndexRef.current = null
         setDragIndex(null)
         setOverIndex(null)
       }

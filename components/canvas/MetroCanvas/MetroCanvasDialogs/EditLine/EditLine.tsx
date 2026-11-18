@@ -3,7 +3,6 @@
 import { useSelectedSegmentData } from '@/components/canvas/MetroCanvas/hooks/useSelectedSegmentData'
 import { LineTab } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine/LineTab/LineTab'
 import { SegmentTab } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine/SegmentTab/SegmentTab'
-import { StationsTab } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine/StationsTab/StationsTab'
 import type { SelectedSegment } from '@/components/canvas/MetroCanvas/MetroMapLayer/MetroLines/types'
 import { LineIcon } from '@/components/ui/Icons'
 import { Modal } from '@/components/ui/Modal/Modal'
@@ -31,8 +30,7 @@ export const EditLine = ({ isOpen, selectedSegment, onClose, reloadData }: EditL
   const { tabs, currentTab, selectTab } = useEditLineTabs({
     hasSegment: Boolean(segment?.segmentId),
   })
-  const { saveSegmentTime, reorderStations } = useEditLineActions({
-    line: currentLine,
+  const { saveSegmentTime } = useEditLineActions({
     segmentId: segment?.segmentId,
     reloadData,
   })
@@ -57,10 +55,6 @@ export const EditLine = ({ isOpen, selectedSegment, onClose, reloadData }: EditL
 
         {currentTab === 'line' && (
           <LineTab line={currentLine} onClose={onClose} reloadData={reloadData} />
-        )}
-
-        {currentTab === 'stations' && (
-          <StationsTab line={currentLine} onReorder={reorderStations} />
         )}
       </div>
     </Modal>

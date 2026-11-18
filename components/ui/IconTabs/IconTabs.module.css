@@ -1,0 +1,50 @@
+.list {
+    display: flex;
+    gap: 8px;
+}
+
+.item {
+    position: relative;
+    display: inline-flex;
+}
+
+.button {
+    --button-icon-size: 44px;
+    --button-icon-glyph: 22px;
+    --button-radius: 12px;
+    --button-focus: var(--sidebar-focus);
+    --button-soft-bg: var(--sidebar-button-bg);
+    --button-soft-hover: var(--sidebar-button-hover);
+    --button-soft-text: var(--sidebar-icon-color);
+    --button-soft-hover-text: var(--sidebar-icon-hover);
+    --button-active-bg: var(--sidebar-accent);
+    --button-active-text: var(--white);
+    --button-active-border: var(--sidebar-accent-border);
+    --button-active-shadow: 0 4px 14px var(--sidebar-accent-shadow);
+}
+
+/* Подсказка по наведению и фокусу */
+.item::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    z-index: 10;
+    padding: 4px 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    color: var(--sidebar-text);
+    background: var(--hint-background);
+    border: 1px solid var(--sidebar-border);
+    border-radius: 6px;
+    box-shadow: var(--sidebar-shadow);
+    opacity: 0;
+    transform: translateX(-50%);
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.item:hover::after,
+.item:focus-within::after {
+    opacity: 1;
+}
