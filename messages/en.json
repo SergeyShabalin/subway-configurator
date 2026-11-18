@@ -174,7 +174,10 @@
     "noBetween": "There are no stations between these two",
     "sharedWarning": "Interchange stations among them: {count}. Other lines through them will change too.",
     "done": "Stations aligned: {count}",
-    "error": "Failed to save the new station positions"
+    "error": "Failed to save the new station positions",
+    "axisVertical": "Strictly vertical",
+    "axisHorizontal": "Strictly horizontal",
+    "equalSpacing": "Equal spacing between stations"
   },
   "LineStationsTab": {
     "dragHandle": "Drag to reorder",
@@ -297,6 +300,8 @@
     "moveOff": "Turn off moving",
     "moveSelectLine": "Select a line first",
     "moveBlocked": "First save or cancel the radius change on the Circle tab",
-    "moveActive": "Moving is on: drag a line segment on the map"
+    "moveActive": "Moving is on: drag a line segment on the map",
+    "tabAlign": "Align",
+    "alignDescription": "Lines up the stations between two chosen ones. Select a line, then the first and last station."
   }
 }

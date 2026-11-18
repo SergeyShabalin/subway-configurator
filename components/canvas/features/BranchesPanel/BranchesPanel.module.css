@@ -27,6 +27,12 @@
     color: var(--error);
 }
 
+.warning {
+    margin: 0;
+    font-size: 14px;
+    color: var(--warning);
+}
+
 .success {
     margin: 0;
     font-size: 14px;
