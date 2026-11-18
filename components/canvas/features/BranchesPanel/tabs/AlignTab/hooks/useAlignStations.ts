@@ -1,10 +1,6 @@
 'use client'
 
-import {
-  Alignment,
-  AlignStatus,
-} from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine/AlignTab/types'
-import { alignOnStraightLine, getPathBetween } from '@/src/lib/layout/alignStations'
+import { alignOnAxis, getPathBetween, type AlignAxis } from '@/src/lib/layout/alignStations'
 import { visualsService } from '@/src/lib/services'
 import { useMetroStore, useMetroStoreApi } from '@/store'
 import type { Line } from '@/types/metro'
@@ -13,8 +9,15 @@ import { buildAlignOptions } from '../helpers/buildAlignOptions'
 import { countSharedStations } from '../helpers/countSharedStations'
 import { getPositionedPath } from '../helpers/getPositionedPath'
 import { resolveAlignProblem } from '../helpers/resolveAlignProblem'
+import type { Alignment, AlignStatus } from '../types'
 
-export const useAlignStations = (line: Line) => {
+interface UseAlignStationsParams {
+  line: Line
+  /** Снаружи выравнивание запрещено (например, есть несохранённые правки окружности) */
+  isLocked: boolean
+}
+
+export const useAlignStations = ({ line, isLocked }: UseAlignStationsParams) => {
   const store = useMetroStoreApi()
   const stations = useMetroStore((state) => state.stations)
   const visualToStations = useMetroStore((state) => state.visualToStations)
@@ -22,6 +25,8 @@ export const useAlignStations = (line: Line) => {
 
   const [startId, setStartId] = useState('')
   const [endId, setEndId] = useState('')
+  const [axis, setAxis] = useState<AlignAxis>('free')
+  const [equalSpacing, setEqualSpacing] = useState(true)
   const [status, setStatus] = useState<AlignStatus>('idle')
   const [lastAlignment, setLastAlignment] = useState<Alignment | null>(null)
   const [isSaving, setIsSaving] = useState(false)
@@ -56,15 +61,29 @@ export const useAlignStations = (line: Line) => {
     setStatus('idle')
   }
 
+  /** Повторный выбор той же оси снимает её. Вертикаль и горизонталь взаимоисключающие */
+  const toggleAxis = (target: Exclude<AlignAxis, 'free'>) => {
+    setAxis((current) => (current === target ? 'free' : target))
+    setStatus('idle')
+  }
+
+  const toggleEqualSpacing = () => {
+    setEqualSpacing((enabled) => !enabled)
+    setStatus('idle')
+  }
+
+  const hasEffect = axis !== 'free' || equalSpacing
+
   const align = async () => {
     // Координаты берём из стора в момент нажатия, чтобы не перерисовывать вкладку при каждом движении станций
     const positioned = getPositionedPath(path, store.getState().visuals)
     if (!positioned) return
 
-    const after = alignOnStraightLine(positioned)
+    const after = alignOnAxis(positioned, axis, equalSpacing)
     if (after.length === 0) return
 
-    const before = positioned.slice(1, -1)
+    // Без оси крайние станции не двигаются, с осью двигаются все станции пути
+    const before = axis === 'free' ? positioned.slice(1, -1) : positioned
 
     setIsSaving(true)
     setStatus('idle')
@@ -102,7 +121,14 @@ export const useAlignStations = (line: Line) => {
 
   return {
     isCircular,
-    picker: { options, startId, endId, selectStart, selectEnd, isDisabled: isSaving },
+    picker: { options, startId, endId, selectStart, selectEnd, isDisabled: isSaving || isLocked },
+    axis: {
+      value: axis,
+      toggle: toggleAxis,
+      equalSpacing,
+      toggleEqualSpacing,
+      isDisabled: isSaving || isLocked,
+    },
     feedback: {
       problem,
       sharedCount,
@@ -110,8 +136,8 @@ export const useAlignStations = (line: Line) => {
       alignedCount: lastAlignment?.after.length ?? 0,
     },
     controls: {
-      canAlign: path.length >= 3 && !isSaving,
-      canUndo: lastAlignment !== null && !isSaving,
+      canAlign: path.length >= 3 && hasEffect && !isSaving && !isLocked,
+      canUndo: lastAlignment !== null && !isSaving && !isLocked,
       isSaving,
       align,
       undo,

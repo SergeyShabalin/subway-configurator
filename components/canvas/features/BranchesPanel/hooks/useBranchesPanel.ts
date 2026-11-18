@@ -1,3 +1,4 @@
+import { useMetroStore } from '@/store'
 import { useState } from 'react'
 import type { BranchesTab } from '../types'
 import { useCircleLayout } from './useCircleLayout'
@@ -8,16 +9,20 @@ export const useBranchesPanel = () => {
   const [tab, setTab] = useState<BranchesTab>('move')
   const [isMoveEnabled, setIsMoveEnabled] = useState(false)
 
-  const hasLine = Boolean(circle.picker.lineId)
+  const lineId = circle.picker.lineId
+  const line = useMetroStore((state) => state.linesById[lineId])
+
+  const hasLine = Boolean(lineId)
   const isMoveBlocked = circle.state.isDirty || circle.state.isSaving
 
   // Режим переноса активен только на своей вкладке и при включённом переключателе
   const isMoveActive = tab === 'move' && isMoveEnabled && hasLine && !isMoveBlocked
-  useLineMoveMode(circle.picker.lineId, isMoveActive)
+  useLineMoveMode(lineId, isMoveActive)
 
   return {
     tab,
     selectTab: setTab,
+    line,
     circle,
     move: {
       isEnabled: isMoveEnabled,

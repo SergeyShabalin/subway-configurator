@@ -1,4 +1,4 @@
-import { AlignProblem } from '@/components/canvas/MetroCanvas/MetroCanvasDialogs/EditLine/AlignTab/types'
+import type { AlignProblem } from '../types'
 
 export const resolveAlignProblem = (
   startId: string,

@@ -9,7 +9,6 @@ import { LineIcon } from '@/components/ui/Icons'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { Tabs } from '@/components/ui/Tabs'
 import { useTranslations } from 'next-intl'
-import { AlignTab } from './AlignTab/AlignTab'
 import styles from './EditLine.module.css'
 import { getSegmentKey } from './helpers/getSegmentKey'
 import { useCurrentLine } from './hooks/useCurrentLine'
@@ -63,8 +62,6 @@ export const EditLine = ({ isOpen, selectedSegment, onClose, reloadData }: EditL
         {currentTab === 'stations' && (
           <StationsTab line={currentLine} onReorder={reorderStations} />
         )}
-
-        {currentTab === 'align' && <AlignTab line={currentLine} />}
       </div>
     </Modal>
   )

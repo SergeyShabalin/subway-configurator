@@ -3,23 +3,26 @@
 import { Dropdown } from '@/components/ui/Dropdown'
 import type { Line } from '@/types/metro'
 import { useTranslations } from 'next-intl'
-import styles from './AlignTab.module.css'
+import styles from '../../BranchesPanel.module.css'
+import { AlignAxisOptions } from './components/AlignAxisOptions'
 import { AlignControls } from './components/AlignControls'
 import { AlignFeedback } from './components/AlignFeedback'
 import { useAlignStations } from './hooks/useAlignStations'
 
 interface AlignTabProps {
   line: Line
+  isLocked: boolean
 }
 
-export const AlignTab = ({ line }: AlignTabProps) => {
+export const AlignTab = ({ line, isLocked }: AlignTabProps) => {
   const t = useTranslations('AlignTab')
 
-  const { isCircular, picker, feedback, controls } = useAlignStations(line)
+  const { isCircular, picker, axis, feedback, controls } = useAlignStations({ line, isLocked })
 
   return (
-    <div className={styles.root}>
-      <p className={styles.hint}>{t(isCircular ? 'hintCircular' : 'hint')}</p>
+    <>
+      {isCircular && <p className={styles.hint}>{t('hintCircular')}</p>}
+
       <Dropdown
         label={t('from')}
         value={picker.startId}
@@ -40,8 +43,10 @@ export const AlignTab = ({ line }: AlignTabProps) => {
         disabled={picker.isDisabled}
         largeList
       />
+
+      <AlignAxisOptions axis={axis} />
       <AlignFeedback feedback={feedback} />
       <AlignControls controls={controls} />
-    </div>
+    </>
   )
 }

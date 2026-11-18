@@ -174,7 +174,10 @@
     "noBetween": "No hay estaciones entre estas dos",
     "sharedWarning": "Estaciones de transbordo entre ellas: {count}. Las otras líneas que pasan por ellas también cambiarán.",
     "done": "Estaciones alineadas: {count}",
-    "error": "No se pudo guardar la nueva posición de las estaciones"
+    "error": "No se pudo guardar la nueva posición de las estaciones",
+    "axisVertical": "Estrictamente vertical",
+    "axisHorizontal": "Estrictamente horizontal",
+    "equalSpacing": "Distancias iguales entre estaciones"
   },
   "LineStationsTab": {
     "dragHandle": "Arrastrar para cambiar el orden",
@@ -297,6 +300,8 @@
     "moveOff": "Desactivar movimiento",
     "moveSelectLine": "Primero elige una línea",
     "moveBlocked": "Primero guarda o cancela el cambio de radio en la pestaña Círculo",
-    "moveActive": "Movimiento activado: arrastra un tramo de la línea en el mapa"
+    "moveActive": "Movimiento activado: arrastra un tramo de la línea en el mapa",
+    "tabAlign": "Alinear",
+    "alignDescription": "Alinea las estaciones entre dos elegidas. Elige una línea, la primera y la última estación."
   }
 }

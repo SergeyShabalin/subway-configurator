@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import styles from '../AlignTab.module.css'
+import styles from '../../../BranchesPanel.module.css'
 import type { useAlignStations } from '../hooks/useAlignStations'
 
 interface AlignFeedbackProps {
