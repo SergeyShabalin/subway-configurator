@@ -24,61 +24,63 @@ export const CreateStationForm = (props: CreateStationFormProps) => {
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
-      <Dropdown
-        value={state.selectedLineId}
-        options={state.lineOptions}
-        onChange={actions.handleLineChange}
-        label={t('lineLabel')}
-        placeholder={t('linePlaceholder')}
-        emptyMessage={t('noLines')}
-      />
-      <Dropdown
-        value={state.insertPosition}
-        options={state.insertPositionOptions}
-        onChange={actions.setInsertPosition}
-        label={t('insertPositionLabel')}
-        placeholder={t('insertPositionPlaceholder')}
-        emptyMessage={t('noInsertPositionOptions')}
-        disabled={!state.selectedLineId || state.insertPositionOptions.length === 0}
-      />
-      <div className={styles.field}>
-        <Input
-          type="text"
-          label={t('nameLabel')}
-          value={state.resolvedName}
-          onChange={(e) => actions.setStationName(e.target.value)}
-          placeholder={t('namePlaceholder')}
-          disabled={!!state.transferVisualId}
-          autoFocus
-        />
-      </div>
-      <div className={styles.field}>
+      <div className={styles.fields}>
         <Dropdown
-          value={state.transferVisualId}
-          options={state.transferOptions}
-          onChange={actions.setTransferVisualId}
-          label={t('transferLabel')}
-          placeholder={t('transferPlaceholder')}
-          emptyMessage={t('noTransferOptions')}
-          disabled={!state.selectedLineId}
+          value={state.selectedLineId}
+          options={state.lineOptions}
+          onChange={actions.handleLineChange}
+          label={t('lineLabel')}
+          placeholder={t('linePlaceholder')}
+          emptyMessage={t('noLines')}
         />
-      </div>
-      <div className={styles.field}>
-        <Input
-          type="text"
-          inputMode="numeric"
-          label={t('timeLabel')}
-          value={state.time}
-          onChange={actions.handleTimeChange}
-          disabled={state.isLoading}
+        <Dropdown
+          value={state.insertPosition}
+          options={state.insertPositionOptions}
+          onChange={actions.setInsertPosition}
+          label={t('insertPositionLabel')}
+          placeholder={t('insertPositionPlaceholder')}
+          emptyMessage={t('noInsertPositionOptions')}
+          disabled={!state.selectedLineId || state.insertPositionOptions.length === 0}
         />
+        <div className={styles.field}>
+          <Input
+            type="text"
+            label={t('nameLabel')}
+            value={state.resolvedName}
+            onChange={(e) => actions.setStationName(e.target.value)}
+            placeholder={t('namePlaceholder')}
+            disabled={!!state.transferVisualId}
+            autoFocus
+          />
+        </div>
+        <div className={styles.field}>
+          <Dropdown
+            value={state.transferVisualId}
+            options={state.transferOptions}
+            onChange={actions.setTransferVisualId}
+            label={t('transferLabel')}
+            placeholder={t('transferPlaceholder')}
+            emptyMessage={t('noTransferOptions')}
+            disabled={!state.selectedLineId}
+          />
+        </div>
+        <div className={styles.field}>
+          <Input
+            type="text"
+            inputMode="numeric"
+            label={t('timeLabel')}
+            value={state.time}
+            onChange={actions.handleTimeChange}
+            disabled={state.isLoading}
+          />
+        </div>
+        <div className={styles.coordinates}>
+          <span>
+            {t('coordinates', { x: Math.round(props.position.x), y: Math.round(props.position.y) })}
+          </span>
+        </div>
       </div>
-      <div className={styles.coordinates}>
-        <span>
-          {t('coordinates', { x: Math.round(props.position.x), y: Math.round(props.position.y) })}
-        </span>
-      </div>
-      <div className={styles.spacer} />
+
       <div className={styles.actions}>
         <Button
           title={t('cancel')}
