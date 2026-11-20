@@ -45,11 +45,13 @@ export function Sidebar({ items, defaultActiveId, panelWidth = 380, className }:
 
       {activeItem && (
         <SidebarPanel
+          key={activeItem.id}
           title={activeItem.label}
           width={panelWidth}
           position={position}
           onPositionChange={setPosition}
           onClose={handleClose}
+          mobileHeights={activeItem.mobileHeights}
         >
           {activeItem.content}
         </SidebarPanel>

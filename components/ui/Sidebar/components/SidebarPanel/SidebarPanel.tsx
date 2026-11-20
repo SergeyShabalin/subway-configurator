@@ -10,6 +10,9 @@ import { useMobilePanelExpand } from './hooks/useMobilePanelExpand'
 import { usePanelMode } from './hooks/usePanelMode'
 import styles from './SidebarPanel.module.css'
 
+const DEFAULT_COLLAPSED_HEIGHT = '45dvh'
+const DEFAULT_EXPANDED_HEIGHT = '90dvh'
+
 export function SidebarPanel({
   title,
   width,
@@ -17,6 +20,7 @@ export function SidebarPanel({
   onPositionChange,
   onClose,
   children,
+  mobileHeights,
 }: SidebarPanelProps) {
   const t = useTranslations('Sidebar')
   const mode = usePanelMode()
@@ -51,6 +55,8 @@ export function SidebarPanel({
     '--panel-width': `${width}px`,
     '--panel-left': `${position.left}px`,
     '--panel-top': `${position.top}px`,
+    '--panel-collapsed-height': mobileHeights?.collapsed ?? DEFAULT_COLLAPSED_HEIGHT,
+    '--panel-expanded-height': mobileHeights?.expanded ?? DEFAULT_EXPANDED_HEIGHT,
     ...mobileExpand.getPanelStyleOverride(),
   } as CSSProperties
 
