@@ -77,7 +77,9 @@ export const RoutePanel = () => {
       {status === 'sameStation' && <p className={styles.message}>{t('sameStation')}</p>}
       {status === 'notFound' && <p className={styles.message}>{t('notFound')}</p>}
       {status === 'found' && (
-        <RouteResult routes={routes} activeIndex={activeIndex} onSelect={selectRoute} />
+        <div className={styles.resultWrapper}>
+          <RouteResult routes={routes} activeIndex={activeIndex} onSelect={selectRoute} />
+        </div>
       )}
     </div>
   )

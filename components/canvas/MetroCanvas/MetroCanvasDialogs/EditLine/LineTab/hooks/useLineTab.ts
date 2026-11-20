@@ -5,16 +5,31 @@ import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import type { LineTabProps } from '../types'
 
-type UseLineTabParams = LineTabProps & { onError: (error: unknown) => void }
+type UseLineTabParams = LineTabProps & {
+  onError: (error: unknown) => void
+  onDeleteError: (error: unknown) => void
+  confirmDelete: () => boolean
+}
 
-export const useLineTab = ({ line, onClose, reloadData, onError }: UseLineTabParams) => {
+export const useLineTab = ({
+  line,
+  onClose,
+  reloadData,
+  onError,
+  onDeleteError,
+  confirmDelete,
+}: UseLineTabParams) => {
   const [name, setName] = useState(line.name)
   const [color, setColor] = useState(line.color)
   const [lineBadge, setLineBadge] = useState(line.lineBadge)
   const [isCircular, setIsCircular] = useState(line.is_circular === 1)
   const [lineType, setLineType] = useState<LineType>(line.type ?? 'subway')
 
-  const { isLoading, run } = useAsyncAction({ onError })
+  const saveAction = useAsyncAction({ onError })
+  const deleteAction = useAsyncAction({ onError: onDeleteError })
+
+  // Общий флаг: пока идёт сохранение или удаление, всё заблокировано
+  const isLoading = saveAction.isLoading || deleteAction.isLoading
 
   const isDirty =
     name !== line.name ||
@@ -45,7 +60,7 @@ export const useLineTab = ({ line, onClose, reloadData, onError }: UseLineTabPar
     if (!name.trim()) return
     if (!isDirty) return
 
-    await run(async () => {
+    await saveAction.run(async () => {
       await linesService.update(line.id, {
         name: name.trim(),
         color,
@@ -53,6 +68,16 @@ export const useLineTab = ({ line, onClose, reloadData, onError }: UseLineTabPar
         is_circular: isCircular ? 1 : 0,
         type: lineType,
       })
+      await reloadData()
+      onClose()
+    })
+  }
+
+  const handleDelete = async () => {
+    if (!confirmDelete()) return
+
+    await deleteAction.run(async () => {
+      await linesService.delete(line.id)
       await reloadData()
       onClose()
     })
@@ -67,6 +92,7 @@ export const useLineTab = ({ line, onClose, reloadData, onError }: UseLineTabPar
       handleColorChange,
       handleIsCircularChange,
       handleSave,
+      handleDelete,
     },
   }
 }

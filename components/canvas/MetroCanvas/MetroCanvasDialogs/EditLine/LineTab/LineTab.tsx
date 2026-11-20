@@ -7,6 +7,8 @@ import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 import styles from './LineTab.module.css'
 import { buildLineTypeOptions } from './helpers/buildLineTypeOptions'
+import { confirmDeleteLine } from './helpers/confirmDeleteLine'
+import { handleDeleteLineError } from './helpers/handleDeleteLineError'
 import { handleLineTabError } from './helpers/handleLineTabError'
 import { useLineTab } from './hooks/useLineTab'
 import type { LineTabProps } from './types'
@@ -19,68 +21,79 @@ export const LineTab = ({ line, onClose, reloadData }: LineTabProps) => {
     onClose,
     reloadData,
     onError: (error) => handleLineTabError(error, t),
+    onDeleteError: (error) => handleDeleteLineError(error, t),
+    confirmDelete: () => confirmDeleteLine(t, line.name, line.logicalStationIds.length),
   })
 
   const typeOptions = useMemo(() => buildLineTypeOptions(t), [t])
 
   return (
     <div className={styles.content}>
-      <div className={styles.field}>
-        <Input
-          label={t('nameLabel')}
-          type="text"
-          value={state.name}
-          onChange={actions.handleNameChange}
-          disabled={state.isLoading}
-        />
-      </div>
-
-      <div className={styles.field}>
-        <Dropdown
-          value={state.lineType}
-          options={typeOptions}
-          onChange={actions.setLineType}
-          label={t('typeLabel')}
-          placeholder={t('typePlaceholder')}
-          disabled={state.isLoading}
-        />
-      </div>
-
-      <div className={styles.field}>
-        <label className={styles.label}>{t('colorLabel')}</label>
-        <div className={styles.colorPicker}>
-          <input
-            type="color"
-            value={state.color}
-            onChange={actions.handleColorChange}
-            className={styles.colorInput}
+      <div className={styles.fields}>
+        <div className={styles.field}>
+          <Input
+            label={t('nameLabel')}
+            type="text"
+            value={state.name}
+            onChange={actions.handleNameChange}
             disabled={state.isLoading}
           />
-          <span className={styles.colorValue}>{state.color}</span>
+        </div>
+
+        <div className={styles.field}>
+          <Dropdown
+            value={state.lineType}
+            options={typeOptions}
+            onChange={actions.setLineType}
+            label={t('typeLabel')}
+            placeholder={t('typePlaceholder')}
+            disabled={state.isLoading}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>{t('colorLabel')}</label>
+          <div className={styles.colorPicker}>
+            <input
+              type="color"
+              value={state.color}
+              onChange={actions.handleColorChange}
+              className={styles.colorInput}
+              disabled={state.isLoading}
+            />
+            <span className={styles.colorValue}>{state.color}</span>
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <Input
+            label={t('lineBadge')}
+            type="text"
+            value={state.lineBadge}
+            onChange={actions.handleLineBadgeChange}
+            disabled={state.isLoading}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <Input
+            type="checkbox"
+            label={t('circularLabel')}
+            checked={state.isCircular}
+            onChange={actions.handleIsCircularChange}
+            disabled={state.isLoading}
+          />
         </div>
       </div>
 
-      <div className={styles.field}>
-        <Input
-          label={t('lineBadge')}
-          type="text"
-          value={state.lineBadge}
-          onChange={actions.handleLineBadgeChange}
-          disabled={state.isLoading}
-        />
-      </div>
-
-      <div className={styles.field}>
-        <Input
-          type="checkbox"
-          label={t('circularLabel')}
-          checked={state.isCircular}
-          onChange={actions.handleIsCircularChange}
-          disabled={state.isLoading}
-        />
-      </div>
-
       <div className={styles.actions}>
+        <Button
+          title={t('delete')}
+          variant="outlineColored"
+          color="danger"
+          onClick={actions.handleDelete}
+          disabled={state.isLoading}
+        />
         <Button
           title={t('save')}
           variant="outlineColored"

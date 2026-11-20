@@ -197,7 +197,10 @@
     "typePlaceholder": "Select type",
     "typeSubway": "Metro",
     "typeCommuterRail": "Commuter rail",
-    "lineBadge": "Line Badge"
+    "lineBadge": "Line Badge",
+    "delete": "Delete",
+    "confirmDelete": "Delete the line \"{name}\" and its stations ({count})? Stations shared with other lines will stay on them.",
+    "errorDelete": "Could not delete the line"
   },
   "SegmentTab": {
     "title": "Segment information",

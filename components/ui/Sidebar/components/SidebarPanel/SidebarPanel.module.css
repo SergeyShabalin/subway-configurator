@@ -58,6 +58,10 @@
     overflow-y: auto;
 }
 
+.dragHandle {
+    display: none;
+}
+
 @keyframes panelEnter {
     from {
         opacity: 0;
@@ -74,23 +78,48 @@
     .panel {
         top: auto;
         right: 10px;
-        bottom: 92px; /* 10 отступ + 72 тулбар + 10 зазор */
+        bottom: 92px;
         left: 10px;
         width: auto;
-        max-height: 45vh;
+        height: 45dvh;
         max-height: 45dvh;
         animation: panelSlideUp 220ms ease;
+        transition: height 200ms ease, max-height 200ms ease;
+    }
+
+    .panel.expanded {
+        height: 90dvh;
+        max-height: 90dvh;
+    }
+
+    .panel.dragging {
+        transition: none;
     }
 
     .header {
+        position: relative;
         min-height: 52px;
-        padding: 0 16px;
+        padding: 14px 16px 0;
         cursor: default;
-        touch-action: auto;
+        touch-action: none;
+        flex-wrap: wrap;
     }
 
     .header:active {
         cursor: default;
+    }
+
+    .dragHandle {
+        display: block;
+        width: 40px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--text-muted, #94a3b8);
+        opacity: 0.6;
+        margin: 0 auto 8px;
+        flex-basis: 100%;
+        flex-shrink: 0;
+        pointer-events: none;
     }
 
     .title {
