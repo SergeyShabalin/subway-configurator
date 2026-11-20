@@ -36,42 +36,45 @@ export const CreateLineForm = ({
 
   return (
     <form onSubmit={actions.handleSubmit} className={styles.form}>
-      <div className={styles.field}>
-        <Input
-          value={state.lineName}
-          label={t('nameLabel')}
-          onChange={(e) => actions.setLineName(e.target.value)}
-          placeholder={t('namePlaceholder')}
-          autoFocus
-        />
-      </div>
+      <div className={styles.fields}>
+        <div className={styles.field}>
+          <Input
+            value={state.lineName}
+            label={t('nameLabel')}
+            onChange={(e) => actions.setLineName(e.target.value)}
+            placeholder={t('namePlaceholder')}
+            autoFocus
+          />
+        </div>
 
-      <div className={styles.field}>
-        <Dropdown<LineType>
-          value={state.lineType}
-          options={typeOptions}
-          onChange={actions.setLineType}
-          label={t('typeLabel')}
-          placeholder={t('typePlaceholder')}
-        />
-      </div>
+        <div className={styles.field}>
+          <Dropdown<LineType>
+            value={state.lineType}
+            options={typeOptions}
+            onChange={actions.setLineType}
+            label={t('typeLabel')}
+            placeholder={t('typePlaceholder')}
+          />
+        </div>
 
-      <div className={styles.field}>
-        <Input
-          type="color"
-          label={t('colorLabel')}
-          value={state.lineColor}
-          onChange={(e) => actions.setLineColor(e.target.value)}
-        />
-      </div>
-      <div className={styles.field}>
-        <Input
-          label={t('lineBadge')}
-          type="text"
-          value={state.lineBadge}
-          onChange={(e) => actions.setLineBadge(e.target.value)}
-          disabled={state.isLoading}
-        />
+        <div className={styles.field}>
+          <Input
+            type="color"
+            label={t('colorLabel')}
+            value={state.lineColor}
+            onChange={(e) => actions.setLineColor(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <Input
+            label={t('lineBadge')}
+            type="text"
+            value={state.lineBadge}
+            onChange={(e) => actions.setLineBadge(e.target.value)}
+            disabled={state.isLoading}
+          />
+        </div>
       </div>
 
       <div className={styles.actions}>

@@ -16,6 +16,7 @@ const CONTEXT = {
   updateName: 'StationsService.updateName',
   delete: 'StationsService.delete',
   deleteFromLine: 'StationsService.deleteFromLine',
+  deleteAllFromLine: 'StationsService.deleteAllFromLine',
   countTransferStations: 'StationsService.countTransferStations',
 } as const
 
@@ -70,8 +71,6 @@ export class StationsService extends BaseService {
         : previousLogicalIds[previousLogicalIds.length - 1]
       const isCircular = line.is_circular === 1
 
-      // Замыкающий сегмент связывает крайние станции, а они меняются.
-      // Снимаем его после валидаций и строим заново для новых крайних станций.
       if (isCircular) {
         await segmentsService.deleteClosing(line)
       }
@@ -110,7 +109,6 @@ export class StationsService extends BaseService {
         logicalStationIds: updatedLogicalIds,
       })
 
-      // Направление сегмента совпадает с порядком станций на линии
       const segment = neighborId
         ? await segmentsService.create({
             fromStationId: isStart ? stationId : neighborId,
@@ -139,7 +137,6 @@ export class StationsService extends BaseService {
         throw new Error(`Station ${stationId} not found`)
       }
 
-      // Все станции одного узла хранят одно имя, поэтому переименовываем весь узел
       const { stationIds } = await this.collectNode(stationId)
       const idsToRename = new Set<string>([stationId, ...stationIds])
 
@@ -192,8 +189,6 @@ export class StationsService extends BaseService {
       const lines = await Promise.all(lineIds.map((id) => linesRepo.getById(id)))
       const linesToUpdate = lines.filter((line): line is Line => line !== undefined)
 
-      // Мост создаётся до удаления: было a-b, b-c, удаляем b → остаётся a-c.
-      // Список uniqueSegments собран выше, поэтому новые сегменты под удаление не попадут.
       await Promise.all(
         linesToUpdate.map((line) => segmentsService.bridgeRemoved(line, stationIdsToDelete))
       )
@@ -222,57 +217,131 @@ export class StationsService extends BaseService {
   }
 
   /**
-   * Удаляет одну логическую станцию (с одной ветки).
-   * Визуал и станции других веток остаются; если станций на визуале не осталось, удаляется и визуал.
+   * Удаляет одну логическую станцию с одной линии.
+   *
+   * Важно:
+   * - удаляются только сегменты этой линии (не трогаем перегоны пересадочных линий);
+   * - из visualStationIds линии убираются все визуалы, которые осиротели;
+   * - визуалы/пересадки других линий не трогаются.
    */
   async deleteFromLine(stationId: string): Promise<void> {
-    return this.run(CONTEXT.deleteFromLine, async () => {
-      const station = await stationsRepo.getById(stationId)
+    const station = await stationsRepo.getById(stationId)
+    if (!station) {
+      throw new Error(`Station ${stationId} not found`)
+    }
 
-      if (!station) {
-        throw new Error(`Station ${stationId} not found`)
+    const [line, links, segments] = await Promise.all([
+      linesRepo.getById(station.line_id),
+      visualStationLinksRepo.getByStationId(stationId),
+      segmentsRepo.getByStationId(stationId),
+    ])
+
+    const ownSegments = segments.filter((segment) => segment.line_id === station.line_id)
+    const visualIds = [...new Set(links.map((link) => link.visual_id))]
+
+    if (line) {
+      await segmentsService.bridgeRemoved(line, new Set([stationId]))
+    }
+
+    const linksPerVisual = await Promise.all(
+      visualIds.map((visualId) => visualStationLinksRepo.getByVisualId(visualId))
+    )
+    const orphanVisualIds = visualIds.filter((_, index) =>
+      linksPerVisual[index].every((link) => link.station_id === stationId)
+    )
+    const orphanVisualSet = new Set(orphanVisualIds)
+
+    const transfersArrays = await Promise.all(
+      orphanVisualIds.map((visualId) => visualTransfersRepo.getByVisualId(visualId))
+    )
+    const transfersToDelete = new Map<string, { id: string }>()
+    for (const list of transfersArrays) {
+      for (const tr of list) transfersToDelete.set(tr.id, tr)
+    }
+
+    await Promise.all([
+      ...ownSegments.map((segment) => segmentsRepo.delete(segment.id)),
+      ...links.map((link) => visualStationLinksRepo.deleteLink(link)),
+      stationsRepo.delete(stationId),
+      ...orphanVisualIds.map((id) => visualsRepo.delete(id)),
+      ...[...transfersToDelete.values()].map((tr) => visualTransfersRepo.delete(tr.id)),
+    ])
+
+    if (line) {
+      await linesRepo.update(line.id, {
+        logicalStationIds: (line.logicalStationIds ?? []).filter((id) => id !== stationId),
+        visualStationIds: (line.visualStationIds ?? []).filter((id) => !orphanVisualSet.has(id)),
+      })
+    }
+  }
+
+  /**
+   * Удаляет все логические станции линии одним проходом.
+   * Используется при удалении линии — так нет гонки при обновлении visualStationIds
+   * и не строятся промежуточные мосты.
+   */
+  async deleteAllFromLine(line: Line): Promise<void> {
+    const stationIds = new Set(line.logicalStationIds ?? [])
+    if (stationIds.size === 0) return
+
+    const idsArray = [...stationIds]
+    const [linksArrays, segmentsArrays] = await Promise.all([
+      Promise.all(idsArray.map((id) => visualStationLinksRepo.getByStationId(id))),
+      Promise.all(idsArray.map((id) => segmentsRepo.getByStationId(id))),
+    ])
+
+    const linksToDelete = ([] as Array<VisualStationLink>).concat(...linksArrays)
+    const visualIds = [...new Set(linksToDelete.map((l) => l.visual_id))]
+
+    const segmentsToDelete = new Map<string, Segment>()
+    for (const segments of segmentsArrays) {
+      for (const segment of segments) {
+        if (segment.line_id === line.id) segmentsToDelete.set(segment.id, segment)
       }
+    }
 
-      const [line, links, segments] = await Promise.all([
-        linesRepo.getById(station.line_id),
-        visualStationLinksRepo.getByStationId(stationId),
-        segmentsRepo.getByStationId(stationId),
-      ])
+    const linksPerVisual = await Promise.all(
+      visualIds.map((visualId) => visualStationLinksRepo.getByVisualId(visualId))
+    )
+    const orphanVisualIds = visualIds.filter((_, index) =>
+      linksPerVisual[index].every((link) => stationIds.has(link.station_id))
+    )
+    const orphanVisualSet = new Set(orphanVisualIds)
 
-      const visualId = links[0]?.visual_id
+    const transfersArrays = await Promise.all(
+      orphanVisualIds.map((visualId) => visualTransfersRepo.getByVisualId(visualId))
+    )
+    const transfersToDelete = new Map<string, { id: string }>()
+    for (const list of transfersArrays) {
+      for (const tr of list) transfersToDelete.set(tr.id, tr)
+    }
 
-      // Мост строится до удаления, как и в delete
-      if (line) {
-        await segmentsService.bridgeRemoved(line, new Set([stationId]))
-      }
+    await Promise.all([
+      ...[...segmentsToDelete.values()].map((s) => segmentsRepo.delete(s.id)),
+      ...linksToDelete.map((link) => visualStationLinksRepo.deleteLink(link)),
+      ...idsArray.map((id) => stationsRepo.delete(id)),
+      ...orphanVisualIds.map((id) => visualsRepo.delete(id)),
+      ...[...transfersToDelete.values()].map((tr) => visualTransfersRepo.delete(tr.id)),
+    ])
 
-      const visualLinks = visualId ? await visualStationLinksRepo.getByVisualId(visualId) : []
-      const remainingCount = visualLinks.filter((link) => link.station_id !== stationId).length
+    const allLines = await linesRepo.getAll()
+    const otherLines = allLines.filter((l) => l.id !== line.id)
 
-      await Promise.all([
-        ...segments.map((segment) => segmentsRepo.delete(segment.id)),
-        ...links.map((link) => visualStationLinksRepo.deleteLink(link)),
-        stationsRepo.delete(stationId),
-      ])
-
-      if (line) {
-        await linesRepo.update(line.id, {
-          logicalStationIds: (line.logicalStationIds ?? []).filter((id) => id !== stationId),
-          visualStationIds: (line.visualStationIds ?? []).filter((id) => id !== visualId),
+    await Promise.all(
+      otherLines.map((otherLine) => {
+        const nextLogical = (otherLine.logicalStationIds ?? []).filter((id) => !stationIds.has(id))
+        const nextVisual = (otherLine.visualStationIds ?? []).filter(
+          (id) => !orphanVisualSet.has(id)
+        )
+        const logicalChanged = nextLogical.length !== (otherLine.logicalStationIds ?? []).length
+        const visualChanged = nextVisual.length !== (otherLine.visualStationIds ?? []).length
+        if (!logicalChanged && !visualChanged) return Promise.resolve()
+        return linesRepo.update(otherLine.id, {
+          logicalStationIds: nextLogical,
+          visualStationIds: nextVisual,
         })
-      }
-
-      if (!visualId) return
-
-      if (remainingCount === 0) {
-        const transfers = await visualTransfersRepo.getByVisualId(visualId)
-
-        await Promise.all([
-          visualsRepo.delete(visualId),
-          ...transfers.map((tr) => visualTransfersRepo.delete(tr.id)),
-        ])
-      }
-    })
+      })
+    )
   }
 
   async countTransferStations(stationId: string): Promise<number> {
@@ -290,7 +359,6 @@ export class StationsService extends BaseService {
     return position === 'start' ? [id, ...ids] : [...ids, id]
   }
 
-  /** Узел = все визуалы станции и все станции, привязанные к этим визуалам. */
   private async collectNode(
     stationId: string
   ): Promise<{ visualIds: Array<string>; stationIds: Set<string> }> {
@@ -311,10 +379,6 @@ export class StationsService extends BaseService {
     return { visualIds, stationIds }
   }
 
-  /**
-   * Определяет визуал для новой станции: существующий узел (пересадка) или новый визуал.
-   * Все валидации выполняются до первой записи в БД.
-   */
   private async resolveVisual(
     data: CreateStationInput,
     line: Line

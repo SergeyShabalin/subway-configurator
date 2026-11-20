@@ -27,7 +27,9 @@ export const SegmentTab = ({ segment, onSave, onClose }: SegmentTabProps) => {
       <InfoRow label={t('from')} value={fromStationName} color={lineColor} indicatorType="bar" />
 
       <div className={styles.arrowRow}>
-        <SegmentIcon color={lineColor} />
+        <span className={styles.arrowIcon}>
+          <SegmentIcon color={lineColor} />
+        </span>
 
         <div className={styles.timeControl}>
           <div className={styles.timeField}>

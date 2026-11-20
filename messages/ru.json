@@ -198,7 +198,10 @@
     "typePlaceholder": "Выберите тип",
     "typeSubway": "Метро",
     "typeCommuterRail": "Наземные поезда",
-    "lineBadge": "Номер линии"
+    "lineBadge": "Номер линии",
+    "delete": "Удалить",
+    "confirmDelete": "Удалить линию «{name}» и её станции ({count})? Станции, общие с другими линиями, останутся на них.",
+    "errorDelete": "Не удалось удалить линию"
   },
   "SegmentTab": {
     "title": "Информация о сегменте",

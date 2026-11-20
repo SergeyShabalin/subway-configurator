@@ -6,6 +6,14 @@
     min-height: 200px;
 }
 
+.fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    min-height: 8px;
+}
+
 .field {
     display: flex;
     flex-direction: column;
@@ -23,9 +31,8 @@
     display: flex;
     justify-content: flex-end;
     gap: 8px;
-    margin-top: auto;
-    padding-top: 8px;
     flex-shrink: 0;
+    padding-top: 8px;
 }
 
 .cancelButton {
@@ -62,4 +69,21 @@
 .submitButton:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+@media (width <= 520px) {
+    .fields {
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .actions {
+        padding-bottom: env(safe-area-inset-bottom);
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+    }
+
+    .actions > * {
+        flex: 1;
+    }
 }

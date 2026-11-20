@@ -1,4 +1,5 @@
 import { linesRepo, visualStationLinksRepo } from '@/src/lib/indexeddb/repositories'
+import { stationsService } from '@/src/lib/services/stations.service'
 import type { BadgeEnd, Line, LineCircle, LineType, Point } from '@/types/metro'
 import { BaseService } from './base.service'
 import { segmentsService } from './segments.service'
@@ -10,6 +11,7 @@ const CONTEXT = {
   updateBadgeOffset: 'LinesService.updateBadgeOffset',
   reorderStations: 'LinesService.reorderStations',
   setCircle: 'LinesService.setCircle',
+  delete: 'LinesService.delete',
 } as const
 
 export class LinesService extends BaseService {
@@ -66,7 +68,6 @@ export class LinesService extends BaseService {
       }
 
       const wasCircular = line.is_circular === 1
-      // Если поле не передано - закольцованность не меняется
       const willBeCircular = data.is_circular === undefined ? wasCircular : data.is_circular === 1
 
       await linesRepo.update(lineId, data)
@@ -76,6 +77,17 @@ export class LinesService extends BaseService {
       } else if (wasCircular && !willBeCircular) {
         await segmentsService.deleteClosing(line)
       }
+    })
+  }
+
+  async delete(lineId: string): Promise<void> {
+    return this.run(CONTEXT.delete, async () => {
+      const line = await linesRepo.getById(lineId)
+      if (!line) {
+        throw new Error(`Line ${lineId} not found`)
+      }
+      await stationsService.deleteAllFromLine(line)
+      await linesRepo.delete(lineId)
     })
   }
 
@@ -99,10 +111,8 @@ export class LinesService extends BaseService {
         throw new Error(`Line ${lineId} not found`)
       }
 
-      // Проверка набора станций и пересборка сегментов идут по старому порядку линии
       await segmentsService.reorder(line, orderedStationIds)
 
-      // Карта рисует линию по visualStationIds, поэтому порядок визуалов пересчитываем тоже
       const links = await visualStationLinksRepo.getAll()
       const visualByStation = new Map(links.map((l) => [l.station_id, l.visual_id]))
 
@@ -116,6 +126,7 @@ export class LinesService extends BaseService {
       })
     })
   }
+
   async setCircle(lineId: string, circle: LineCircle | undefined): Promise<void> {
     return this.run(CONTEXT.setCircle, async () => {
       await linesRepo.update(lineId, { circle })

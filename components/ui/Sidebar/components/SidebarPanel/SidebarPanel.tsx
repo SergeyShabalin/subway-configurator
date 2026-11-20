@@ -3,17 +3,12 @@
 import { Button } from '@/components/ui/Button'
 import { CloseIcon } from '@/components/ui/Icons'
 import { useTranslations } from 'next-intl'
-import type { CSSProperties, PointerEvent } from 'react'
-import { useRef } from 'react'
-import { DOCKED_MEDIA_QUERY } from '../../constants'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
-import type { PanelPosition, SidebarPanelProps } from '../../types'
+import type { CSSProperties } from 'react'
+import type { SidebarPanelProps } from '../../types'
+import { useDesktopPanelDrag } from './hooks/useDesktopPanelDrag'
+import { useMobilePanelExpand } from './hooks/useMobilePanelExpand'
+import { usePanelMode } from './hooks/usePanelMode'
 import styles from './SidebarPanel.module.css'
-
-interface DragOffset {
-  x: number
-  y: number
-}
 
 export function SidebarPanel({
   title,
@@ -24,56 +19,52 @@ export function SidebarPanel({
   children,
 }: SidebarPanelProps) {
   const t = useTranslations('Sidebar')
-  const isDocked = useMediaQuery(DOCKED_MEDIA_QUERY)
-  const dragOffset = useRef<DragOffset | null>(null)
+  const mode = usePanelMode()
 
-  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
-    if (isDocked) return
-    if ((event.target as HTMLElement).closest('button')) return
+  const desktopDrag = useDesktopPanelDrag({
+    enabled: mode === 'desktop',
+    position,
+    width,
+    onPositionChange,
+  })
 
-    dragOffset.current = {
-      x: event.clientX - position.left,
-      y: event.clientY - position.top,
-    }
+  const mobileExpand = useMobilePanelExpand({
+    enabled: mode === 'mobile',
+  })
 
-    event.currentTarget.setPointerCapture(event.pointerId)
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    desktopDrag.handlePointerDown(e)
+    mobileExpand.handlePointerDown(e)
   }
 
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (!dragOffset.current) return
-
-    const panel = event.currentTarget.closest(`.${styles.panel}`)
-
-    if (!panel) return
-
-    const panelHeight = panel.getBoundingClientRect().height
-
-    const nextPosition: PanelPosition = {
-      left: Math.max(
-        92,
-        Math.min(event.clientX - dragOffset.current.x, window.innerWidth - width - 16)
-      ),
-      top: Math.max(
-        8,
-        Math.min(event.clientY - dragOffset.current.y, window.innerHeight - panelHeight - 8)
-      ),
-    }
-
-    onPositionChange(nextPosition)
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    desktopDrag.handlePointerMove(e)
+    mobileExpand.handlePointerMove(e)
   }
 
   const handlePointerUp = () => {
-    dragOffset.current = null
+    desktopDrag.handlePointerUp()
+    mobileExpand.handlePointerUp()
   }
 
-  const panelStyle = {
+  const panelStyle: CSSProperties = {
     '--panel-width': `${width}px`,
     '--panel-left': `${position.left}px`,
     '--panel-top': `${position.top}px`,
+    ...mobileExpand.getPanelStyleOverride(),
   } as CSSProperties
 
+  const panelClassName = [
+    mobileExpand.getPanelClassName(styles.panel, styles.expanded),
+    mobileExpand.isDragging ? styles.dragging : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const showDragHandle = mode === 'mobile'
+
   return (
-    <section className={styles.panel} style={panelStyle}>
+    <section className={panelClassName} style={panelStyle} data-sidebar-panel>
       <div
         className={styles.header}
         onPointerDown={handlePointerDown}
@@ -81,6 +72,8 @@ export function SidebarPanel({
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
+        {showDragHandle && <span className={styles.dragHandle} aria-hidden="true" />}
+
         <h2 className={styles.title}>{title}</h2>
 
         <Button

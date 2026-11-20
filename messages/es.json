@@ -197,7 +197,10 @@
     "typePlaceholder": "Selecciona el tipo",
     "typeSubway": "Metro",
     "typeCommuterRail": "Tren de cercanías",
-    "lineBadge": "Número de línea"
+    "lineBadge": "Número de línea",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Eliminar la línea «{name}» y sus estaciones ({count})? Las estaciones compartidas con otras líneas se conservarán en ellas.",
+    "errorDelete": "No se pudo eliminar la línea"
   },
   "SegmentTab": {
     "title": "Información del tramo",
