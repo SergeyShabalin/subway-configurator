@@ -55,7 +55,7 @@
     flex-direction: column;
     min-height: 0;
     padding: 5px 15px 15px;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .dragHandle {
@@ -81,15 +81,15 @@
         bottom: 92px;
         left: 10px;
         width: auto;
-        height: 45dvh;
-        max-height: 45dvh;
+        height: var(--panel-collapsed-height, 45dvh);
+        max-height: var(--panel-collapsed-height, 45dvh);
         animation: panelSlideUp 220ms ease;
         transition: height 200ms ease, max-height 200ms ease;
     }
 
     .panel.expanded {
-        height: 90dvh;
-        max-height: 90dvh;
+        height: var(--panel-expanded-height, 90dvh);
+        max-height: var(--panel-expanded-height, 90dvh);
     }
 
     .panel.dragging {
