@@ -3,6 +3,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher/LanguageSwitcher'
 import { routing } from '@/i18n/routing'
 import { MetroStoreProvider } from '@/providers/MetroStoreProvider'
 
@@ -42,7 +43,7 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages}>
       <MetroStoreProvider>
-        {/*<LanguageSwitcher />*/}
+        <LanguageSwitcher />
         {children}
       </MetroStoreProvider>
     </NextIntlClientProvider>
