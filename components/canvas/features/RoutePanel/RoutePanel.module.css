@@ -43,3 +43,17 @@
     flex: 1;
     min-height: 0;
 }
+
+/* Мобилка, свёрнутая панель: сообщения скрыты, обёртка результата по контенту
+   (внутри RouteResult остаются только табы вариантов) */
+@media (max-width: 499px) {
+    :global([data-sidebar-panel][data-expanded='false']) .message {
+        display: none;
+    }
+
+    :global([data-sidebar-panel][data-expanded='false']) .resultWrapper {
+        display: block;
+        flex: 0 0 auto;
+        min-width: 0;
+    }
+}

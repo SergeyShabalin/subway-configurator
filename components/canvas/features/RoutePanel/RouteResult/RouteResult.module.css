@@ -16,6 +16,7 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
+    touch-action: pan-x;
 }
 
 .tabs::-webkit-scrollbar {
@@ -65,4 +66,12 @@
     padding-right: 4px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+}
+
+/* Мобилка, свёрнутая панель: показываем только табы вариантов */
+@media (max-width: 499px) {
+    :global([data-sidebar-panel][data-expanded='false']) .summary,
+    :global([data-sidebar-panel][data-expanded='false']) .timeline {
+        display: none;
+    }
 }

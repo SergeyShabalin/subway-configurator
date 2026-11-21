@@ -10,6 +10,9 @@ export interface SidebarItem {
   label: string
   icon: ReactNode
   content: ReactNode
+  /** На мобилке панель растягивается свайпом. Остальные подстраиваются под контент. */
+  expandable?: boolean
+  /** Используется только вместе с expandable */
   mobileHeights?: SidebarPanelHeights
 }
 
@@ -32,6 +35,7 @@ export interface SidebarPanelProps {
   onPositionChange: (position: PanelPosition) => void
   onClose: () => void
   children: ReactNode
+  expandable?: boolean
   mobileHeights?: SidebarPanelHeights
 }
 
