@@ -17,3 +17,6 @@ export const DRAG_THRESHOLD = 2
 
 // Размытие тени при hover
 export const HOVER_SHADOW_BLUR = 4
+
+// Минимальный радиус зоны касания в экранных пикселях (диаметр ~44px)
+export const MIN_TOUCH_RADIUS_PX = 22

@@ -8,3 +8,9 @@
 .root > * {
     pointer-events: auto;
 }
+
+@media (max-width: 499px) {
+    .root {
+        --sidebar-toolbar-height: 60px;
+    }
+}

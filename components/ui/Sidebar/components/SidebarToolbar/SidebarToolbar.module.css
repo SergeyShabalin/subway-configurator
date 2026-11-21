@@ -39,17 +39,22 @@
     --button-active-border: var(--sidebar-accent-border);
     --button-active-shadow: 0 4px 14px var(--sidebar-accent-shadow);
 }
+
 @media (max-width: 499px) {
+    /* Тулбар прижат к низу и занимает всю ширину.
+       Высота = рабочая область + нижняя безопасная зона (полоска «домой») */
     .toolbar {
+        box-sizing: border-box;
         top: auto;
-        right: 10px;
-        bottom: 10px;
-        left: 10px;
+        right: 0;
+        bottom: 0;
+        left: 0;
         flex-direction: row;
         justify-content: center;
         width: auto;
-        height: 72px;
-        padding: 0 8px;
+        height: calc(var(--sidebar-toolbar-height, 72px) + env(safe-area-inset-bottom, 0px));
+        padding: 0 8px env(safe-area-inset-bottom, 0px);
+        border-radius: var(--glass-radius) var(--glass-radius) 0 0;
     }
 
     .navigation {
