@@ -93,7 +93,7 @@ const eslintConfig = defineConfig([
       'app/**/layout.tsx',
       'app/**/loading.tsx',
       'app/**/error.tsx',
-      'app/manifest.ts.off',
+      'app/manifest.ts',
     ],
     rules: {
       'import/no-default-export': 'off',
