@@ -42,18 +42,23 @@
 
 @media (max-width: 499px) {
     /* Тулбар прижат к низу и занимает всю ширину.
-       Высота = рабочая область + нижняя безопасная зона (полоска «домой») */
+       --standalone-bottom-gap: iOS «Домой» отдаёт окно короче экрана,
+       поэтому тулбар вытягивается вниз за край окна на эту величину.
+       Верхняя граница тулбара при этом не меняется. */
     .toolbar {
         box-sizing: border-box;
         top: auto;
         right: 0;
-        bottom: 0;
+        bottom: calc(-1 * var(--standalone-bottom-gap, 0px));
         left: 0;
         flex-direction: row;
         justify-content: center;
         width: auto;
-        height: calc(var(--sidebar-toolbar-height, 72px) + env(safe-area-inset-bottom, 0px));
-        padding: 0 8px env(safe-area-inset-bottom, 0px);
+        height: calc(
+                var(--sidebar-toolbar-height, 72px) + env(safe-area-inset-bottom, 0px) +
+                var(--standalone-bottom-gap, 0px)
+        );
+        padding: 0 8px calc(env(safe-area-inset-bottom, 0px) + var(--standalone-bottom-gap, 0px));
         border-radius: var(--glass-radius) var(--glass-radius) 0 0;
     }
 
