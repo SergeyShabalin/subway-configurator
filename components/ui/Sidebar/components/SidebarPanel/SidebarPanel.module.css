@@ -10,7 +10,7 @@
     color: var(--sidebar-text);
     background: var(--sidebar-panel-bg);
     border-radius: var(--glass-radius);
-    backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(40%);
     backdrop-filter: blur(var(--glass-blur)) saturate(40%);
     box-shadow: var(--sidebar-shadow-soft);
     font-family: Arial, sans-serif;
@@ -74,14 +74,20 @@
     }
 }
 
-@media (width <= 499px) {
+@media (max-width: 499px) {
     .panel {
+        /* Нижняя граница панели: над тулбаром + нижняя безопасная зона + зазор */
         --panel-bottom: calc(
-                var(--sidebar-toolbar-height, 60px) + env(safe-area-inset-bottom, 0px) + 10px
+                var(--sidebar-toolbar-height, 72px) + env(safe-area-inset-bottom, 0px) + 10px
         );
+
+        /* Максимальная высота: до верхней безопасной зоны + запас */
         --panel-limit: calc(100dvh - var(--panel-bottom) - env(safe-area-inset-top, 0px) - 24px);
 
-        inset: auto 10px var(--panel-bottom) 10px;
+        top: auto;
+        right: 10px;
+        bottom: var(--panel-bottom);
+        left: 10px;
         width: auto;
         height: auto;
         max-height: var(--panel-limit);
