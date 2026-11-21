@@ -49,8 +49,9 @@
         left: 0;
         flex-direction: row;
         justify-content: center;
+        align-items: center;
         width: auto;
-        height: calc(var(--sidebar-toolbar-height, 72px) + env(safe-area-inset-bottom, 0px));
+        height: calc(var(--sidebar-toolbar-height, 60px) + env(safe-area-inset-bottom, 0px));
         padding: 0 8px env(safe-area-inset-bottom, 0px);
         border-radius: var(--glass-radius) var(--glass-radius) 0 0;
     }
@@ -63,6 +64,14 @@
 
     .button {
         --button-icon-size: 48px;
-        --button-icon-glyph: 22px;
+        --button-icon-glyph: 24px;
+    }
+}
+
+/* Режим «Домой»: иконки по центру всей высоты тулбара,
+   включая нижнюю безопасную зону */
+@media (max-width: 499px) and (display-mode: standalone) {
+    .toolbar {
+        padding-bottom: 0;
     }
 }

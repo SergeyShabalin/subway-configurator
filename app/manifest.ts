@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Subway Configurator',
     short_name: 'Subway',
     start_url: '/',
-    display: 'fullscreen',
+    display: 'standalone',
     background_color: '#0f172a',
     theme_color: '#0f172a',
     icons: [
