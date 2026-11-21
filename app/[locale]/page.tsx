@@ -4,7 +4,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle/ThemeToggle'
 
 export default function Home() {
   return (
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ width: '100vw', height: '100dvh', overflow: 'hidden' }}>
       <MetroCanvas />
       <ThemeToggle />
       <MetroSidebar />
