@@ -51,6 +51,7 @@ export function Sidebar({ items, defaultActiveId, panelWidth = 380, className }:
           position={position}
           onPositionChange={setPosition}
           onClose={handleClose}
+          expandable={activeItem.expandable}
           mobileHeights={activeItem.mobileHeights}
         >
           {activeItem.content}

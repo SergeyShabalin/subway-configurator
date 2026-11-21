@@ -76,54 +76,83 @@
 
 @media (max-width: 499px) {
     .panel {
+        /* Максимальная высота: от нижней панели до верхней безопасной зоны + запас */
+        --panel-limit: calc(100dvh - 92px - env(safe-area-inset-top, 0px) - 24px);
+
         top: auto;
         right: 10px;
         bottom: 92px;
         left: 10px;
         width: auto;
-        height: var(--panel-collapsed-height, 45dvh);
-        max-height: var(--panel-collapsed-height, 45dvh);
+        height: auto;
+        max-height: var(--panel-limit);
         animation: panelSlideUp 220ms ease;
-        transition: height 200ms ease, max-height 200ms ease;
-    }
-
-    .panel.expanded {
-        height: var(--panel-expanded-height, 90dvh);
-        max-height: var(--panel-expanded-height, 90dvh);
-    }
-
-    .panel.dragging {
-        transition: none;
     }
 
     .header {
         position: relative;
         min-height: 52px;
-        padding: 14px 16px 0;
+        padding: 0 16px;
         cursor: default;
-        touch-action: none;
-        flex-wrap: wrap;
+        touch-action: auto;
     }
 
     .header:active {
         cursor: default;
     }
 
-    .dragHandle {
-        display: block;
-        width: 40px;
-        height: 4px;
-        border-radius: 2px;
-        background: var(--text-muted, #94a3b8);
-        opacity: 0.6;
-        margin: 0 auto 8px;
-        flex-basis: 100%;
-        flex-shrink: 0;
-        pointer-events: none;
+    .panel:not(.expandable) .content {
+        flex: 0 1 auto;
     }
 
     .title {
         font-size: 17px;
+    }
+
+    /* Растягиваемая панель (маршрут): свёрнутая — по контенту, раскрытая — не выше лимита */
+    .panel.expandable {
+        height: auto;
+        max-height: var(--panel-limit);
+        transition: height 200ms ease, max-height 200ms ease;
+    }
+
+    .panel.expandable .content {
+        flex: 1 1 auto;
+    }
+
+    .panel.expandable.expanded {
+        height: min(var(--panel-expanded-height, 90dvh), var(--panel-limit));
+        max-height: min(var(--panel-expanded-height, 90dvh), var(--panel-limit));
+    }
+
+    .panel.expandable.dragging {
+        transition: none;
+    }
+
+    .panel.expandable .header {
+        padding: 8px 16px 0;
+        flex-wrap: wrap;
+        touch-action: none;
+    }
+
+    .dragHandle {
+        display: block;
+        width: 32px;
+        height: 3px;
+        margin: 0 auto 6px;
+        flex-basis: 100%;
+        flex-shrink: 0;
+        border-radius: 999px;
+        background: currentcolor;
+        opacity: 0.25;
+        pointer-events: none;
+        transition: opacity 150ms ease, width 150ms ease;
+    }
+
+    /* Лёгкий отклик, пока палец тянет панель */
+    .panel.expandable.dragging .dragHandle {
+        width: 40px;
+        opacity: 0.45;
     }
 }
 

@@ -20,6 +20,7 @@ export function SidebarPanel({
   onPositionChange,
   onClose,
   children,
+  expandable = false,
   mobileHeights,
 }: SidebarPanelProps) {
   const t = useTranslations('Sidebar')
@@ -33,7 +34,7 @@ export function SidebarPanel({
   })
 
   const mobileExpand = useMobilePanelExpand({
-    enabled: mode === 'mobile',
+    enabled: mode === 'mobile' && expandable,
   })
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -62,15 +63,22 @@ export function SidebarPanel({
 
   const panelClassName = [
     mobileExpand.getPanelClassName(styles.panel, styles.expanded),
+    expandable ? styles.expandable : '',
     mobileExpand.isDragging ? styles.dragging : '',
   ]
     .filter(Boolean)
     .join(' ')
 
-  const showDragHandle = mode === 'mobile'
+  const showDragHandle = mode === 'mobile' && expandable
+  const expandedAttr = showDragHandle ? String(mobileExpand.isExpanded) : undefined
 
   return (
-    <section className={panelClassName} style={panelStyle} data-sidebar-panel>
+    <section
+      className={panelClassName}
+      style={panelStyle}
+      data-sidebar-panel
+      data-expanded={expandedAttr}
+    >
       <div
         className={styles.header}
         onPointerDown={handlePointerDown}
