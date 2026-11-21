@@ -5,6 +5,7 @@ import { Circle } from 'react-konva'
 import type { StationCircleProps } from '../types'
 import { areStationCirclePropsEqual } from './helpers/areStationCirclePropsEqual'
 import { useStationCircleStyle } from './hooks/useStationCircleStyle'
+import { useStationHitArea } from './hooks/useStationHitArea'
 import { useStationInteraction } from './hooks/useStationInteraction'
 
 export const StationCircle = memo(
@@ -20,6 +21,7 @@ export const StationCircle = memo(
       isDimmed,
       isHovered,
     })
+    const hitFunc = useStationHitArea()
 
     if (!visual) return null
 
@@ -29,6 +31,7 @@ export const StationCircle = memo(
         y={visual.y ?? 0}
         radius={radius}
         fill={fill}
+        hitFunc={hitFunc}
         {...strokeProps}
         {...shadowProps}
         {...interactiveProps}
