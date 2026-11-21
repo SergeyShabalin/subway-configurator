@@ -10,6 +10,8 @@
     border-radius: 6px;
     border: 1px solid var(--input-border);
     background: var(--input-bg);
+    color: var(--text-strong);
+    font-family: Arial, sans-serif;
     z-index: 99999;
     min-width: 200px;
     box-shadow: var(--dropdown-shadow);

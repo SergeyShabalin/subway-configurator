@@ -8,6 +8,7 @@ import { useFilteredOptions } from './hooks/useFilteredOptions'
 import { useListBoxNavigation } from './hooks/useListBoxNavigation'
 import { defaultOptionSearcher } from './search/createOptionSearcher'
 import type { OptionSearcher } from './search/types'
+import { getFixedOrigin } from './utils/getFixedOrigin'
 import { titleIfTruncated } from './utils/titleIfTruncated'
 
 export interface DropdownOption<T extends string> {
@@ -126,7 +127,13 @@ export const Dropdown = <T extends string>({
 
     if (triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect()
-      setPosition({ top: rect.bottom + 4, left: rect.left, width: rect.width })
+      // Вычитаем реальное начало координат fixed: в iOS «Домой» оно может не совпадать с (0, 0)
+      const origin = getFixedOrigin()
+      setPosition({
+        top: rect.bottom - origin.top + 4,
+        left: rect.left - origin.left,
+        width: rect.width,
+      })
     }
     setIsOpen(true)
   }
