@@ -27,8 +27,8 @@
 .item::after {
     content: attr(data-tooltip);
     position: absolute;
-    top: calc(100% + 6px);
-    left: 50%;
+    top: calc(100% + 9px);
+    left: 52%;
     z-index: 10;
     padding: 4px 8px;
     font-size: 12px;

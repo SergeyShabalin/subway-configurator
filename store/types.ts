@@ -3,6 +3,7 @@ import type { GraphSlice } from './slices/graphSlice'
 import type { LayoutSlice } from './slices/layoutSlice'
 import type { LoaderSlice } from './slices/loaderSlice'
 import type { RouteSlice } from './slices/routeSlice'
+import type { StyleSlice } from './slices/styleSlice'
 import type { UiSlice } from './slices/uiSlice'
 
 /**
@@ -11,7 +12,7 @@ import type { UiSlice } from './slices/uiSlice'
  * Новый слайс добавляется в три места: файл в `slices/`, этот тип и `createMetroStore`.
  * Существующие слайсы при этом не меняются.
  */
-export type MetroStore = GraphSlice & LayoutSlice & LoaderSlice & RouteSlice & UiSlice
+export type MetroStore = GraphSlice & LayoutSlice & LoaderSlice & RouteSlice & StyleSlice & UiSlice
 
 /**
  * Тип фабрики слайса.

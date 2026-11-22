@@ -14,6 +14,8 @@ import type Konva from 'konva'
 import { Golos_Text } from 'next/font/google'
 import { useCallback, useEffect, useState } from 'react'
 import { Text } from 'react-konva'
+
+import { THEME_VALUE } from '@/components/ui/ThemeToggle/const'
 import { useMetroLabels } from './hooks/useMetroLabels'
 import type { MetroLabelsProps } from './types'
 
@@ -50,6 +52,7 @@ const useLabelFontReady = (): boolean => {
 export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsProps) => {
   const { theme } = useTheme()
   const visuals = useMetroStore((state) => state.visuals)
+  const customStyle = useMetroStore((state) => state.styles.labels)
   const routeVisualIds = useRoute()?.visualIds
 
   const isFontReady = useLabelFontReady()
@@ -57,10 +60,15 @@ export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsP
 
   const [hoveredLabelId, setHoveredLabelId] = useState<string | null>(null)
 
-  const labelFill = CANVAS_LABEL_FILL[theme]
+  const fontSize = customStyle?.fontSize ?? LABEL_FONT_SIZE
+  const labelWidth = (LABEL_WIDTH * fontSize) / LABEL_FONT_SIZE
+  const isBold = customStyle?.bold ?? CANVAS_LABEL_FONT_STYLE[theme] === 'bold'
+  const labelFontStyle =
+    [customStyle?.italic && 'italic', isBold && 'bold'].filter(Boolean).join(' ') || 'normal'
+  const customColor = theme === THEME_VALUE.DARK ? customStyle?.colorDark : customStyle?.colorLight
+  const labelFill = customColor ?? CANVAS_LABEL_FILL[theme]
   const labelHoverFill = CANVAS_LABEL_HOVER_FILL[theme]
   const labelStroke = CANVAS_LABEL_STROKE[theme]
-  const labelFontStyle = CANVAS_LABEL_FONT_STYLE[theme]
   const dimmedColor = CANVAS_DIMMED_COLOR[theme]
 
   const handleMouseEnter = useCallback((e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
@@ -115,9 +123,9 @@ export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsP
             }}
             x={label.x}
             y={label.y}
-            offsetX={LABEL_WIDTH / 2}
+            offsetX={labelWidth / 2}
             text={label.text}
-            fontSize={LABEL_FONT_SIZE}
+            fontSize={fontSize}
             fontFamily={LABEL_FONT_FAMILY}
             fontStyle={labelFontStyle}
             fill={currentFill}

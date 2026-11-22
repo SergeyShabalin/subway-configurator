@@ -1,6 +1,8 @@
+import { sanitizeStyles } from '@/src/lib/styles/sanitizeStyles'
 import type {
   GraphData,
   Line,
+  MapStyles,
   Segment,
   Station,
   VisualStation,
@@ -18,6 +20,7 @@ export interface MappedGraph {
   visuals: Record<string, VisualStation>
   visualToStations: Record<string, Array<string>>
   visualTransfers: Array<VisualTransfer>
+  styles: MapStyles
 }
 
 export const mapGraph = (data: GraphData): MappedGraph => {
@@ -78,5 +81,6 @@ export const mapGraph = (data: GraphData): MappedGraph => {
     visuals,
     visualToStations: data.visualToStations,
     visualTransfers,
+    styles: sanitizeStyles(data.styles),
   }
 }

@@ -312,5 +312,16 @@
     "alignDescription": "Alinea las estaciones entre dos elegidas. Elige una línea, la primera y la última estación.",
     "tabStations": "Orden",
     "stationsDescription": "Cambia el orden de las estaciones de la línea. Elige una línea y arrastra las estaciones por el asa."
+  },
+  "StylesPanel": {
+    "tabLabels": "Etiquetas",
+    "labelsDescription": "Aspecto de los nombres de las estaciones en el mapa. Los ajustes se guardan.",
+    "fontSizeLabel": "Tamaño de fuente: {value}",
+    "fontStyleLabel": "Estilo de fuente",
+    "bold": "Negrita",
+    "italic": "Cursiva",
+    "colorLightLabel": "Color en tema claro",
+    "colorDarkLabel": "Color en tema oscuro",
+    "reset": "Restablecer"
   }
 }
