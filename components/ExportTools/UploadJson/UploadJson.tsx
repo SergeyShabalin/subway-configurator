@@ -3,10 +3,12 @@
 import { Input } from '@/components/ui/Input/Input'
 import { linesRepo } from '@/src/lib/indexeddb/repositories/lines.repository'
 import { segmentsRepo } from '@/src/lib/indexeddb/repositories/segments.repository'
+import { settingsRepo } from '@/src/lib/indexeddb/repositories/settings.repository'
 import { stationsRepo } from '@/src/lib/indexeddb/repositories/stations.repository'
 import { visualStationLinksRepo } from '@/src/lib/indexeddb/repositories/visual-station-links.repository'
 import { visualTransfersRepo } from '@/src/lib/indexeddb/repositories/visual-transfers.repository'
 import { visualsRepo } from '@/src/lib/indexeddb/repositories/visuals.repository'
+import { sanitizeStyles } from '@/src/lib/styles/sanitizeStyles'
 import { useMetroStore } from '@/store'
 import type { LineBadgeOffsets, LineType, VisualStationLink, VisualTransfer } from '@/types/metro'
 import { useTranslations } from 'next-intl'
@@ -80,6 +82,7 @@ interface MetroDataInput {
     visualToLogical?: Record<string, Array<string>>
     visualTransfers?: Record<string, TransferInput>
   }
+  styles?: unknown
 }
 
 interface LineRecord {
@@ -375,6 +378,10 @@ export const UploadJson = ({ onSuccess, onError }: UploadJsonProps) => {
     const transfers = buildTransferRecords(metroData.connections?.visualTransfers ?? {})
     await visualTransfersRepo.clear()
     await visualTransfersRepo.saveMany(transfers)
+
+    // Старые файлы без блока styles дают пустые стили, то есть значения темы
+    await settingsRepo.clear()
+    await settingsRepo.saveStyles(sanitizeStyles(metroData.styles))
 
     await loadData()
 

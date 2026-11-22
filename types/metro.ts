@@ -130,6 +130,19 @@ export interface GraphTransfer {
   style?: string
 }
 
+/** Стиль подписей станций. Хранятся только заданные поля, остальное берётся из темы. */
+export interface LabelStyle {
+  fontSize?: number
+  bold?: boolean
+  italic?: boolean
+  colorLight?: string
+  colorDark?: string
+}
+/** Пользовательские стили карты. Нет поля: используются значения по умолчанию. */
+export interface MapStyles {
+  labels?: LabelStyle
+}
+
 export interface GraphData {
   lines: Array<GraphLine>
   stations: Array<GraphStation>
@@ -137,6 +150,7 @@ export interface GraphData {
   segments: Array<GraphSegment>
   visualToStations: Record<string, Array<string>>
   visualTransfers: Array<GraphTransfer>
+  styles?: MapStyles
 }
 
 export type InsertPosition = 'start' | 'end'

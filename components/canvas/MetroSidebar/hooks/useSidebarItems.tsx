@@ -1,5 +1,6 @@
 import { RoutePanel, ToolsPanel } from '@/components/canvas/features'
 import { BranchesPanel } from '@/components/canvas/features/BranchesPanel/BranchesPanel'
+import { StylesPanel } from '@/components/canvas/features/StylesPanel/StylesPanel'
 import { LayersIcon, PaletteIcon, RouteIcon, SettingsIcon, UploadIcon } from '@/components/ui/Icons'
 import type { SidebarItem } from '@/components/ui/Sidebar/types'
 import { useTranslations } from 'next-intl'
@@ -27,7 +28,7 @@ export const useSidebarItems = (): Array<SidebarItem> => {
       id: 'palette',
       label: t('styles'),
       icon: <PaletteIcon className={styles.icon} />,
-      content: <div className={styles.unavailable}>{t('unavailable', { tab: t('styles') })}</div>,
+      content: <StylesPanel />,
     },
     {
       id: 'tools',

@@ -312,5 +312,16 @@
     "alignDescription": "Lines up the stations between two chosen ones. Select a line, then the first and last station.",
     "tabStations": "Order",
     "stationsDescription": "Changes the order of the line's stations. Select a line and drag stations by the handle."
+  },
+  "StylesPanel": {
+    "tabLabels": "Labels",
+    "labelsDescription": "How station names look on the map. Settings are saved.",
+    "fontSizeLabel": "Font size: {value}",
+    "fontStyleLabel": "Font style",
+    "bold": "Bold",
+    "italic": "Italic",
+    "colorLightLabel": "Color in light theme",
+    "colorDarkLabel": "Color in dark theme",
+    "reset": "Reset"
   }
 }

@@ -3,6 +3,7 @@ import { mapGraph } from '../mappers/mapGraph'
 import type { SliceCreator } from '../types'
 import type { GraphSlice } from './graphSlice'
 import type { LayoutSlice } from './layoutSlice'
+import type { StyleSlice } from './styleSlice'
 
 /** Источник данных графа. Стор зависит от интерфейса, а не от конкретного сервиса. */
 export interface GraphSource {
@@ -14,7 +15,7 @@ export interface GraphSource {
  *
  * Назначение:
  *   Запрос к источнику, преобразование ответа через `mapGraph`, раздача данных
- *   по `graphSlice` и `layoutSlice`, учёт `isLoading` и `error`.
+ *   по `graphSlice`, `layoutSlice` и `styleSlice`, учёт `isLoading` и `error`.
  *
  * Хранить здесь:
  *   - статус загрузки (`isLoading`) и текст ошибки (`error`)
@@ -29,7 +30,7 @@ export interface GraphSource {
  *   - Другой источник данных (API, мок): передать другой `GraphSource` в провайдер.
  *   - Частичная перезагрузка (только линии): добавить отдельное действие рядом с `loadData`.
  *
- * Зависимости: `GraphSlice` (`setGraph`) и `LayoutSlice` (`setVisuals`).
+ * Зависимости: `GraphSlice` (`setGraph`), `LayoutSlice` (`setVisuals`), `StyleSlice` (`setStyles`).
  * Источник данных внедряется параметром фабрики, в тестах подставляется мок.
  *
  * Компонентам, которым нужно только запустить перезагрузку, подходит `useGraphActions`:
@@ -43,7 +44,7 @@ export interface LoaderSlice {
 }
 
 export const createLoaderSlice =
-  (source: GraphSource): SliceCreator<LoaderSlice, GraphSlice & LayoutSlice> =>
+  (source: GraphSource): SliceCreator<LoaderSlice, GraphSlice & LayoutSlice & StyleSlice> =>
   (set, get) => ({
     isLoading: false,
     error: null,
@@ -52,10 +53,11 @@ export const createLoaderSlice =
       set({ isLoading: true, error: null })
 
       try {
-        const { visuals, ...graph } = mapGraph(await source.getGraph())
+        const { visuals, styles, ...graph } = mapGraph(await source.getGraph())
 
         get().setGraph(graph)
         get().setVisuals(visuals)
+        get().setStyles(styles)
         set({ isLoading: false })
       } catch (error) {
         set({

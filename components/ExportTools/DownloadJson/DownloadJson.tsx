@@ -7,7 +7,7 @@ import { stationsRepo } from '@/src/lib/indexeddb/repositories/stations.reposito
 import { visualStationLinksRepo } from '@/src/lib/indexeddb/repositories/visual-station-links.repository'
 import { visualTransfersRepo } from '@/src/lib/indexeddb/repositories/visual-transfers.repository'
 import { useMetroStore } from '@/store'
-import type { LineBadgeOffsets, LineType } from '@/types/metro'
+import type { LineBadgeOffsets, LineType, MapStyles } from '@/types/metro'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import styles from './DownloadJson.module.css'
@@ -146,7 +146,8 @@ const buildMetroData = (
   links: Array<LinkRecord>,
   segments: Array<SegmentRecord>,
   transfers: Array<TransferRecord>,
-  visuals: Array<VisualRecord>
+  visuals: Array<VisualRecord>,
+  mapStyles: MapStyles
 ) => ({
   lines: buildLines(lines),
   logic: {
@@ -160,6 +161,7 @@ const buildMetroData = (
     visualToLogical: buildVisualToLogical(visuals, links),
     visualTransfers: buildVisualTransfers(transfers),
   },
+  ...(mapStyles.labels ? { styles: mapStyles } : {}),
 })
 
 const triggerDownload = (data: unknown) => {
@@ -184,6 +186,7 @@ export const DownloadJson = () => {
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState<Status | null>(null)
   const visuals = useMetroStore((state) => state.visuals)
+  const mapStyles = useMetroStore((state) => state.styles)
 
   const handleDownload = async () => {
     setLoading(true)
@@ -206,7 +209,8 @@ export const DownloadJson = () => {
         links as Array<LinkRecord>,
         segments as Array<SegmentRecord>,
         transfers as Array<TransferRecord>,
-        Object.values(visuals) as Array<VisualRecord>
+        Object.values(visuals) as Array<VisualRecord>,
+        mapStyles
       )
       const size = triggerDownload(metroData)
 
