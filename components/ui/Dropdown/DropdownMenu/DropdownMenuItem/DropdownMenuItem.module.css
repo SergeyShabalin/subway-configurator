@@ -1,0 +1,33 @@
+.item {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: var(--dropdown-item-padding);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    color: var(--text-strong);
+    font-size: var(--font-size-md);
+}
+
+.item:hover {
+    background: var(--dropdown-item-hover);
+}
+
+.itemActive {
+    background: var(--dropdown-item-hover);
+}
+
+.optionLine {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    min-width: 0;
+    flex: 1;
+}
+
+.optionLabel {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

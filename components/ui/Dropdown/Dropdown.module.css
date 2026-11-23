@@ -1,15 +1,15 @@
 .label {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
     color: var(--text-primary);
-    margin-bottom: 4px;
+    margin-bottom: var(--spacing-xs);
     display: block;
 }
 
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--spacing-xs);
     position: relative;
     flex-shrink: 0;
 }
@@ -20,15 +20,15 @@
     justify-content: space-between;
     width: 100%;
     min-width: 0;
-    padding: 8px 12px;
-    border-radius: 6px;
+    padding: var(--dropdown-trigger-padding);
+    border-radius: var(--radius-sm);
     border: 1px solid var(--input-border);
     background: var(--input-bg);
     color: var(--text-strong);
     font-family: inherit;
-    font-size: 14px;
+    font-size: var(--font-size-md);
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: border-color var(--transition-base);
     user-select: none;
     text-align: left;
 }
@@ -42,14 +42,14 @@
 }
 
 .trigger.disabled {
-    opacity: 0.5;
+    opacity: var(--opacity-disabled);
     cursor: not-allowed;
 }
 
 .optionLine {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-2);
     min-width: 0;
     flex: 1;
 }
@@ -72,10 +72,10 @@
 
 .arrow {
     flex-shrink: 0;
-    margin-left: 8px;
+    margin-left: var(--dropdown-arrow-offset);
     color: var(--text-placeholder);
-    font-size: 10px;
-    transition: transform 0.2s;
+    font-size: var(--font-size-3xs);
+    transition: transform var(--transition-base);
 }
 
 .trigger.open .arrow {

@@ -1,29 +1,29 @@
 .panel {
     position: fixed;
-    z-index: 1001;
+    z-index: var(--z-index-sidebar-panel);
     display: flex;
     flex-direction: column;
     width: var(--panel-width);
     left: var(--panel-left);
     top: var(--panel-top);
-    max-height: calc(100vh - 20px);
+    max-height: calc(100vh - var(--panel-max-height-offset));
     color: var(--sidebar-text);
     background: var(--sidebar-panel-bg);
     border-radius: var(--glass-radius);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(40%);
-    backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     box-shadow: var(--sidebar-shadow-soft);
-    font-family: Arial, sans-serif;
+    font-family: var(--font-family-base);
     overflow: hidden;
-    animation: panelEnter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    animation: panelEnter var(--panel-animation-duration) var(--panel-animation-timing);
 }
 
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 68px;
-    padding: 0 20px;
+    min-height: var(--panel-header-min-height);
+    padding: 0 var(--panel-header-padding-x);
     cursor: grab;
     user-select: none;
     touch-action: none;
@@ -35,14 +35,14 @@
 
 .title {
     margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
+    font-size: var(--panel-title-font-size);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-xs);
 }
 
 .closeButton {
-    --button-icon-size: 36px;
-    --button-radius: 10px;
+    --button-icon-size: var(--panel-close-icon-size);
+    --button-radius: var(--panel-close-radius);
     --button-focus: var(--sidebar-focus);
     --button-soft-bg: transparent;
     --button-soft-hover: var(--sidebar-button-hover);
@@ -54,7 +54,7 @@
     flex: 1;
     flex-direction: column;
     min-height: 0;
-    padding: 5px 15px 15px;
+    padding: var(--panel-content-padding);
     overflow: hidden;
 }
 
@@ -66,7 +66,7 @@
 @keyframes panelEnter {
     from {
         opacity: 0;
-        transform: translateX(-32px);
+        transform: translateX(var(--panel-animation-translate-x));
     }
 
     to {
@@ -77,7 +77,7 @@
 
 @media (prefers-reduced-motion: reduce) {
     .panel {
-        animation-duration: 1ms;
+        animation-duration: var(--reduced-motion-duration);
     }
 }
 
@@ -85,26 +85,26 @@
     .panel {
         /* Нижняя граница панели: над тулбаром + нижняя безопасная зона + зазор */
         --panel-bottom: calc(
-                var(--sidebar-toolbar-height, 60px) + env(safe-area-inset-bottom, 0px) + 10px
+                var(--sidebar-toolbar-height-mobile) + var(--safe-area-inset-bottom) + var(--panel-bottom-offset-mobile)
         );
 
         /* Максимальная высота: до верхней безопасной зоны + запас */
-        --panel-limit: calc(100dvh - var(--panel-bottom) - env(safe-area-inset-top, 0px) - 24px);
+        --panel-limit: calc(100dvh - var(--panel-bottom) - var(--safe-area-inset-top) - var(--panel-limit-offset));
 
         top: auto;
-        right: 10px;
+        right: var(--panel-side-offset-mobile);
         bottom: var(--panel-bottom);
-        left: 10px;
+        left: var(--panel-side-offset-mobile);
         width: auto;
         height: auto;
         max-height: var(--panel-limit);
-        animation: panelSlideUp 220ms ease;
+        animation: panelSlideUp var(--panel-animation-slide-duration) ease;
     }
 
     .header {
         position: relative;
-        min-height: 52px;
-        padding: 0 16px;
+        min-height: var(--panel-header-min-height-mobile);
+        padding: 0 var(--panel-header-padding-x-mobile);
         cursor: default;
         touch-action: auto;
     }
@@ -118,14 +118,14 @@
     }
 
     .title {
-        font-size: 17px;
+        font-size: var(--panel-title-font-size-mobile);
     }
 
     /* Растягиваемая панель (маршрут): свёрнутая — по контенту, раскрытая — не выше лимита */
     .panel.expandable {
         height: auto;
         max-height: var(--panel-limit);
-        transition: height 200ms ease, max-height 200ms ease;
+        transition: height var(--panel-animation-expand-duration) ease, max-height var(--panel-animation-expand-duration) ease;
     }
 
     .panel.expandable .content {
@@ -133,8 +133,8 @@
     }
 
     .panel.expandable.expanded {
-        height: min(var(--panel-expanded-height, 90dvh), var(--panel-limit));
-        max-height: min(var(--panel-expanded-height, 90dvh), var(--panel-limit));
+        height: min(var(--panel-expanded-height, var(--panel-expanded-height-default)), var(--panel-limit));
+        max-height: min(var(--panel-expanded-height, var(--panel-expanded-height-default)), var(--panel-limit));
     }
 
     .panel.expandable.dragging {
@@ -142,29 +142,29 @@
     }
 
     .panel.expandable .header {
-        padding: 8px 16px 0;
+        padding: var(--panel-header-padding-top-mobile) var(--panel-header-padding-x-mobile) 0;
         flex-wrap: wrap;
         touch-action: none;
     }
 
     .dragHandle {
         display: block;
-        width: 32px;
-        height: 3px;
-        margin: 0 auto 6px;
+        width: var(--drag-handle-width);
+        height: var(--drag-handle-height);
+        margin: 0 auto var(--drag-handle-margin-bottom);
         flex-basis: 100%;
         flex-shrink: 0;
-        border-radius: 999px;
+        border-radius: var(--radius-pill);
         background: currentcolor;
-        opacity: 0.25;
+        opacity: var(--drag-handle-opacity);
         pointer-events: none;
-        transition: opacity 150ms ease, width 150ms ease;
+        transition: opacity var(--transition-fast), width var(--transition-fast);
     }
 
     /* Лёгкий отклик, пока палец тянет панель */
     .panel.expandable.dragging .dragHandle {
-        width: 40px;
-        opacity: 0.45;
+        width: var(--drag-handle-width-active);
+        opacity: var(--drag-handle-opacity-active);
     }
 }
 

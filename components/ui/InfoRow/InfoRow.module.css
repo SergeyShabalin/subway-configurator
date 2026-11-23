@@ -1,13 +1,13 @@
 .row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--spacing-3);
     min-width: 0;
-    padding: 12px 14px;
+    padding: var(--info-row-padding);
     border: none;
-    border-radius: 10px;
+    border-radius: var(--glass-radius);
     background: var(--row-bg);
-    transition: background 0.2s ease;
+    transition: background var(--transition-base);
 }
 
 .row:hover {
@@ -16,25 +16,25 @@
 
 .indicatorWrapper {
     display: flex;
-    flex: 0 0 4px;
+    flex: 0 0 var(--info-row-indicator-width);
     align-items: center;
     justify-content: center;
     align-self: stretch;
 }
 
 .indicator {
-    flex: 0 0 4px;
-    width: 4px;
-    min-height: 30px;
-    border-radius: 999px;
+    flex: 0 0 var(--info-row-indicator-width);
+    width: var(--info-row-indicator-width);
+    min-height: var(--info-row-indicator-min-height);
+    border-radius: var(--radius-pill);
     background: var(--accent-color);
 }
 
 .dot {
-    flex: 0 0 8px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+    flex: 0 0 var(--info-row-dot-size);
+    width: var(--info-row-dot-size);
+    height: var(--info-row-dot-size);
+    border-radius: var(--radius-circle);
     background: var(--accent-color);
 }
 
@@ -43,37 +43,37 @@
     flex: 1;
     flex-direction: column;
     justify-content: center;
-    gap: 3px;
+    gap: var(--spacing-0);
     min-width: 0;
 }
 
 .label {
     color: var(--text-muted);
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.4;
-    letter-spacing: 0.2px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-xs);
 }
 
 .content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: var(--spacing-3);
     min-width: 0;
 }
 
 .value {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: var(--info-row-value-gap);
     flex: 1;
     min-width: 0;
     color: var(--text-strong);
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.4;
-    letter-spacing: -0.2px;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-tight);
 }
 
 .valueText {
@@ -85,19 +85,19 @@
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
-    gap: 8px;
+    gap: var(--spacing-2);
     margin-left: auto;
     color: var(--text-muted);
-    font-size: 12px;
-    line-height: 1.4;
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
     white-space: nowrap;
 }
 
 .descriptionDot {
     display: inline-block;
-    flex: 0 0 8px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+    flex: 0 0 var(--info-row-dot-size);
+    width: var(--info-row-dot-size);
+    height: var(--info-row-dot-size);
+    border-radius: var(--radius-circle);
     background: var(--accent-color);
 }

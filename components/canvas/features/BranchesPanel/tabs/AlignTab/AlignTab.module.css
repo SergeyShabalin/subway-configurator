@@ -1,35 +1,35 @@
 .root {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--spacing-3);
 }
 
 .hint {
     margin: 0;
-    font-size: 13px;
-    color: var(--text-muted, #6b7280);
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
 }
 
 .message,
 .warning,
 .success {
     margin: 0;
-    font-size: 14px;
+    font-size: var(--font-size-md);
 }
 
 .message {
-    color: var(--danger, #dc2626);
+    color: var(--error);
 }
 
 .warning {
-    color: var(--warning, #b45309);
+    color: var(--warning);
 }
 
 .success {
-    color: var(--success, #15803d);
+    color: var(--success);
 }
 
 .actions {
     display: flex;
-    gap: 8px;
+    gap: var(--spacing-2);
 }

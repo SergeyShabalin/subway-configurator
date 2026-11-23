@@ -1,13 +1,13 @@
 .colors {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
+    gap: var(--spacing-0);
     flex-shrink: 0;
 }
 
 .dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
+    width: var(--timeline-dot-size);
+    height: var(--timeline-dot-size);
+    border-radius: var(--radius-circle);
     flex-shrink: 0;
 }

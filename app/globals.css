@@ -15,6 +15,7 @@
     --black: #000000;
     --warning: #a1d110;
     --accent-icon: #2563eb;
+    --accent-fallback: #3b82f6;
     --button-primary-hover: #0866b2;
     --button-primary-text: #ffffff;
     --button-outline-bg: transparent;
@@ -22,15 +23,195 @@
     --button-outline-text: var(--text-primary);
     --button-border: var(--border);
     --button-ghost-hover: #dde1e9;
+    --button-ghost-hover-color-fallback: #93a8e4;
     --button-ghost-text: var(--text-primary);
     --button-disabled-opacity: 0.5;
     --button-focus: #38bdf8;
     --radius-sm: 6px;
     --radius-md: 8px;
     --radius-lg: 12px;
+    --radius-2xl: 16px;
+    --radius-xs: 2px;
+    --radius-pill: 999px;
+    --radius-circle: 50%;
     --surface-1: #ffffff;
     --surface-2: #dfe3ea;
     --surface-secondary: var(--surface-2);
+
+
+    /* Spacing */
+    --spacing-0: 3px;
+    --spacing-xs: 4px;
+    --spacing-1: 6px;
+    --spacing-2: 8px;
+    --spacing-3: 12px;
+    --spacing-4: 10px;
+    --spacing-5: 16px;
+    --spacing-6: 5px;
+    --spacing-7: 20px;
+    --spacing-8: 14px;
+    --spacing-9: 2px;
+    --spacing-10: 24px;
+
+    /* Typography */
+    --font-family-base: Arial, sans-serif;
+    --font-size-3xs: 10px;
+    --font-size-2xs: 11px;
+    --font-size-xs: 12px;
+    --font-size-sm: 13px;
+    --font-size-md: 14px;
+    --font-size-lg: 16px;
+    --font-size-2xl: 17px;
+    --font-size-xl: 20px;
+    --font-size-3xl: 24px;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.4;
+    --line-height-relaxed: 1.5;
+    --letter-spacing-tight: -0.2px;
+    --letter-spacing-xs: 0.2px;
+    --letter-spacing-md: 0.5px;
+    --letter-spacing-wide: 0.06em;
+    --letter-spacing-loose: 1px;
+
+    /* Icons */
+    --icon-size-sm: 18px;
+    --icon-size-lg: 26px;
+
+    /* Button */
+    --button-height-sm: 30px;
+    --button-height-md: 36px;
+    --button-height-lg: 44px;
+    --button-padding-sm: var(--spacing-6) var(--spacing-4);
+    --button-padding-md: var(--spacing-2) var(--spacing-5);
+    --button-padding-lg: var(--spacing-4) var(--spacing-7);
+    --button-icon-glyph: 18px;
+    --button-spinner-size: 14px;
+    --button-spinner-border: 2px;
+    --button-spinner-duration: 0.65s;
+    --button-outline-width: 2px;
+    --button-outline-offset: 2px;
+    --button-active-transform: translateY(1px);
+    --button-opacity-hover: 0.85;
+
+    /* Dropdown */
+    --dropdown-trigger-padding: var(--spacing-2) var(--spacing-3);
+    --dropdown-trigger-gap: var(--spacing-xs);
+    --dropdown-arrow-offset: var(--spacing-2);
+    --dropdown-min-width: 200px;
+    --dropdown-max-height-sm: 320px;
+    --dropdown-max-height-lg: 600px;
+    --dropdown-item-padding: var(--spacing-2) var(--spacing-3);
+
+    /* IconTabs */
+    --icon-tab-size: 44px;
+    --icon-tab-glyph: 22px;
+    --icon-tab-active-shadow: 0 4px 14px var(--sidebar-accent-shadow);
+
+    /* Tooltip */
+    --tooltip-offset-y: 9px;
+    --tooltip-offset-x: 52%;
+    --tooltip-padding: var(--spacing-xs) var(--spacing-2);
+
+    /* InfoRow */
+    --info-row-padding: var(--spacing-3) var(--spacing-8);
+    --info-row-indicator-width: 4px;
+    --info-row-indicator-min-height: 30px;
+    --info-row-dot-size: 8px;
+    --info-row-value-gap: 9px;
+
+    /* Input */
+    --input-label-margin: var(--spacing-4);
+    --input-color-size: 40px;
+    --input-color-padding: var(--spacing-9);
+    --input-checkbox-size: 16px;
+    --input-checkbox-gap: var(--spacing-2);
+
+    /* LanguageSwitcher */
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --language-switcher-top: calc(var(--spacing-4) + var(--safe-area-inset-top));
+    --language-switcher-right: var(--spacing-4);
+    --language-switcher-height: var(--input-color-size);
+    --language-switcher-gap: var(--spacing-xs);
+    --language-switcher-padding: var(--spacing-xs);
+
+    /* Modal */
+    --modal-size-sm: 360px;
+    --modal-size-md: 480px;
+    --modal-size-lg: 720px;
+    --modal-min-height-sm: 320px;
+    --modal-min-height-md: 200px;
+    --modal-min-height-lg: 600px;
+    --modal-header-padding: var(--spacing-7) var(--spacing-10);
+    --modal-content-padding: var(--spacing-10);
+    --modal-content-padding-mobile: var(--spacing-5);
+    --modal-title-font-size: var(--font-size-xl);
+    --modal-close-font-size: var(--font-size-3xl);
+    --modal-close-padding: var(--spacing-xs) var(--spacing-2);
+    --modal-close-disabled-opacity: 0.4;
+    --modal-close-focus-shadow: 0 0 0 3px var(--modal-focus);
+    --modal-icon-size: 36px;
+    --modal-icon-glyph: 21px;
+    --modal-animation-in: 0.3s ease-out;
+    --modal-animation-out: 0.2s ease-out;
+    --modal-translate-y: var(--spacing-7);
+    --modal-mobile-width: 92vw;
+    --modal-mobile-max-height: 80dvh;
+
+    /* Sidebar */
+    --sidebar-toolbar-left: var(--spacing-4);
+    --sidebar-toolbar-top: var(--spacing-4);
+    --sidebar-toolbar-width: 76px;
+    --sidebar-toolbar-gap: var(--spacing-3);
+    --sidebar-toolbar-height-mobile: 60px;
+    --sidebar-toolbar-padding-y: var(--spacing-3);
+    --sidebar-toolbar-padding-x-mobile: var(--spacing-2);
+    --sidebar-button-icon-size: 52px;
+    --sidebar-button-icon-glyph: 24px;
+    --sidebar-button-radius: 14px;
+    --sidebar-button-active-shadow: 0 4px 14px var(--sidebar-accent-shadow);
+    --sidebar-button-icon-size-mobile: 48px;
+
+    /* SidebarPanel */
+    --panel-max-height-offset: var(--spacing-7);
+    --panel-header-min-height: 68px;
+    --panel-header-padding-x: var(--spacing-7);
+    --panel-header-min-height-mobile: 52px;
+    --panel-header-padding-x-mobile: var(--spacing-5);
+    --panel-header-padding-top-mobile: var(--spacing-2);
+    --panel-title-font-size: var(--font-size-xl);
+    --panel-title-font-size-mobile: var(--font-size-2xl);
+    --panel-close-icon-size: 36px;
+    --panel-close-radius: var(--glass-radius);
+    --panel-content-padding: var(--spacing-6) var(--spacing-8) var(--spacing-8);
+    --panel-animation-duration: 260ms;
+    --panel-animation-timing: cubic-bezier(0.22, 1, 0.36, 1);
+    --panel-animation-translate-x: -32px;
+    --panel-animation-slide-duration: 220ms;
+    --panel-animation-expand-duration: 200ms;
+    --panel-bottom-offset-mobile: var(--spacing-4);
+    --panel-side-offset-mobile: var(--spacing-4);
+    --panel-limit-offset: var(--spacing-10);
+    --panel-expanded-height-default: 90dvh;
+    --panel-collapsed-height-default: 45dvh;
+    --drag-handle-width: 32px;
+    --drag-handle-width-active: 40px;
+    --drag-handle-height: 3px;
+    --drag-handle-margin-bottom: var(--spacing-1);
+    --drag-handle-opacity: 0.25;
+    --drag-handle-opacity-active: 0.45;
+    --reduced-motion-duration: 1ms;
+
+    /* Breakpoints */
+    --breakpoint-xs: 499px;
+    --breakpoint-sm: 520px;
+    --breakpoint-md: 820px;
+
+    /* Border radius */
+    --radius-scrollbar: 2px;
 
     /* Тени */
     --shadow-sm: 0 1px 2px rgb(15 23 42 / 6%);
@@ -44,6 +225,7 @@
     /* Анимации */
     --transition-fast: 0.15s ease;
     --transition-base: 0.2s ease;
+    --transition-slow: 0.25s ease;
 
     /* Поверхности: hover */
     --surface-hover: #f5f7fa;
@@ -75,6 +257,17 @@
     /* Окно старта */
     --hint-lets-started-bg: #ffffff;
     --hint-lets-started-color: #0d0e0e;
+
+    /* Подсказка старта (HintLetsStarted) */
+    --hint-border: rgb(226 232 240 / 25%);
+    --hint-shadow: 0 4px 10px 0 rgb(0 0 0 / 35%), 0 4px 100px 10px rgb(57 53 53 / 35%);
+    --hint-max-width: 420px;
+    --hint-text-max-width: 360px;
+    --hint-icon-size: 42px;
+    --hint-padding-y: 28px;
+    --hint-padding-x: 36px;
+    --hint-padding-mobile: 30px;
+    --hint-mobile-offset: 50px;
 
     /* Окно инструментов */
     --tools-menu-bg: rgb(255 255 255 / 80%);
@@ -139,6 +332,26 @@
     --timeline-padding: 16px;
     --timeline-icon-width: 16px;
     --timeline-gap: 12px;
+    --timeline-title-offset: 20px;
+    --timeline-station-max-width: 130px;
+    --timeline-color-bar-width: 4px;
+    --timeline-color-bar-height: 14px;
+    --timeline-fallback-color: #888888;
+    --timeline-dot-size: 14px;
+
+    /* z-index */
+    --z-index-overlay: 10;
+    --z-index-tooltip: 10;
+    --z-index-modal: 1000;
+    --z-index-switcher: 1000;
+    --z-index-sidebar: 1000;
+    --z-index-toolbar: 1000;
+    --z-index-sidebar-panel: 1001;
+    --z-index-dropdown: 99999;
+
+    /* Прозрачность */
+    --opacity-muted: 0.9;
+    --opacity-disabled: 0.5;
 
     /* Подсказки */
     --hint-background: white;
@@ -161,6 +374,7 @@
     --black: #000000;
     --warning: #a1d110;
     --accent-icon: #4d85d6;
+    --accent-fallback: #3b82f6;
     --button-primary-hover: #1689e5;
     --button-primary-text: #ffffff;
     --button-outline-bg: transparent;
@@ -168,12 +382,17 @@
     --button-outline-text: var(--text-primary);
     --button-border: var(--border);
     --button-ghost-hover: #1e293b;
+    --button-ghost-hover-color-fallback: #93a8e4;
     --button-ghost-text: var(--text-primary);
     --button-disabled-opacity: 0.5;
     --button-focus: #38bdf8;
     --radius-sm: 6px;
     --radius-md: 8px;
     --radius-lg: 12px;
+    --radius-2xl: 16px;
+    --radius-xs: 2px;
+    --radius-pill: 999px;
+    --radius-circle: 50%;
     --surface-1: #1e293b;
     --surface-2: #2d3748;
     --surface-secondary: var(--surface-2);
@@ -190,6 +409,7 @@
     /* Анимации */
     --transition-fast: 0.15s ease;
     --transition-base: 0.2s ease;
+    --transition-slow: 0.25s ease;
 
     /* Поверхности: hover */
     --surface-hover: #243247;
@@ -220,6 +440,17 @@
     /* Окно старта */
     --hint-lets-started-bg: #181827;
     --hint-lets-started-color: #e2e8f0;
+
+    /* Подсказка старта (HintLetsStarted) */
+    --hint-border: rgb(226 232 240 / 25%);
+    --hint-shadow: 0 4px 10px 0 rgb(0 0 0 / 35%), 0 4px 100px 10px rgb(57 53 53 / 35%);
+    --hint-max-width: 420px;
+    --hint-text-max-width: 360px;
+    --hint-icon-size: 42px;
+    --hint-padding-y: 28px;
+    --hint-padding-x: 36px;
+    --hint-padding-mobile: 30px;
+    --hint-mobile-offset: 50px;
 
     /* Окно инструментов */
     --tools-menu-bg: rgb(0 0 0 / 80%);

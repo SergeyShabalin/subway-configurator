@@ -1,7 +1,7 @@
 .content {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--spacing-3);
     flex: 1;
     min-height: 0;
     overflow-y: auto;
@@ -11,41 +11,41 @@
 
 .hint {
     margin: 0;
-    font-size: 13px;
+    font-size: var(--font-size-sm);
     color: var(--text-muted);
 }
 
 .radius {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--spacing-1);
 }
 
 .label {
-    font-size: 14px;
+    font-size: var(--font-size-md);
     color: var(--text-secondary);
 }
 
 .message {
     margin: 0;
-    font-size: 14px;
+    font-size: var(--font-size-md);
     color: var(--error);
 }
 
 .warning {
     margin: 0;
-    font-size: 14px;
+    font-size: var(--font-size-md);
     color: var(--warning);
 }
 
 .success {
     margin: 0;
-    font-size: 14px;
+    font-size: var(--font-size-md);
     color: var(--success);
 }
 
 .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--spacing-2);
 }

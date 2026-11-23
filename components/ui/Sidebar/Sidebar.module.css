@@ -1,7 +1,7 @@
 .root {
     position: fixed;
     inset: 0;
-    z-index: 1000;
+    z-index: var(--z-index-sidebar);
     pointer-events: none;
 }
 
@@ -11,6 +11,6 @@
 
 @media (max-width: 499px) {
     .root {
-        --sidebar-toolbar-height: 60px;
+        --sidebar-toolbar-height: var(--sidebar-toolbar-height-mobile);
     }
 }
