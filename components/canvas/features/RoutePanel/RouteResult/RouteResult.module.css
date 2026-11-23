@@ -5,7 +5,7 @@
     min-height: 0;
     padding-top: 14px;
     border-top: 1px solid var(--border);
-    gap: 10px;
+    gap: var(--spacing-4);
 }
 
 .tabs {
@@ -29,7 +29,7 @@
 
 .tabs::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 2px;
+    border-radius: var(--radius-scrollbar);
 }
 
 .tabsInner {
@@ -44,18 +44,18 @@
 .summary {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: var(--spacing-0);
     flex-shrink: 0;
 }
 
 .summary strong {
-    font-size: 20px;
+    font-size: var(--font-size-xl);
     font-weight: 700;
     color: var(--text-strong);
 }
 
 .summary span {
-    font-size: 13px;
+    font-size: var(--font-size-sm);
     color: var(--text-muted);
 }
 
@@ -63,7 +63,7 @@
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
-    padding-right: 4px;
+    padding-right: var(--spacing-1);
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
 }

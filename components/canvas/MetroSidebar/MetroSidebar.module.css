@@ -1,9 +1,9 @@
 .icon {
-    width: 26px;
-    height: 26px;
+    width: var(--icon-size-lg);
+    height: var(--icon-size-lg);
     color: currentcolor;
 }
 
 .unavailable {
-    margin: 10px;
+    margin: var(--spacing-4);
 }

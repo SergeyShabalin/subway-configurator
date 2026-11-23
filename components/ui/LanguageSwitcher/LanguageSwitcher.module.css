@@ -1,34 +1,32 @@
 .wrapper {
     position: fixed;
-    top: calc(10px + env(safe-area-inset-top, 0px));
-    right: 10px;
-    z-index: 1000;
+    top: var(--language-switcher-top);
+    right: var(--language-switcher-right);
+    z-index: var(--z-index-switcher);
     display: flex;
-    gap: 4px;
-    padding: 4px;
-    height: 40px;
+    gap: var(--language-switcher-gap);
+    padding: var(--language-switcher-padding);
+    height: var(--language-switcher-height);
     background: var(--glass-toolbar-bg);
     border-radius: var(--glass-radius);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(40%);
-    backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     box-shadow: var(--glass-shadow);
-    font-family: Arial, sans-serif;
+    font-family: var(--font-family-base);
 }
 
 .button {
-    padding: 6px 12px;
+    padding: var(--spacing-1) var(--spacing-3);
     background: transparent;
     border: none;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     color: var(--glass-text);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-md);
     text-transform: uppercase;
     cursor: pointer;
-    transition:
-            background 0.15s ease,
-            color 0.15s ease;
+    transition: background var(--transition-fast), color var(--transition-fast);
 }
 
 .button:hover {
@@ -38,7 +36,7 @@
 
 .button:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px var(--glass-focus);
+    box-shadow: 0 0 0 var(--button-outline-width) var(--glass-focus);
 }
 
 .active {

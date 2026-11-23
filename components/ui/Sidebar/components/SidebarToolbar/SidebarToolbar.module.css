@@ -1,34 +1,34 @@
 .toolbar {
     position: fixed;
-    top: 10px;
-    left: 10px;
-    bottom: 10px;
-    z-index: 1000;
+    top: var(--sidebar-toolbar-top);
+    left: var(--sidebar-toolbar-left);
+    bottom: var(--sidebar-toolbar-top);
+    z-index: var(--z-index-toolbar);
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 76px;
-    padding: 12px 0;
+    width: var(--sidebar-toolbar-width);
+    padding: var(--sidebar-toolbar-padding-y) 0;
     background: var(--sidebar-toolbar-bg);
     border-radius: var(--glass-radius);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(40%);
-    backdrop-filter: blur(var(--glass-blur)) saturate(40%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     box-shadow: var(--sidebar-shadow-soft);
-    font-family: Arial, sans-serif;
+    font-family: var(--font-family-base);
 }
 
 .navigation {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: var(--sidebar-toolbar-gap);
     width: 100%;
 }
 
 .button {
-    --button-icon-size: 52px;
-    --button-icon-glyph: 24px;
-    --button-radius: 14px;
+    --button-icon-size: var(--sidebar-button-icon-size);
+    --button-icon-glyph: var(--sidebar-button-icon-glyph);
+    --button-radius: var(--sidebar-button-radius);
     --button-focus: var(--sidebar-focus);
     --button-soft-bg: var(--sidebar-button-bg);
     --button-soft-hover: var(--sidebar-button-hover);
@@ -37,7 +37,7 @@
     --button-active-bg: var(--sidebar-accent);
     --button-active-text: var(--white);
     --button-active-border: var(--sidebar-accent-border);
-    --button-active-shadow: 0 4px 14px var(--sidebar-accent-shadow);
+    --button-active-shadow: var(--sidebar-button-active-shadow);
 }
 
 @media (max-width: 499px) {
@@ -51,20 +51,20 @@
         justify-content: center;
         align-items: center;
         width: auto;
-        height: calc(var(--sidebar-toolbar-height, 60px) + env(safe-area-inset-bottom, 0px));
-        padding: 0 8px env(safe-area-inset-bottom, 0px);
+        height: calc(var(--sidebar-toolbar-height-mobile) + var(--safe-area-inset-bottom));
+        padding: 0 var(--sidebar-toolbar-padding-x-mobile) var(--safe-area-inset-bottom);
         border-radius: var(--glass-radius) var(--glass-radius) 0 0;
     }
 
     .navigation {
         flex-direction: row;
         justify-content: space-around;
-        gap: 8px;
+        gap: var(--spacing-2);
     }
 
     .button {
-        --button-icon-size: 48px;
-        --button-icon-glyph: 24px;
+        --button-icon-size: var(--sidebar-button-icon-size-mobile);
+        --button-icon-glyph: var(--sidebar-button-icon-glyph);
     }
 }
 

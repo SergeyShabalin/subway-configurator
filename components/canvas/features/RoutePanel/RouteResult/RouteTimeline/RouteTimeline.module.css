@@ -1,8 +1,8 @@
 .timeline {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding: 10px 0;
+    gap: var(--spacing-6);
+    padding: var(--spacing-4) 0;
 }
 
 .segment {
@@ -13,13 +13,13 @@
 .accessSection {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--spacing-1);
 }
 
 .accessTitle {
-    padding: 10px 0;
-    font-size: 12px;
-    font-weight: 600;
+    padding: var(--spacing-4) 0;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
     color: var(--text-secondary);
-    line-height: 1.2;
+    line-height: var(--line-height-tight);
 }

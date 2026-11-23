@@ -8,7 +8,7 @@ import { useTheme } from '@/context/theme-context'
 import { LABEL_FONT_SIZE_MAX, LABEL_FONT_SIZE_MIN } from '@/src/lib/styles/sanitizeStyles'
 import { useMetroStore } from '@/store'
 import { useTranslations } from 'next-intl'
-import styles from '../StylesPanel.module.css'
+import styles from './LabelStyleTab.module.css'
 
 const DEFAULT_FONT_SIZE = 14
 

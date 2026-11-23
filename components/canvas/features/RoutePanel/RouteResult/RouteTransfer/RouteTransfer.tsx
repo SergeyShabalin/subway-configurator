@@ -6,7 +6,7 @@ import { memo } from 'react'
 import type { RouteEndpoint, TransferData } from '../RouteTimeline/types'
 import styles from './RouteTransfer.module.css'
 
-const FALLBACK_COLOR = '#888888'
+const FALLBACK_COLOR = 'var(--timeline-fallback-color)'
 
 const Endpoint = ({ station, color = FALLBACK_COLOR, badge, type }: RouteEndpoint) => (
   <div className={styles.stationWithColor}>

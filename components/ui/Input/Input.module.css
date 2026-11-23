@@ -1,21 +1,21 @@
 .label {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
     color: var(--text-primary);
-    margin-bottom: 10px;
+    margin-bottom: var(--input-label-margin);
     display: block;
 }
 
 .input {
     width: 100%;
-    padding: 8px 12px;
+    padding: var(--dropdown-trigger-padding);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
     background: var(--surface-1);
     color: var(--text-primary);
-    font-size: 14px;
+    font-size: var(--font-size-md);
     outline: none;
-    transition: border-color 0.2s ease;
+    transition: border-color var(--transition-base);
 }
 
 .input:focus {
@@ -27,9 +27,9 @@
 }
 
 .colorInput {
-    width: 40px;
-    height: 40px;
-    padding: 2px;
+    width: var(--input-color-size);
+    height: var(--input-color-size);
+    padding: var(--input-color-padding);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
     background: var(--surface-1);
@@ -57,21 +57,21 @@
 .checkboxWrapper {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--input-checkbox-gap);
     cursor: pointer;
     user-select: none;
 }
 
 .checkbox {
-    width: 16px;
-    height: 16px;
+    width: var(--input-checkbox-size);
+    height: var(--input-checkbox-size);
     cursor: pointer;
-    accent-color: var(--button-focus, #3b82f6);
+    accent-color: var(--button-focus, var(--accent-fallback));
     flex-shrink: 0;
 }
 
 .checkboxLabel {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
     color: var(--text-primary);
 }

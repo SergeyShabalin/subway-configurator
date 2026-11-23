@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import type { DropdownOption } from '../../Dropdown'
 import { titleIfTruncated } from '../../utils/titleIfTruncated'
-import styles from '../DropdownMenu.module.css'
+import styles from './DropdownMenuItem.module.css'
 
 interface DropdownMenuItemProps {
   id: string

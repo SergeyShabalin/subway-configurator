@@ -5,8 +5,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
-    animation: fade-in 0.2s ease-out;
+    z-index: var(--z-index-modal);
+    animation: fade-in var(--modal-animation-out);
 }
 
 .modal {
@@ -16,43 +16,43 @@
     backdrop-filter: blur(var(--modal-blur)) saturate(var(--modal-saturate));
     box-shadow: var(--modal-shadow-soft);
     color: var(--modal-text);
-    font-family: Arial, sans-serif;
+    font-family: var(--font-family-base);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     flex-shrink: 0;
-    animation: slide-up 0.3s ease-out;
+    animation: slide-up var(--modal-animation-in);
 }
 
 .small {
-    width: 360px;
-    min-height: 320px;
+    width: var(--modal-size-sm);
+    min-height: var(--modal-min-height-sm);
 }
 
 .medium {
-    width: 480px;
-    min-height: 200px;
+    width: var(--modal-size-md);
+    min-height: var(--modal-min-height-md);
 }
 
 .large {
-    width: 720px;
-    min-height: 600px;
+    width: var(--modal-size-lg);
+    min-height: var(--modal-min-height-lg);
 }
 
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 24px;
+    padding: var(--modal-header-padding);
     border-bottom: 1px solid var(--sidebar-border-soft);
     flex-shrink: 0;
 }
 
 .title {
     margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
+    font-size: var(--modal-title-font-size);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-xs);
     color: var(--modal-text);
 }
 
@@ -60,13 +60,12 @@
     background: none;
     border: none;
     color: var(--modal-icon-color);
-    font-size: 24px;
+    font-size: var(--modal-close-font-size);
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
+    padding: var(--modal-close-padding);
+    border-radius: var(--radius-sm);
     line-height: 1;
-    transition: background 0.15s ease,
-    color 0.15s ease;
+    transition: background var(--transition-fast), color var(--transition-fast);
 }
 
 .closeButton:hover {
@@ -76,16 +75,16 @@
 
 .closeButton:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px var(--modal-focus);
+    box-shadow: var(--modal-close-focus-shadow);
 }
 
 .closeButton:disabled {
-    opacity: 0.4;
+    opacity: var(--modal-close-disabled-opacity);
     cursor: not-allowed;
 }
 
 .content {
-    padding: 24px;
+    padding: var(--modal-content-padding);
     overflow: hidden;
     flex: 1;
     min-height: 0;
@@ -97,7 +96,7 @@
 .headerActions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-2);
     flex-shrink: 0;
 }
 
@@ -105,15 +104,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: var(--modal-icon-size);
+    height: var(--modal-icon-size);
     color: var(--modal-icon-color);
 }
 
 .headerIcon svg {
     display: block;
-    width: 21px;
-    height: 21px;
+    width: var(--modal-icon-glyph);
+    height: var(--modal-icon-glyph);
     flex-shrink: 0;
 }
 
@@ -129,7 +128,7 @@
 
 @keyframes slide-up {
     from {
-        transform: translateY(20px);
+        transform: translateY(var(--modal-translate-y));
         opacity: 0;
     }
 
@@ -142,24 +141,22 @@
 @media (width <= 520px) {
     .small,
     .medium {
-        width: 92vw;
+        width: var(--modal-mobile-width);
         height: auto;
         min-height: 0;
-        max-height: 80vh;
-        max-height: 80dvh;
+        max-height: var(--modal-mobile-max-height);
     }
 
     .content {
-        padding: 16px;
+        padding: var(--modal-content-padding-mobile);
     }
 }
 
 @media (width <= 820px) {
     .large {
-        width: 92vw;
+        width: var(--modal-mobile-width);
         height: auto;
         min-height: 0;
-        max-height: 80vh;
-        max-height: 80dvh;
+        max-height: var(--modal-mobile-max-height);
     }
 }
