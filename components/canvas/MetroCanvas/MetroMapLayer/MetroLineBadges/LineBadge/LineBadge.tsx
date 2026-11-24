@@ -1,5 +1,6 @@
 'use client'
 
+import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { memo } from 'react'
 import { Group } from 'react-konva'
@@ -19,6 +20,9 @@ interface LineBadgeProps {
 }
 
 export const LineBadge = memo(({ x, y, text, geometry, appearance, onDragEnd }: LineBadgeProps) => {
+  const isDragEnabled = useMetroStore((state) => state.isDragEnabled)
+  const isInteractive = isDragEnabled && !appearance.isDimmed
+
   const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
     onDragEnd(e)
 
@@ -43,8 +47,8 @@ export const LineBadge = memo(({ x, y, text, geometry, appearance, onDragEnd }: 
     <Group
       x={x}
       y={y}
-      draggable={!appearance.isDimmed}
-      listening={!appearance.isDimmed}
+      draggable={isInteractive}
+      listening={isInteractive}
       onDragEnd={handleDragEnd}
       onMouseEnter={setPointerCursor}
       onMouseLeave={resetCursor}

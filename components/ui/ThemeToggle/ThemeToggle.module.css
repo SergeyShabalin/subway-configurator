@@ -1,16 +1,16 @@
 .container {
     position: fixed;
-    right: 150px;
-    top: calc(10px + env(safe-area-inset-top, 0px));
+    right: var(--theme-toggle-right);
+    top: var(--theme-toggle-top);
     display: flex;
     align-items: center;
     justify-content: right;
-    border: 1px solid rgb(226 232 240 / 20%);
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
-    font-family: Arial, sans-serif;
-    backdrop-filter: blur(3px);
-    height: 40px;
+    border: 1px solid var(--theme-toggle-border-color);
+    border-radius: var(--glass-radius);
+    box-shadow: var(--theme-toggle-shadow);
+    font-family: var(--font-family-base);
+    backdrop-filter: blur(var(--theme-toggle-blur));
+    height: var(--theme-toggle-height);
 }
 
 .toggle {
@@ -19,20 +19,20 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     place-items: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
+    width: var(--theme-toggle-size);
+    height: var(--theme-toggle-size);
+    border-radius: var(--radius-circle);
     cursor: pointer;
 }
 
 /* Анимации включаются только после монтирования,
    чтобы при загрузке иконка не «переезжала» с дефолтного состояния */
 .ready {
-    transition: transform 0.2s ease;
+    transition: transform var(--transition-base);
 }
 
 .ready:hover {
-    transform: scale(1.05);
+    transform: scale(var(--theme-toggle-hover-scale));
 }
 
 .input {
@@ -45,19 +45,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 0.1;
+    line-height: var(--theme-toggle-icon-line-height);
 }
 
 .ready .icon {
-    transition: transform 500ms;
+    transition: transform var(--theme-toggle-icon-duration);
 }
 
 .iconMoon {
-    color: #0aa2e4;
+    color: var(--theme-toggle-moon-color);
 }
 
 .iconSun {
-    color: #ffa500;
+    color: var(--theme-toggle-sun-color);
 }
 
 /* Не checked = тёмная тема → луна */
@@ -80,24 +80,24 @@
 
 @media (max-width: 768px) {
     .toggle {
-        width: 48px;
-        height: 48px;
+        width: var(--theme-toggle-size-tablet);
+        height: var(--theme-toggle-size-tablet);
     }
 
     .icon svg {
-        width: 24px;
-        height: 24px;
+        width: var(--theme-toggle-icon-size-tablet);
+        height: var(--theme-toggle-icon-size-tablet);
     }
 }
 
 @media (max-width: 480px) {
     .toggle {
-        width: 44px;
-        height: 44px;
+        width: var(--theme-toggle-size-mobile);
+        height: var(--theme-toggle-size-mobile);
     }
 
     .icon svg {
-        width: 20px;
-        height: 20px;
+        width: var(--theme-toggle-icon-size-mobile);
+        height: var(--theme-toggle-icon-size-mobile);
     }
 }

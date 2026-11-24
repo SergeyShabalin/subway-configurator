@@ -1,5 +1,6 @@
 import { RoutePanel, ToolsPanel } from '@/components/canvas/features'
 import { BranchesPanel } from '@/components/canvas/features/BranchesPanel/BranchesPanel'
+import { SettingsPanel } from '@/components/canvas/features/SettingsPanel/SettingsPanel'
 import { StylesPanel } from '@/components/canvas/features/StylesPanel/StylesPanel'
 import { LayersIcon, PaletteIcon, RouteIcon, SettingsIcon, UploadIcon } from '@/components/ui/Icons'
 import type { SidebarItem } from '@/components/ui/Sidebar/types'
@@ -40,7 +41,7 @@ export const useSidebarItems = (): Array<SidebarItem> => {
       id: 'settings',
       label: t('settings'),
       icon: <SettingsIcon className={styles.icon} />,
-      content: <div className={styles.unavailable}>{t('unavailable', { tab: t('settings') })}</div>,
+      content: <SettingsPanel />,
     },
   ]
 }

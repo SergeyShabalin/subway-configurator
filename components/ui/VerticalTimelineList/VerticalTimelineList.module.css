@@ -1,28 +1,27 @@
-
 .container {
     position: relative;
-    padding-left: 22px;
+    padding-left: var(--timeline-container-padding-left);
 }
 
 .line {
     position: absolute;
-    top: 10px;
-    bottom: 10px;
-    left: 26px;
-    width: 4px;
-    border-radius: 4px;
+    top: var(--timeline-connector-top);
+    bottom: var(--timeline-connector-bottom);
+    left: var(--timeline-connector-offset-left);
+    width: var(--timeline-connector-width);
+    border-radius: var(--timeline-connector-radius);
 }
 
 .lineExpanded {
-    bottom: 46px;
+    bottom: var(--timeline-connector-bottom-expanded);
 }
 
 .lineDouble {
-    left: 24px;
-    width: 8px;
+    left: var(--timeline-connector-offset-left-double);
+    width: var(--timeline-connector-width-double);
     box-sizing: border-box;
     border-style: solid;
-    border-width: 0 2px;
+    border-width: 0 var(--timeline-connector-border-width);
     border-radius: 0;
     background: transparent;
 }
@@ -30,7 +29,7 @@
 .list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: var(--timeline-list-gap);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -38,20 +37,20 @@
 
 .item {
     display: grid;
-    grid-template-columns: 12px 1fr;
+    grid-template-columns: var(--timeline-item-columns-dot) 1fr;
     align-items: center;
-    gap: 12px;
-    font-size: 14px;
+    gap: var(--timeline-item-gap);
+    font-size: var(--timeline-item-font-size);
     color: var(--text-primary);
     position: relative;
     z-index: 1;
 }
 
 .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid;
+    width: var(--timeline-dot-size-md);
+    height: var(--timeline-dot-size-md);
+    border-radius: var(--radius-circle);
+    border: var(--timeline-dot-border-width) solid;
     background: var(--background);
     box-sizing: border-box;
 }
@@ -59,18 +58,18 @@
 .expandItem {
     position: relative;
     z-index: 1;
-    padding-left: 24px;
+    padding-left: var(--timeline-indent);
 }
 
 .expandButton {
     display: block;
     padding: 0;
     min-height: auto;
-    font-size: 13px;
+    font-size: var(--timeline-expand-font-size);
 }
 
 .collapseItem {
     position: relative;
     z-index: 1;
-    padding-left: 24px;
+    padding-left: var(--timeline-indent);
 }

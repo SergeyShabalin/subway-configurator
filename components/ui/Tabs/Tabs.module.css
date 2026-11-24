@@ -1,3 +1,4 @@
 .tabs {
-    gap: 4px;
+    display: flex;
+    gap: var(--spacing-xs);
 }

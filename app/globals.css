@@ -1,4 +1,10 @@
+/* ==========================================================================
+   ТОКЕНЫ — светлая тема (значения по умолчанию)
+   ========================================================================== */
 :root {
+    color-scheme: light;
+
+    /* ---------- Цвета: база и текст ---------- */
     --background: #e8ebf1;
     --foreground: #1a1d26;
     --text-primary: #1f2430;
@@ -6,55 +12,61 @@
     --text-strong: #1a1d26;
     --text-muted: #5b6475;
     --text-placeholder: #8a93a3;
+
+    /* ---------- Цвета: границы ---------- */
     --border: #d0d5df;
     --border-color: var(--border);
+
+    /* ---------- Цвета: брендовые и статусные ---------- */
+    --white: #ffffff;
+    --black: #000000;
+    --blue: #1078cd;
+    --warning: #a1d110;
     --error: #dc2626;
     --success: #16a34a;
-    --white: #ffffff;
-    --blue: #1078cd;
-    --black: #000000;
-    --warning: #a1d110;
+    --error-bg: rgb(220 38 38 / 10%);
+    --success-bg: rgb(22 163 74 / 10%);
     --accent-icon: #2563eb;
     --accent-fallback: #3b82f6;
-    --button-primary-hover: #0866b2;
-    --button-primary-text: #ffffff;
-    --button-outline-bg: transparent;
-    --button-outline-hover: #dde1e9;
-    --button-outline-text: var(--text-primary);
-    --button-border: var(--border);
-    --button-ghost-hover: #dde1e9;
-    --button-ghost-hover-color-fallback: #93a8e4;
-    --button-ghost-text: var(--text-primary);
-    --button-disabled-opacity: 0.5;
-    --button-focus: #38bdf8;
+
+    /* ---------- Цвета: поверхности ---------- */
+    --surface-1: #ffffff;
+    --surface-2: #dfe3ea;
+    --surface-secondary: var(--surface-2);
+    --surface-hover: #f5f7fa;
+    --hover-overlay: rgb(15 23 42 / 6%);
+    --row-bg: rgb(15 23 42 / 4%);
+    --row-bg-hover: rgb(15 23 42 / 7%);
+    --disabled-bg: rgb(15 23 42 / 4%);
+    --overlay-bg: rgb(15 23 42 / 40%);
+
+    /* ---------- Радиусы ---------- */
+    --radius-xs: 2px;
+    --radius-scrollbar: 2px;
     --radius-sm: 6px;
     --radius-md: 8px;
     --radius-lg: 12px;
     --radius-2xl: 16px;
-    --radius-xs: 2px;
     --radius-pill: 999px;
     --radius-circle: 50%;
-    --surface-1: #ffffff;
-    --surface-2: #dfe3ea;
-    --surface-secondary: var(--surface-2);
 
-
-    /* Spacing */
+    /* ---------- Отступы ---------- */
+    --spacing-9: 2px;
     --spacing-0: 3px;
     --spacing-xs: 4px;
+    --spacing-6: 5px;
     --spacing-1: 6px;
     --spacing-2: 8px;
-    --spacing-3: 12px;
     --spacing-4: 10px;
-    --spacing-5: 16px;
-    --spacing-6: 5px;
-    --spacing-7: 20px;
+    --spacing-3: 12px;
     --spacing-8: 14px;
-    --spacing-9: 2px;
+    --spacing-5: 16px;
+    --spacing-7: 20px;
     --spacing-10: 24px;
 
-    /* Typography */
+    /* ---------- Типографика ---------- */
     --font-family-base: Arial, sans-serif;
+    --font-family-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-size-3xs: 10px;
     --font-size-2xs: 11px;
     --font-size-xs: 12px;
@@ -64,23 +76,91 @@
     --font-size-2xl: 17px;
     --font-size-xl: 20px;
     --font-size-3xl: 24px;
+    --font-weight-regular: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --line-height-tight: 1.2;
     --line-height-normal: 1.4;
     --line-height-relaxed: 1.5;
-    --letter-spacing-tight: -0.2px;
     --letter-spacing-xs: 0.2px;
+    --letter-spacing-tight: -0.2px;
     --letter-spacing-md: 0.5px;
     --letter-spacing-wide: 0.06em;
+    --letter-spacing-subtle: 0.02em;
     --letter-spacing-loose: 1px;
 
-    /* Icons */
+    /* ---------- Иконки ---------- */
     --icon-size-sm: 18px;
     --icon-size-lg: 26px;
 
-    /* Button */
+    /* ---------- Тени ---------- */
+    --shadow-sm: 0 1px 2px rgb(15 23 42 / 6%);
+    --shadow-md: 0 4px 12px rgb(15 23 42 / 10%);
+    --shadow-lg: 0 6px 18px rgb(15 23 42 / 15%);
+    --drag-shadow: var(--shadow-lg);
+
+    /* ---------- Фокус ---------- */
+    --focus-ring: 0 0 0 3px rgb(56 189 248 / 30%);
+
+    /* ---------- Анимации ---------- */
+    --transition-instant: 0.1s ease;
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.2s ease;
+    --transition-slow: 0.25s ease;
+    --reduced-motion-duration: 1ms;
+
+    /* ---------- Прозрачность ---------- */
+    --opacity-muted: 0.9;
+    --opacity-dragging: 0.95;
+    --opacity-disabled: 0.5;
+
+    /* ---------- z-index ---------- */
+    --z-index-sortable-item: 1;
+    --z-index-sortable-handle: 1;
+    --z-index-loader-dot: 5;
+    --z-index-overlay: 10;
+    --z-index-tooltip: 10;
+    --z-index-sortable-item-dragging: 10;
+    --z-index-modal: 1000;
+    --z-index-switcher: 1000;
+    --z-index-sidebar: 1000;
+    --z-index-toolbar: 1000;
+    --z-index-sidebar-panel: 1001;
+    --z-index-dropdown: 99999;
+
+    /* ---------- Брейкпоинты ---------- */
+    --breakpoint-xs: 499px;
+    --breakpoint-sm: 520px;
+    --breakpoint-md: 820px;
+
+    /* ---------- Безопасные зоны ---------- */
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+
+    /* ---------- Скроллбар ---------- */
+    --scrollbar-size: 8px;
+    --scrollbar-thumb: #b6bdca;
+    --scrollbar-track: transparent;
+
+    /* ---------- Стекло (glassy surface) ---------- */
+    --glass-toolbar-bg: rgb(255 255 255 / 12%);
+    --glass-panel-bg: rgb(255 255 255 / 18%);
+    --glass-blur: 16px;
+    --glass-saturate: 40%;
+    --glass-shadow: 0 8px 24px rgb(15 23 42 / 18%);
+    --glass-radius: 10px;
+    --glass-item-bg: rgb(15 23 42 / 5%);
+    --glass-item-hover-bg: rgb(15 23 42 / 10%);
+    --glass-text: #64708a;
+    --glass-text-hover: #1e293b;
+    --glass-accent-bg: #155eef;
+    --glass-accent-text: var(--white);
+    --glass-focus: #4385ff;
+
+    /* ==================== КОМПОНЕНТЫ ==================== */
+
+    /* ---------- Button ---------- */
     --button-height-sm: 30px;
     --button-height-md: 36px;
     --button-height-lg: 44px;
@@ -95,8 +175,38 @@
     --button-outline-offset: 2px;
     --button-active-transform: translateY(1px);
     --button-opacity-hover: 0.85;
+    --button-disabled-opacity: 0.5;
+    --button-focus: #38bdf8;
+    --button-primary-hover: #0866b2;
+    --button-primary-text: #ffffff;
+    --button-outline-bg: transparent;
+    --button-outline-hover: #dde1e9;
+    --button-outline-text: var(--text-primary);
+    --button-border: var(--border);
+    --button-ghost-hover: #dde1e9;
+    --button-ghost-hover-color-fallback: #93a8e4;
+    --button-ghost-text: var(--text-primary);
 
-    /* Dropdown */
+    /* ---------- Input ---------- */
+    --input-bg: #ffffff;
+    --input-border: #c5cbd6;
+    --input-border-hover: #9aa3b2;
+    --input-border-focus: #2563eb;
+    --input-label-margin: var(--spacing-4);
+    --input-color-size: 40px;
+    --input-color-padding: var(--spacing-9);
+    --input-checkbox-size: 16px;
+    --input-checkbox-gap: var(--spacing-2);
+    --input-font-size-touch: 16px;
+
+    /* ---------- Switch ---------- */
+    --switch-width: 36px;
+    --switch-height: 20px;
+    --switch-thumb-size: 16px;
+    --switch-padding: 2px;
+    --switch-gap: var(--spacing-5);
+
+    /* ---------- Dropdown ---------- */
     --dropdown-trigger-padding: var(--spacing-2) var(--spacing-3);
     --dropdown-trigger-gap: var(--spacing-xs);
     --dropdown-arrow-offset: var(--spacing-2);
@@ -104,41 +214,103 @@
     --dropdown-max-height-sm: 320px;
     --dropdown-max-height-lg: 600px;
     --dropdown-item-padding: var(--spacing-2) var(--spacing-3);
+    --dropdown-item-hover: #eceef3;
+    --dropdown-shadow: 0 8px 24px rgb(15 23 42 / 15%);
 
-    /* IconTabs */
+    /* ---------- Sortable (список с перетаскиванием) ---------- */
+    --sortable-list-max-height: 360px;
+    --sortable-handle-icon-size: 16px;
+    --sortable-handle-stroke-width: 1.5;
+
+    /* ---------- SubwayLoader ---------- */
+    --loader-color: var(--accent-fallback);
+    --loader-color-soft: rgb(59 130 246 / 30%);
+    --loader-route-bg: rgb(255 255 255 / 8%);
+    --loader-dot-shadow: 0 0 20px rgb(59 130 246 / 50%), 0 0 60px rgb(59 130 246 / 20%);
+    --loader-text-color: #64748b;
+    --loader-width: 320px;
+    --loader-width-mobile: 260px;
+    --loader-gap: 18px;
+    --loader-map-width: 300px;
+    --loader-map-height: 120px;
+    --loader-map-width-mobile: 240px;
+    --loader-map-height-mobile: 100px;
+    --loader-route-stroke-width: 2.5;
+    --loader-route-length: 420;
+    --loader-route-glow-size: 8px;
+    --loader-station-size: 6px;
+    --loader-station-size-mobile: 5px;
+    --loader-station-border-width: 2px;
+    --loader-station-border-width-mobile: 1.5px;
+    --loader-station-inset: 1px;
+    --loader-station-static-opacity: 0.6;
+    --loader-station-pulse-scale: 1.5;
+    --loader-station-pulse-min-opacity: 0.3;
+    --loader-station-stagger: 0.3s;
+    --loader-dot-size: 10px;
+    --loader-dot-size-mobile: 8px;
+    --loader-dot-scale-up: 1.2;
+    --loader-dot-scale-down: 0.9;
+    --loader-dot-scale-settle: 1.1;
+    --loader-dot-easing: cubic-bezier(0.45, 0, 0.55, 1);
+    --loader-dots-width: 18px;
+    --loader-duration: 3s;
+    --loader-pulse-duration: 1.5s;
+    --loader-dots-duration: 1.2s;
+    --loader-station-1-x: 8%;
+    --loader-station-1-y: 58%;
+    --loader-station-2-x: 28%;
+    --loader-station-2-y: 30%;
+    --loader-station-3-x: 50%;
+    --loader-station-3-y: 55%;
+    --loader-station-4-x: 72%;
+    --loader-station-4-y: 25%;
+    --loader-station-5-x: 92%;
+    --loader-station-5-y: 48%;
+
+    /* ---------- IconTabs ---------- */
     --icon-tab-size: 44px;
     --icon-tab-glyph: 22px;
     --icon-tab-active-shadow: 0 4px 14px var(--sidebar-accent-shadow);
 
-    /* Tooltip */
+    /* ---------- Tooltip ---------- */
     --tooltip-offset-y: 9px;
     --tooltip-offset-x: 52%;
     --tooltip-padding: var(--spacing-xs) var(--spacing-2);
 
-    /* InfoRow */
+    /* ---------- InfoRow ---------- */
     --info-row-padding: var(--spacing-3) var(--spacing-8);
     --info-row-indicator-width: 4px;
     --info-row-indicator-min-height: 30px;
     --info-row-dot-size: 8px;
     --info-row-value-gap: 9px;
 
-    /* Input */
-    --input-label-margin: var(--spacing-4);
-    --input-color-size: 40px;
-    --input-color-padding: var(--spacing-9);
-    --input-checkbox-size: 16px;
-    --input-checkbox-gap: var(--spacing-2);
-
-    /* LanguageSwitcher */
-    --safe-area-inset-top: env(safe-area-inset-top, 0px);
-    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    /* ---------- LanguageSwitcher ---------- */
     --language-switcher-top: calc(var(--spacing-4) + var(--safe-area-inset-top));
     --language-switcher-right: var(--spacing-4);
     --language-switcher-height: var(--input-color-size);
     --language-switcher-gap: var(--spacing-xs);
     --language-switcher-padding: var(--spacing-xs);
 
-    /* Modal */
+    /* ---------- ThemeToggle ---------- */
+    --theme-toggle-top: var(--language-switcher-top);
+    --theme-toggle-right: 150px;
+    --theme-toggle-height: var(--language-switcher-height);
+    --theme-toggle-border-color: rgb(226 232 240 / 20%);
+    --theme-toggle-shadow: 0 8px 24px rgb(0 0 0 / 35%);
+    --theme-toggle-blur: 3px;
+    --theme-toggle-size: 52px;
+    --theme-toggle-size-tablet: 48px;
+    --theme-toggle-size-mobile: 44px;
+    --theme-toggle-icon-size-tablet: 24px;
+    --theme-toggle-icon-size-mobile: 20px;
+    --theme-toggle-hover-scale: 1.05;
+    --theme-toggle-icon-duration: 500ms;
+    --theme-toggle-icon-line-height: 0.1;
+    --theme-toggle-moon-color: #0aa2e4;
+    --theme-toggle-sun-color: #ffa500;
+
+    /* ---------- Modal ---------- */
     --modal-size-sm: 360px;
     --modal-size-md: 480px;
     --modal-size-lg: 720px;
@@ -160,8 +332,21 @@
     --modal-translate-y: var(--spacing-7);
     --modal-mobile-width: 92vw;
     --modal-mobile-max-height: 80dvh;
+    --modal-bg: #ffffff;
+    --modal-border: rgb(15 23 42 / 8%);
+    --modal-shadow: 0 20px 60px rgb(15 23 42 / 18%);
+    --modal-shadow-soft: 0 8px 24px rgb(15 23 42 / 18%);
+    --modal-panel-bg: rgb(255 255 255 / 90%);
+    --glass-modal-bg: rgb(255 255 255 / 90%);
+    --modal-blur: 16px;
+    --modal-saturate: 40%;
+    --modal-radius: 20px;
+    --modal-text: #172033;
+    --modal-icon-color: #64708a;
+    --modal-icon-hover: #1e293b;
+    --modal-focus: #4385ff;
 
-    /* Sidebar */
+    /* ---------- Sidebar ---------- */
     --sidebar-toolbar-left: var(--spacing-4);
     --sidebar-toolbar-top: var(--spacing-4);
     --sidebar-toolbar-width: 76px;
@@ -170,12 +355,29 @@
     --sidebar-toolbar-padding-y: var(--spacing-3);
     --sidebar-toolbar-padding-x-mobile: var(--spacing-2);
     --sidebar-button-icon-size: 52px;
+    --sidebar-button-icon-size-mobile: 48px;
     --sidebar-button-icon-glyph: 24px;
     --sidebar-button-radius: 14px;
     --sidebar-button-active-shadow: 0 4px 14px var(--sidebar-accent-shadow);
-    --sidebar-button-icon-size-mobile: 48px;
+    --sidebar-toolbar-bg: var(--glass-toolbar-bg);
+    --sidebar-panel-bg: var(--glass-panel-bg);
+    --sidebar-border: rgb(15 23 42 / 8%);
+    --sidebar-border-soft: rgb(226 232 240 / 40%);
+    --sidebar-shadow: 0 8px 32px rgb(15 23 42 / 14%);
+    --sidebar-shadow-soft: var(--glass-shadow);
+    --sidebar-blur: var(--glass-blur);
+    --sidebar-saturate: var(--glass-saturate);
+    --sidebar-button-bg: var(--glass-item-bg);
+    --sidebar-button-hover: var(--glass-item-hover-bg);
+    --sidebar-icon-color: var(--glass-text);
+    --sidebar-icon-hover: var(--glass-text-hover);
+    --sidebar-text: #172033;
+    --sidebar-accent: var(--glass-accent-bg);
+    --sidebar-accent-border: #3478ff;
+    --sidebar-accent-shadow: rgb(21 94 239 / 25%);
+    --sidebar-focus: var(--glass-focus);
 
-    /* SidebarPanel */
+    /* ---------- SidebarPanel ---------- */
     --panel-max-height-offset: var(--spacing-7);
     --panel-header-min-height: 68px;
     --panel-header-padding-x: var(--spacing-7);
@@ -203,62 +405,11 @@
     --drag-handle-margin-bottom: var(--spacing-1);
     --drag-handle-opacity: 0.25;
     --drag-handle-opacity-active: 0.45;
-    --reduced-motion-duration: 1ms;
 
-    /* Breakpoints */
-    --breakpoint-xs: 499px;
-    --breakpoint-sm: 520px;
-    --breakpoint-md: 820px;
-
-    /* Border radius */
-    --radius-scrollbar: 2px;
-
-    /* Тени */
-    --shadow-sm: 0 1px 2px rgb(15 23 42 / 6%);
-    --shadow-md: 0 4px 12px rgb(15 23 42 / 10%);
-    --shadow-lg: 0 6px 18px rgb(15 23 42 / 15%);
-    --drag-shadow: var(--shadow-lg);
-
-    /* Фокус-кольцо */
-    --focus-ring: 0 0 0 3px rgb(56 189 248 / 30%);
-
-    /* Анимации */
-    --transition-fast: 0.15s ease;
-    --transition-base: 0.2s ease;
-    --transition-slow: 0.25s ease;
-
-    /* Поверхности: hover */
-    --surface-hover: #f5f7fa;
-
-    /* Статусы */
-    --success-bg: rgb(22 163 74 / 10%);
-    --error-bg: rgb(220 38 38 / 10%);
-
-    /* Disabled */
-    --disabled-bg: rgb(15 23 42 / 4%);
-
-    /* Модальные окна */
-    --overlay-bg: rgb(15 23 42 / 40%);
-    --modal-bg: #ffffff;
-    --modal-border: rgb(15 23 42 / 8%);
-    --modal-shadow: 0 20px 60px rgb(15 23 42 / 18%);
-    --glass-modal-bg: rgb(255 255 255 / 90%);
-    --modal-panel-bg: rgb(255 255 255 / 90%);
-    --modal-blur: 16px;
-    --modal-saturate: 40%;
-    --modal-radius: 20px;
-    --modal-shadow-soft: 0 8px 24px rgb(15 23 42 / 18%);
-    --modal-text: #172033;
-    --modal-icon-color: #64708a;
-    --modal-icon-hover: #1e293b;
-    --modal-focus: #4385ff;
-
-
-    /* Окно старта */
+    /* ---------- Hint (окно старта и подсказки) ---------- */
     --hint-lets-started-bg: #ffffff;
     --hint-lets-started-color: #0d0e0e;
-
-    /* Подсказка старта (HintLetsStarted) */
+    --hint-background: white;
     --hint-border: rgb(226 232 240 / 25%);
     --hint-shadow: 0 4px 10px 0 rgb(0 0 0 / 35%), 0 4px 100px 10px rgb(57 53 53 / 35%);
     --hint-max-width: 420px;
@@ -269,66 +420,11 @@
     --hint-padding-mobile: 30px;
     --hint-mobile-offset: 50px;
 
-    /* Окно инструментов */
+    /* ---------- Tools menu ---------- */
     --tools-menu-bg: rgb(255 255 255 / 80%);
     --tools-menu-section-color: #26282b;
 
-    /* Полупрозрачные подложки поверх поверхностей */
-    --hover-overlay: rgb(15 23 42 / 6%);
-    --row-bg: rgb(15 23 42 / 4%);
-    --row-bg-hover: rgb(15 23 42 / 7%);
-
-    /* Поля ввода, выпадающие списки */
-    --input-bg: #ffffff;
-    --input-border: #c5cbd6;
-    --input-border-hover: #9aa3b2;
-    --input-border-focus: #2563eb;
-
-    /* Выпадающее меню */
-    --dropdown-item-hover: #eceef3;
-    --dropdown-shadow: 0 8px 24px rgb(15 23 42 / 15%);
-
-    /* Скроллбар */
-    --scrollbar-thumb: #b6bdca;
-    --scrollbar-track: transparent;
-
-    /* Стекло (glassy surface) — общий фон и blur */
-    --glass-toolbar-bg: rgb(255 255 255 / 12%);
-    --glass-panel-bg: rgb(255 255 255 / 18%);
-    --glass-blur: 16px;
-    --glass-saturate: 40%;
-    --glass-shadow: 0 8px 24px rgb(15 23 42 / 18%);
-    --glass-radius: 10px;
-    --glass-item-bg: rgb(15 23 42 / 5%);
-    --glass-item-hover-bg: rgb(15 23 42 / 10%);
-    --glass-text: #64708a;
-    --glass-text-hover: #1e293b;
-    --glass-accent-bg: #155eef;
-    --glass-accent-text: var(--white);
-    --glass-focus: #4385ff;
-
-    /* Сайдбар */
-    --sidebar-toolbar-bg: var(--glass-toolbar-bg);
-    --sidebar-panel-bg: var(--glass-panel-bg);
-    --sidebar-border: rgb(15 23 42 / 8%);
-    --sidebar-border-soft: rgb(226 232 240 / 40%);
-    --sidebar-shadow: 0 8px 32px rgb(15 23 42 / 14%);
-    --sidebar-shadow-soft: var(--glass-shadow);
-    --sidebar-blur: var(--glass-blur);
-    --sidebar-saturate: var(--glass-saturate);
-    --sidebar-button-bg: var(--glass-item-bg);
-    --sidebar-button-hover: var(--glass-item-hover-bg);
-    --sidebar-icon-color: var(--glass-text);
-    --sidebar-icon-hover: var(--glass-text-hover);
-    --sidebar-text: #172033;
-    --sidebar-accent: var(--glass-accent-bg);
-    --sidebar-accent-border: #3478ff;
-    --sidebar-accent-shadow: rgb(21 94 239 / 25%);
-    --sidebar-focus: var(--glass-focus);
-
-    color-scheme: light;
-
-
+    /* ---------- Timeline ---------- */
     --timeline-padding: 16px;
     --timeline-icon-width: 16px;
     --timeline-gap: 12px;
@@ -338,26 +434,33 @@
     --timeline-color-bar-height: 14px;
     --timeline-fallback-color: #888888;
     --timeline-dot-size: 14px;
-
-    /* z-index */
-    --z-index-overlay: 10;
-    --z-index-tooltip: 10;
-    --z-index-modal: 1000;
-    --z-index-switcher: 1000;
-    --z-index-sidebar: 1000;
-    --z-index-toolbar: 1000;
-    --z-index-sidebar-panel: 1001;
-    --z-index-dropdown: 99999;
-
-    /* Прозрачность */
-    --opacity-muted: 0.9;
-    --opacity-disabled: 0.5;
-
-    /* Подсказки */
-    --hint-background: white;
+    --timeline-connector-offset-left: 26px;
+    --timeline-connector-offset-left-double: 24px;
+    --timeline-connector-width: 4px;
+    --timeline-connector-width-double: 8px;
+    --timeline-connector-border-width: 2px;
+    --timeline-connector-radius: 4px;
+    --timeline-connector-top: var(--spacing-4);
+    --timeline-connector-bottom: var(--spacing-4);
+    --timeline-connector-bottom-expanded: 46px;
+    --timeline-container-padding-left: 22px;
+    --timeline-list-gap: var(--spacing-8);
+    --timeline-item-columns-dot: var(--font-size-xs);
+    --timeline-item-gap: var(--spacing-3);
+    --timeline-item-font-size: var(--font-size-md);
+    --timeline-dot-size-md: 12px;
+    --timeline-dot-border-width: 2px;
+    --timeline-indent: var(--spacing-10);
+    --timeline-expand-font-size: var(--font-size-sm);
 }
 
+/* ==========================================================================
+   ТОКЕНЫ — тёмная тема (только то, что отличается от светлой)
+   ========================================================================== */
 :root.dark {
+    color-scheme: dark;
+
+    /* ---------- Цвета: база и текст ---------- */
     --background: #0a0a0a;
     --foreground: #ededed;
     --text-primary: #bcb7b7;
@@ -365,156 +468,95 @@
     --text-strong: #bababf;
     --text-muted: #94a3b8;
     --text-placeholder: #64748b;
+
+    /* ---------- Цвета: границы ---------- */
     --border: #27272a;
-    --border-color: var(--border);
+
+    /* ---------- Цвета: статусные ---------- */
     --error: #ef4444;
     --success: #22c55e;
-    --white: #ffffff;
-    --blue: #1078cd;
-    --black: #000000;
-    --warning: #a1d110;
+    --error-bg: rgb(239 68 68 / 12%);
+    --success-bg: rgb(34 197 94 / 12%);
     --accent-icon: #4d85d6;
-    --accent-fallback: #3b82f6;
-    --button-primary-hover: #1689e5;
-    --button-primary-text: #ffffff;
-    --button-outline-bg: transparent;
-    --button-outline-hover: #1e293b;
-    --button-outline-text: var(--text-primary);
-    --button-border: var(--border);
-    --button-ghost-hover: #1e293b;
-    --button-ghost-hover-color-fallback: #93a8e4;
-    --button-ghost-text: var(--text-primary);
-    --button-disabled-opacity: 0.5;
-    --button-focus: #38bdf8;
-    --radius-sm: 6px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-2xl: 16px;
-    --radius-xs: 2px;
-    --radius-pill: 999px;
-    --radius-circle: 50%;
+
+    /* ---------- Цвета: поверхности ---------- */
     --surface-1: #1e293b;
     --surface-2: #2d3748;
-    --surface-secondary: var(--surface-2);
-
-    /* Тени */
-    --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
-    --shadow-md: 0 4px 12px rgb(0 0 0 / 50%);
-    --shadow-lg: 0 6px 18px rgb(0 0 0 / 50%);
-    --drag-shadow: var(--shadow-lg);
-
-    /* Фокус-кольцо */
-    --focus-ring: 0 0 0 3px rgb(56 189 248 / 40%);
-
-    /* Анимации */
-    --transition-fast: 0.15s ease;
-    --transition-base: 0.2s ease;
-    --transition-slow: 0.25s ease;
-
-    /* Поверхности: hover */
     --surface-hover: #243247;
-
-    /* Статусы */
-    --success-bg: rgb(34 197 94 / 12%);
-    --error-bg: rgb(239 68 68 / 12%);
-
-    /* Disabled */
-    --disabled-bg: rgb(255 255 255 / 4%);
-
-    /* Модальные окна */
-    --overlay-bg: rgb(0 0 0 / 60%);
-    --modal-bg: #181827;
-    --modal-border: rgb(255 255 255 / 6%);
-    --modal-shadow: 0 20px 60px rgb(0 0 0 / 50%);
-    --glass-modal-bg: rgb(25 28 36 / 85%);
-    --modal-panel-bg: rgb(25 28 36 / 78%);
-    --modal-blur: 10px;
-    --modal-saturate: 40%;
-    --modal-radius: 20px;
-    --modal-shadow-soft: 0 8px 24px rgb(0 0 0 / 45%);
-    --modal-text: #edf0f7;
-    --modal-icon-color: #a6afc2;
-    --modal-icon-hover: #ffffff;
-    --modal-focus: #4385ff;
-
-    /* Окно старта */
-    --hint-lets-started-bg: #181827;
-    --hint-lets-started-color: #e2e8f0;
-
-    /* Подсказка старта (HintLetsStarted) */
-    --hint-border: rgb(226 232 240 / 25%);
-    --hint-shadow: 0 4px 10px 0 rgb(0 0 0 / 35%), 0 4px 100px 10px rgb(57 53 53 / 35%);
-    --hint-max-width: 420px;
-    --hint-text-max-width: 360px;
-    --hint-icon-size: 42px;
-    --hint-padding-y: 28px;
-    --hint-padding-x: 36px;
-    --hint-padding-mobile: 30px;
-    --hint-mobile-offset: 50px;
-
-    /* Окно инструментов */
-    --tools-menu-bg: rgb(0 0 0 / 80%);
-    --tools-menu-section-color: #94a3b8;
-
-    /* Полупрозрачные подложки поверх поверхностей */
     --hover-overlay: rgb(255 255 255 / 5%);
     --row-bg: rgb(255 255 255 / 3%);
     --row-bg-hover: rgb(255 255 255 / 5%);
+    --disabled-bg: rgb(255 255 255 / 4%);
+    --overlay-bg: rgb(0 0 0 / 60%);
 
-    /* Поля ввода, выпадающие списки */
-    --input-bg: #1e293b;
-    --input-border: #334155;
-    --input-border-hover: #475569;
-    --input-border-focus: #3b82f6;
+    /* ---------- Тени ---------- */
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+    --shadow-md: 0 4px 12px rgb(0 0 0 / 50%);
+    --shadow-lg: 0 6px 18px rgb(0 0 0 / 50%);
 
-    /* Выпадающее меню */
-    --dropdown-item-hover: #2d3748;
-    --dropdown-shadow: 0 8px 24px rgb(0 0 0 / 40%);
+    /* ---------- Фокус ---------- */
+    --focus-ring: 0 0 0 3px rgb(56 189 248 / 40%);
 
-    /* Скроллбар */
+    /* ---------- Скроллбар ---------- */
     --scrollbar-thumb: #475569;
-    --scrollbar-track: transparent;
 
-    /* Стекло (glassy surface) — общий фон и blur */
+    /* ---------- Стекло ---------- */
     --glass-toolbar-bg: rgb(25 28 36 / 72%);
     --glass-panel-bg: rgb(25 28 36 / 78%);
     --glass-blur: 10px;
     --glass-saturate: 40%;
     --glass-shadow: 0 8px 24px rgb(0 0 0 / 45%);
-    --glass-radius: 10px;
     --glass-item-bg: rgb(255 255 255 / 6%);
     --glass-item-hover-bg: rgb(255 255 255 / 12%);
     --glass-text: #a6afc2;
     --glass-text-hover: #ffffff;
-    --glass-accent-bg: #155eef;
-    --glass-accent-text: var(--white);
-    --glass-focus: #4385ff;
 
-    /* Сайдбар */
-    --sidebar-toolbar-bg: var(--glass-toolbar-bg);
-    --sidebar-panel-bg: var(--glass-panel-bg);
+    /* ---------- Button ---------- */
+    --button-primary-hover: #1689e5;
+    --button-outline-hover: #1e293b;
+    --button-ghost-hover: #1e293b;
+
+    /* ---------- Input ---------- */
+    --input-bg: #1e293b;
+    --input-border: #334155;
+    --input-border-hover: #475569;
+    --input-border-focus: #3b82f6;
+
+    /* ---------- Dropdown ---------- */
+    --dropdown-item-hover: #2d3748;
+    --dropdown-shadow: 0 8px 24px rgb(0 0 0 / 40%);
+
+    /* ---------- Modal ---------- */
+    --modal-bg: #181827;
+    --modal-border: rgb(255 255 255 / 6%);
+    --modal-shadow: 0 20px 60px rgb(0 0 0 / 50%);
+    --modal-shadow-soft: 0 8px 24px rgb(0 0 0 / 45%);
+    --modal-panel-bg: rgb(25 28 36 / 78%);
+    --glass-modal-bg: rgb(25 28 36 / 85%);
+    --modal-blur: 10px;
+    --modal-text: #edf0f7;
+    --modal-icon-color: #a6afc2;
+    --modal-icon-hover: #ffffff;
+
+    /* ---------- Sidebar ---------- */
     --sidebar-border: rgb(255 255 255 / 7%);
     --sidebar-border-soft: rgb(226 232 240 / 20%);
     --sidebar-shadow: 0 8px 32px rgb(0 0 0 / 16%);
-    --sidebar-shadow-soft: var(--glass-shadow);
-    --sidebar-blur: var(--glass-blur);
-    --sidebar-saturate: var(--glass-saturate);
-    --sidebar-button-bg: var(--glass-item-bg);
-    --sidebar-button-hover: var(--glass-item-hover-bg);
-    --sidebar-icon-color: var(--glass-text);
-    --sidebar-icon-hover: var(--glass-text-hover);
     --sidebar-text: #edf0f7;
-    --sidebar-accent: var(--glass-accent-bg);
-    --sidebar-accent-border: #3478ff;
-    --sidebar-accent-shadow: rgb(21 94 239 / 25%);
-    --sidebar-focus: var(--glass-focus);
 
-    color-scheme: dark;
-
-    /* Подсказки */
+    /* ---------- Hint ---------- */
+    --hint-lets-started-bg: #181827;
+    --hint-lets-started-color: #e2e8f0;
     --hint-background: #0e0e0e;
+
+    /* ---------- Tools menu ---------- */
+    --tools-menu-bg: rgb(0 0 0 / 80%);
+    --tools-menu-section-color: #94a3b8;
 }
 
+/* ==========================================================================
+   ГЛОБАЛЬНЫЕ ПРАВИЛА
+   ========================================================================== */
 html {
     height: 100%;
     overflow: hidden;
@@ -570,13 +612,13 @@ a {
 }
 
 *::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
 }
 
 *::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
 }
 
 *::-webkit-scrollbar-track {
@@ -587,6 +629,6 @@ a {
     input,
     textarea,
     select {
-        font-size: max(16px, 1em) !important;
+        font-size: max(var(--input-font-size-touch), 1em) !important;
     }
 }

@@ -53,6 +53,7 @@ export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsP
   const { theme } = useTheme()
   const visuals = useMetroStore((state) => state.visuals)
   const customStyle = useMetroStore((state) => state.styles.labels)
+  const isDragEnabled = useMetroStore((state) => state.isDragEnabled)
   const routeVisualIds = useRoute()?.visualIds
 
   const isFontReady = useLabelFontReady()
@@ -95,25 +96,26 @@ export const MetroLabels = ({ stationNames, textRef, onLabelMove }: MetroLabelsP
   return (
     <>
       {labelData.map((label) => {
-        const isHovered = hoveredLabelId === label.id
+        const isHovered = isDragEnabled && hoveredLabelId === label.id
         const isDimmed = routeVisualIds ? !routeVisualIds.has(label.id) : false
 
         const currentFill =
           isHovered && !isDimmed ? labelHoverFill : isDimmed ? dimmedColor : labelFill
         const currentStroke = isDimmed && !isHovered ? 'transparent' : labelStroke
 
-        const interactiveProps = isDimmed
-          ? { listening: false }
-          : {
-              draggable: true,
-              onMouseEnter: (e: Konva.KonvaEventObject<MouseEvent>) =>
-                handleMouseEnter(e, label.id),
-              onMouseLeave: handleMouseLeave,
-              onDragEnd: (e: Konva.KonvaEventObject<DragEvent>) => handleDragEnd(e, label.id),
-              onMouseDown: (e: Konva.KonvaEventObject<MouseEvent>) => {
-                e.cancelBubble = true
-              },
-            }
+        const interactiveProps =
+          isDimmed || !isDragEnabled
+            ? { listening: false }
+            : {
+                draggable: true,
+                onMouseEnter: (e: Konva.KonvaEventObject<MouseEvent>) =>
+                  handleMouseEnter(e, label.id),
+                onMouseLeave: handleMouseLeave,
+                onDragEnd: (e: Konva.KonvaEventObject<DragEvent>) => handleDragEnd(e, label.id),
+                onMouseDown: (e: Konva.KonvaEventObject<MouseEvent>) => {
+                  e.cancelBubble = true
+                },
+              }
 
         return (
           <Text

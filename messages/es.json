@@ -323,5 +323,12 @@
     "colorLightLabel": "Color en tema claro",
     "colorDarkLabel": "Color en tema oscuro",
     "reset": "Restablecer"
+  },
+  "SettingsPanel": {
+    "dragLabel": "Arrastrar objetos",
+    "dragDescription": "Permite mover estaciones, etiquetas y números de línea directamente en el mapa. Si está desactivado, solo puedes desplazar y ampliar el mapa, así que nada se mueve por accidente."
+  },
+  "SortableList": {
+    "dragHandle": "Arrastrar para cambiar el orden"
   }
 }

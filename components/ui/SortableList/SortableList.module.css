@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     display: block;
-    max-height: 360px;
+    max-height: var(--sortable-list-max-height);
     overflow-y: auto;
     overflow-anchor: none;
 }
