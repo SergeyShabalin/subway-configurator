@@ -2,7 +2,8 @@
 
 import { useTheme } from '@/context/theme-context'
 import { THEME_VALUE } from './const'
-import { MoonIcon, SunIcon } from './icons'
+
+import { MoonIcon, SunIcon } from '@/components/ui/Icons'
 import styles from './ThemeToggle.module.css'
 
 export const ThemeToggle = () => {

@@ -323,5 +323,12 @@
     "colorLightLabel": "Color in light theme",
     "colorDarkLabel": "Color in dark theme",
     "reset": "Reset"
+  },
+  "SettingsPanel": {
+    "dragLabel": "Drag objects",
+    "dragDescription": "Lets you move stations, labels and line badges directly on the map. When off, you can only pan and zoom the map, so nothing gets moved by accident."
+  },
+  "SortableList": {
+    "dragHandle": "Drag to reorder"
   }
 }

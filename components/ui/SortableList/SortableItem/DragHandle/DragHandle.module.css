@@ -1,7 +1,7 @@
 .handle {
     display: grid;
     place-items: center;
-    padding: 4px;
+    padding: var(--spacing-xs);
     border: 0;
     border-radius: var(--radius-sm);
     background: none;
@@ -9,7 +9,7 @@
     cursor: grab;
     touch-action: none;
     position: relative;
-    z-index: 1;
+    z-index: var(--z-index-sortable-handle);
     transition:
             color var(--transition-fast),
             background-color var(--transition-fast);
@@ -27,4 +27,10 @@
 .handle:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
+}
+
+.icon {
+    width: var(--sortable-handle-icon-size);
+    height: var(--sortable-handle-icon-size);
+    stroke-width: var(--sortable-handle-stroke-width);
 }

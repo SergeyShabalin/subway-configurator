@@ -1,4 +1,3 @@
-// SortableList.tsx
 'use client'
 
 import { useRef, type ReactNode } from 'react'

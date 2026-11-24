@@ -7,11 +7,11 @@
 }
 
 .loader {
-    width: 320px;
+    width: var(--loader-width);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
+    gap: var(--loader-gap);
 }
 
 .loaderContainer {
@@ -23,8 +23,8 @@
 
 .map {
     position: relative;
-    width: 300px;
-    height: 120px;
+    width: var(--loader-map-width);
+    height: var(--loader-map-height);
     overflow: visible;
 }
 
@@ -39,77 +39,77 @@
 .routeBackground,
 .routeProgress {
     fill: none;
-    stroke-width: 2.5;
+    stroke-width: var(--loader-route-stroke-width);
     stroke-linecap: round;
     stroke-linejoin: round;
 }
 
 .routeBackground {
-    stroke: rgba(255, 255, 255, 0.08);
+    stroke: var(--loader-route-bg);
 }
 
 .routeProgress {
-    stroke: #3b82f6;
-    stroke-dasharray: 420;
-    stroke-dashoffset: 420;
-    animation: buildRoute 3s ease-in-out infinite;
-    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+    stroke: var(--loader-color);
+    stroke-dasharray: var(--loader-route-length);
+    stroke-dashoffset: var(--loader-route-length);
+    animation: buildRoute var(--loader-duration) ease-in-out infinite;
+    filter: drop-shadow(0 0 var(--loader-route-glow-size) var(--loader-color-soft));
 }
 
 .station {
     position: absolute;
-    width: 6px;
-    height: 6px;
+    width: var(--loader-station-size);
+    height: var(--loader-station-size);
     transform: translate(-50%, -50%) scale(0);
-    border-radius: 50%;
+    border-radius: var(--radius-circle);
     background: transparent;
-    border: 2px solid rgba(59, 130, 246, 0.3);
+    border: var(--loader-station-border-width) solid var(--loader-color-soft);
     box-sizing: border-box;
-    animation: stationAppear 3s ease-out infinite;
+    animation: stationAppear var(--loader-duration) ease-out infinite;
+    animation-delay: calc(var(--station-index) * var(--loader-station-stagger));
 }
 
 .station span {
     position: absolute;
-    inset: 1px;
-    border-radius: 50%;
-    background: #3b82f6;
+    inset: var(--loader-station-inset);
+    border-radius: var(--radius-circle);
+    background: var(--loader-color);
     opacity: 0;
-    animation: stationPulse 1.5s ease-in-out infinite;
+    animation: stationPulse var(--loader-pulse-duration) ease-in-out infinite;
 }
 
 .dot {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background: #3b82f6;
-    border-radius: 50%;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5),
-    0 0 60px rgba(59, 130, 246, 0.2);
-    animation: dotMove 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-    z-index: 5;
+    width: var(--loader-dot-size);
+    height: var(--loader-dot-size);
+    background: var(--loader-color);
+    border-radius: var(--radius-circle);
+    box-shadow: var(--loader-dot-shadow);
+    animation: dotMove var(--loader-duration) var(--loader-dot-easing) infinite;
+    z-index: var(--z-index-loader-dot);
     transform: translate(-50%, -50%);
 }
 
 .text {
     display: flex;
     align-items: center;
-    color: #64748b;
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--loader-text-color);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: var(--letter-spacing-subtle);
+    font-family: var(--font-family-system);
 }
 
 .dots {
-    width: 18px;
+    width: var(--loader-dots-width);
     overflow: hidden;
-    animation: dots 1.2s steps(4) infinite;
+    animation: dots var(--loader-dots-duration) steps(4) infinite;
     display: inline-block;
 }
 
 @keyframes buildRoute {
     0% {
-        stroke-dashoffset: 420;
+        stroke-dashoffset: var(--loader-route-length);
         opacity: 0;
     }
     20% {
@@ -120,7 +120,7 @@
         opacity: 1;
     }
     100% {
-        stroke-dashoffset: -420;
+        stroke-dashoffset: calc(var(--loader-route-length) * -1);
         opacity: 0;
     }
 }
@@ -142,75 +142,75 @@
 
 @keyframes stationPulse {
     0%, 100% {
-        opacity: 0.3;
+        opacity: var(--loader-station-pulse-min-opacity);
         transform: scale(1);
     }
     50% {
         opacity: 1;
-        transform: scale(1.5);
+        transform: scale(var(--loader-station-pulse-scale));
     }
 }
 
 @keyframes dotMove {
     0% {
-        left: 8%;
-        top: 58%;
+        left: var(--loader-station-1-x);
+        top: var(--loader-station-1-y);
         transform: translate(-50%, -50%) scale(1);
     }
     5% {
-        transform: translate(-50%, -50%) scale(1.2);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-up));
     }
     10% {
-        transform: translate(-50%, -50%) scale(0.9);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-down));
     }
     15% {
-        transform: translate(-50%, -50%) scale(1.1);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-settle));
     }
     25% {
-        left: 28%;
-        top: 30%;
+        left: var(--loader-station-2-x);
+        top: var(--loader-station-2-y);
         transform: translate(-50%, -50%) scale(1);
     }
     30% {
-        transform: translate(-50%, -50%) scale(1.2);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-up));
     }
     35% {
-        transform: translate(-50%, -50%) scale(0.9);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-down));
     }
     40% {
-        transform: translate(-50%, -50%) scale(1.1);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-settle));
     }
     50% {
-        left: 50%;
-        top: 55%;
+        left: var(--loader-station-3-x);
+        top: var(--loader-station-3-y);
         transform: translate(-50%, -50%) scale(1);
     }
     55% {
-        transform: translate(-50%, -50%) scale(1.2);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-up));
     }
     60% {
-        transform: translate(-50%, -50%) scale(0.9);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-down));
     }
     65% {
-        transform: translate(-50%, -50%) scale(1.1);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-settle));
     }
     75% {
-        left: 72%;
-        top: 25%;
+        left: var(--loader-station-4-x);
+        top: var(--loader-station-4-y);
         transform: translate(-50%, -50%) scale(1);
     }
     80% {
-        transform: translate(-50%, -50%) scale(1.2);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-up));
     }
     85% {
-        transform: translate(-50%, -50%) scale(0.9);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-down));
     }
     90% {
-        transform: translate(-50%, -50%) scale(1.1);
+        transform: translate(-50%, -50%) scale(var(--loader-dot-scale-settle));
     }
     100% {
-        left: 92%;
-        top: 48%;
+        left: var(--loader-station-5-x);
+        top: var(--loader-station-5-y);
         transform: translate(-50%, -50%) scale(1);
     }
 }
@@ -220,51 +220,51 @@
         width: 0;
     }
     100% {
-        width: 18px;
+        width: var(--loader-dots-width);
     }
 }
 
 @media (max-width: 400px) {
     .loader {
-        width: 260px;
+        width: var(--loader-width-mobile);
     }
 
     .map {
-        width: 240px;
-        height: 100px;
+        width: var(--loader-map-width-mobile);
+        height: var(--loader-map-height-mobile);
     }
 
     .station {
-        width: 5px;
-        height: 5px;
-        border-width: 1.5px;
+        width: var(--loader-station-size-mobile);
+        height: var(--loader-station-size-mobile);
+        border-width: var(--loader-station-border-width-mobile);
     }
 
     .dot {
-        width: 8px;
-        height: 8px;
+        width: var(--loader-dot-size-mobile);
+        height: var(--loader-dot-size-mobile);
     }
 
     @keyframes dotMove {
         0% {
-            left: 8%;
-            top: 58%;
+            left: var(--loader-station-1-x);
+            top: var(--loader-station-1-y);
         }
         25% {
-            left: 28%;
-            top: 30%;
+            left: var(--loader-station-2-x);
+            top: var(--loader-station-2-y);
         }
         50% {
-            left: 50%;
-            top: 55%;
+            left: var(--loader-station-3-x);
+            top: var(--loader-station-3-y);
         }
         75% {
-            left: 72%;
-            top: 25%;
+            left: var(--loader-station-4-x);
+            top: var(--loader-station-4-y);
         }
         100% {
-            left: 92%;
-            top: 48%;
+            left: var(--loader-station-5-x);
+            top: var(--loader-station-5-y);
         }
     }
 }
@@ -279,7 +279,7 @@
 
     .station span {
         animation: none;
-        opacity: 0.6;
+        opacity: var(--loader-station-static-opacity);
     }
 
     .dot {

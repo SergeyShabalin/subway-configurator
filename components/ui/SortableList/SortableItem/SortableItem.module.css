@@ -1,14 +1,15 @@
 .item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4) var(--spacing-3);
+    margin-bottom: var(--spacing-2);
     border-radius: var(--radius-md);
     border: 1px solid var(--border);
     background: var(--surface-1);
     color: var(--text-primary);
     position: relative;
+    z-index: var(--z-index-sortable-item);
     will-change: transform;
 }
 
@@ -16,11 +17,16 @@
     margin-bottom: 0;
 }
 
+.animated {
+    transition: transform var(--transition-instant), background-color var(--transition-instant);
+}
+
 .dragging {
     box-shadow: var(--drag-shadow);
     border-color: var(--input-border-focus);
     background: var(--surface-2);
-    opacity: 0.95;
+    opacity: var(--opacity-dragging);
+    z-index: var(--z-index-sortable-item-dragging);
 }
 
 .content {

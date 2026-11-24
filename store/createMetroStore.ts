@@ -1,3 +1,4 @@
+import { createSettingsSlice } from '@/store/slices/settingsSlice'
 import { createStore } from 'zustand/vanilla'
 import { createGraphSlice } from './slices/graphSlice'
 import { createLayoutSlice } from './slices/layoutSlice'
@@ -18,6 +19,7 @@ export const createMetroStore = (source: GraphSource, initState: MetroInitState 
     ...createRouteSlice(...args),
     ...createStyleSlice(...args),
     ...createUiSlice(...args),
+    ...createSettingsSlice(...args),
     ...initState,
   }))
 

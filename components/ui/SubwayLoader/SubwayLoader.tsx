@@ -1,14 +1,10 @@
 'use client'
 
+import type { CSSProperties } from 'react'
 import styles from './SubwayLoader.module.css'
 
-const stations = [
-  { left: '8%', top: '58%' },
-  { left: '28%', top: '30%' },
-  { left: '50%', top: '55%' },
-  { left: '72%', top: '25%' },
-  { left: '92%', top: '48%' },
-]
+/** Номера станций: позиции лежат в глобальных переменных `--loader-station-N-x/y` */
+const STATION_NUMBERS = [1, 2, 3, 4, 5]
 
 interface MetroLoaderProps {
   text?: string
@@ -24,15 +20,17 @@ function SubwayLoader({ text = 'Building metro' }: MetroLoaderProps) {
             <path className={styles.routeProgress} d="M24 70 L84 36 L150 66 L216 30 L276 58" />
           </svg>
 
-          {stations.map((station, index) => (
+          {STATION_NUMBERS.map((n, index) => (
             <div
-              key={index}
+              key={n}
               className={styles.station}
-              style={{
-                left: station.left,
-                top: station.top,
-                animationDelay: `${index * 0.3}s`,
-              }}
+              style={
+                {
+                  left: `var(--loader-station-${n}-x)`,
+                  top: `var(--loader-station-${n}-y)`,
+                  '--station-index': index,
+                } as CSSProperties
+              }
             >
               <span />
             </div>
