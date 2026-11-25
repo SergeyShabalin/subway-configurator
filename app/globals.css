@@ -214,14 +214,11 @@
     /* ---------- Form (формы в модальных окнах) ---------- */
     --form-min-height: 200px;
 
-    /* ---------- TimeInput (поле времени в формах сегмента и перехода) ---------- */
-    --time-input-width: 100px;
-    --time-input-height: 44px;
-    --time-input-font-size: 18px;
-
-    /* ---------- SegmentTab / EditTransfer ---------- */
+    /* ---------- SegmentTab (редактирование сегмента) ---------- */
+    --segment-time-field-width: 100px;
+    --segment-time-input-height: 44px;
+    --segment-time-font-size: 18px;
     --segment-actions-border: rgb(255 255 255 / 6%);
-    --transfer-walk-row-height: 30px;
 
     /* ---------- EditStation (редактирование станции) ---------- */
     --station-transfer-list-max-height: 300px;
