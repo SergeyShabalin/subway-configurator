@@ -1,6 +1,7 @@
 'use client'
 
 import { CANVAS_DIMMED_COLOR } from '@/components/canvas/shared/dimmedColors'
+import { LABEL_FONT_FAMILY } from '@/components/canvas/shared/labelFont'
 import { useRoute } from '@/components/canvas/shared/routing/useRoute'
 import {
   CANVAS_LABEL_FILL,
@@ -11,7 +12,6 @@ import {
 import { useTheme } from '@/context/theme-context'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
-import { Golos_Text } from 'next/font/google'
 import { useCallback, useEffect, useState } from 'react'
 import { Text } from 'react-konva'
 
@@ -19,12 +19,6 @@ import { THEME_VALUE } from '@/components/ui/ThemeToggle/const'
 import { useMetroLabels } from './hooks/useMetroLabels'
 import type { MetroLabelsProps } from './types'
 
-const labelFont = Golos_Text({
-  subsets: ['cyrillic', 'latin'],
-  display: 'swap',
-})
-
-const LABEL_FONT_FAMILY = labelFont.style.fontFamily
 const LABEL_FONT_SIZE = 14
 const LABEL_WIDTH = 60
 

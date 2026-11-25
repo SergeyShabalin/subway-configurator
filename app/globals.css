@@ -43,6 +43,7 @@
     /* ---------- Радиусы ---------- */
     --radius-xs: 2px;
     --radius-scrollbar: 2px;
+    --radius-badge: 4px;
     --radius-sm: 6px;
     --radius-md: 8px;
     --radius-lg: 12px;
@@ -108,6 +109,8 @@
     --transition-fast: 0.15s ease;
     --transition-base: 0.2s ease;
     --transition-slow: 0.25s ease;
+    --animation-spin-duration: 1s;
+    --overlay-fade-duration: 0.15s;
     --reduced-motion-duration: 1ms;
 
     /* ---------- Прозрачность ---------- */
@@ -128,6 +131,7 @@
     --z-index-toolbar: 1000;
     --z-index-sidebar-panel: 1001;
     --z-index-dropdown: 99999;
+    --z-index-drag-overlay: 99999;
 
     /* ---------- Брейкпоинты ---------- */
     --breakpoint-xs: 499px;
@@ -194,6 +198,7 @@
     --input-border-focus: #2563eb;
     --input-label-margin: var(--spacing-4);
     --input-color-size: 40px;
+    --input-color-width: 48px;
     --input-color-padding: var(--spacing-9);
     --input-checkbox-size: 16px;
     --input-checkbox-gap: var(--spacing-2);
@@ -205,6 +210,22 @@
     --switch-thumb-size: 16px;
     --switch-padding: 2px;
     --switch-gap: var(--spacing-5);
+
+    /* ---------- Form (формы в модальных окнах) ---------- */
+    --form-min-height: 200px;
+
+    /* ---------- TimeInput (поле времени в формах сегмента и перехода) ---------- */
+    --time-input-width: 100px;
+    --time-input-height: 44px;
+    --time-input-font-size: 18px;
+
+    /* ---------- SegmentTab / EditTransfer ---------- */
+    --segment-actions-border: rgb(255 255 255 / 6%);
+    --transfer-walk-row-height: 30px;
+
+    /* ---------- EditStation (редактирование станции) ---------- */
+    --station-transfer-list-max-height: 300px;
+    --station-lines-list-max-height: 180px;
 
     /* ---------- Dropdown ---------- */
     --dropdown-trigger-padding: var(--spacing-2) var(--spacing-3);
@@ -221,6 +242,22 @@
     --sortable-list-max-height: 360px;
     --sortable-handle-icon-size: 16px;
     --sortable-handle-stroke-width: 1.5;
+
+    /* ---------- StatusMessage (статусы выгрузки и загрузки JSON, PDF) ---------- */
+    --status-success-text: #4ade80;
+    --status-success-bg: rgb(16 185 129 / 12%);
+    --status-success-border: rgb(16 185 129 / 35%);
+    --status-error-text: #f87171;
+    --status-error-bg: rgb(239 68 68 / 12%);
+    --status-error-border: rgb(239 68 68 / 35%);
+    --status-info-text: #60a5fa;
+    --status-info-bg: rgb(59 130 246 / 12%);
+    --status-info-border: rgb(59 130 246 / 35%);
+
+    /* ---------- Dropzone (загрузка JSON) ---------- */
+    --dropzone-dragging-border-width: 2px;
+    --dropzone-overlay-border-width: 4px;
+    --dropzone-overlay-font-size: 22px;
 
     /* ---------- SubwayLoader ---------- */
     --loader-color: var(--accent-fallback);

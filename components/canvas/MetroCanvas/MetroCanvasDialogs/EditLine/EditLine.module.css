@@ -3,5 +3,5 @@
     flex-direction: column;
     flex: 1;
     min-height: 0;
-    gap: 20px;
+    gap: var(--spacing-7);
 }

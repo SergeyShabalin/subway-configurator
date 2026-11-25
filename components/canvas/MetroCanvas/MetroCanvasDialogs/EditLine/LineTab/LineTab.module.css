@@ -1,7 +1,7 @@
 .content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--spacing-5);
     flex: 1;
     min-height: 0;
 }
@@ -9,7 +9,7 @@
 .fields {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--spacing-5);
     flex: 1;
     min-height: 0;
     overflow-y: auto;
@@ -20,32 +20,32 @@
 .field {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--spacing-xs);
     flex-shrink: 0;
 }
 
 .label {
-    font-size: 14px;
+    font-size: var(--font-size-md);
     color: var(--text-secondary);
 }
 
 .colorPicker {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--spacing-3);
 }
 
 .colorInput {
-    width: 48px;
-    height: 40px;
-    padding: 4px;
+    width: var(--input-color-width);
+    height: var(--input-color-size);
+    padding: var(--spacing-xs);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     cursor: pointer;
 }
 
 .colorValue {
-    font-size: 14px;
+    font-size: var(--font-size-md);
     color: var(--text-primary);
     font-family: monospace;
 }
@@ -54,16 +54,16 @@
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--spacing-2);
     flex-shrink: 0;
-    padding-top: 8px;
+    padding-top: var(--spacing-2);
 }
 
 @media (width <= 520px) {
     .actions {
-        padding-bottom: env(safe-area-inset-bottom);
+        padding-bottom: var(--safe-area-inset-bottom);
         border-top: 1px solid var(--border);
-        padding-top: 12px;
+        padding-top: var(--spacing-3);
     }
 
     .actions > * {

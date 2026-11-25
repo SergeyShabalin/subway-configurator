@@ -1,26 +1,26 @@
 .form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--spacing-5);
     height: 100%;
 }
 
 .field {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--spacing-xs);
     flex-shrink: 0;
 }
 
 .spacer {
     flex: 1;
-    min-height: 8px;
+    min-height: var(--spacing-2);
 }
 
 .actions {
     display: flex;
     justify-content: flex-end;
-    gap: 8px;
+    gap: var(--spacing-2);
     flex-shrink: 0;
-    padding-top: 8px;
+    padding-top: var(--spacing-2);
 }

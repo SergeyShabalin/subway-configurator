@@ -1,28 +1,28 @@
 .container {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: var(--spacing-10);
 }
 
 .info {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: var(--spacing-6);
 }
 
 .actions {
     display: flex;
     justify-content: flex-end;
-    padding-top: 8px;
+    padding-top: var(--spacing-2);
     border-top: 1px solid var(--border);
-    gap: 10px;
+    gap: var(--spacing-4);
 }
 
 .section {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 12px;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
 }
@@ -31,28 +31,28 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: var(--spacing-2);
 }
 
 .sectionTitle {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
     color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--letter-spacing-wide);
 }
 
 .emptyTransfers {
-    padding: 4px 0;
-    font-size: 13px;
+    padding: var(--spacing-xs) 0;
+    font-size: var(--font-size-sm);
     color: var(--text-secondary);
 }
 
 .transferList {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    max-height: 300px;
+    gap: var(--spacing-2);
+    max-height: var(--station-transfer-list-max-height);
     overflow-y: auto;
     list-style: none;
     padding: 0;
@@ -62,21 +62,21 @@
 .linesList {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--spacing-1);
 }
 
 .linesLabel {
     color: var(--text-secondary);
-    font-size: 14px;
+    font-size: var(--font-size-md);
 }
 
 .linesItems {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--spacing-xs);
     list-style: none;
     margin: 0;
-    padding: 0 4px 0 0;
-    max-height: 180px;
+    padding: 0 var(--spacing-xs) 0 0;
+    max-height: var(--station-lines-list-max-height);
     overflow-y: auto;
 }

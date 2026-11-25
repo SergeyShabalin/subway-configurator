@@ -1,12 +1,12 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--spacing-1);
 }
 
 .spinner {
     display: inline-block;
-    animation: spin 1s linear infinite;
+    animation: spin var(--animation-spin-duration) linear infinite;
 }
 
 @keyframes spin {
@@ -16,19 +16,19 @@
 }
 
 .status {
-    padding: 4px 8px;
-    font-size: 11px;
+    padding: var(--spacing-xs) var(--spacing-2);
+    font-size: var(--font-size-2xs);
     text-align: center;
-    border-radius: 4px;
+    border-radius: var(--radius-badge);
     word-break: break-word;
 }
 
 .statusSuccess {
-    color: #4ade80;
-    background: rgb(16 185 129 / 12%);
+    color: var(--status-success-text);
+    background: var(--status-success-bg);
 }
 
 .statusError {
-    color: #f87171;
-    background: rgb(239 68 68 / 12%);
+    color: var(--status-error-text);
+    background: var(--status-error-bg);
 }

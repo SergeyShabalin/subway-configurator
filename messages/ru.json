@@ -105,6 +105,7 @@
     }
   },
   "DownloadPdf": {
+    "legendTitle": "Линии",
     "button": {
       "idle": "Скачать PDF",
       "loading": "Подготовка..."

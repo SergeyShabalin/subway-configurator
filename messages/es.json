@@ -104,6 +104,7 @@
     }
   },
   "DownloadPdf": {
+    "legendTitle": "Líneas",
     "button": {
       "idle": "Descargar PDF",
       "loading": "Preparando..."

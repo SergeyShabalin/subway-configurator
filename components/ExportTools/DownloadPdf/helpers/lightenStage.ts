@@ -11,11 +11,6 @@ export const lightenStage = (stage: Konva.Stage): (() => void) => {
     perfectDraw: shape.perfectDrawEnabled(),
   }))
 
-  console.log(
-    `[pdf] shapes: ${shapes.length}, with shadow: ${saved.filter((s) => s.shadow).length}, ` +
-      `with filters: ${shapes.filter((s) => s.filters()?.length).length}`
-  )
-
   for (const { shape } of saved) {
     shape.shadowEnabled(false)
     shape.shadowForStrokeEnabled(false)
