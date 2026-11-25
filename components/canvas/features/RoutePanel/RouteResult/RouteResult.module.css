@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-width: 0;
     min-height: 0;
     padding-top: 14px;
     border-top: 1px solid var(--border);
@@ -11,30 +12,37 @@
 .tabs {
     flex-shrink: 0;
     min-width: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
+    max-height: var(--tabs-max-height, 120px);
+    overflow: auto;
+    padding-bottom: 6px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
 }
 
 .tabs::-webkit-scrollbar {
     height: 4px;
+    width: 4px;
 }
 
 .tabs::-webkit-scrollbar-track {
     background: transparent;
+    margin: 0 2px 2px;
 }
 
 .tabs::-webkit-scrollbar-thumb {
     background: var(--border);
     border-radius: var(--radius-scrollbar);
+    border-bottom: 2px solid transparent;
+    background-clip: padding-box;
 }
 
 .tabsInner {
-    display: inline-flex;
+    display: flex;
+    width: max-content;
     min-width: 100%;
+    padding-bottom: 2px;
 }
 
 .tabsInner > * {
@@ -46,6 +54,7 @@
     flex-direction: column;
     gap: var(--spacing-0);
     flex-shrink: 0;
+    min-width: 0;
 }
 
 .summary strong {
@@ -61,14 +70,15 @@
 
 .timeline {
     flex: 1 1 auto;
+    min-width: 0;
     min-height: 0;
+    overflow-x: hidden;
     overflow-y: auto;
     padding-right: var(--spacing-1);
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
 }
 
-/* Мобилка, свёрнутая панель: показываем только табы вариантов */
 @media (max-width: 499px) {
     :global([data-sidebar-panel][data-expanded='false']) .summary,
     :global([data-sidebar-panel][data-expanded='false']) .timeline {
