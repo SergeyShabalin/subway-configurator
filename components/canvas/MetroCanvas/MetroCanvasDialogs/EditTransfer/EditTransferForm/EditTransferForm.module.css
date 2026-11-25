@@ -1,8 +1,7 @@
-
 .content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--spacing-5);
     min-width: 0;
 }
 
@@ -10,9 +9,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    padding: 4px 0;
-    height: 30px;
+    gap: var(--spacing-5);
+    padding: var(--spacing-xs) 0;
+    height: var(--transfer-walk-row-height);
 }
 
 .walkIcon {
@@ -24,35 +23,35 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-2);
     min-width: 0;
 }
 
 .timeLabel {
     color: var(--text-secondary);
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
 }
 
 .timeControl {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-2);
 }
 
 .timeControl input {
-    width: 100px;
-    min-height: 44px;
-    padding: 8px 12px;
+    width: var(--time-input-width);
+    min-height: var(--time-input-height);
+    padding: var(--spacing-2) var(--spacing-3);
     text-align: center;
-    font-size: 18px;
-    font-weight: 600;
-    border-radius: 8px;
+    font-size: var(--time-input-font-size);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-md);
 }
 
 .timeUnit {
     color: var(--text-secondary);
-    font-size: 13px;
+    font-size: var(--font-size-sm);
     white-space: nowrap;
 }
 
@@ -60,15 +59,15 @@
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
-    gap: 8px;
-    padding-top: 16px;
+    gap: var(--spacing-2);
+    padding-top: var(--spacing-5);
     border-top: 1px solid var(--border);
-    margin-top: 4px;
+    margin-top: var(--spacing-xs);
 }
 
 @media (max-width: 360px) {
     .walkRow {
-        gap: 10px;
+        gap: var(--spacing-4);
     }
 
     .actions {

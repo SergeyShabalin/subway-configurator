@@ -1,7 +1,7 @@
 .content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--spacing-5);
     min-width: 0;
 }
 
@@ -10,14 +10,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    padding: 4px 0;
+    gap: var(--spacing-5);
+    padding: var(--spacing-xs) 0;
     min-width: 0;
 }
 
 .arrowIcon {
     position: absolute;
-    left: 5px;
+    left: var(--spacing-6);
     top: 50%;
     display: flex;
     transform: translateY(-50%);
@@ -31,28 +31,28 @@
 .timeControl {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-2);
     min-width: 0;
 }
 
 .timeField {
-    width: 100px;
-    flex: 0 0 100px;
+    width: var(--segment-time-field-width);
+    flex: 0 0 var(--segment-time-field-width);
 }
 
 .timeField input {
     width: 100%;
-    min-height: 44px;
-    padding: 8px 12px;
+    min-height: var(--segment-time-input-height);
+    padding: var(--spacing-2) var(--spacing-3);
     text-align: center;
-    font-size: 18px;
-    font-weight: 600;
-    border-radius: 8px;
+    font-size: var(--segment-time-font-size);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-md);
 }
 
 .timeUnit {
     color: var(--text-secondary);
-    font-size: 13px;
+    font-size: var(--font-size-sm);
     white-space: nowrap;
 }
 
@@ -60,10 +60,10 @@
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
-    gap: 8px;
-    padding-top: 16px;
-    border-top: 1px solid rgb(255 255 255 / 6%);
-    margin-top: 4px;
+    gap: var(--spacing-2);
+    padding-top: var(--spacing-5);
+    border-top: 1px solid var(--segment-actions-border);
+    margin-top: var(--spacing-xs);
 }
 
 @media (max-width: 400px) {
@@ -75,7 +75,7 @@
 
 @media (max-width: 360px) {
     .arrowRow {
-        gap: 10px;
+        gap: var(--spacing-4);
     }
 
     .actions {

@@ -11,6 +11,8 @@ import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 import styles from './EditTransferForm.module.css'
 
+const WALK_ICON_SIZE = 28
+
 interface EditTransferModalProps {
   onClose: () => void
   fromStationName: string
@@ -78,7 +80,12 @@ export const EditTransferForm = ({
       <InfoRow label={t('from')} value={fromStationName} color={fromColor} indicatorType="bar" />
 
       <div className={styles.walkRow}>
-        <WalkIcon className={styles.walkIcon} fromColor={fromColor} toColor={toColor} size={28} />
+        <WalkIcon
+          className={styles.walkIcon}
+          fromColor={fromColor}
+          toColor={toColor}
+          size={WALK_ICON_SIZE}
+        />
         <div className={styles.timeControl}>
           <div className={styles.timeField}>
             <Input type="text" value={time} onChange={handleTimeChange} disabled={isLoading} />

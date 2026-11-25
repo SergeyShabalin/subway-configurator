@@ -1,5 +1,8 @@
 import { lightenStage } from '@/components/ExportTools/DownloadPdf/helpers/lightenStage'
+import { LABEL_FONT_FAMILY } from '@/components/canvas/shared/labelFont'
 import { getStage } from '@/src/lib/stageRegistry/stageRegistry'
+import { useMetroStore } from '@/store'
+import { useTranslations } from 'next-intl'
 import { useCallback, useState } from 'react'
 import { PDF_FILE_NAME } from '../constants'
 import { ExportError } from '../errors'
@@ -11,7 +14,11 @@ import type { ExportStatus, ExportStatusType } from '../types'
 const LOADING_STATUSES: ReadonlySet<ExportStatusType> = new Set(['rendering', 'creatingFile'])
 
 export const useDownloadPdf = () => {
+  const t = useTranslations('DownloadPdf')
+  const lines = useMetroStore((state) => state.lines)
   const [status, setStatus] = useState<ExportStatus>({ type: 'idle' })
+
+  const legendTitle = t('legendTitle')
 
   const download = useCallback(async () => {
     try {
@@ -26,7 +33,11 @@ export const useDownloadPdf = () => {
       const restore = lightenStage(stage)
       let image
       try {
-        image = await renderStageToImage(stage, background)
+        image = await renderStageToImage(stage, background, {
+          lines,
+          title: legendTitle,
+          fontFamily: LABEL_FONT_FAMILY,
+        })
       } finally {
         restore()
       }
@@ -42,7 +53,7 @@ export const useDownloadPdf = () => {
       console.error('PDF ExportTools failed:', error)
       setStatus({ type: 'error', error })
     }
-  }, [])
+  }, [lines, legendTitle])
 
   return { status, isLoading: LOADING_STATUSES.has(status.type), download }
 }
