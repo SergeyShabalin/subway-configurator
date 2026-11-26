@@ -323,7 +323,15 @@
     "italic": "Cursiva",
     "colorLightLabel": "Color en tema claro",
     "colorDarkLabel": "Color en tema oscuro",
-    "reset": "Restablecer"
+    "reset": "Restablecer",
+    "tabLines": "Líneas",
+    "lineLabel": "Línea",
+    "linePlaceholder": "Selecciona una línea",
+    "lineWidthLabel": "Grosor: ×{value}",
+    "resetLine": "Restablecer línea",
+    "resetAllLines": "Restablecer todas las líneas",
+    "linesDescription": "Elige una línea y ajusta su grosor y curvatura. Con 0 las esquinas son rectas.",
+    "lineCurvatureLabel": "Curvatura: ×{value}"
   },
   "SettingsPanel": {
     "dragLabel": "Arrastrar objetos",

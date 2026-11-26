@@ -323,7 +323,15 @@
     "italic": "Italic",
     "colorLightLabel": "Color in light theme",
     "colorDarkLabel": "Color in dark theme",
-    "reset": "Reset"
+    "reset": "Reset",
+    "tabLines": "Lines",
+    "lineLabel": "Branch",
+    "linePlaceholder": "Select a branch",
+    "lineWidthLabel": "Width: ×{value}",
+    "resetLine": "Reset branch",
+    "resetAllLines": "Reset all lines",
+    "linesDescription": "Pick a branch and set its line width and curvature. At 0 the corners are straight.",
+    "lineCurvatureLabel": "Curvature: ×{value}"
   },
   "SettingsPanel": {
     "dragLabel": "Drag objects",

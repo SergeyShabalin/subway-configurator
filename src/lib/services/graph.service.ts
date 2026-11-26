@@ -76,7 +76,7 @@ export const graphService = {
         timeMinutes: t.time_minutes,
         style: t.style,
       })),
-      styles: stylesRecord ? { labels: stylesRecord.labels } : undefined,
+      styles: stylesRecord,
     }
   },
 }

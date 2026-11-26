@@ -1,14 +1,14 @@
 'use client'
 
 import type { LineType } from '@/types/metro'
-import type Konva from 'konva'
-import { memo, useCallback, useState } from 'react'
-import { Path } from 'react-konva'
+import { memo } from 'react'
 import type { Segment } from './buildSegments'
-import { HIT_STROKE_WIDTH, RAIL_GAP, RAIL_LINE_WIDTH, SUBWAY_WIDTH } from './constants'
-import { bezierToPath } from './geometry/bezier'
-import { offsetBezier } from './geometry/offsetBezier'
 import type { LineDragStartEvent } from './hooks/useLineDrag'
+import { useRegisterRef } from './hooks/useRegisterRef'
+import { useSegmentInteraction } from './hooks/useSegmentInteraction'
+import { getLineStroke } from './lineStroke'
+import { RailPath } from './RailPath'
+import { SubwayPath } from './SubwayPath'
 import type { MetroLinesProps } from './types'
 
 export interface SegmentPathProps {
@@ -17,6 +17,8 @@ export interface SegmentPathProps {
   lineType: LineType
   color: string
   hoverColor: string
+  /** Множитель толщины линии (1 — по умолчанию) */
+  widthScale: number
   isDimmed: boolean
   /** Линия выбрана для переноса: сегмент тянется вместо клика */
   isMovable: boolean
@@ -25,137 +27,7 @@ export interface SegmentPathProps {
   onLineDragStart: (lineId: string, e: LineDragStartEvent) => void
 }
 
-const useSegmentInteraction = (
-  segment: Segment,
-  lineId: string,
-  isDimmed: boolean,
-  isMovable: boolean,
-  onSegmentClick: MetroLinesProps['onSegmentClick'],
-  onLineDragStart: SegmentPathProps['onLineDragStart']
-) => {
-  const [isHovered, setIsHovered] = useState(false)
-
-  const handleClick = (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) => {
-    e.cancelBubble = true
-    onSegmentClick?.({ lineId, fromVisualId: segment.fromId, toVisualId: segment.toId })
-  }
-
-  const handleDragStart = (e: LineDragStartEvent) => onLineDragStart(lineId, e)
-
-  const handleMouseEnter = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    const stage = e.target.getStage()
-    if (stage) stage.container().style.cursor = isMovable ? 'move' : 'pointer'
-    setIsHovered(true)
-  }
-
-  const handleMouseLeave = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    const stage = e.target.getStage()
-    if (stage) stage.container().style.cursor = 'default'
-    setIsHovered(false)
-  }
-
-  const interactiveProps = isDimmed
-    ? { listening: false }
-    : {
-        listening: true,
-        onClick: isMovable ? undefined : handleClick,
-        onTap: isMovable ? undefined : handleClick,
-        onMouseDown: isMovable ? handleDragStart : undefined,
-        onTouchStart: isMovable ? handleDragStart : undefined,
-        onMouseEnter: handleMouseEnter,
-        onMouseLeave: handleMouseLeave,
-      }
-
-  return { isHovered, interactiveProps }
-}
-
-const useRegisterRef = (lineRef: MetroLinesProps['lineRef'], segmentKey: string, suffix: string) =>
-  useCallback(
-    (node: Konva.Path | null) => {
-      if (node) lineRef.current[`${segmentKey}${suffix}`] = node as unknown as Konva.Line
-    },
-    [lineRef, segmentKey, suffix]
-  )
-
-const shadowProps = (isHovered: boolean, hoverColor: string) => ({
-  shadowColor: isHovered ? hoverColor : undefined,
-  shadowBlur: isHovered ? 3 : 0,
-  shadowOpacity: isHovered ? 1 : 0,
-})
-
-const SubwayPath = ({
-  segment,
-  color,
-  isHovered,
-  hoverColor,
-  interactiveProps,
-  refCb,
-}: {
-  segment: Segment
-  color: string
-  isHovered: boolean
-  hoverColor: string
-  interactiveProps: object
-  refCb: (node: Konva.Path | null) => void
-}) => (
-  <Path
-    ref={refCb}
-    perfectDrawEnabled={false}
-    data={segment.path}
-    {...shadowProps(isHovered, hoverColor)}
-    stroke={color}
-    strokeWidth={SUBWAY_WIDTH}
-    lineCap="round"
-    lineJoin="round"
-    hitStrokeWidth={HIT_STROKE_WIDTH}
-    {...interactiveProps}
-  />
-)
-
-const RailPath = ({
-  segment,
-  color,
-  isHovered,
-  hoverColor,
-  interactiveProps,
-  leftRef,
-  rightRef,
-}: {
-  segment: Segment
-  color: string
-  isHovered: boolean
-  hoverColor: string
-  interactiveProps: object
-  leftRef: (node: Konva.Path | null) => void
-  rightRef: (node: Konva.Path | null) => void
-}) => {
-  const half = RAIL_GAP / 2
-  const left = offsetBezier(segment.bezier, -half)
-  const right = offsetBezier(segment.bezier, half)
-
-  const shared = {
-    perfectDrawEnabled: false,
-    stroke: color,
-    strokeWidth: RAIL_LINE_WIDTH,
-    lineCap: 'round' as const,
-    lineJoin: 'round' as const,
-    ...shadowProps(isHovered, hoverColor),
-  }
-
-  return (
-    <>
-      <Path
-        ref={leftRef}
-        data={bezierToPath(left)}
-        {...shared}
-        hitStrokeWidth={HIT_STROKE_WIDTH}
-        {...interactiveProps}
-      />
-      <Path ref={rightRef} data={bezierToPath(right)} {...shared} listening={false} />
-    </>
-  )
-}
-
+/** Сегментов на карте много, а родитель перерисовывается при перетаскивании: memo здесь оправдан. */
 export const SegmentPath = memo(
   ({
     segment,
@@ -163,6 +35,7 @@ export const SegmentPath = memo(
     lineType,
     color,
     hoverColor,
+    widthScale,
     isDimmed,
     isMovable,
     lineRef,
@@ -178,34 +51,17 @@ export const SegmentPath = memo(
       onLineDragStart
     )
 
-    const mainRef = useRegisterRef(
-      lineRef,
-      segment.key,
-      lineType === 'commuter_rail' ? ':left' : ''
-    )
-    const rightRef = useRegisterRef(lineRef, segment.key, ':right')
-
     const isRail = lineType === 'commuter_rail'
+    const mainRef = useRegisterRef(lineRef, segment.key, isRail ? ':left' : '')
+    const rightRef = useRegisterRef(lineRef, segment.key, ':right')
+    const stroke = getLineStroke(lineType, widthScale)
+
+    const visual = { segment, color, isHovered, hoverColor, interactiveProps }
 
     return isRail ? (
-      <RailPath
-        segment={segment}
-        color={color}
-        isHovered={isHovered}
-        hoverColor={hoverColor}
-        interactiveProps={interactiveProps}
-        leftRef={mainRef}
-        rightRef={rightRef}
-      />
+      <RailPath {...visual} stroke={stroke} leftRef={mainRef} rightRef={rightRef} />
     ) : (
-      <SubwayPath
-        segment={segment}
-        color={color}
-        isHovered={isHovered}
-        hoverColor={hoverColor}
-        interactiveProps={interactiveProps}
-        refCb={mainRef}
-      />
+      <SubwayPath {...visual} stroke={stroke} refCb={mainRef} />
     )
   }
 )

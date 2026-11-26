@@ -140,6 +140,9 @@ const buildVisualTransfers = (transfers: Array<TransferRecord>) =>
     return acc
   }, {})
 
+/** Блок styles пишется, если задана хотя бы одна секция (шрифты или толщина линий). */
+const hasStyles = (mapStyles: MapStyles) => Object.keys(mapStyles).length > 0
+
 const buildMetroData = (
   lines: Array<LineRecord>,
   stations: Array<StationRecord>,
@@ -161,7 +164,7 @@ const buildMetroData = (
     visualToLogical: buildVisualToLogical(visuals, links),
     visualTransfers: buildVisualTransfers(transfers),
   },
-  ...(mapStyles.labels ? { styles: mapStyles } : {}),
+  ...(hasStyles(mapStyles) ? { styles: mapStyles } : {}),
 })
 
 const triggerDownload = (data: unknown) => {

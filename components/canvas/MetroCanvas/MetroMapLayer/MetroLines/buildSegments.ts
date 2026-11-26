@@ -1,4 +1,5 @@
 import type { LineCircle } from '@/types/metro'
+import { DEFAULT_TENSION } from './constants'
 import { bezierToPath, type BezierSegment, type Point } from './geometry/bezier'
 import { buildArcBezier } from './geometry/buildArcBezier'
 import { buildBezier } from './geometry/buildBezier'
@@ -66,15 +67,22 @@ const buildArcPath = (circle: LineCircle, p1: Point, p2: Point): Array<BezierSeg
   )
 }
 
+/**
+ * @param curvature множитель натяжения относительно DEFAULT_TENSION: 0 даёт прямые углы,
+ * 1 — вид по умолчанию. Для линий-окружностей (`circle`) не применяется.
+ */
 export const buildSegments = (
   lineId: string,
   visualIds: Array<string>,
   isCircular: boolean,
   visuals: MetroLinesProps['visuals'],
-  circle?: LineCircle
+  circle?: LineCircle,
+  curvature = 1
 ): Array<Segment> => {
   const points = collectPoints(visualIds, isCircular, visuals)
   if (points.length < 2) return []
+
+  const tension = DEFAULT_TENSION * curvature
 
   const segments: Array<Segment> = []
   for (let i = 0; i < points.length - 1; i++) {
@@ -97,7 +105,7 @@ export const buildSegments = (
     const p0 = neighbor(points, i - 1, isCircular, p1)
     const p3 = neighbor(points, i + 2, isCircular, p2)
 
-    const bezier = buildBezier(p0, p1, p2, p3)
+    const bezier = buildBezier(p0, p1, p2, p3, tension)
     segments.push({ bezier, path: bezierToPath(bezier), key, fromId: p1.id, toId: p2.id })
   }
 

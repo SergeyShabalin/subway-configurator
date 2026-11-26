@@ -7,6 +7,12 @@ const normalize = (v: Point): Point => {
   return l === 0 ? { x: 0, y: 0 } : { x: v.x / l, y: v.y / l }
 }
 
+/** Единичное направление from → to; если точки совпадают (кривизна 0), берётся запасное. */
+const direction = (from: Point, to: Point, fallback: Point): Point => {
+  const d = normalize({ x: to.x - from.x, y: to.y - from.y })
+  return d.x === 0 && d.y === 0 ? fallback : d
+}
+
 /** Поворот касательной на 90° */
 const normal = (t: Point): Point => ({ x: -t.y, y: t.x })
 
@@ -18,9 +24,10 @@ const normal = (t: Point): Point => ({ x: -t.y, y: t.x })
 export const offsetBezier = (seg: BezierSegment, offset: number): BezierSegment => {
   const { p0, p1, p2, p3 } = seg
 
-  const t0 = normalize({ x: p1.x - p0.x, y: p1.y - p0.y })
-  const t1 = normalize({ x: p2.x - p1.x, y: p2.y - p1.y })
-  const t2 = normalize({ x: p3.x - p2.x, y: p3.y - p2.y })
+  const chord = normalize({ x: p3.x - p0.x, y: p3.y - p0.y })
+  const t0 = direction(p0, p1, chord)
+  const t1 = direction(p1, p2, chord)
+  const t2 = direction(p2, p3, chord)
 
   const n0 = normal(t0)
   const n1 = normal(normalize({ x: t0.x + t1.x, y: t0.y + t1.y }))

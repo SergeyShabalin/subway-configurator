@@ -7,6 +7,8 @@ export interface StylesRecord extends MapStyles {
 
 const STYLES_ID = 'styles'
 
+const hasStyles = (styles: MapStyles) => Object.keys(styles).length > 0
+
 export class SettingsRepository extends BaseRepository<StylesRecord> {
   protected storeName = 'settings'
 
@@ -14,8 +16,9 @@ export class SettingsRepository extends BaseRepository<StylesRecord> {
     return this.getById(STYLES_ID)
   }
 
+  /** Пустые стили удаляют запись, любая заданная секция (шрифты, толщина линий) сохраняется. */
   saveStyles(styles: MapStyles) {
-    return styles.labels ? this.save({ id: STYLES_ID, ...styles }) : this.delete(STYLES_ID)
+    return hasStyles(styles) ? this.save({ id: STYLES_ID, ...styles }) : this.delete(STYLES_ID)
   }
 }
 
