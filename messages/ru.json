@@ -324,7 +324,15 @@
     "italic": "Курсив",
     "colorLightLabel": "Цвет в светлой теме",
     "colorDarkLabel": "Цвет в тёмной теме",
-    "reset": "Сбросить"
+    "reset": "Сбросить",
+    "tabLines": "Линии",
+    "lineLabel": "Ветка",
+    "linePlaceholder": "Выберите ветку",
+    "lineWidthLabel": "Толщина: ×{value}",
+    "resetLine": "Сбросить ветку",
+    "resetAllLines": "Сбросить все линии",
+    "linesDescription": "Выберите ветку и задайте толщину и кривизну её линии. При кривизне 0 углы прямые.",
+    "lineCurvatureLabel": "Кривизна: ×{value}"
   },
   "SettingsPanel": {
     "dragLabel": "Перетаскивание объектов",

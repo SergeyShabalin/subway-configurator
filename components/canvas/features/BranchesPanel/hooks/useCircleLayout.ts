@@ -1,10 +1,10 @@
-import { buildLineMarkedOption } from '@/components/canvas/shared/options/lineOptionHelpers'
+import { useLineOptions } from '@/components/canvas/shared/options/useLineOptions'
 import type { PositionedVisual } from '@/src/lib/layout/alignStations'
 import { arrangeOnCircle, getCentroid, getMeanDistance } from '@/src/lib/layout/arrangeOnCircle'
 import { linesService, visualsService } from '@/src/lib/services'
 import { useMetroStore, useMetroStoreApi } from '@/store'
 import type { LineCircle, Point } from '@/types/metro'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 const MIN_RADIUS = 30
 const MAX_RADIUS = 3000
@@ -20,7 +20,7 @@ export type CircleStatus = 'idle' | 'saved' | 'error'
 
 export const useCircleLayout = () => {
   const store = useMetroStoreApi()
-  const lines = useMetroStore((s) => s.lines)
+  const lineOptions = useLineOptions()
   const updateVisualPositions = useMetroStore((s) => s.updateVisualPositions)
   const updateLineCircle = useMetroStore((s) => s.updateLineCircle)
 
@@ -33,11 +33,6 @@ export const useCircleLayout = () => {
   const [tooShort, setTooShort] = useState(false)
 
   const isDirty = snapshot !== null
-
-  const lineOptions = useMemo(
-    () => lines.map((line) => buildLineMarkedOption(line.id, line.name, [line])),
-    [lines]
-  )
 
   /** Актуальные позиции станций линии из стора */
   const readPositions = (id: string): Array<PositionedVisual> => {

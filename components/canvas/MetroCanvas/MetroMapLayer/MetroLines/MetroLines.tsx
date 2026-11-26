@@ -4,6 +4,8 @@ import { CANVAS_DIMMED_COLOR } from '@/components/canvas/shared/dimmedColors'
 import { useRoute } from '@/components/canvas/shared/routing/useRoute'
 import { CANVAS_HOVER_COLOR } from '@/components/canvas/shared/themeColors'
 import { useTheme } from '@/context/theme-context'
+import { resolveLineCurvature } from '@/src/lib/styles/lineCurvature'
+import { resolveLineWidthScale } from '@/src/lib/styles/lineWidth'
 import { useMetroStore } from '@/store'
 import type { LineType } from '@/types/metro'
 import { memo, useMemo } from 'react'
@@ -25,11 +27,17 @@ interface SegmentItem {
 const byType = (a: SegmentItem, b: SegmentItem) =>
   Number(a.lineType === 'commuter_rail') - Number(b.lineType === 'commuter_rail')
 
+/**
+ * Построение геометрии дорогое, поэтому useMemo здесь оправдан.
+ * Кривизна меняет геометрию и входит в зависимости, толщина — нет.
+ */
 const useSegmentItems = (
   visuals: MetroLinesProps['visuals'],
   routeKeys: Set<string> | undefined
 ): Array<SegmentItem> => {
   const { lineData } = useMetroLines()
+  const lineCurvature = useMetroStore((state) => state.styles.lineCurvature)
+
   return useMemo(() => {
     const items: Array<SegmentItem> = []
 
@@ -39,7 +47,8 @@ const useSegmentItems = (
         line.visualStationIds,
         line.isCircular,
         visuals,
-        line.circle
+        line.circle,
+        resolveLineCurvature(lineCurvature, line.id)
       )
       for (const segment of segments) {
         items.push({
@@ -62,13 +71,14 @@ const useSegmentItems = (
     }
 
     return items
-  }, [lineData, visuals, routeKeys])
+  }, [lineData, visuals, routeKeys, lineCurvature])
 }
 
 export const MetroLines = memo(({ visuals, lineRef, onSegmentClick }: MetroLinesProps) => {
   const { theme } = useTheme()
   const route = useRoute()
   const movableLineId = useMetroStore((state) => state.movableLineId)
+  const lineWidths = useMetroStore((state) => state.styles.lineWidths)
   const { startDrag } = useLineDrag()
   const dimmedColor = CANVAS_DIMMED_COLOR[theme]
   const hoverColor = CANVAS_HOVER_COLOR[theme]
@@ -84,6 +94,7 @@ export const MetroLines = memo(({ visuals, lineRef, onSegmentClick }: MetroLines
           lineType={lineType}
           color={isDimmed ? dimmedColor : color}
           hoverColor={hoverColor}
+          widthScale={resolveLineWidthScale(lineWidths, lineId)}
           isDimmed={isDimmed}
           isMovable={lineId === movableLineId}
           lineRef={lineRef}

@@ -138,9 +138,14 @@ export interface LabelStyle {
   colorLight?: string
   colorDark?: string
 }
+
 /** Пользовательские стили карты. Нет поля: используются значения по умолчанию. */
 export interface MapStyles {
   labels?: LabelStyle
+  /** Множитель толщины по id линии. Нет записи: толщина по умолчанию (×1). */
+  lineWidths?: Record<string, number>
+  /** Множитель кривизны по id линии (0 — прямые углы). Нет записи: кривизна по умолчанию (×1). */
+  lineCurvature?: Record<string, number>
 }
 
 export interface GraphData {
