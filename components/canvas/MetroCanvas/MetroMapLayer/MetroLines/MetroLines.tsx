@@ -9,10 +9,10 @@ import { resolveLineWidthScale } from '@/src/lib/styles/lineWidth'
 import { useMetroStore } from '@/store'
 import type { LineType } from '@/types/metro'
 import { memo, useMemo } from 'react'
-import { buildSegments, type Segment } from './buildSegments'
+import { buildSegments, type Segment } from './helpers/buildSegments'
 import { useLineDrag } from './hooks/useLineDrag'
 import { useMetroLines } from './hooks/useMetroLines'
-import { SegmentPath } from './SegmentPath'
+import { SegmentPath } from './SegmentPath/SegmentPath'
 import type { MetroLinesProps } from './types'
 
 interface SegmentItem {

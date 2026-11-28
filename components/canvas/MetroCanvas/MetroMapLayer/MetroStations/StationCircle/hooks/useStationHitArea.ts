@@ -3,8 +3,11 @@ import { MIN_TOUCH_RADIUS_PX } from '../constants'
 import { createTouchHitFunc } from '../helpers/touchHitFunc'
 import { useIsCoarsePointer } from './useIsCoarsePointer'
 
-export const useStationHitArea = () => {
+export const useStationHitArea = (isSquare: boolean) => {
   const isCoarse = useIsCoarsePointer()
 
-  return useMemo(() => (isCoarse ? createTouchHitFunc(MIN_TOUCH_RADIUS_PX) : undefined), [isCoarse])
+  return useMemo(
+    () => (isCoarse ? createTouchHitFunc(MIN_TOUCH_RADIUS_PX, isSquare) : undefined),
+    [isCoarse, isSquare]
+  )
 }

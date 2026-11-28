@@ -331,7 +331,18 @@
     "resetLine": "Reset branch",
     "resetAllLines": "Reset all lines",
     "linesDescription": "Pick a branch and set its line width and curvature. At 0 the corners are straight.",
-    "lineCurvatureLabel": "Curvature: ×{value}"
+    "lineCurvatureLabel": "Curvature: ×{value}",
+    "tabStations": "Stations",
+    "stationSizeLabel": "Size: ×{value}",
+    "stationStrokeLabel": "Outline: ×{value}",
+    "stationSquareLabel": "Square stations",
+    "stationsDescription": "Pick a branch and station type, then set size, outline and shape.",
+    "stationKindLabel": "Station type",
+    "stationKindRegular": "Regular",
+    "stationKindTransfer": "With transfer",
+    "stationKindMultiLine": "Same-name (multiple lines)",
+    "resetStationLine": "Reset branch stations",
+    "resetStations": "Reset all stations"
   },
   "SettingsPanel": {
     "dragLabel": "Drag objects",

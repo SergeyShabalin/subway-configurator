@@ -80,6 +80,7 @@ export const useMetroStations = (
       result[visual.id] = {
         isMultiLine,
         isTransferStation,
+        lineIds: [...lineIds],
         color: isMultiLine ? undefined : (colors[0] ?? '#888888'),
         colors: isMultiLine ? colors : undefined,
         colorsActive: isMultiLine && hasActive ? colorsActive : undefined,

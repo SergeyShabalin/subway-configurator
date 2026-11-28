@@ -1,9 +1,9 @@
 import type Konva from 'konva'
 import { Path } from 'react-konva'
-import { bezierToPath } from './geometry/bezier'
-import { offsetBezier } from './geometry/offsetBezier'
-import type { LineStroke } from './lineStroke'
-import { shadowProps, type PathVisualProps } from './pathStyle'
+import { bezierToPath } from '../../geometry/bezier'
+import { offsetBezier } from '../../geometry/offsetBezier'
+import type { LineStroke } from '../../helpers/lineStroke'
+import { shadowProps, type PathVisualProps } from '../../helpers/pathStyle'
 
 interface RailPathProps extends PathVisualProps {
   stroke: LineStroke

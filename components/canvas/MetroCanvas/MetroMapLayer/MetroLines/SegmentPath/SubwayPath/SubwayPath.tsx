@@ -1,7 +1,7 @@
 import type Konva from 'konva'
 import { Path } from 'react-konva'
-import type { LineStroke } from './lineStroke'
-import { shadowProps, type PathVisualProps } from './pathStyle'
+import type { LineStroke } from '../../helpers/lineStroke'
+import { shadowProps, type PathVisualProps } from '../../helpers/pathStyle'
 
 interface SubwayPathProps extends PathVisualProps {
   stroke: LineStroke

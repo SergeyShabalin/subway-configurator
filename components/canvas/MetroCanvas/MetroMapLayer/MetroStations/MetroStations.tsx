@@ -2,10 +2,12 @@
 
 import { TransferDropRing } from '@/components/canvas/MetroCanvas/MetroMapLayer/MetroStations/TransferDrop/TransferDropRing'
 import { useRoute } from '@/components/canvas/shared/routing/useRoute'
+import { findStationStyle } from '@/src/lib/styles/stationStyle'
 import { useMetroStore } from '@/store'
 import type Konva from 'konva'
 import { useCallback, useMemo } from 'react'
 import { useMetroDrag, useMetroPosition, useMetroStations } from './hooks'
+import { getStationKind } from './StationCircle/helpers/getStationKind'
 import { StationCircle } from './StationCircle/StationCircle'
 import type { MetroStationsProps, StationHandlers } from './types'
 
@@ -17,6 +19,7 @@ export const MetroStations = ({
 }: MetroStationsProps) => {
   const visuals = useMetroStore((state) => state.visuals)
   const visualToStations = useMetroStore((state) => state.visualToStations)
+  const stationStyles = useMetroStore((state) => state.styles.stations)
   const route = useRoute()
   const routeVisualIds = route?.visualIds
 
@@ -83,6 +86,11 @@ export const MetroStations = ({
             appearance={appearance}
             stationId={stationId}
             isDimmed={routeVisualIds ? !routeVisualIds.has(visual.id) : false}
+            stationStyle={findStationStyle(
+              stationStyles,
+              appearance.lineIds,
+              getStationKind(appearance)
+            )}
             handlers={handlers}
           />
         )

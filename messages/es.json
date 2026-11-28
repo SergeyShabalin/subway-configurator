@@ -331,7 +331,18 @@
     "resetLine": "Restablecer línea",
     "resetAllLines": "Restablecer todas las líneas",
     "linesDescription": "Elige una línea y ajusta su grosor y curvatura. Con 0 las esquinas son rectas.",
-    "lineCurvatureLabel": "Curvatura: ×{value}"
+    "lineCurvatureLabel": "Curvatura: ×{value}",
+    "tabStations": "Estaciones",
+    "stationSizeLabel": "Tamaño: ×{value}",
+    "stationStrokeLabel": "Contorno: ×{value}",
+    "stationSquareLabel": "Estaciones cuadradas",
+    "stationsDescription": "Elige una línea y un tipo de estación y ajusta tamaño, contorno y forma.",
+    "stationKindLabel": "Tipo de estación",
+    "stationKindRegular": "Normales",
+    "stationKindTransfer": "Con transbordo",
+    "stationKindMultiLine": "Del mismo nombre (varias líneas)",
+    "resetStationLine": "Restablecer estaciones de la línea",
+    "resetStations": "Restablecer todas las estaciones"
   },
   "SettingsPanel": {
     "dragLabel": "Arrastrar objetos",

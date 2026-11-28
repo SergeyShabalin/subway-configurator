@@ -1,5 +1,5 @@
 import type { LineType } from '@/types/metro'
-import { HIT_STROKE_WIDTH, RAIL_GAP, RAIL_LINE_WIDTH, SUBWAY_WIDTH } from './constants'
+import { HIT_STROKE_WIDTH, RAIL_GAP, RAIL_LINE_WIDTH, SUBWAY_WIDTH } from '../constants'
 
 export interface LineStroke {
   /** Толщина одной линии */
