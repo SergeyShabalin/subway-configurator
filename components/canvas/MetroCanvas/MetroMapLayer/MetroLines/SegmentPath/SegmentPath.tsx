@@ -2,14 +2,14 @@
 
 import type { LineType } from '@/types/metro'
 import { memo } from 'react'
-import type { Segment } from './buildSegments'
-import type { LineDragStartEvent } from './hooks/useLineDrag'
-import { useRegisterRef } from './hooks/useRegisterRef'
-import { useSegmentInteraction } from './hooks/useSegmentInteraction'
-import { getLineStroke } from './lineStroke'
-import { RailPath } from './RailPath'
-import { SubwayPath } from './SubwayPath'
-import type { MetroLinesProps } from './types'
+import type { Segment } from '../helpers/buildSegments'
+import { getLineStroke } from '../helpers/lineStroke'
+import type { LineDragStartEvent } from '../hooks/useLineDrag'
+import { useRegisterRef } from '../hooks/useRegisterRef'
+import { useSegmentInteraction } from '../hooks/useSegmentInteraction'
+import type { MetroLinesProps } from '../types'
+import { RailPath } from './RailPath/RailPath'
+import { SubwayPath } from './SubwayPath/SubwayPath'
 
 export interface SegmentPathProps {
   segment: Segment

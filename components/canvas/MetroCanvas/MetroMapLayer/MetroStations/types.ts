@@ -1,5 +1,5 @@
 import { TransferDropApi } from '@/components/canvas/MetroCanvas/MetroMapLayer/MetroStations/TransferDrop/types'
-import type { VisualStation } from '@/types/metro'
+import type { StationStyle, VisualStation } from '@/types/metro'
 import type Konva from 'konva'
 
 export type VisualData = Pick<VisualStation, 'id' | 'x' | 'y'>
@@ -7,6 +7,8 @@ export type VisualData = Pick<VisualStation, 'id' | 'x' | 'y'>
 export interface StationAppearance {
   isMultiLine: boolean
   isTransferStation: boolean
+  /** Все ветки узла по порядку (у обычной станции одна). Нужны для выбора стиля. */
+  lineIds: Array<string>
   color?: string
   colors?: Array<string>
   colorsActive?: Array<boolean>
@@ -31,5 +33,7 @@ export interface StationCircleProps {
   appearance: StationAppearance
   stationId: string
   isDimmed?: boolean
+  /** Заданный стиль для веток и типа этой станции. Сравнивается по ссылке: стор не пересоздаёт неизменённые стили. */
+  stationStyle?: StationStyle
   handlers: StationHandlers
 }

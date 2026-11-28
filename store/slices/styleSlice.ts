@@ -1,13 +1,16 @@
 import { persistStyles } from '@/src/lib/styles/persistStyles'
 import {
   clearAllLines,
+  clearAllStations,
   clearLabels,
   clearLine,
+  clearStationLine,
   compactStyles,
   mergeLabels,
+  mergeStationStyle,
   withLineValue,
 } from '@/src/lib/styles/styleOperations'
-import type { LabelStyle, MapStyles } from '@/types/metro'
+import type { LabelStyle, MapStyles, StationKind, StationStyle } from '@/types/metro'
 import type { SliceCreator } from '../types'
 
 /**
@@ -25,6 +28,12 @@ export interface StyleSlice {
   /** Передайте `undefined` в поле, чтобы сбросить его к значению темы. */
   updateLabelStyle: (patch: LabelStyle) => void
   resetLabelStyle: () => void
+  /** Стиль станций одного типа на одной ветке. `undefined` в поле сбрасывает его к значению по умолчанию. */
+  updateStationStyle: (lineId: string, kind: StationKind, patch: StationStyle) => void
+  /** Сбрасывает стили всех типов станций одной ветки. */
+  resetStationLine: (lineId: string) => void
+  /** Сбрасывает стили станций всех веток. */
+  resetStations: () => void
   /** Множитель толщины линии. `undefined` сбрасывает линию к толщине по умолчанию. */
   updateLineWidth: (lineId: string, scale: number | undefined) => void
   /** Множитель кривизны линии (0 — прямые углы). `undefined` сбрасывает к значению по умолчанию. */
@@ -49,6 +58,11 @@ export const createStyleSlice: SliceCreator<StyleSlice> = (set, get) => {
 
     updateLabelStyle: (patch) => commit((s) => mergeLabels(s, patch)),
     resetLabelStyle: () => commit(clearLabels),
+
+    updateStationStyle: (lineId, kind, patch) =>
+      commit((s) => mergeStationStyle(s, lineId, kind, patch)),
+    resetStationLine: (lineId) => commit((s) => clearStationLine(s, lineId)),
+    resetStations: () => commit(clearAllStations),
 
     updateLineWidth: (lineId, scale) =>
       commit((s) => withLineValue(s, 'lineWidths', lineId, scale)),

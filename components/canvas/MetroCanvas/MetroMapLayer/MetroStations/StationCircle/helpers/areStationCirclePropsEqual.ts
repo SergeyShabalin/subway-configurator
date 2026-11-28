@@ -8,6 +8,7 @@ const appearanceEqual = (a: StationAppearance, b: StationAppearance) =>
   (a.isMultiLine === b.isMultiLine &&
     a.isTransferStation === b.isTransferStation &&
     a.color === b.color &&
+    arraysEqual(a.lineIds, b.lineIds) &&
     arraysEqual(a.colors, b.colors) &&
     arraysEqual(a.colorsActive, b.colorsActive))
 
@@ -16,5 +17,6 @@ export const areStationCirclePropsEqual = (prev: StationCircleProps, next: Stati
   prev.visual === next.visual &&
   prev.stationId === next.stationId &&
   prev.isDimmed === next.isDimmed &&
+  prev.stationStyle === next.stationStyle &&
   prev.handlers === next.handlers &&
   appearanceEqual(prev.appearance, next.appearance)

@@ -1,9 +1,9 @@
 import type { LineCircle } from '@/types/metro'
-import { DEFAULT_TENSION } from './constants'
-import { bezierToPath, type BezierSegment, type Point } from './geometry/bezier'
-import { buildArcBezier } from './geometry/buildArcBezier'
-import { buildBezier } from './geometry/buildBezier'
-import type { MetroLinesProps } from './types'
+import { DEFAULT_TENSION } from '../constants'
+import { bezierToPath, type BezierSegment, type Point } from '../geometry/bezier'
+import { buildArcBezier } from '../geometry/buildArcBezier'
+import { buildBezier } from '../geometry/buildBezier'
+import type { MetroLinesProps } from '../types'
 
 export interface Segment {
   bezier: BezierSegment
@@ -68,6 +68,11 @@ const buildArcPath = (circle: LineCircle, p1: Point, p2: Point): Array<BezierSeg
 }
 
 /**
+ * @param lineId
+ * @param visualIds
+ * @param isCircular
+ * @param visuals
+ * @param circle
  * @param curvature множитель натяжения относительно DEFAULT_TENSION: 0 даёт прямые углы,
  * 1 — вид по умолчанию. Для линий-окружностей (`circle`) не применяется.
  */

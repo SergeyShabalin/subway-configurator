@@ -1,6 +1,6 @@
 import type Konva from 'konva'
 import { useState } from 'react'
-import type { Segment } from '../buildSegments'
+import type { Segment } from '../helpers/buildSegments'
 import type { MetroLinesProps } from '../types'
 import type { LineDragStartEvent } from './useLineDrag'
 

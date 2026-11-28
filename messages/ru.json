@@ -332,7 +332,18 @@
     "resetLine": "Сбросить ветку",
     "resetAllLines": "Сбросить все линии",
     "linesDescription": "Выберите ветку и задайте толщину и кривизну её линии. При кривизне 0 углы прямые.",
-    "lineCurvatureLabel": "Кривизна: ×{value}"
+    "lineCurvatureLabel": "Кривизна: ×{value}",
+    "tabStations": "Станции",
+    "stationSizeLabel": "Размер: ×{value}",
+    "stationStrokeLabel": "Обводка: ×{value}",
+    "stationSquareLabel": "Квадратные станции",
+    "stationsDescription": "Выберите ветку и тип станции, затем задайте размер, обводку и форму.",
+    "stationKindLabel": "Тип станции",
+    "stationKindRegular": "Обычные",
+    "stationKindTransfer": "С пересадкой",
+    "stationKindMultiLine": "Одноимённые (несколько линий)",
+    "resetStationLine": "Сбросить станции ветки",
+    "resetStations": "Сбросить все станции"
   },
   "SettingsPanel": {
     "dragLabel": "Перетаскивание объектов",

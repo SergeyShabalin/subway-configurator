@@ -139,9 +139,32 @@ export interface LabelStyle {
   colorDark?: string
 }
 
+/**
+ * Тип станции для стилей: обычная, с пересадкой (одна линия и пунктир пересадки)
+ * или одноимённая (несколько линий в одном узле).
+ */
+export type StationKind = 'regular' | 'transfer' | 'multiLine'
+
+/** Стиль маркера станции. Нет поля: используется значение по умолчанию. */
+export interface StationStyle {
+  /** Множитель диаметра (×1 — по умолчанию) */
+  sizeScale?: number
+  /** Множитель толщины обводки (×1 — по умолчанию) */
+  strokeScale?: number
+  /** Квадратные маркеры вместо круглых */
+  isSquare?: boolean
+}
+
+/** Стили станций одной ветки по типам станций. */
+export type LineStationStyles = Partial<Record<StationKind, StationStyle>>
+
+/** Стили станций по id ветки. */
+export type StationStyles = Record<string, LineStationStyles>
+
 /** Пользовательские стили карты. Нет поля: используются значения по умолчанию. */
 export interface MapStyles {
   labels?: LabelStyle
+  stations?: StationStyles
   /** Множитель толщины по id линии. Нет записи: толщина по умолчанию (×1). */
   lineWidths?: Record<string, number>
   /** Множитель кривизны по id линии (0 — прямые углы). Нет записи: кривизна по умолчанию (×1). */
